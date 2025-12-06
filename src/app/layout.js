@@ -23,17 +23,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${outfit.variable} bg-black text-white antialiased`}>
+    // FIX: suppressHydrationWarning add kiya
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning={true}>
+      <body 
+        className={`${inter.variable} ${outfit.variable} bg-black text-white antialiased`}
+        suppressHydrationWarning={true} // FIX: Ye line add karein
+      >
         
         {/* --- GLOBAL FEATURES --- */}
-        <Preloader />        {/* 1. Website Load Screen */}
-        <ProgressBar />      {/* 2. Top Scroll Line */}
-        <WhatsAppBtn />      {/* 3. Floating Chat Button */}
+        <Preloader />
+        <ProgressBar />
+        <WhatsAppBtn />
         
-        <CustomCursor />     {/* Glowing Cursor */}
-        <Noise />            {/* Film Grain */}
-        <ScrollToTop />      {/* Back to top button */}
+        <CustomCursor />
+        <Noise />
+        <ScrollToTop />
         
         {/* --- MAIN LAYOUT --- */}
         <Navbar />

@@ -2,19 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // 1. Hook Import kiya
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-// ✅ UPDATED LINKS LIST
 const navLinks = [
   { name: "Services", href: "#services" },
-  { name: "Process", href: "#process" }, // New
+  { name: "Process", href: "#process" },
   { name: "Work", href: "#work" },
-  { name: "Pricing", href: "#pricing" }, // New
+  { name: "Pricing", href: "#pricing" },
   { name: "About", href: "#about" },
 ];
 
 const Navbar = () => {
+  const pathname = usePathname(); // 2. Current Path pata kiya
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -25,6 +26,11 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // 3. Admin Check: Agar '/admin' par hain to Navbar mat dikhao
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
 
   const toggleMenu = () => setIsOpen(!isOpen);
 

@@ -1,64 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check, X, Zap } from "lucide-react";
 
-const plans = [
-  {
-    name: "Starter",
-    desc: "Perfect for small businesses and personal portfolios.",
-    priceMonthly: "499",
-    priceYearly: "399", // Discounted price
-    features: [
-      "5 Page Website",
-      "Mobile Responsive",
-      "Basic SEO Setup",
-      "Contact Form",
-      "1 Month Support",
-    ],
-    missing: ["CMS Integration", "E-commerce", "Advanced Animations"],
-    popular: false,
-    gradient: "from-gray-500 to-gray-700",
-  },
-  {
-    name: "Professional",
-    desc: "Our most popular plan for growing brands and startups.",
-    priceMonthly: "999",
-    priceYearly: "799",
-    features: [
-      "10 Page Website",
-      "Next.js High Performance",
-      "CMS (Content Management)",
-      "Advanced SEO & Analytics",
-      "Social Media Integration",
-      "3 Months Support",
-    ],
-    missing: ["Custom Web App Features"],
-    popular: true, // Ye card highlight hoga
-    gradient: "from-blue-600 to-purple-600",
-  },
-  {
-    name: "Enterprise",
-    desc: "Full-scale custom solutions for large organizations.",
-    priceMonthly: "1999",
-    priceYearly: "1599",
-    features: [
-      "Unlimited Pages",
-      "Custom Web App / SaaS",
-      "E-commerce Functionality",
-      "Database & Auth Integration",
-      "Priority 24/7 Support",
-      "Dedicated Project Manager",
-    ],
-    missing: [],
-    popular: false,
-    gradient: "from-pink-600 to-orange-600",
-  },
-];
-
 const Pricing = () => {
+  const [plans, setPlans] = useState([]);
   const [billing, setBilling] = useState("monthly"); // 'monthly' or 'yearly'
+
+  // API se Data Fetch karna
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const res = await fetch("/api/pricing");
+        const data = await res.json();
+        setPlans(data.pricing || []);
+      } catch (error) {
+        console.error("Failed to fetch pricing", error);
+      }
+    };
+    fetchPricing();
+  }, []);
 
   return (
     <section id="pricing" className="py-24 bg-black text-white relative overflow-hidden">
@@ -98,7 +60,7 @@ const Pricing = () => {
             </button>
             
             <span className={`text-sm font-bold ${billing === "yearly" ? "text-white" : "text-gray-500"}`}>
-                Yearly <span className="text-xs text-green-400 ml-1 font-normal">(Save 20%)</span>
+                Yearly <span className="text-xs text-green-400 ml-1 font-normal">(Save ~20%)</span>
             </span>
           </div>
         </div>
@@ -107,12 +69,12 @@ const Pricing = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {plans.map((plan, index) => (
             <motion.div
-              key={index}
+              key={plan._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-              whileHover={{ y: -10 }} // Hover karne par card upar uthega
+              whileHover={{ y: -10 }}
               className={`relative p-8 rounded-3xl border transition-all duration-300 flex flex-col h-full ${
                 plan.popular 
                     ? "bg-white/10 border-blue-500/50 shadow-[0_0_30px_rgba(37,99,235,0.15)] z-10 scale-105" 
@@ -138,7 +100,7 @@ const Pricing = () => {
                 <span className="text-4xl font-bold text-white">
                     ${billing === "monthly" ? plan.priceMonthly : plan.priceYearly}
                 </span>
-                <span className="text-gray-500 mb-1">/project</span>
+                <span className="text-gray-500 mb-1">/{billing === "monthly" ? "mo" : "yr"}</span>
               </div>
 
               {/* Button */}
@@ -162,9 +124,9 @@ const Pricing = () => {
                     </div>
                 ))}
                 
-                {/* Missing Features (Optional - Greyed out) */}
-                {plan.missing.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3 opacity-40">
+                {/* Missing Features (Greyed out) */}
+                {plan.missing && plan.missing.map((feature, i) => (
+                    <div key={`miss-${i}`} className="flex items-center gap-3 opacity-40">
                         <div className="p-1 rounded-full bg-white/5 text-gray-500">
                             <X size={12} strokeWidth={3} />
                         </div>
@@ -175,14 +137,6 @@ const Pricing = () => {
 
             </motion.div>
           ))}
-        </div>
-
-        {/* Enterprise CTA */}
-        <div className="mt-16 text-center">
-            <p className="text-gray-400 mb-4">Need something more custom?</p>
-            <a href="#contact" className="text-blue-500 font-bold border-b border-blue-500 hover:text-white hover:border-white transition-all pb-1">
-                Contact our Sales Team
-            </a>
         </div>
 
       </div>

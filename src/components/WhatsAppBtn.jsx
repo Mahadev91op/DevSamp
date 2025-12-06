@@ -1,8 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation"; // 1. Hook Import kiya
 
 const WhatsAppBtn = () => {
+  const pathname = usePathname(); // 2. Current Path pata kiya
+
+  // 3. Admin Check: Agar '/admin' par hain to Button mat dikhao
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <motion.a
       href="https://wa.me/919876543210" // Apna number yahan dalein
