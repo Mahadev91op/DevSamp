@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+// FIX: 'Download' ko import list me add kar diya hai
 import { 
   LayoutDashboard, Users, Layers, Plus, Loader2, LogOut, Menu, X, 
-  Bell, CheckCircle, AlertCircle, Briefcase, PenBox, Calendar, 
+  CheckCircle, AlertCircle, Briefcase, PenBox, 
   Trash2, Search, ExternalLink, CreditCard, Star, MessageCircle, 
-  ArrowUpRight, Download, TrendingUp, Filter
+  TrendingUp, Filter, Rss, Download, Wand2 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // --- CUSTOM SVG CHART COMPONENT ---
+// Original Design Wapas: Circles aur Labels ke sath
 const AnalyticsChart = ({ data }) => {
   if (!data || data.length === 0) return null;
   const max = Math.max(...data) || 1;
@@ -59,6 +61,7 @@ const Toast = ({ message, type, onClose }) => (
 );
 
 // --- STATS CARD ---
+// Original Design: Trend Badge Support ke sath
 const StatCard = ({ title, value, icon: Icon, color, trend }) => (
   <div className="bg-white/5 border border-white/5 p-6 rounded-2xl relative overflow-hidden group hover:border-white/10 transition-all hover:-translate-y-1 duration-300">
     <div className={`absolute -right-6 -top-6 w-24 h-24 bg-${color}-500/20 blur-2xl rounded-full group-hover:bg-${color}-500/30 transition-all`}></div>
@@ -84,16 +87,18 @@ export default function AdminPanel() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState(null); 
   const [loading, setLoading] = useState(false);
+  const [extracting, setExtracting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(""); 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [data, setData] = useState({ leads: [], services: [], team: [], projects: [], pricing: [], reviews: [] });
+  const [data, setData] = useState({ leads: [], services: [], team: [], projects: [], pricing: [], reviews: [], blogs: [] });
   const [forms, setForms] = useState({
     project: { id: null, title: "", category: "", image: "", tech: "", link: "" },
     service: { title: "", desc: "", icon: "Monitor", color: "text-blue-500", gradient: "from-blue-500 to-cyan-500" },
     team: { id: null, name: "", role: "", image: "", desc: "" },
-    pricing: { id: null, name: "", desc: "", priceMonthly: "", priceYearly: "", features: "", missing: "", popular: false }
+    pricing: { id: null, name: "", desc: "", priceMonthly: "", priceYearly: "", features: "", missing: "", popular: false },
+    blog: { id: null, link: "", title: "", desc: "", image: "", category: "", platform: "other" }
   });
 
   const showToast = (message, type = "success") => { setToast({ message, type }); setTimeout(() => setToast(null), 3000); };
@@ -122,7 +127,7 @@ export default function AdminPanel() {
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const endpoints = ["contact", "services", "team", "projects", "pricing", "reviews"];
+      const endpoints = ["contact", "services", "team", "projects", "pricing", "reviews", "blogs"];
       const responses = await Promise.all(endpoints.map(ep => fetch(`/api/${ep}`).then(res => res.json())));
       setData({
         leads: responses[0].contacts || [],
@@ -130,10 +135,41 @@ export default function AdminPanel() {
         team: responses[2].team || [],
         projects: responses[3].projects || [],
         pricing: responses[4].pricing || [],
-        reviews: responses[5].reviews || []
+        reviews: responses[5].reviews || [],
+        blogs: responses[6].blogs || []
       });
     } catch (e) { showToast("Sync Failed", "error"); }
     setLoading(false);
+  };
+
+  const handleExtractMeta = async () => {
+    if (!forms.blog.link) return showToast("Please enter a link first", "error");
+    setExtracting(true);
+    try {
+        const res = await fetch("/api/extract", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: forms.blog.link })
+        });
+        const meta = await res.json();
+        if (res.ok) {
+            setForms(prev => ({
+                ...prev,
+                blog: { 
+                    ...prev.blog, 
+                    title: meta.title || "", 
+                    desc: meta.desc || "", 
+                    image: meta.image || "",
+                    platform: meta.platform || "other",
+                    category: meta.platform === 'youtube' ? 'Video' : 'Social'
+                }
+            }));
+            showToast("Data Fetched!");
+        } else {
+            showToast("Could not fetch data", "error");
+        }
+    } catch (e) { showToast("Extraction Error", "error"); }
+    setExtracting(false);
   };
 
   const exportLeads = () => {
@@ -171,15 +207,15 @@ export default function AdminPanel() {
     if(type === 'project') setForms(p => ({ ...p, project: item ? { ...item, id: item._id, tech: item.tech.join(', ') } : { id: null, title: "", category: "", image: "", tech: "", link: "" } }));
     if(type === 'service') setForms(p => ({ ...p, service: item || { title: "", desc: "", icon: "Monitor", color: "text-blue-500", gradient: "from-blue-500 to-cyan-500" } }));
     if(type === 'team') setForms(p => ({ ...p, team: item ? { ...item, id: item._id } : { id: null, name: "", role: "", image: "", desc: "" } }));
-    // UPDATED: Populate all pricing fields correctly
     if(type === 'pricing') setForms(p => ({ ...p, pricing: item ? { ...item, id: item._id, features: item.features.join(','), missing: item.missing.join(',') } : { id: null, name: "", desc: "", priceMonthly: "", priceYearly: "", features: "", missing: "", popular: false } }));
+    if(type === 'blog') setForms(p => ({ ...p, blog: item ? { ...item, id: item._id } : { id: null, link: "", title: "", desc: "", image: "", category: "", platform: "other" } }));
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    let api = modalType === 'service' ? 'services' : modalType === 'pricing' ? 'pricing' : modalType + 's'; 
+    let api = modalType === 'service' ? 'services' : modalType === 'pricing' ? 'pricing' : modalType === 'blog' ? 'blogs' : modalType + 's'; 
     let currentForm = forms[modalType];
     let body = { ...currentForm };
     
@@ -238,6 +274,7 @@ export default function AdminPanel() {
                 <NavItem icon={ExternalLink} label="Projects" id="projects" active={activeTab} set={setActiveTab} />
                 <NavItem icon={Layers} label="Services" id="services" active={activeTab} set={setActiveTab} />
                 <NavItem icon={CreditCard} label="Pricing" id="pricing" active={activeTab} set={setActiveTab} />
+                <NavItem icon={Rss} label="Blogs" id="blogs" active={activeTab} set={setActiveTab} />
             </div>
             <div className="p-4 border-t border-white/5">
                 <button onClick={() => setIsAuthenticated(false)} className="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-red-900/10 rounded-xl transition-all font-medium text-sm">
@@ -264,6 +301,7 @@ export default function AdminPanel() {
                 
                 {activeTab === 'dashboard' && (
                     <div className="space-y-8 animate-fade-in max-w-7xl mx-auto">
+                        {/* FIX: Reverted to Original 4 Cards (Services instead of Blogs) */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             <StatCard title="Total Inquiries" value={data.leads.length} icon={Users} color="blue" trend="+12%" />
                             <StatCard title="Active Projects" value={data.projects.length} icon={Briefcase} color="purple" />
@@ -341,12 +379,12 @@ export default function AdminPanel() {
                     </div>
                 )}
 
-                {['services', 'team', 'projects', 'pricing', 'reviews'].includes(activeTab) && (
+                {['services', 'team', 'projects', 'pricing', 'reviews', 'blogs'].includes(activeTab) && (
                     <div className="space-y-6 animate-fade-in max-w-7xl mx-auto">
                         <div className="flex justify-between items-center">
                             <h3 className="text-2xl font-bold text-white capitalize">{activeTab}</h3>
                             {activeTab !== 'reviews' && (
-                                <button onClick={() => openModal(activeTab.slice(0, -1))} className="bg-white text-black px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors shadow-lg hover:shadow-white/10">
+                                <button onClick={() => openModal(activeTab === 'blogs' ? 'blog' : activeTab.slice(0, -1))} className="bg-white text-black px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors shadow-lg hover:shadow-white/10">
                                     <Plus size={18} /> Add New
                                 </button>
                             )}
@@ -368,6 +406,28 @@ export default function AdminPanel() {
                                             <a href={p.link} target="_blank" className="text-gray-500 hover:text-white"><ExternalLink size={16}/></a>
                                         </div>
                                         <h4 className="font-bold text-lg text-white">{p.title}</h4>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {activeTab === 'blogs' && data.blogs.map(b => (
+                                <div key={b._id} className="bg-[#0a0a0a] border border-white/5 rounded-2xl overflow-hidden group hover:border-white/20 transition-all">
+                                    <div className="h-48 bg-gray-800 relative overflow-hidden">
+                                        {/* If Embed Code exists, render it roughly, else image */}
+                                        {b.image ? (
+                                            <img src={b.image} alt={b.title} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" />
+                                        ) : (
+                                            <div className="w-full h-full bg-black flex items-center justify-center text-gray-500 text-xs p-4">No Image</div>
+                                        )}
+                                        <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 z-20">
+                                            <button onClick={() => openModal('blog', b)} className="p-2 bg-black/60 backdrop-blur rounded-lg text-white hover:bg-blue-600"><PenBox size={14}/></button>
+                                            <button onClick={() => handleDelete('blogs', b._id)} className="p-2 bg-black/60 backdrop-blur rounded-lg text-white hover:bg-red-600"><Trash2 size={14}/></button>
+                                        </div>
+                                    </div>
+                                    <div className="p-5">
+                                        <span className="text-[10px] font-bold text-pink-400 bg-pink-500/10 px-2 py-1 rounded uppercase tracking-wider">{b.category}</span>
+                                        <h4 className="font-bold text-lg text-white mt-2 truncate">{b.title}</h4>
+                                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">{b.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -432,6 +492,39 @@ export default function AdminPanel() {
                         </div>
                         
                         <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+                            
+                            {/* --- DYNAMIC FIELDS --- */}
+                            
+                            {/* BLOG AUTO-FILL FEATURE */}
+                            {modalType === 'blog' && (
+                                <div className="space-y-4">
+                                    <div className="flex gap-2">
+                                        <div className="flex-1">
+                                            <label className="text-xs text-gray-500 ml-1">Paste Link (YouTube/Insta)</label>
+                                            <input 
+                                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500" 
+                                                placeholder="https://youtube.com/..." 
+                                                value={forms.blog.link} 
+                                                onChange={e=>setForms(p=>({...p, blog:{...p.blog, link:e.target.value}}))} 
+                                            />
+                                        </div>
+                                        <button 
+                                            type="button" 
+                                            onClick={handleExtractMeta} 
+                                            disabled={extracting}
+                                            className="mt-6 px-4 bg-blue-600/20 border border-blue-600/50 text-blue-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
+                                        >
+                                            {extracting ? <Loader2 className="animate-spin" size={20} /> : <Wand2 size={20} />}
+                                        </button>
+                                    </div>
+                                    
+                                    <Input placeholder="Title (Auto)" value={forms.blog.title} onChange={e=>setForms(p=>({...p, blog:{...p.blog, title:e.target.value}}))} />
+                                    <Input placeholder="Image URL (Auto)" value={forms.blog.image} onChange={e=>setForms(p=>({...p, blog:{...p.blog, image:e.target.value}}))} />
+                                    <TextArea placeholder="Description (Auto)" value={forms.blog.desc} onChange={e=>setForms(p=>({...p, blog:{...p.blog, desc:e.target.value}}))} />
+                                </div>
+                            )}
+
+                            {/* OTHER FORMS */}
                             {modalType === 'project' && (
                                 <><Input placeholder="Project Title" value={forms.project.title} onChange={e=>setForms(p=>({...p, project:{...p.project, title:e.target.value}}))} />
                                 <div className="flex gap-4"><Input placeholder="Category" value={forms.project.category} onChange={e=>setForms(p=>({...p, project:{...p.project, category:e.target.value}}))} /><Input placeholder="Live Link" value={forms.project.link} onChange={e=>setForms(p=>({...p, project:{...p.project, link:e.target.value}}))} /></div>
@@ -440,23 +533,7 @@ export default function AdminPanel() {
                             )}
                             {modalType === 'service' && <><Input placeholder="Title" value={forms.service.title} onChange={e=>setForms(p=>({...p, service:{...p.service, title:e.target.value}}))} /><TextArea placeholder="Desc" value={forms.service.desc} onChange={e=>setForms(p=>({...p, service:{...p.service, desc:e.target.value}}))} /></>}
                             {modalType === 'team' && <><Input placeholder="Name" value={forms.team.name} onChange={e=>setForms(p=>({...p, team:{...p.team, name:e.target.value}}))} /><Input placeholder="Role" value={forms.team.role} onChange={e=>setForms(p=>({...p, team:{...p.team, role:e.target.value}}))} /><Input placeholder="Image URL" value={forms.team.image} onChange={e=>setForms(p=>({...p, team:{...p.team, image:e.target.value}}))} /></>}
-                            
-                            {modalType === 'pricing' && (
-                                <>
-                                    <Input placeholder="Plan Name (e.g. Pro)" value={forms.pricing.name} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, name:e.target.value}}))} />
-                                    <Input placeholder="Description" value={forms.pricing.desc} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, desc:e.target.value}}))} />
-                                    <div className="flex gap-4">
-                                        <Input placeholder="Monthly Price ($)" value={forms.pricing.priceMonthly} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, priceMonthly:e.target.value}}))} />
-                                        <Input placeholder="Yearly Price ($)" value={forms.pricing.priceYearly} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, priceYearly:e.target.value}}))} />
-                                    </div>
-                                    <TextArea placeholder="Features (comma separated)" value={forms.pricing.features} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, features:e.target.value}}))} />
-                                    <TextArea placeholder="Missing Features (comma separated)" value={forms.pricing.missing} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, missing:e.target.value}}))} />
-                                    <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
-                                        <input type="checkbox" checked={forms.pricing.popular} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, popular:e.target.checked}}))} className="w-5 h-5 accent-blue-600" />
-                                        <span className="text-sm text-gray-300">Mark as Popular</span>
-                                    </div>
-                                </>
-                            )}
+                            {modalType === 'pricing' && <><Input placeholder="Name" value={forms.pricing.name} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, name:e.target.value}}))} /><Input placeholder="Price (Mo)" value={forms.pricing.priceMonthly} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, priceMonthly:e.target.value}}))} /><TextArea placeholder="Features" value={forms.pricing.features} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, features:e.target.value}}))} /></>}
 
                             <button disabled={loading} className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-200 transition-all flex justify-center items-center gap-2 mt-4">
                                 {loading ? <Loader2 className="animate-spin" /> : "Save Changes"}

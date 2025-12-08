@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Phone, Send, ChevronDown, Check, Loader2 } from "lucide-react"; // Loader2 import kiya
+import { Mail, Phone, Send, ChevronDown, Check, Loader2 } from "lucide-react"; 
 
 const servicesList = [
   "Web Development",
@@ -22,7 +22,7 @@ const Contact = () => {
     service: "",
     message: ""
   });
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [status, setStatus] = useState("idle");
 
   // --- HANDLERS ---
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -36,29 +36,43 @@ const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // --- FORM SUBMIT LOGIC (BACKEND CONNECTION) ---
+  // --- SMART PHONE CLICK HANDLER ---
+  const handlePhoneClick = () => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const phoneNumber = "919330680642";
+    const message = "Hello DevSamp, I checked your website and would like to discuss a project.";
+
+    if (isMobile) {
+      // Mobile: Open Dialer
+      window.location.href = `tel:+${phoneNumber}`;
+    } else {
+      // PC: Open WhatsApp Web
+      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+    }
+  };
+
+  // --- EMAIL LINKS ---
+  const emailSubject = "Inquiry regarding a Project - DevSamp";
+  const emailBody = "Hello DevSamp Team,%0D%0A%0D%0AI am interested in your services and would like to discuss a potential project.%0D%0A%0D%0A- Name:%20%0D%0A- Project Type:%20%0D%0A- Estimated Budget:%20%0D%0A%0D%0ALooking forward to hearing from you.";
+
+  // --- FORM SUBMIT LOGIC ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validation
     if(!formData.name || !formData.email || !formData.message) {
         alert("Please fill all fields!");
         return;
     }
-
     setStatus("loading");
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
       if (res.ok) {
         setStatus("success");
-        setFormData({ name: "", email: "", service: "", message: "" }); // Form clear
-        setTimeout(() => setStatus("idle"), 5000); // 5 sec baad reset
+        setFormData({ name: "", email: "", service: "", message: "" });
+        setTimeout(() => setStatus("idle"), 5000);
       } else {
         setStatus("error");
       }
@@ -96,26 +110,41 @@ const Contact = () => {
               Have an idea? Let's discuss how DevSamp can help your business grow.
             </p>
 
-            {/* Contact Details */}
+            {/* Contact Details (Interactive) */}
             <div className="space-y-6">
-                <div className="flex items-center gap-4 text-gray-300">
-                    <div className="p-3 bg-white/5 rounded-full border border-white/10 text-blue-500">
+                
+                {/* Email Item */}
+                <div className="flex items-center gap-4 text-gray-300 group">
+                    <div className="p-3 bg-white/5 rounded-full border border-white/10 text-blue-500 group-hover:border-blue-500/50 transition-colors">
                         <Mail size={24} />
                     </div>
                     <div>
                         <p className="text-xs text-gray-500 uppercase tracking-wider">Email us at</p>
-                        <p className="text-lg font-medium">hello@devsamp.com</p>
+                        <a 
+                            href={`mailto:devsamp1st@gmail.com?subject=${emailSubject}&body=${emailBody}`}
+                            className="text-lg font-medium group-hover:text-blue-400 transition-colors"
+                        >
+                            devsamp1st@gmail.com
+                        </a>
                     </div>
                 </div>
-                <div className="flex items-center gap-4 text-gray-300">
-                    <div className="p-3 bg-white/5 rounded-full border border-white/10 text-purple-500">
+
+                {/* Phone Item (Smart Click) */}
+                <div 
+                    onClick={handlePhoneClick}
+                    className="flex items-center gap-4 text-gray-300 group cursor-pointer"
+                >
+                    <div className="p-3 bg-white/5 rounded-full border border-white/10 text-purple-500 group-hover:border-purple-500/50 transition-colors">
                         <Phone size={24} />
                     </div>
                     <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wider">Call us</p>
-                        <p className="text-lg font-medium">+91 98765 43210</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wider">Call or WhatsApp</p>
+                        <p className="text-lg font-medium group-hover:text-purple-400 transition-colors">
+                            +91 9330680642
+                        </p>
                     </div>
                 </div>
+
             </div>
           </div>
 
@@ -152,63 +181,28 @@ const Contact = () => {
             </AnimatePresence>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
-                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400 ml-1">Your Name</label>
-                        <input 
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            type="text" 
-                            placeholder="John Doe"
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                            required
-                        />
+                        <input name="name" value={formData.name} onChange={handleChange} type="text" placeholder="John Doe" className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" required />
                     </div>
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400 ml-1">Your Email</label>
-                        <input 
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            type="email" 
-                            placeholder="john@example.com"
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                            required
-                        />
+                        <input name="email" value={formData.email} onChange={handleChange} type="email" placeholder="john@example.com" className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" required />
                     </div>
                 </div>
 
-                {/* Dropdown */}
                 <div className="space-y-2 relative">
                     <label className="text-sm text-gray-400 ml-1">Service Interested In</label>
-                    <div 
-                        onClick={toggleDropdown}
-                        className={`w-full bg-black/40 border cursor-pointer rounded-xl px-5 py-4 text-white flex justify-between items-center transition-all ${isOpen ? 'border-blue-500 ring-1 ring-blue-500' : 'border-white/10 hover:border-white/30'}`}
-                    >
-                        <span className={formData.service ? "text-white" : "text-gray-600"}>
-                            {formData.service || "Select a Service"}
-                        </span>
-                        <ChevronDown 
-                            size={20} 
-                            className={`text-gray-400 transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`} 
-                        />
+                    <div onClick={toggleDropdown} className={`w-full bg-black/40 border cursor-pointer rounded-xl px-5 py-4 text-white flex justify-between items-center transition-all ${isOpen ? 'border-blue-500 ring-1 ring-blue-500' : 'border-white/10 hover:border-white/30'}`}>
+                        <span className={formData.service ? "text-white" : "text-gray-600"}>{formData.service || "Select a Service"}</span>
+                        <ChevronDown size={20} className={`text-gray-400 transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`} />
                     </div>
                     <AnimatePresence>
                         {isOpen && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="absolute z-50 w-full mt-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
-                            >
+                            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="absolute z-50 w-full mt-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
                                 {servicesList.map((service, index) => (
-                                    <div 
-                                        key={index}
-                                        onClick={() => handleSelect(service)}
-                                        className="px-5 py-3 text-gray-300 hover:bg-blue-600 hover:text-white cursor-pointer transition-colors"
-                                    >
+                                    <div key={index} onClick={() => handleSelect(service)} className="px-5 py-3 text-gray-300 hover:bg-blue-600 hover:text-white cursor-pointer transition-colors">
                                         {service}
                                     </div>
                                 ))}
@@ -219,29 +213,12 @@ const Contact = () => {
 
                 <div className="space-y-2">
                     <label className="text-sm text-gray-400 ml-1">Message</label>
-                    <textarea 
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows={4}
-                        placeholder="Tell us about your project..."
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
-                        required
-                    ></textarea>
+                    <textarea name="message" value={formData.message} onChange={handleChange} rows={4} placeholder="Tell us about your project..." className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none" required></textarea>
                 </div>
 
-                <button 
-                    type="submit"
-                    disabled={status === "loading"}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 group disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                    {status === "loading" ? (
-                        <>Sending... <Loader2 className="animate-spin" size={20} /></>
-                    ) : (
-                        <>Send Message <Send size={18} className="group-hover:translate-x-1 transition-transform" /></>
-                    )}
+                <button type="submit" disabled={status === "loading"} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 group disabled:opacity-70 disabled:cursor-not-allowed">
+                    {status === "loading" ? (<>Sending... <Loader2 className="animate-spin" size={20} /></>) : (<>Send Message <Send size={18} className="group-hover:translate-x-1 transition-transform" /></>)}
                 </button>
-
             </form>
           </motion.div>
 

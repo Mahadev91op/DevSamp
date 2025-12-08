@@ -3,20 +3,25 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Linkedin, Twitter, Plus } from "lucide-react";
+import { Youtube, Plus, Bird } from "lucide-react";
+
+// X Icon Component
+const XIcon = ({ size = 20, className }) => (
+  <svg role="img" viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [activeId, setActiveId] = useState(null);
 
-  // API se Data Fetch karna
   useEffect(() => {
     const fetchTeam = async () => {
       try {
         const res = await fetch("/api/team");
         const data = await res.json();
         setTeamMembers(data.team || []);
-        // Pehle member ko active set karo agar data hai
         if (data.team?.length > 0) setActiveId(data.team[0]._id);
       } catch (error) {
         console.error("Failed to fetch team", error);
@@ -25,7 +30,7 @@ const Team = () => {
     fetchTeam();
   }, []);
 
-  if (teamMembers.length === 0) return null; // Agar koi team member nahi hai to section mat dikhao
+  if (teamMembers.length === 0) return null;
 
   return (
     <section id="team" className="py-24 bg-black text-white overflow-hidden">
@@ -75,12 +80,15 @@ const Team = () => {
                             <p className="text-gray-300 text-sm max-w-xs">{member.desc}</p>
                         </div>
                         <div className="flex gap-3">
-                            <button className="p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
-                                <Linkedin size={20} />
-                            </button>
-                            <button className="p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
-                                <Twitter size={20} />
-                            </button>
+                            <a href="https://www.freelancer.in/u/DevSamp" target="_blank" className="p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
+                                <Bird size={20} />
+                            </a>
+                            <a href="https://www.youtube.com/@DevSamp1st" target="_blank" className="p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
+                                <Youtube size={20} />
+                            </a>
+                            <a href="https://x.com/devsamp1st" target="_blank" className="p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
+                                <XIcon size={20} />
+                            </a>
                         </div>
                     </div>
                 </motion.div>

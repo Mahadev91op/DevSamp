@@ -6,12 +6,13 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
+// Nav Links me 'Blog' add kiya
 const navLinks = [
-  { name: "Services", href: "#services" },
-  { name: "Process", href: "#process" },
-  { name: "Work", href: "#work" },
-  { name: "Pricing", href: "#pricing" },
-  { name: "About", href: "#about" },
+  { name: "Services", href: "/#services" },
+  { name: "Work", href: "/#work" },
+  { name: "Pricing", href: "/#pricing" },
+  { name: "Blog", href: "/blog" }, // New Blog Page Link
+  { name: "About", href: "/#about" },
 ];
 
 const Navbar = () => {
@@ -19,7 +20,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Scroll detection logic
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -28,8 +28,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // --- FIX 1: Scroll Lock ---
-  // Jab menu khulega, body scroll band ho jayega
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -38,14 +36,12 @@ const Navbar = () => {
     }
   }, [isOpen]);
 
-  // Admin Panel Check
   if (pathname && pathname.startsWith("/admin")) {
     return null;
   }
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Animations
   const menuVariants = {
     closed: { x: "100%", transition: { duration: 0.4, ease: "easeInOut" } },
     open: { x: 0, transition: { duration: 0.4, ease: "easeInOut" } }
@@ -58,15 +54,12 @@ const Navbar = () => {
 
   return (
     <nav
-      // --- FIX 2 & 3: Z-Index and Stable State ---
-      // z-[1000] ensure karega ye sabse upar rahe.
-      // isOpen hone par hum 'bg-black py-5' force kar rahe hain taaki menu khulne par navbar hile nahi.
       className={`fixed w-full z-[1000] top-0 start-0 transition-all duration-300 ${
         isOpen 
-          ? "bg-black py-5 border-b border-white/10" // Jab Menu khula ho (Stable look)
+          ? "bg-black py-5 border-b border-white/10"
           : scrolled
-            ? "bg-black/80 backdrop-blur-md border-b border-white/10 py-3" // Scroll karne par (Compact look)
-            : "bg-transparent py-5" // Top par (Transparent look)
+            ? "bg-black/80 backdrop-blur-md border-b border-white/10 py-3"
+            : "bg-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6">
@@ -82,7 +75,7 @@ const Navbar = () => {
             </motion.div>
         </Link>
 
-        {/* Desktop Menu (Hidden on Mobile) */}
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link, index) => (
             <Link 

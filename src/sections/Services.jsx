@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link"; // Link Import kiya
 import * as LucideIcons from "lucide-react";
 
-// --- FIX: Predefined Gradients ---
-// Ye classes ab code me hain, to Tailwind inka CSS pakka generate karega.
-// Colors gayab hone ki problem isse solve ho jayegi.
+// --- Predefined Gradients ---
 const gradients = [
   "from-blue-500 to-cyan-500",      // Card 1
   "from-purple-500 to-pink-500",    // Card 2
@@ -80,44 +79,44 @@ const Services = () => {
           {servicesData.map((service, index) => {
             const IconComponent = LucideIcons[service.icon] || LucideIcons.HelpCircle;
             
-            // Fix: Index ke hisaab se gradient aur color assign karna
-            // Agar DB me missing bhi ho, tab bhi ye sahi chalega.
             const gradientClass = gradients[index % gradients.length];
             const colorClass = textColors[index % textColors.length];
 
             return (
-              <motion.div
-                key={service._id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="group relative p-1 rounded-2xl bg-white/5 hover:bg-transparent transition-all duration-300"
-              >
-                {/* --- Glow Effect --- */}
-                <div className={`absolute -inset-[2px] rounded-2xl bg-gradient-to-r ${gradientClass} opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500 -z-10`} />
-                
-                {/* Card Content */}
-                <div className="h-full bg-neutral-900/90 backdrop-blur-xl border border-white/10 p-8 rounded-xl group-hover:border-transparent transition-colors relative overflow-hidden">
+              // FIX: Wrapped in Link to make it clickable
+              <Link href="#contact" key={service._id} className="block h-full">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="group relative p-1 rounded-2xl bg-white/5 hover:bg-transparent transition-all duration-300 h-full"
+                >
+                  {/* --- Glow Effect --- */}
+                  <div className={`absolute -inset-[2px] rounded-2xl bg-gradient-to-r ${gradientClass} opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500 -z-10`} />
                   
-                  {/* Decorative Circle behind Icon */}
-                  <div className={`absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br ${gradientClass} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out`}></div>
+                  {/* Card Content */}
+                  <div className="h-full bg-neutral-900/90 backdrop-blur-xl border border-white/10 p-8 rounded-xl group-hover:border-transparent transition-colors relative overflow-hidden">
+                    
+                    {/* Decorative Circle behind Icon */}
+                    <div className={`absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br ${gradientClass} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out`}></div>
 
-                  {/* Icon */}
-                  <div className={`mb-6 p-3 w-fit rounded-lg bg-white/5 border border-white/10 ${colorClass} group-hover:scale-110 transition-transform duration-300`}>
-                    <IconComponent size={32} />
+                    {/* Icon */}
+                    <div className={`mb-6 p-3 w-fit rounded-lg bg-white/5 border border-white/10 ${colorClass} group-hover:scale-110 transition-transform duration-300`}>
+                      <IconComponent size={32} />
+                    </div>
+
+                    {/* Text */}
+                    <h3 className="text-xl font-bold mb-3 group-hover:text-white transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300">
+                      {service.desc}
+                    </p>
+
                   </div>
-
-                  {/* Text */}
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-white transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300">
-                    {service.desc}
-                  </p>
-
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             );
           })}
         </div>

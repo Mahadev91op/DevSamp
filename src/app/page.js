@@ -4,11 +4,12 @@ import About from "@/sections/About";
 import Team from "@/sections/Team";
 import Process from "@/sections/Process";
 import Pricing from "@/sections/Pricing";
-import FAQ from "@/sections/FAQ"; // <-- Import kiya
+import FAQ from "@/sections/FAQ"; 
 import Portfolio from "@/sections/Portfolio";
 import Testimonials from "@/sections/Testimonials";
 import Contact from "@/sections/Contact";
 import Footer from "@/components/Footer";
+import Blogs from "@/sections/Blogs"; // <-- Import kiya
 
 export default function Home() {
   return (
@@ -20,7 +21,8 @@ export default function Home() {
       <Process />
       <Portfolio />
       <Pricing />
-      <FAQ /> {/* <-- Yahan Add kiya */}
+      <Blogs /> {/* <-- Yahan Add kiya (Pricing ke baad) */}
+      <FAQ /> 
       <Testimonials />
       <Contact />
       <Footer />

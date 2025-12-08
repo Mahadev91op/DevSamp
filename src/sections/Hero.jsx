@@ -1,20 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { 
   ArrowRight, 
   Code2, 
   LayoutTemplate, 
-  Github, 
-  Linkedin, 
-  Twitter, 
+  Youtube, 
   Instagram, 
-  CheckCircle2 
+  CheckCircle2,
+  Bird // Freelancer Icon
 } from "lucide-react";
+
+// X (Twitter) Custom Icon
+const XIcon = ({ size = 22, className }) => (
+  <svg role="img" viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 const Hero = () => {
   return (
-    // FIX 1: 'pb-40' kar diya taaki niche kaafi jagah bache aur content upar rahe
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden pt-32 pb-40">
       
       {/* --- BACKGROUND --- */}
@@ -23,7 +29,7 @@ const Hero = () => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-      {/* --- SOCIAL SIDEBAR --- */}
+      {/* --- SOCIAL SIDEBAR (UPDATED) --- */}
       <motion.div 
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -32,10 +38,22 @@ const Hero = () => {
       >
         <div className="w-[1px] h-24 bg-gradient-to-b from-transparent to-gray-600"></div>
         <div className="flex flex-col gap-6">
-            <a href="#" className="text-gray-500 hover:text-blue-500 hover:-translate-y-1 transition-all"><Github size={22} /></a>
-            <a href="#" className="text-gray-500 hover:text-blue-500 hover:-translate-y-1 transition-all"><Linkedin size={22} /></a>
-            <a href="#" className="text-gray-500 hover:text-blue-500 hover:-translate-y-1 transition-all"><Twitter size={22} /></a>
-            <a href="#" className="text-gray-500 hover:text-blue-500 hover:-translate-y-1 transition-all"><Instagram size={22} /></a>
+            {/* Freelancer (LinkedIn Replaced) */}
+            <a href="https://www.freelancer.in/u/DevSamp" target="_blank" className="text-gray-500 hover:text-blue-500 hover:-translate-y-1 transition-all" title="Freelancer">
+                <Bird size={22} />
+            </a>
+            {/* YouTube (GitHub Replaced) */}
+            <a href="https://www.youtube.com/@DevSamp1st" target="_blank" className="text-gray-500 hover:text-red-600 hover:-translate-y-1 transition-all" title="YouTube">
+                <Youtube size={22} />
+            </a>
+            {/* X (Twitter Replaced) */}
+            <a href="https://x.com/devsamp1st" target="_blank" className="text-gray-500 hover:text-white hover:-translate-y-1 transition-all" title="X">
+                <XIcon size={20} />
+            </a>
+            {/* Instagram */}
+            <a href="https://www.instagram.com/devsamp1st/" target="_blank" className="text-gray-500 hover:text-pink-600 hover:-translate-y-1 transition-all" title="Instagram">
+                <Instagram size={22} />
+            </a>
         </div>
         <div className="w-[1px] h-24 bg-gradient-to-t from-transparent to-gray-600"></div>
       </motion.div>
@@ -48,7 +66,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm hover:border-blue-500/30 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm hover:border-blue-500/30 transition-colors cursor-default"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -88,14 +106,14 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col sm:flex-row gap-5 justify-center items-center w-full"
         >
-          <button className="group px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all flex items-center gap-2 shadow-[0_0_30px_-5px_rgba(37,99,235,0.4)]">
+          <Link href="#contact" className="group px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all flex items-center gap-2 shadow-[0_0_30px_-5px_rgba(37,99,235,0.4)]">
             Start a Project 
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
           
-          <button className="px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 text-white font-semibold text-lg transition-all backdrop-blur-sm">
+          <Link href="#work" className="px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 text-white font-semibold text-lg transition-all backdrop-blur-sm">
             View Portfolio
-          </button>
+          </Link>
         </motion.div>
 
         {/* --- STATS BAR --- */}
@@ -138,8 +156,8 @@ const Hero = () => {
       </motion.div>
 
       {/* --- SCROLL INDICATOR --- */}
-      {/* FIX 2: 'bottom-10' use kiya taaki ye content se door rahe */}
-      <motion.div 
+      <motion.a 
+        href="#services"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
@@ -158,7 +176,7 @@ const Hero = () => {
         <span className="text-[10px] text-gray-500 uppercase tracking-[0.3em] font-medium animate-pulse">
             Scroll
         </span>
-      </motion.div>
+      </motion.a>
 
     </section>
   );

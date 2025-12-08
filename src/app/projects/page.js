@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link"; // Link component import kiya
+import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { ExternalLink } from "lucide-react";
 
-const Portfolio = () => {
+export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -25,33 +27,30 @@ const Portfolio = () => {
 
   const categories = ["All", ...new Set(projects.map(p => p.category))];
 
-  // Pehle filter karo, fir sirf top 6 nikalo
   const filteredProjects = activeCategory === "All" 
     ? projects 
     : projects.filter(project => project.category === activeCategory);
-  
-  const displayedProjects = filteredProjects.slice(0, 6); // Sirf 6 dikhana
 
   return (
-    <section id="work" className="py-24 bg-black relative">
-      <div className="container mx-auto px-6">
+    <main className="bg-black min-h-screen text-white">
+      <Navbar />
+      
+      <div className="pt-32 pb-16 px-6 container mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <motion.h2 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-4xl md:text-5xl font-bold text-white mb-2"
-            >
-              Selected <span className="text-blue-500">Works</span>
-            </motion.h2>
-            <p className="text-gray-400">Check out some of our latest projects.</p>
-          </div>
+        <div className="text-center mb-16">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold mb-4"
+          >
+            All <span className="text-blue-500">Projects</span>
+          </motion.h1>
+          <p className="text-gray-400">A complete archive of our digital craftsmanship.</p>
+        </div>
 
-          {/* Filter Buttons */}
-          <div className="flex flex-wrap gap-2">
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap justify-center gap-2 mb-12">
             {categories.map((cat, idx) => (
               <button
                 key={idx}
@@ -65,13 +64,12 @@ const Portfolio = () => {
                 {cat}
               </button>
             ))}
-          </div>
         </div>
 
         {/* Projects Grid */}
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
-            {displayedProjects.map((project) => (
+            {filteredProjects.map((project) => (
               <motion.div
                 layout
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -81,7 +79,6 @@ const Portfolio = () => {
                 key={project._id}
                 className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white/5 border border-white/10"
               >
-                {/* Image Container */}
                 <div className="relative h-[300px] w-full overflow-hidden">
                   <Image
                     src={project.image}
@@ -92,14 +89,12 @@ const Portfolio = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                 </div>
 
-                {/* Content */}
                 <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <div className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">
                     {project.category}
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
                   
-                  {/* Tech Stack Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((t, i) => (
                         <span key={i} className="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">
@@ -114,24 +109,14 @@ const Portfolio = () => {
                     </a>
                   </div>
                 </div>
-
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {/* View All Button - Links to /projects */}
-        <div className="mt-16 flex justify-center">
-            <Link href="/projects">
-                <button className="px-8 py-3 border border-white/20 rounded-full text-white hover:bg-white hover:text-black transition-all">
-                    View All Projects
-                </button>
-            </Link>
-        </div>
-
       </div>
-    </section>
-  );
-};
 
-export default Portfolio;
+      <Footer />
+    </main>
+  );
+}
