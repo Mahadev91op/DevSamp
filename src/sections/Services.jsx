@@ -2,12 +2,33 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import * as LucideIcons from "lucide-react"; // Icons dynamic lane ke liye
+import * as LucideIcons from "lucide-react";
+
+// --- FIX: Predefined Gradients ---
+// Ye classes ab code me hain, to Tailwind inka CSS pakka generate karega.
+// Colors gayab hone ki problem isse solve ho jayegi.
+const gradients = [
+  "from-blue-500 to-cyan-500",      // Card 1
+  "from-purple-500 to-pink-500",    // Card 2
+  "from-orange-500 to-red-500",     // Card 3
+  "from-emerald-500 to-green-500",  // Card 4
+  "from-pink-500 to-rose-500",      // Card 5
+  "from-yellow-500 to-orange-500",  // Card 6
+];
+
+// --- Fallback Colors for Icon Box ---
+const textColors = [
+  "text-blue-500",
+  "text-purple-500",
+  "text-orange-500",
+  "text-emerald-500",
+  "text-pink-500",
+  "text-yellow-500",
+];
 
 const Services = () => {
   const [servicesData, setServicesData] = useState([]);
 
-  // API se Services fetch karna
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -24,7 +45,7 @@ const Services = () => {
   return (
     <section id="services" className="relative w-full py-24 bg-black text-white">
       
-      {/* Background Glow for Ambiance */}
+      {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[20%] right-0 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px]"></div>
           <div className="absolute bottom-[10%] left-0 w-[400px] h-[400px] bg-purple-900/10 rounded-full blur-[120px]"></div>
@@ -32,7 +53,7 @@ const Services = () => {
 
       <div className="relative z-10 container mx-auto px-6">
         
-        {/* Section Header */}
+        {/* Header */}
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -57,8 +78,12 @@ const Services = () => {
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesData.map((service, index) => {
-            // Dynamic Icon Select Karna
             const IconComponent = LucideIcons[service.icon] || LucideIcons.HelpCircle;
+            
+            // Fix: Index ke hisaab se gradient aur color assign karna
+            // Agar DB me missing bhi ho, tab bhi ye sahi chalega.
+            const gradientClass = gradients[index % gradients.length];
+            const colorClass = textColors[index % textColors.length];
 
             return (
               <motion.div
@@ -69,17 +94,17 @@ const Services = () => {
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 className="group relative p-1 rounded-2xl bg-white/5 hover:bg-transparent transition-all duration-300"
               >
-                {/* Hover Gradient Border Effect */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 -z-10`} />
+                {/* --- Glow Effect --- */}
+                <div className={`absolute -inset-[2px] rounded-2xl bg-gradient-to-r ${gradientClass} opacity-0 group-hover:opacity-100 blur-lg transition-all duration-500 -z-10`} />
                 
                 {/* Card Content */}
                 <div className="h-full bg-neutral-900/90 backdrop-blur-xl border border-white/10 p-8 rounded-xl group-hover:border-transparent transition-colors relative overflow-hidden">
                   
-                  {/* --- YEH LINE MISSING THI: Decorative Circle behind Icon --- */}
-                  <div className={`absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br ${service.gradient} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out`}></div>
+                  {/* Decorative Circle behind Icon */}
+                  <div className={`absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br ${gradientClass} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out`}></div>
 
                   {/* Icon */}
-                  <div className={`mb-6 p-3 w-fit rounded-lg bg-white/5 border border-white/10 ${service.color} group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`mb-6 p-3 w-fit rounded-lg bg-white/5 border border-white/10 ${colorClass} group-hover:scale-110 transition-transform duration-300`}>
                     <IconComponent size={32} />
                   </div>
 
