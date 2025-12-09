@@ -241,7 +241,17 @@ export default function AdminPanel() {
 
   const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const handleLogin = (e) => { e.preventDefault(); if (password === "devsamp_boss_123") { setIsAuthenticated(true); fetchAllData(); } else { showToast("Invalid Passkey", "error"); } };
+  // Environment variable se password check karega
+const handleLogin = (e) => { 
+  e.preventDefault(); 
+  // Ye .env file se password uthayega
+  if (password === process.env.NEXT_PUBLIC_ADMIN_KEY) { 
+    setIsAuthenticated(true); 
+    fetchAllData(); 
+  } else { 
+    showToast("Invalid Passkey", "error"); 
+  } 
+};
 
   const fetchAllData = async () => {
     setLoading(true);

@@ -29,7 +29,7 @@ export default function LoginPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-            action: authMode, // login, signup, या forgot
+            action: authMode, 
             ...form 
         }),
       });
@@ -40,12 +40,11 @@ export default function LoginPage() {
         if (authMode === 'forgot') {
             setSuccessMsg(data.message);
             setLoading(false);
-            return; // Redirect न करें, बस मैसेज दिखाएं
+            return;
         }
 
-        // Login/Signup Success
         localStorage.setItem("user", JSON.stringify(data.user));
-        window.dispatchEvent(new Event("storage")); // Navbar update
+        window.dispatchEvent(new Event("storage"));
         router.push("/dashboard");
       } else {
         setError(data.message || "Something went wrong");
@@ -56,12 +55,15 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  // --- SOCIAL LOGIN HANDLER (Mock/Simulation) ---
+  // --- SOCIAL LOGIN HANDLER (Secure Alert) ---
   const handleSocialLogin = async (provider) => {
+    // Production Note: Asli social login ke liye NextAuth.js setup karna padega.
+    // Abhi ke liye hum ise Demo mode mein rakhenge.
+    alert("Note: Social Login is currently in Demo Mode. Use Email/Password for production accounts.");
+    
     setLoading(true);
     setError("");
     
-    // सिमुलेशन के लिए हम एक डेमो यूजर बना रहे हैं
     const mockUser = {
         name: provider === 'google' ? 'Google User' : 'GitHub Dev',
         email: provider === 'google' ? 'user@gmail.com' : 'dev@github.com',
@@ -69,7 +71,6 @@ export default function LoginPage() {
     };
 
     try {
-        // बैकएंड को सोशल लॉगिन की सूचना दें (ताकि DB में सेव हो सके)
         const res = await fetch("/api/auth", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -84,8 +85,6 @@ export default function LoginPage() {
         if(res.ok) {
             localStorage.setItem("user", JSON.stringify(data.user));
             window.dispatchEvent(new Event("storage"));
-            
-            // थोड़ा सा delay ताकि लोडर दिखे (Real feel)
             setTimeout(() => {
                 router.push("/dashboard");
             }, 1000);
@@ -104,7 +103,6 @@ export default function LoginPage() {
       <Navbar />
       
       <div className="flex-1 flex items-center justify-center p-6 pt-32 relative overflow-hidden">
-        {/* Background Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -131,7 +129,6 @@ export default function LoginPage() {
                 </p>
             </div>
 
-            {/* Error / Success Messages */}
             <AnimatePresence>
                 {error && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm flex items-center gap-2 overflow-hidden">
@@ -147,7 +144,6 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
                 
-                {/* Name Field (Only for Signup) */}
                 <AnimatePresence mode="popLayout">
                     {authMode === 'signup' && (
                         <motion.div 
@@ -162,7 +158,6 @@ export default function LoginPage() {
                     )}
                 </AnimatePresence>
 
-                {/* Email Field (Always Visible) */}
                 <div className="space-y-1">
                     <label className="text-xs text-gray-500 font-bold ml-1 uppercase tracking-wider">Email Address</label>
                     <div className="relative group">
@@ -171,7 +166,6 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                {/* Password Field (Hidden in Forgot Mode) */}
                 <AnimatePresence mode="popLayout">
                     {authMode !== 'forgot' && (
                         <motion.div 
@@ -200,7 +194,6 @@ export default function LoginPage() {
                 </button>
             </form>
 
-            {/* Back Button for Forgot Password */}
             {authMode === 'forgot' && (
                 <div className="mt-6 text-center">
                     <button onClick={() => setAuthMode('login')} className="text-sm text-gray-400 hover:text-white flex items-center justify-center gap-1 mx-auto transition-colors">
@@ -209,7 +202,6 @@ export default function LoginPage() {
                 </div>
             )}
 
-            {/* Social Login (Only show in Login/Signup) */}
             {authMode !== 'forgot' && (
                 <>
                     <div className="relative my-8">
