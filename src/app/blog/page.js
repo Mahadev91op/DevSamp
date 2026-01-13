@@ -1,7 +1,7 @@
+// src/app/blog/page.js
 "use client";
 
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -67,7 +67,7 @@ export default function BlogPage() {
 
   return (
     <main className="bg-black min-h-screen text-white selection:bg-blue-500/30">
-      <Navbar />
+      {/* Navbar removed */}
       
       <div className="pt-32 pb-24 px-6 container mx-auto max-w-7xl">
         

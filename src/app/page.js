@@ -11,10 +11,13 @@ import Contact from "@/sections/Contact";
 import Footer from "@/components/Footer";
 import Blogs from "@/sections/Blogs";
 
-// Specific Metadata for Homepage
+// Specific Professional Metadata for Homepage
 export const metadata = {
-  title: "DevSamp | Transform Ideas into Digital Reality",
-  description: "DevSamp offers top-tier web development, app creation, and UI/UX design services. Hire expert developers for your next big project.",
+  title: "DevSamp | Top Web Development & UI/UX Design Agency",
+  description: "DevSamp is a premium digital agency providing custom Web Development, App Solutions, and UI/UX Design. Partner with expert developers to grow your business.",
+  alternates: {
+    canonical: 'https://www.devsamp.online',
+  },
 };
 
 export default function Home() {

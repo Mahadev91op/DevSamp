@@ -1,10 +1,9 @@
+// src/app/projects/page.js
 "use client";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ExternalLink } from "lucide-react";
 
@@ -33,7 +32,7 @@ export default function ProjectsPage() {
 
   return (
     <main className="bg-black min-h-screen text-white">
-      <Navbar />
+      {/* Navbar removed as it's in RootLayout */}
       
       <div className="pt-32 pb-16 px-6 container mx-auto">
         

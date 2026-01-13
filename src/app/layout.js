@@ -19,13 +19,13 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 // --- IMPROVED SEO METADATA ---
 export const metadata = {
-  metadataBase: new URL('https://www.devsamp.online'), // Apna actual domain yahan dalein
+  metadataBase: new URL('https://www.devsamp.online'),
   title: {
-    default: "DevSamp | Creative Web & App Development Agency",
+    default: "DevSamp | Top Web Development & UI/UX Design Agency",
     template: "%s | DevSamp Agency"
   },
-  description: "DevSamp is a premium digital agency providing Web Development, UI/UX Design, and App Solutions. We transform ideas into digital reality with Next.js and modern tech.",
-  keywords: ["Web Development", "App Development", "UI/UX Design", "Next.js Agency", "React Developers", "Digital Agency India", "DevSamp", "Freelance Web Developer", "SEO Services"],
+  description: "DevSamp is a premium digital agency providing custom Web Development, App Solutions, and UI/UX Design. Transform your ideas into digital reality with expert developers.",
+  keywords: ["Web Development", "App Development", "UI/UX Design", "Next.js Agency", "React Developers", "Digital Agency India", "DevSamp", "Freelance Web Developer", "SEO Services", "Website Design"],
   authors: [{ name: "DevSamp Team", url: "https://www.devsamp.online" }],
   creator: "DevSamp",
   publisher: "DevSamp Agency",
@@ -35,21 +35,26 @@ export const metadata = {
     telephone: false,
   },
   manifest: "/manifest.json",
+  // Yahan humne icon-192.png ko main logo set kiya hai
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon-192.png",
+    icon: '/icon-192.png',
+    shortcut: '/icon-192.png',
+    apple: '/icon-192.png',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/icon-192.png',
+    },
   },
   openGraph: {
     title: "DevSamp | Modern Digital Agency",
     description: "Transforming ideas into digital reality. Expert Web & App Development services.",
     url: 'https://www.devsamp.online',
-    siteName: 'DevSamp',
+    siteName: 'DevSamp Agency',
     images: [
       {
-        url: '/icon-512.png', // Apna banner image yahan use karein
-        width: 800,
-        height: 600,
+        url: '/icon-512.png', // Social media ke liye badi image behtar hoti hai
+        width: 512,
+        height: 512,
         alt: 'DevSamp Agency Logo',
       },
     ],
@@ -85,38 +90,58 @@ export const viewport = {
   themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5, // Accessibility ke liye zoom allow kiya hai
+  maximumScale: 5,
   userScalable: true,
 };
 
 export default function RootLayout({ children }) {
+  // Enhanced JSON-LD Schema for Google Rich Results
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "DevSamp",
+        "url": "https://www.devsamp.online",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.devsamp.online/icon-192.png", // Yahan bhi icon-192.png use kiya hai
+          "width": 192,
+          "height": 192,
+          "caption": "DevSamp Agency Logo"
+        },
+        "image": "https://www.devsamp.online/icon-512.png",
+        "sameAs": [
+          "https://x.com/devsamp1st",
+          "https://www.instagram.com/devsamp1st/",
+          "https://www.youtube.com/@DevSamp1st",
+          "https://www.freelancer.in/u/DevSamp"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-9330680642",
+          "contactType": "customer service",
+          "email": "devsamp1st@gmail.com",
+          "areaServed": "IN",
+          "availableLanguage": ["en", "hi"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "name": "DevSamp",
+        "alternateName": ["DevSamp Agency", "DevSamp Web Solutions"],
+        "url": "https://www.devsamp.online"
+      }
+    ]
+  };
+
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning={true}>
       <head>
-        {/* JSON-LD Schema for Organization SEO */}
+        {/* JSON-LD Schema Injection */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "DevSamp",
-              "url": "https://www.devsamp.online",
-              "logo": "https://www.devsamp.online/icon-512.png",
-              "sameAs": [
-                "https://x.com/devsamp1st",
-                "https://www.instagram.com/devsamp1st/",
-                "https://www.youtube.com/@DevSamp1st",
-                "https://www.freelancer.in/u/DevSamp"
-              ],
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+91-9330680642",
-                "contactType": "customer service",
-                "email": "devsamp1st@gmail.com"
-              }
-            })
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body 
