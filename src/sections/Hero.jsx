@@ -9,7 +9,7 @@ import {
   Youtube, 
   Instagram, 
   CheckCircle2,
-  Bird // Freelancer Icon
+  Bird 
 } from "lucide-react";
 
 // X (Twitter) Custom Icon
@@ -21,15 +21,17 @@ const XIcon = ({ size = 22, className }) => (
 
 const Hero = () => {
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden pt-32 pb-40">
+    // FIX 1: Padding adjusted for mobile (pt-24 pb-20) and restored for PC (md:pt-32 md:pb-40)
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden pt-24 pb-20 md:pt-32 md:pb-40">
       
       {/* --- BACKGROUND --- */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
       
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+      {/* FIX 2: Reduced blob size on mobile so it doesn't overwhelm the screen */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] md:w-[500px] md:h-[300px] bg-blue-600/20 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-purple-600/10 rounded-full blur-[60px] md:blur-[100px] pointer-events-none"></div>
 
-      {/* --- SOCIAL SIDEBAR (UPDATED) --- */}
+      {/* --- SOCIAL SIDEBAR (Hidden on Mobile, Same as before) --- */}
       <motion.div 
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -38,19 +40,15 @@ const Hero = () => {
       >
         <div className="w-[1px] h-24 bg-gradient-to-b from-transparent to-gray-600"></div>
         <div className="flex flex-col gap-6">
-            {/* Freelancer (LinkedIn Replaced) */}
             <a href="https://www.freelancer.in/u/DevSamp" target="_blank" className="text-gray-500 hover:text-blue-500 hover:-translate-y-1 transition-all" title="Freelancer">
                 <Bird size={22} />
             </a>
-            {/* YouTube (GitHub Replaced) */}
             <a href="https://www.youtube.com/@DevSamp1st" target="_blank" className="text-gray-500 hover:text-red-600 hover:-translate-y-1 transition-all" title="YouTube">
                 <Youtube size={22} />
             </a>
-            {/* X (Twitter Replaced) */}
             <a href="https://x.com/devsamp1st" target="_blank" className="text-gray-500 hover:text-white hover:-translate-y-1 transition-all" title="X">
                 <XIcon size={20} />
             </a>
-            {/* Instagram */}
             <a href="https://www.instagram.com/devsamp1st/" target="_blank" className="text-gray-500 hover:text-pink-600 hover:-translate-y-1 transition-all" title="Instagram">
                 <Instagram size={22} />
             </a>
@@ -66,7 +64,8 @@ const Hero = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm hover:border-blue-500/30 transition-colors cursor-default"
+          // FIX 3: Smaller text and margin on mobile
+          className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10 text-xs md:text-sm text-gray-300 mb-6 md:mb-8 backdrop-blur-sm hover:border-blue-500/30 transition-colors cursor-default"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -80,7 +79,8 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6"
+          // FIX 4: Changed text-4xl to text-3xl for mobile, kept md:text-7xl for PC
+          className="text-3xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.2] md:leading-[1.1] mb-4 md:mb-6"
         >
           Transforming Ideas Into <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
@@ -93,7 +93,8 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+          // FIX 5: text-base for mobile, text-lg for PC
+          className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto mb-8 md:mb-10 leading-relaxed px-2"
         >
           DevSamp is a creative agency specializing in Next.js, motion design, 
           and scalable web solutions for modern businesses.
@@ -104,14 +105,14 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-5 justify-center items-center w-full"
+          className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center items-center w-full sm:w-auto"
         >
-          <Link href="#contact" className="group px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all flex items-center gap-2 shadow-[0_0_30px_-5px_rgba(37,99,235,0.4)]">
+          <Link href="#contact" className="w-full sm:w-auto group px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_-5px_rgba(37,99,235,0.4)]">
             Start a Project 
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           
-          <Link href="#work" className="px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 text-white font-semibold text-lg transition-all backdrop-blur-sm">
+          <Link href="#work" className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 text-white font-semibold text-lg transition-all backdrop-blur-sm flex justify-center">
             View Portfolio
           </Link>
         </motion.div>
@@ -121,7 +122,8 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="mt-16 pt-8 border-t border-white/10 w-full max-w-3xl flex flex-wrap justify-center sm:justify-between gap-6 sm:gap-0"
+            // FIX 6: Adjusted margins and gaps for mobile
+            className="mt-10 md:mt-16 pt-6 md:pt-8 border-t border-white/10 w-full max-w-3xl flex flex-wrap justify-center sm:justify-between gap-4 sm:gap-0"
         >
             <div className="flex items-center gap-3 text-gray-400">
                 <div className="bg-blue-500/10 p-2 rounded-full"><CheckCircle2 className="text-blue-500" size={18} /></div>
@@ -140,6 +142,7 @@ const Hero = () => {
       </div>
 
       {/* --- FLOATING BACKGROUND ICONS --- */}
+      {/* Kept hidden on mobile as per original design (2xl:block) */}
       <motion.div
         animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -156,6 +159,7 @@ const Hero = () => {
       </motion.div>
 
       {/* --- SCROLL INDICATOR --- */}
+      {/* Kept hidden on mobile to save space */}
       <motion.a 
         href="#services"
         initial={{ opacity: 0 }}
