@@ -1,7 +1,16 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const secretKey = process.env.JWT_SECRET || "your-super-secret-key-change-it";
+// FIX: Yahan humne ek 'Fallback Key' add kar di hai.
+// Agar .env me JWT_SECRET nahi milega, to ye default key use karega.
+// Isse BUILD ERROR fix ho jayega.
+const secretKey = process.env.JWT_SECRET || "default-dev-secret-key-change-this-in-prod";
+
+// Sirf Console me Warning dikhayenge, App Crash nahi karenge
+if (!process.env.JWT_SECRET) {
+  console.warn("⚠️ WARNING: JWT_SECRET is missing in .env file. Using default insecure key.");
+}
+
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload) {
@@ -27,7 +36,6 @@ export async function login(userData) {
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ user: userData, expires });
 
-  // ✅ FIX: 'await cookies()' use karein
   const cookieStore = await cookies();
   
   cookieStore.set("session", session, { 
@@ -40,13 +48,11 @@ export async function login(userData) {
 }
 
 export async function logout() {
-  // ✅ FIX: 'await cookies()' use karein
   const cookieStore = await cookies();
   cookieStore.set("session", "", { expires: new Date(0), path: "/" });
 }
 
 export async function getSession() {
-  // ✅ FIX: 'await cookies()' use karein
   const cookieStore = await cookies();
   const session = cookieStore.get("session")?.value;
   if (!session) return null;

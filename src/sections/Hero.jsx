@@ -21,17 +21,16 @@ const XIcon = ({ size = 22, className }) => (
 
 const Hero = () => {
   return (
-    // FIX 1: Padding adjusted for mobile (pt-24 pb-20) and restored for PC (md:pt-32 md:pb-40)
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden pt-24 pb-20 md:pt-32 md:pb-40">
       
-      {/* --- BACKGROUND --- */}
+      {/* --- BACKGROUND EFFECTS (Restored) --- */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
       
-      {/* FIX 2: Reduced blob size on mobile so it doesn't overwhelm the screen */}
+      {/* Floating Blobs */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] md:w-[500px] md:h-[300px] bg-blue-600/20 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-purple-600/10 rounded-full blur-[60px] md:blur-[100px] pointer-events-none"></div>
 
-      {/* --- SOCIAL SIDEBAR (Hidden on Mobile, Same as before) --- */}
+      {/* --- SOCIAL SIDEBAR (Desktop Only) --- */}
       <motion.div 
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -64,28 +63,24 @@ const Hero = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          // FIX 3: Smaller text and margin on mobile
           className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10 text-xs md:text-sm text-gray-300 mb-6 md:mb-8 backdrop-blur-sm hover:border-blue-500/30 transition-colors cursor-default"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          Available for Freelance Projects
+          Available for New Projects
         </motion.div>
 
-        {/* Heading */}
+        {/* Heading - SEO Optimized but Beautiful */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          // FIX 4: Changed text-4xl to text-3xl for mobile, kept md:text-7xl for PC
           className="text-3xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.2] md:leading-[1.1] mb-4 md:mb-6"
         >
-          Transforming Ideas Into <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
-            Digital Reality
-          </span>
+          Expert <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">Website Developer</span> <br className="hidden md:block" />
+          & UI/UX Design Agency
         </motion.h1>
 
         {/* Subtext */}
@@ -93,11 +88,10 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          // FIX 5: text-base for mobile, text-lg for PC
           className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto mb-8 md:mb-10 leading-relaxed px-2"
         >
-          DevSamp is a creative agency specializing in Next.js, motion design, 
-          and scalable web solutions for modern businesses.
+          We are a team of professional website developers building high-performance websites, 
+          custom apps, and digital products that scale.
         </motion.p>
 
         {/* Buttons */}
@@ -108,7 +102,7 @@ const Hero = () => {
           className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center items-center w-full sm:w-auto"
         >
           <Link href="#contact" className="w-full sm:w-auto group px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_-5px_rgba(37,99,235,0.4)]">
-            Start a Project 
+            Hire Developers 
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           
@@ -122,7 +116,6 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            // FIX 6: Adjusted margins and gaps for mobile
             className="mt-10 md:mt-16 pt-6 md:pt-8 border-t border-white/10 w-full max-w-3xl flex flex-wrap justify-center sm:justify-between gap-4 sm:gap-0"
         >
             <div className="flex items-center gap-3 text-gray-400">
@@ -141,25 +134,7 @@ const Hero = () => {
 
       </div>
 
-      {/* --- FLOATING BACKGROUND ICONS --- */}
-      {/* Kept hidden on mobile as per original design (2xl:block) */}
-      <motion.div
-        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[20%] left-[5%] hidden 2xl:block text-gray-800 opacity-20"
-      >
-        <Code2 size={100} />
-      </motion.div>
-      <motion.div
-        animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[30%] right-[5%] hidden 2xl:block text-gray-800 opacity-20"
-      >
-        <LayoutTemplate size={100} />
-      </motion.div>
-
       {/* --- SCROLL INDICATOR --- */}
-      {/* Kept hidden on mobile to save space */}
       <motion.a 
         href="#services"
         initial={{ opacity: 0 }}

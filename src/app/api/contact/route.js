@@ -1,12 +1,31 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Contact from '@/models/Contact';
-import { sendEmail } from '@/lib/email'; // <-- Import Helper
+import { sendEmail } from '@/lib/email';
 
 // 1. DATA SAVE KARNA (POST)
 export async function POST(request) {
   try {
-    const { name, email, service, message } = await request.json();
+    const body = await request.json();
+    const { name, email, service, message } = body;
+
+    // --- VALIDATION START ---
+    if (!name || !email || !message) {
+      return NextResponse.json(
+        { message: "All fields are required!" }, 
+        { status: 400 }
+      );
+    }
+    
+    // Basic Email Regex Check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { message: "Invalid Email Address!" }, 
+        { status: 400 }
+      );
+    }
+    // --- VALIDATION END ---
     
     console.log("📨 New Lead Received:", name);
 
@@ -16,38 +35,43 @@ export async function POST(request) {
     await Contact.create({ 
         name, 
         email, 
-        service, 
+        service: service || "General Inquiry", 
         message,
         status: "New"
     });
 
-    // --- EMAIL NOTIFICATION LOGIC (NEW) ---
-    // 1. Admin ko email bhejo
+    // Email Notification to Admin
     const adminEmailContent = `
       <h3>🚀 New Lead Received!</h3>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Service:</strong> ${service}</p>
+      <p><strong>Service:</strong> ${service || "N/A"}</p>
       <p><strong>Message:</strong><br/>${message}</p>
     `;
     
-    await sendEmail(
-        process.env.EMAIL_USER, // Admin Email (Apna hi email daalein)
-        `New Inquiry from ${name}`,
-        `New lead from ${name} for ${service}.`,
-        adminEmailContent
-    );
+    // Admin ko email (Error handling included specifically for email)
+    try {
+        await sendEmail(
+            process.env.EMAIL_USER, 
+            `New Inquiry from ${name}`,
+            `New lead from ${name}.`,
+            adminEmailContent
+        );
 
-    // 2. Client ko "Thank You" email bhejo (Optional but professional)
-    await sendEmail(
-        email,
-        "We received your message! - DevSamp",
-        `Hi ${name},\n\nThanks for reaching out. We have received your inquiry regarding ${service} and will get back to you shortly.\n\nBest,\nDevSamp Team`
-    );
-    // --------------------------------------
+        // Client ko Thank You email
+        await sendEmail(
+            email,
+            "We received your message! - DevSamp",
+            `Hi ${name},\n\nThanks for reaching out. We have received your inquiry and will get back to you shortly.\n\nBest,\nDevSamp Team`
+        );
+    } catch (emailError) {
+        console.error("Email sending failed:", emailError);
+        // Email fail hone par bhi success return karein taaki user panic na kare, 
+        // lekin server logs me error dikh jaye.
+    }
 
     return NextResponse.json(
-      { message: "Message Saved & Email Sent!" }, 
+      { message: "Message Saved Successfully!" }, 
       { status: 201 }
     );
 
@@ -60,7 +84,6 @@ export async function POST(request) {
   }
 }
 
-// 2. DATA LANA (GET)
 export async function GET() {
   try {
     await connectDB();
@@ -71,7 +94,6 @@ export async function GET() {
   }
 }
 
-// 3. DELETE
 export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -84,7 +106,6 @@ export async function DELETE(request) {
   }
 }
 
-// 4. UPDATE STATUS
 export async function PUT(request) {
   try {
     const { id, status } = await request.json();

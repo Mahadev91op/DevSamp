@@ -6,9 +6,6 @@ import Navbar from "@/components/Navbar";
 import Noise from "@/components/Noise";
 import ScrollToTop from "@/components/ScrollToTop";
 import Preloader from "@/components/Preloader";
-
-// NEW: Import the ClientFeatures component
-// (Make sure you have created this file in src/components/ClientFeatures.jsx)
 import ClientFeatures from "@/components/ClientFeatures"; 
 
 const inter = Inter({ 
@@ -25,35 +22,47 @@ const outfit = Outfit({
 
 // --- SEO METADATA ---
 export const metadata = {
-  metadataBase: new URL('https://devsamp.online'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://devsamp.online'),
   title: {
-    default: "DevSamp | Top Web Development & UI/UX Design Agency",
+    default: "DevSamp | Top Website Developer & App Agency in India",
     template: "%s | DevSamp Agency"
   },
-  description: "DevSamp is a premium digital agency providing custom Web Development, App Solutions, and UI/UX Design. Transform your ideas into digital reality with expert developers.",
+  description: "DevSamp is a leading AI-powered Website Developer Agency in India. We specialize in custom Web Development, MERN Stack, Next.js, and Mobile Apps.",
   
   verification: {
     google: 'D6c5A0ciZ3q-98yon-nn2GAVcNvwoKhWvCeYV9GT2Mg',
   },
 
-  keywords: ["Web Development", "App Development", "UI/UX Design", "Next.js Agency", "React Developers", "Digital Agency India", "DevSamp", "Freelance Web Developer", "SEO Services", "Website Design"],
+  // Keywords for AI + Search Engines
+  keywords: [
+    "Web Development", "App Development", "UI/UX Design", "Next.js Agency", "React Developers", 
+    "Digital Agency India", "DevSamp", "Freelance Web Developer", "SEO Services", "Website Design",
+    "Website Developer", "Website Developer in India", "Best Website Developer", 
+    "Hire Website Developer India", "Web Development Company India", "Professional Website Developer",
+    "Custom Website Developer", "Business Website Maker", "Ecommerce Website Developer",
+    "Web Developer near me", "MERN Stack Developer India", "Full Stack Developer"
+  ],
+
   authors: [{ name: "DevSamp Team", url: "https://devsamp.online/" }],
   creator: "DevSamp",
   publisher: "DevSamp Agency",
+  
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
+  
   manifest: "/manifest.json",
   icons: {
     icon: '/icon-192.png',
     shortcut: '/icon-192.png',
     apple: '/icon-192.png',
   },
+  
   openGraph: {
-    title: "DevSamp | Modern Digital Agency",
-    description: "Transforming ideas into digital reality. Expert Web & App Development services.",
+    title: "DevSamp | Best Website Developer Agency",
+    description: "Hire the top 1% Website Developers in India. We build high-performance websites and apps.",
     url: 'https://devsamp.online/',
     siteName: 'DevSamp Agency',
     images: [
@@ -67,22 +76,39 @@ export const metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  
   twitter: {
     card: 'summary_large_image',
-    title: 'DevSamp Agency',
-    description: 'Transforming ideas into digital reality.',
+    title: 'DevSamp | Top Website Developer',
+    description: 'Transforming ideas into digital reality. #1 Web Development Agency.',
     images: ['/icon-512.png'], 
     creator: '@devsamp1st',
   },
+  
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
+  
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "DevSamp",
   },
+
+  other: {
+    "geo.region": "IN", 
+    "geo.placename": "India",
+    "geo.position": "20.5937;78.9629",
+    "ICBM": "20.5937, 78.9629"
+  }
 };
 
 export const viewport = {
@@ -94,41 +120,91 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
+  // 🚀 AI OPTIMIZED SCHEMA (ProfessionalService + Service)
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
+        "@type": "ProfessionalService", // AI Isse Agency Samajhta Hai
         "name": "DevSamp",
-        "url": "https://devsamp.online/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://devsamp.online/icon-192.png",
-          "width": 192,
-          "height": 192,
-          "caption": "DevSamp Agency Logo"
-        },
         "image": "https://devsamp.online/icon-512.png",
+        "@id": "https://devsamp.online",
+        "url": "https://devsamp.online",
+        "telephone": "+91-9330680642",
+        "email": "devsamp1st@gmail.com",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Chinsurah",
+          "addressLocality": "Hooghly",
+          "addressRegion": "WB",
+          "postalCode": "712101",
+          "addressCountry": "IN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 22.90,
+          "longitude": 88.39
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "09:00",
+          "closes": "21:00"
+        },
         "sameAs": [
           "https://x.com/devsamp1st",
           "https://www.instagram.com/devsamp1st/",
           "https://www.youtube.com/@DevSamp1st",
-          "https://www.freelancer.in/u/DevSamp"
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+91-9330680642",
-          "contactType": "customer service",
-          "email": "devsamp1st@gmail.com",
-          "areaServed": "IN",
-          "availableLanguage": ["en", "hi"]
-        }
+          "https://www.freelancer.in/u/DevSamp",
+          "https://www.linkedin.com/company/devsamp"
+        ]
       },
+      // 🚀 Service Schema (AI Yahi Dhoondhta Hai)
       {
-        "@type": "WebSite",
-        "name": "DevSamp",
-        "alternateName": ["DevSamp Agency", "DevSamp Web Solutions"],
-        "url": "https://devsamp.online/"
+        "@type": "Service",
+        "serviceType": "Website Development",
+        "provider": {
+          "@id": "https://devsamp.online"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "India"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Web Development Services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Custom Website Development"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "E-commerce Website Design"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Next.js & React Applications"
+              }
+            }
+          ]
+        }
       }
     ]
   };
@@ -146,10 +222,7 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning={true}
       >
         <Preloader />
-        
-        {/* Client Features (Cursor, ProgressBar, WhatsApp, Chatbot) loaded here */}
         <ClientFeatures />
-        
         <Noise />
         <ScrollToTop />
         <Navbar />

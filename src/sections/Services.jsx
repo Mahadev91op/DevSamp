@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+// FIX: 'useEffect' aur 'useState' hata diya (agar zaroorat nahi)
+// lekin agar aap bad me kuch filter lagana chahe to useState rakh sakte hain, 
+// par abhi direct prop use karna fastest hai.
 import { motion } from "framer-motion";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
@@ -25,21 +27,11 @@ const textColors = [
   "text-yellow-500",
 ];
 
-const Services = () => {
-  const [servicesData, setServicesData] = useState([]);
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const res = await fetch("/api/services");
-        const data = await res.json();
-        setServicesData(data.services || []);
-      } catch (error) {
-        console.error("Failed to fetch services", error);
-      }
-    };
-    fetchServices();
-  }, []);
+// FIX: Props accept kar raha hai
+const Services = ({ initialServices = [] }) => {
+  
+  // FIX: Direct prop use kiya, no loading state needed!
+  const servicesData = initialServices;
 
   // Split data into two halves
   const midpoint = Math.ceil(servicesData.length / 2);
@@ -132,7 +124,6 @@ const Services = () => {
         </div>
 
         {/* --- ROW 2 (Independent Scroll) --- */}
-        {/* FIX: Changed -mt-6 to -mt-14 to reduce gap significantly */}
         <div className="
             -mt-14 md:mt-8 
             flex overflow-x-auto py-10 px-4 gap-4 snap-x snap-mandatory overflow-y-hidden

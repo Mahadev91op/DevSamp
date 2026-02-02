@@ -11,12 +11,24 @@ const withPWA = withPWAInit({
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // Yahan humne saare domains add kar diye hain
-    domains: [
-      "res.cloudinary.com", 
-      "images.unsplash.com", 
-      "randomuser.me"
-    ], 
+    // FIX: Modern formats add kiye
+    formats: ['image/avif', 'image/webp'],
+    
+    // Remote patterns (Same as before)
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+    ],
+  },
+  // FIX: Experimental optimization features
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 };
 

@@ -6,10 +6,11 @@ import Image from "next/image";
 import Link from "next/link"; 
 import { ExternalLink } from "lucide-react";
 
-// Props accept kar raha hai ab
 const Portfolio = ({ initialProjects = [] }) => {
-  const [projects] = useState(initialProjects); // No fetch needed!
   const [activeCategory, setActiveCategory] = useState("All");
+
+  // Ensure projects is always an array
+  const projects = Array.isArray(initialProjects) ? initialProjects : [];
 
   const categories = ["All", ...new Set(projects.map(p => p.category))];
 
@@ -22,8 +23,7 @@ const Portfolio = ({ initialProjects = [] }) => {
   return (
     <section id="work" className="py-12 md:py-24 bg-black relative">
       <div className="container mx-auto px-4 md:px-6">
-        
-        {/* Header (Same as before) */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-12 gap-4 md:gap-6">
           <div>
             <motion.h2 
@@ -38,7 +38,6 @@ const Portfolio = ({ initialProjects = [] }) => {
             <p className="text-gray-400 text-sm md:text-base">Check out some of our latest projects.</p>
           </div>
 
-          {/* Filters */}
           <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
             <div className="flex gap-2 whitespace-nowrap">
                 {categories.map((cat, idx) => (
@@ -76,7 +75,6 @@ const Portfolio = ({ initialProjects = [] }) => {
                     src={project.image}
                     alt={project.title}
                     fill
-                    // OPTIMIZATION: Sizes prop added for speed
                     sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover md:group-hover:scale-110 transition-transform duration-500"
                   />
