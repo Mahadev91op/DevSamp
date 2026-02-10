@@ -11,22 +11,15 @@ const withPWA = withPWAInit({
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // FIX: Modern formats add kiye
-    formats: ['image/avif', 'image/webp'],
-    
-    // Remote patterns (Same as before)
+    // formats: ['image/avif', 'image/webp'], // Isko temporary comment kar sakte hain agar issue ho
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-      {
-        protocol: 'http',
-        hostname: '**',
-      },
+      { protocol: 'https', hostname: 'drive.google.com' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'drive.usercontent.google.com' },
+      { protocol: 'https', hostname: 'googleusercontent.com' },
+      { protocol: 'https', hostname: '**' }, // Fallback for everything else
     ],
   },
-  // FIX: Experimental optimization features
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
