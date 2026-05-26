@@ -6,6 +6,7 @@ const TeamSchema = new mongoose.Schema(
     role: { type: String, required: true },
     image: { type: String, required: true }, // Image URL
     desc: { type: String, required: true },
+    skills: { type: Array, default: [] }
   },
   { timestamps: true }
 );

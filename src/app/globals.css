@@ -10,6 +10,26 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-indigo-650: #493ee1;
+  --color-indigo-655: #463be0;
+  --color-indigo-55: #d4dafe;
+  --color-indigo-150: #b6c3fd;
+  --color-slate-650: #3d4b5f;
+  --color-slate-805: #172032;
+  --color-slate-850: #141d2e;
+  --color-slate-105: #ebf0f5;
+  --color-slate-150: #e8edf4;
+  --color-slate-205: #d8e1eb;
+  --color-slate-250: #d0dae5;
+  --color-slate-350: #b0c0d4;
+  --color-slate-450: #7c8ca3;
+  --color-purple-650: #892be4;
+  --color-red-650: #cb2121;
+  --color-red-655: #c41e1e;
+  --color-green-150: #ccfad9;
+  --color-blue-150: #cde2fe;
+  --color-yellow-150: #fef4a6;
 }
 
 /* Force light theme by ignoring preferences */
@@ -79,4 +99,13 @@ h1, h2, h3, h4, h5, h6 {
     80% { transform: translate(-15%,0) }
     90% { transform: translate(10%,5%) }
     100% { transform: translate(5%,0) }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

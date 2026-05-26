@@ -1,163 +1,305 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { 
   ArrowRight, 
-  Code2, 
-  LayoutTemplate, 
-  Youtube, 
-  Instagram, 
-  CheckCircle2,
-  Bird 
+  Paintbrush, 
+  Cpu, 
+  Database, 
+  Globe, 
+  Play, 
+  Terminal,
+  CheckCircle2
 } from "lucide-react";
 
-// X (Twitter) Custom Icon
-const XIcon = ({ size = 22, className }) => (
-  <svg role="img" viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg">
-    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-  </svg>
-);
+const nodes = [
+  { 
+    id: "design", 
+    label: "Creative UX/UI", 
+    icon: Paintbrush, 
+    color: "from-blue-500 to-cyan-500",
+    logs: [
+      "> compiling design assets...",
+      "✓ Figma prototypes exported",
+      "✓ CSS layout grid compiled: 60fps achieved",
+      "✓ Micro-interactions: Active"
+    ]
+  },
+  { 
+    id: "engine", 
+    label: "Next.js Core", 
+    icon: Cpu, 
+    color: "from-purple-500 to-pink-500",
+    logs: [
+      "> building server components...",
+      "✓ SSR & Hydration pipeline initialised",
+      "✓ Route components compiled in 0.08s",
+      "✓ Server Actions security check: Passed"
+    ]
+  },
+  { 
+    id: "apis", 
+    label: "Secure APIs", 
+    icon: Database, 
+    color: "from-orange-500 to-red-500",
+    logs: [
+      "> establishing secure handshake...",
+      "✓ Database connection pooled successfully",
+      "✓ JWT + httpOnly sessions validated",
+      "✓ API Latency: 24ms (Ultra-fast)"
+    ]
+  },
+  { 
+    id: "deploy", 
+    label: "Edge Deploy", 
+    icon: Globe, 
+    color: "from-emerald-500 to-green-500",
+    logs: [
+      "> deploying to edge networks...",
+      "✓ Global CDN caching warm-up complete",
+      "✓ Core Web Vitals: LCP 0.6s / FID 12ms",
+      "✓ PageSpeed Index: 100/100 (Perfect)"
+    ]
+  }
+];
 
 const Hero = () => {
+  const [activeNode, setActiveNode] = useState("design");
+  const [terminalLogs, setTerminalLogs] = useState(nodes[0].logs);
+  const [compiling, setCompiling] = useState(false);
+  const [compileProgress, setCompileProgress] = useState(0);
+
+  useEffect(() => {
+    if (activeNode) {
+      const selected = nodes.find(n => n.id === activeNode);
+      if (selected) {
+        setTerminalLogs(selected.logs);
+      }
+    }
+  }, [activeNode]);
+
+  const triggerFullBuild = async () => {
+    if (compiling) return;
+    setCompiling(true);
+    setCompileProgress(0);
+    setTerminalLogs(["> starting full system compilation..."]);
+
+    const steps = [
+      { progress: 25, node: "design", log: "> [1/4] Compiling responsive layout assets..." },
+      { progress: 50, node: "engine", log: "> [2/4] Optimizing Next.js client/server boundary..." },
+      { progress: 75, node: "apis", log: "> [3/4] Auditing API route handshake protocols..." },
+      { progress: 100, node: "deploy", log: "> [4/4] Deploying production bundle to Vercel edge..." }
+    ];
+
+    for (let i = 0; i < steps.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setCompileProgress(steps[i].progress);
+      setActiveNode(steps[i].node);
+      setTerminalLogs(prev => [...prev, steps[i].log, ...nodes.find(n => n.id === steps[i].node).logs]);
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setTerminalLogs(prev => [...prev, "✓ BUILD SUCCESSFUL! Mainframe engine deployed.", "✓ DevSamp main core active."]);
+    setCompiling(false);
+  };
+
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-transparent overflow-hidden pt-24 pb-20 md:pt-32 md:pb-40">
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent overflow-hidden pt-28 pb-20 md:pt-36 md:pb-32">
       
-      {/* --- BACKGROUND EFFECTS --- */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e13a_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e13a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+      {/* Architect Blueprint grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none"></div>
       
-      {/* Floating Blobs */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] md:w-[500px] md:h-[300px] bg-blue-500/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-purple-500/10 rounded-full blur-[60px] md:blur-[100px] pointer-events-none"></div>
+      {/* Soft color highlights */}
+      <div className="absolute top-[10%] left-[20%] w-[350px] h-[250px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[300px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-      {/* --- SOCIAL SIDEBAR (Desktop Only) --- */}
-      <motion.div 
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        className="hidden xl:flex absolute left-10 top-1/2 -translate-y-1/2 flex-col gap-6 items-center z-20"
-      >
-        <div className="w-[1px] h-24 bg-gradient-to-b from-transparent to-slate-300"></div>
-        <div className="flex flex-col gap-6">
-            <a href="https://www.freelancer.in/u/DevSamp" target="_blank" className="text-slate-400 hover:text-blue-500 hover:-translate-y-1 transition-all" title="Freelancer" data-cursor="Hire">
-                <Bird size={22} />
-            </a>
-            <a href="https://www.youtube.com/@DevSamp1st" target="_blank" className="text-slate-400 hover:text-red-600 hover:-translate-y-1 transition-all" title="YouTube" data-cursor="Watch">
-                <Youtube size={22} />
-            </a>
-            <a href="https://x.com/devsamp1st" target="_blank" className="text-slate-400 hover:text-slate-900 hover:-translate-y-1 transition-all" title="X" data-cursor="Follow">
-                <XIcon size={20} />
-            </a>
-            <a href="https://www.instagram.com/devsamp1st/" target="_blank" className="text-slate-400 hover:text-pink-600 hover:-translate-y-1 transition-all" title="Instagram" data-cursor="Follow">
-                <Instagram size={22} />
-            </a>
-        </div>
-        <div className="w-[1px] h-24 bg-gradient-to-t from-transparent to-slate-300"></div>
-      </motion.div>
-
-      {/* --- MAIN CONTENT --- */}
-      <div className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center">
-        
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/60 border border-slate-200/80 text-xs md:text-sm text-slate-600 mb-6 md:mb-8 backdrop-blur-sm hover:border-blue-500/30 transition-colors cursor-default shadow-sm"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-          </span>
-          Available for New Projects
-        </motion.div>
-
-        {/* Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.2] md:leading-[1.1] mb-4 md:mb-6"
-        >
-          Expert <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Website Developer</span> <br className="hidden md:block" />
-          & UI/UX Design Agency
-        </motion.h1>
-
-        {/* Subtext */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto mb-8 md:mb-10 leading-relaxed px-2 font-medium"
-        >
-          We are a team of professional website developers building high-performance websites, 
-          custom apps, and digital products that scale.
-        </motion.p>
-
-        {/* Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center items-center w-full sm:w-auto"
-        >
-          <Link href="#contact" className="w-full sm:w-auto group px-8 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-[0_4px_25px_-5px_rgba(79,70,229,0.4)]" data-cursor="Hire">
-            Hire Developers 
-            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+      <div className="relative z-10 container mx-auto px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          <Link href="#work" className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-slate-300 bg-white/40 hover:bg-slate-50 text-slate-700 font-bold text-lg transition-all backdrop-blur-sm flex justify-center shadow-sm" data-cursor="Work">
-            View Portfolio
-          </Link>
-        </motion.div>
+          {/* --- LEFT SIDE: HIGH-END COPYWRITING --- */}
+          <div className="lg:col-span-7 space-y-8 text-left">
+            
+            {/* Status Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs md:text-sm text-slate-600 font-bold shadow-sm"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+              Engineering Digital Masterpieces
+            </motion.div>
 
-        {/* --- STATS BAR --- */}
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="mt-10 md:mt-16 pt-6 md:pt-8 border-t border-slate-200 w-full max-w-3xl flex flex-wrap justify-center sm:justify-between gap-4 sm:gap-0"
-        >
-            <div className="flex items-center gap-3 text-slate-600">
-                <div className="bg-blue-500/10 p-2 rounded-full"><CheckCircle2 className="text-blue-600" size={18} /></div>
-                <span className="text-sm font-semibold">100% Client Satisfaction</span>
-            </div>
-            <div className="flex items-center gap-3 text-slate-600">
-                <div className="bg-purple-500/10 p-2 rounded-full"><CheckCircle2 className="text-purple-600" size={18} /></div>
-                <span className="text-sm font-semibold">Fast Delivery</span>
-            </div>
-            <div className="flex items-center gap-3 text-slate-600">
-                <div className="bg-pink-500/10 p-2 rounded-full"><CheckCircle2 className="text-pink-600" size={18} /></div>
-                <span className="text-sm font-semibold">24/7 Support</span>
-            </div>
-        </motion.div>
+            {/* Custom Interactive Heading */}
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] md:leading-[1.05]">
+              We code the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">complex.</span> <br />
+              We design the <span className="underline decoration-indigo-500/30 decoration-8 underline-offset-4">creative.</span>
+            </h1>
 
-      </div>
+            {/* Subtext */}
+            <p className="text-base md:text-lg text-slate-600 max-w-xl leading-relaxed font-semibold">
+              We are a team of professional website developers and designers who build blazing fast, custom-engineered softwares and websites that set new industry standards.
+            </p>
 
-      {/* --- SCROLL INDICATOR --- */}
-      <motion.a 
-        href="#services"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-3 z-20 cursor-pointer"
-        data-cursor="Down"
-      >
-        <div className="w-[30px] h-[50px] border-2 border-slate-300 rounded-full flex justify-center pt-2 p-1 bg-white/40 backdrop-blur-sm shadow-[0_4px_15px_rgba(79,70,229,0.1)]">
-            <motion.div 
-                animate={{ 
-                    y: [0, 15, 0], 
-                    opacity: [1, 0, 1] 
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="w-1.5 h-2 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"
-            />
+            {/* Interactive tag clouds */}
+            <div className="flex flex-wrap gap-2.5 max-w-xl">
+              {["Next.js 15", "MERN Stack", "Creative UI/UX", "High Performance", "SaaS Core", "SEO & PageSpeed 100"].map((tag, idx) => (
+                <motion.span
+                  key={idx}
+                  whileHover={{ scale: 1.05, borderColor: "rgba(99, 102, 241, 0.4)" }}
+                  className="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-bold text-slate-500 cursor-default shadow-sm select-none transition-colors"
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto pt-4">
+              <Link href="#contact" className="w-full sm:w-auto group px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25" data-cursor="Hire">
+                Hire Dev Agency 
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              
+              <Link href="#portfolio" className="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-lg transition-all flex justify-center shadow-sm" data-cursor="Work">
+                View Portfolio
+              </Link>
+            </div>
+
+          </div>
+
+          {/* --- RIGHT SIDE: PIPELINE HUD SANDBOX --- */}
+          <div className="lg:col-span-5 relative">
+            <div className="w-full bg-white/40 border border-slate-200/80 p-6 rounded-3xl backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col gap-6">
+              
+              {/* Top controls */}
+              <div className="flex justify-between items-center border-b border-slate-200/55 pb-4">
+                <div>
+                  <h3 className="font-extrabold text-sm text-slate-800 tracking-wide uppercase">Sandbox Console</h3>
+                  <p className="text-[10px] text-slate-400 font-bold">Interactive pipeline interface</p>
+                </div>
+                
+                <button 
+                  onClick={triggerFullBuild} 
+                  disabled={compiling}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 text-xs font-bold transition-all"
+                >
+                  <Play size={12} className={compiling ? "animate-spin" : ""} />
+                  {compiling ? "Compiling..." : "Run Build"}
+                </button>
+              </div>
+
+              {/* SVG connection wire system */}
+              <div className="relative h-24 flex justify-between items-center px-4">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+                  <path 
+                    d="M 40,48 L 320,48" 
+                    stroke="#e2e8f0" 
+                    strokeWidth="3" 
+                    fill="none" 
+                  />
+                  {compiling && (
+                    <motion.path 
+                      d="M 40,48 L 320,48" 
+                      stroke="url(#wireGrad)" 
+                      strokeWidth="3" 
+                      fill="none" 
+                      strokeDasharray="15 35"
+                      animate={{ strokeDashoffset: [-100, 0] }}
+                      transition={{ ease: "linear", duration: 1.5, repeat: Infinity }}
+                    />
+                  )}
+                  <defs>
+                    <linearGradient id="wireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#3b82f6" />
+                      <stop offset="50%" stopColor="#a855f7" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                {nodes.map((node, idx) => {
+                  const NodeIcon = node.icon;
+                  const isActive = activeNode === node.id;
+                  return (
+                    <div 
+                      key={node.id} 
+                      onMouseEnter={() => !compiling && setActiveNode(node.id)}
+                      className="relative z-10 flex flex-col items-center gap-2 group cursor-pointer"
+                    >
+                      <motion.div 
+                        animate={isActive ? { scale: 1.15 } : { scale: 1 }}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all ${
+                          isActive 
+                            ? `bg-gradient-to-br ${node.color} text-white border-transparent shadow-lg shadow-indigo-500/20` 
+                            : "bg-white text-slate-400 border-slate-200 hover:border-indigo-500/40 hover:text-slate-700"
+                        }`}
+                      >
+                        <NodeIcon size={18} />
+                      </motion.div>
+                      <span className={`text-[9px] font-extrabold uppercase tracking-wide transition-colors ${
+                        isActive ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"
+                      }`}>
+                        {node.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Simulated Terminal Screen */}
+              <div className="bg-slate-950 text-slate-300 font-mono text-[10px] p-4 rounded-2xl h-44 overflow-y-auto custom-scrollbar flex flex-col gap-1.5 shadow-inner relative border border-white/5">
+                <div className="absolute top-2 right-3 text-[8px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1 select-none">
+                  <Terminal size={10} /> bash
+                </div>
+                
+                <AnimatePresence mode="popLayout">
+                  {terminalLogs.map((log, index) => (
+                    <motion.div 
+                      key={log + index}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0 }}
+                      className={`${
+                        log.startsWith("✓") 
+                          ? "text-emerald-400 font-semibold" 
+                          : log.startsWith(">") 
+                            ? "text-blue-400" 
+                            : "text-slate-400"
+                      }`}
+                    >
+                      {log}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+
+              {/* Progress Bar (Compiling UI) */}
+              {compiling && (
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-[9px] font-bold text-slate-400 uppercase">
+                    <span>Compiling Node Packets</span>
+                    <span>{compileProgress}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                    <motion.div 
+                      animate={{ width: `${compileProgress}%` }}
+                      className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-500"
+                    />
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
+
         </div>
-        <span className="text-[10px] text-slate-400 uppercase tracking-[0.3em] font-bold animate-pulse">
-            Scroll
-        </span>
-      </motion.a>
-
+      </div>
     </section>
   );
 };

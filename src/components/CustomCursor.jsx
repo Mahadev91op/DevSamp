@@ -9,6 +9,12 @@ const CustomCursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const [cursorText, setCursorText] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    setIsMobile(checkMobile);
+  }, []);
 
   useEffect(() => {
     const updateMousePosition = (e) => {
@@ -45,7 +51,7 @@ const CustomCursor = () => {
     return () => window.removeEventListener("mousemove", updateMousePosition);
   }, []);
 
-  if (pathname && pathname.startsWith("/admin")) {
+  if (isMobile || (pathname && pathname.startsWith("/admin"))) {
     return null;
   }
 

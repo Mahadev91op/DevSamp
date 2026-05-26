@@ -1,140 +1,241 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Search, PenTool, Code2, Rocket, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, PenTool, Code2, ShieldCheck, Rocket, Terminal, Play } from "lucide-react";
 
 const steps = [
   {
     id: "01",
     title: "Discovery & Strategy",
-    desc: "We dive deep into your business model, understand your audience, and map out a roadmap for success.",
-    icon: <Search size={24} className="w-5 h-5 md:w-6 md:h-6" />, // Icon size responsive
-    color: "bg-blue-500"
+    desc: "We analyze your business model, understand your audience, and design an architectural blueprint for success.",
+    icon: Search,
+    color: "from-blue-500 to-cyan-500",
+    bgColor: "bg-blue-500/10",
+    borderColor: "group-hover:border-blue-500/30",
+    logs: [
+      "[SYSTEM] Initialising discovery protocol...",
+      "[ANALYSIS] Auditing client market competitors...",
+      "[INFO] Recommended Tech Stack: Next.js + MongoDB",
+      "✓ Architectural roadmap successfully defined"
+    ]
   },
   {
     id: "02",
-    title: "UI/UX Design",
-    desc: "We create wireframes and high-fidelity prototypes. This is where your vision gets its visual identity.",
-    icon: <PenTool size={24} className="w-5 h-5 md:w-6 md:h-6" />,
-    color: "bg-purple-500"
+    title: "High-Fidelity UI/UX",
+    desc: "We build wireframes and interactive prototypes. This is where your brand gets its modern visual identity.",
+    icon: PenTool,
+    color: "from-purple-500 to-pink-500",
+    bgColor: "bg-purple-500/10",
+    borderColor: "group-hover:border-purple-500/30",
+    logs: [
+      "[SYSTEM] Launching Figma assets compiler...",
+      "[RENDER] Creating interactive component layout...",
+      "[INFO] Responsive break-points validated: 60fps",
+      "✓ High-fidelity UI systems approved"
+    ]
   },
   {
     id: "03",
-    title: "Development",
-    desc: "Our coders take over. We build scalable, clean, and fast code using Next.js and modern tech stacks.",
-    icon: <Code2 size={24} className="w-5 h-5 md:w-6 md:h-6" />,
-    color: "bg-pink-500"
+    title: "Next-Gen Coding",
+    desc: "Our senior developers code your software using clean, production-grade Next.js and MERN architecture.",
+    icon: Code2,
+    color: "from-pink-500 to-rose-500",
+    bgColor: "bg-pink-500/10",
+    borderColor: "group-hover:border-pink-500/30",
+    logs: [
+      "[SYSTEM] git checkout -b production-branch",
+      "[COMPILE] Bundling client & server files...",
+      "[INFO] Hydration optimization check: 100% OK",
+      "✓ Clean code compiled with zero lints"
+    ]
   },
   {
     id: "04",
-    title: "Testing & QA",
-    desc: "We rigorously test for bugs, performance issues, and responsiveness across all devices.",
-    icon: <ShieldCheck size={24} className="w-5 h-5 md:w-6 md:h-6" />,
-    color: "bg-green-500"
+    title: "Rigorous QA Testing",
+    desc: "We test code responsiveness, security parameters, and run automated audits across all screens.",
+    icon: ShieldCheck,
+    color: "from-emerald-500 to-green-500",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "group-hover:border-emerald-500/30",
+    logs: [
+      "[SYSTEM] Launching Cypress e2e suite...",
+      "[AUDIT] Verifying SSL handshake & api security...",
+      "[INFO] Google Lighthouse Audit: 100 PageSpeed",
+      "✓ All unit tests passed successfully"
+    ]
   },
   {
     id: "05",
-    title: "Launch & Support",
-    desc: "We deploy your site to the world and provide ongoing support to keep it running smoothly.",
-    icon: <Rocket size={24} className="w-5 h-5 md:w-6 md:h-6" />,
-    color: "bg-orange-500"
+    title: "Edge Launch & Support",
+    desc: "We deploy your project to Vercel/AWS edge nodes and offer constant maintenance checks.",
+    icon: Rocket,
+    color: "from-orange-500 to-red-500",
+    bgColor: "bg-orange-500/10",
+    borderColor: "group-hover:border-orange-500/30",
+    logs: [
+      "[SYSTEM] triggering vercel production build...",
+      "[INFO] Warming up global edge CDN routing...",
+      "[SUCCESS] Site live at canonical domains",
+      "✓ System Online. Support protocols active."
+    ]
   },
 ];
 
 const Process = () => {
-  const containerRef = useRef(null);
-  
-  // Scroll track karna
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const [runningStep, setRunningStep] = useState(null);
+  const [logsState, setLogsState] = useState({});
 
-  // Glowing Line ki height badhana scroll ke saath
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const runPipelineStep = async (idx) => {
+    if (runningStep !== null) return;
+    setRunningStep(idx);
+    
+    const stepLogs = steps[idx].logs;
+    // Clear logs for this step to animate them
+    setLogsState(prev => ({ ...prev, [idx]: [] }));
+
+    for (let i = 0; i < stepLogs.length; i++) {
+      await new Promise(res => setTimeout(res, 500));
+      setLogsState(prev => ({
+        ...prev,
+        [idx]: [...(prev[idx] || []), stepLogs[i]]
+      }));
+    }
+    
+    setRunningStep(null);
+  };
 
   return (
-    <section id="process" ref={containerRef} className="relative py-12 md:py-24 bg-transparent text-slate-900 overflow-hidden">
+    <section id="process" className="relative py-12 md:py-28 bg-transparent text-slate-900 overflow-hidden">
       
+      {/* Background Ambience */}
+      <div className="absolute top-[10%] left-0 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-16 md:mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3"
+          >
+            Workflow
+          </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black mb-4 md:mb-6 tracking-tight"
+            className="text-3xl md:text-5xl font-black mb-4 md:mb-6 tracking-tight leading-tight"
           >
-            Our Process For <br />
-            <span className="text-indigo-600 font-extrabold">Delivering Results</span>
+            DevOps <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Release Pipeline</span>
           </motion.h2>
-          <p className="text-slate-500 text-sm md:text-base font-semibold">
-            From chaos to clarity. We follow a proven 5-step framework to ensure your project is delivered on time.
+          <p className="text-slate-500 text-sm md:text-base font-semibold px-2">
+            Click "Run Pipeline" on any stage card to simulate our software build logs and see how we deliver precision.
           </p>
         </div>
 
-        {/* --- TIMELINE CONTAINER --- */}
-        <div className="relative max-w-5xl mx-auto">
+        {/* --- PIPELINE CARDS GRID --- */}
+        <div className="max-w-5xl mx-auto space-y-8 relative">
           
-          {/* Central Line (Background - Gray) */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 -translate-x-1/2 md:translate-x-0"></div>
-          
-          {/* Central Line (Foreground - Glowing Blue - Animated) */}
-          <motion.div 
-            style={{ height: lineHeight }}
-            className="absolute left-4 md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-blue-600 via-indigo-600 to-purple-600 -translate-x-1/2 md:translate-x-0 shadow-[0_0_15px_rgba(79,70,229,0.5)]"
-          ></motion.div>
+          {/* Central Line connecting cards (Desktop only) */}
+          <div className="absolute left-[34px] md:left-1/2 top-10 bottom-10 w-[2px] bg-slate-200/60 -translate-x-1/2 md:translate-x-0 -z-10"></div>
 
-          {/* Steps Loop */}
-          <div className="space-y-6 md:space-y-24">
-            {steps.map((step, index) => (
+          {steps.map((step, idx) => {
+            const Icon = step.icon;
+            const currentLogs = logsState[idx] || step.logs;
+            const isCompiling = runningStep === idx;
+
+            return (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
+                key={step.id}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`relative flex items-center md:justify-between ${
-                  index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6 }}
+                className={`flex flex-col md:flex-row items-stretch gap-6 md:gap-12 relative ${
+                  idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
                 
-                {/* 1. Blank Space for Desktop Alignment (Takes 50% width) */}
-                <div className="hidden md:block w-5/12"></div>
-
-                {/* 2. Center Node (The Dot on the Line) */}
-                <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
-                    <div className={`w-6 h-6 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-white ${step.color} shadow-[0_4px_10px_rgba(79,70,229,0.2)] flex items-center justify-center text-white font-bold text-[10px] md:text-base`}>
-                        {step.id}
+                {/* 1. Left/Right card content (takes half size) */}
+                <div className="w-full md:w-5/12 flex flex-col justify-center">
+                  <div className={`group relative bg-white/40 border border-slate-200/80 p-6 md:p-8 rounded-3xl backdrop-blur-xl transition-all duration-500 hover:shadow-xl ${step.borderColor}`}>
+                    
+                    {/* Node bubble inside card */}
+                    <div className="flex justify-between items-center mb-5">
+                      <div className={`p-2.5 rounded-xl ${step.bgColor} text-indigo-600 shadow-sm border border-slate-100`}>
+                        <Icon size={20} />
+                      </div>
+                      <span className="font-mono text-[9px] font-bold text-slate-300">
+                        [PIPELINE_STG_{step.id}]
+                      </span>
                     </div>
+
+                    <h3 className="text-lg md:text-xl font-extrabold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      {step.title}
+                    </h3>
+                    
+                    <p className="text-slate-500 text-xs md:text-sm font-semibold leading-relaxed mb-6">
+                      {step.desc}
+                    </p>
+
+                    <button 
+                      onClick={() => runPipelineStep(idx)}
+                      disabled={runningStep !== null}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-950 text-white hover:bg-slate-800 disabled:opacity-50 text-[10px] font-bold tracking-wide uppercase transition-all shadow-md shadow-slate-900/10"
+                    >
+                      <Play size={10} className={isCompiling ? "animate-spin text-indigo-400" : ""} />
+                      {isCompiling ? "Running..." : "Run Pipeline"}
+                    </button>
+                  </div>
                 </div>
 
-                {/* 3. The Content Card */}
-                <div className="pl-12 md:pl-0 w-full md:w-5/12">
-                  <div className="group relative bg-white/70 border border-slate-200/60 p-5 md:p-8 rounded-2xl hover:bg-white hover:border-indigo-500/30 shadow-sm hover:shadow-md transition-all duration-300">
-                    
-                    {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
+                {/* 2. Central Line Indicator (The visual index node) */}
+                <div className="absolute left-[34px] md:left-1/2 top-8 -translate-x-1/2 z-20 flex items-center justify-center pointer-events-none">
+                  <div className={`w-8 h-8 rounded-full border-4 border-white shadow-md bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-mono text-[9px] font-extrabold`}>
+                    {step.id}
+                  </div>
+                </div>
 
-                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg ${step.color} bg-opacity-20 flex items-center justify-center mb-3 md:mb-4 text-white border border-slate-200/40`}>
-                        {step.icon}
+                {/* 3. Simulated Terminal logs box (takes other half size) */}
+                <div className={`${
+                  logsState[idx] !== undefined || isCompiling ? "flex" : "hidden md:flex"
+                } w-full md:w-5/12 pl-16 md:pl-0 flex flex-col justify-center animate-fade-in`}>
+                  <div className="bg-slate-950 text-slate-300 font-mono text-[10px] p-5 rounded-2xl h-[135px] overflow-hidden border border-white/5 flex flex-col gap-1.5 justify-center shadow-inner relative group/term">
+                    
+                    <div className="absolute top-2.5 right-3.5 text-[8px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                      <Terminal size={10} /> console
                     </div>
 
-                    <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-slate-800 group-hover:text-indigo-600 transition-colors">
-                        {step.title}
-                    </h3>
-                    <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-medium">
-                        {step.desc}
-                    </p>
+                    <div className="flex flex-col gap-1">
+                      <AnimatePresence>
+                        {currentLogs.map((log, lIdx) => (
+                          <motion.div 
+                            key={lIdx}
+                            initial={{ opacity: 0, x: -5 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className={`${
+                              log.startsWith("✓") || log.startsWith("[SUCCESS]")
+                                ? "text-emerald-400 font-semibold" 
+                                : log.startsWith("[SYSTEM]") 
+                                  ? "text-blue-400" 
+                                  : "text-slate-400"
+                            }`}
+                          >
+                            {log}
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+
                   </div>
                 </div>
 
               </motion.div>
-            ))}
-          </div>
-
+            );
+          })}
         </div>
 
       </div>

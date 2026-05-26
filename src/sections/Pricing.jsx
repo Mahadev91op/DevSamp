@@ -1,114 +1,340 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Check, X, Zap } from "lucide-react";
+import { Check, X, Zap, Receipt, ShieldCheck, HelpCircle, Sparkles } from "lucide-react";
+
+// Draw Checkmark Path Animation
+const CheckmarkIcon = ({ className }) => (
+  <svg 
+    className={className} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth={3} 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <motion.path 
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      d="M20 6L9 17l-5-5" 
+    />
+  </svg>
+);
 
 const Pricing = ({ initialPlans = [] }) => {
-  const [plans] = useState(initialPlans); // No fetch
+  const [plans] = useState(initialPlans); 
   const [billing, setBilling] = useState("monthly");
+  
+  // Interactive Calculator State
+  const [pagesCount, setPagesCount] = useState(5);
+  const [selectedAddons, setSelectedAddons] = useState([]);
+  const [calculatedQuote, setCalculatedQuote] = useState(499);
+  const [calcSettings, setCalcSettings] = useState({
+    basePrice: 299,
+    pricePerPage: 40,
+    addons: [
+      { name: "Interactive Admin Panel (CMS)", price: 299, enabled: true },
+      { name: "Vitals SEO optimization", price: 149, enabled: true },
+      { name: "Payment Gateway integrations", price: 199, enabled: true }
+    ]
+  });
+
+  // Fetch interactive calculator settings
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch("/api/pricing/settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) {
+            setCalcSettings(data.settings);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load calculator settings:", err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  // Recalculate estimated price
+  useEffect(() => {
+    let base = calcSettings.basePrice;
+    base += pagesCount * calcSettings.pricePerPage;
+    if (calcSettings.addons && calcSettings.addons.length > 0) {
+      calcSettings.addons.forEach(addon => {
+        if (addon.enabled && selectedAddons.includes(addon.name)) {
+          base += addon.price;
+        }
+      });
+    }
+    setCalculatedQuote(base);
+  }, [pagesCount, selectedAddons, calcSettings]);
 
   return (
     <section id="pricing" className="py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
-      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      {/* Background Ambience */}
+      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-8 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 tracking-tight">
-            Simple, Transparent <span className="text-indigo-600">Pricing</span>
+        
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-55 border border-indigo-100 text-[10px] font-bold text-indigo-650 uppercase tracking-widest mb-3">
+            Budget Control
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">
+            Simple, Transparent <span className="text-indigo-650 font-extrabold">Pricing</span>
           </h2>
-          <p className="text-slate-500 text-sm md:text-lg mb-6 md:mb-8 font-semibold">
-            Choose the perfect plan for your business needs. No hidden fees.
+          <p className="text-slate-500 text-xs md:text-sm mb-8 font-semibold">
+            Select an active service blueprint or configure a customized scope using our quote tool.
           </p>
 
-          <div className="flex items-center justify-center gap-4">
-            <span className={`text-sm font-bold ${billing === "monthly" ? "text-slate-800" : "text-slate-400"}`}>
-                Monthly
-            </span>
+          {/* Billing Switcher */}
+          <div className="inline-flex items-center gap-3 bg-slate-100/80 border border-slate-200/60 p-1.5 rounded-full select-none">
             <button
-                onClick={() => setBilling(billing === "monthly" ? "yearly" : "monthly")}
-                className="relative w-14 h-7 md:w-16 md:h-8 rounded-full bg-slate-200/80 border border-slate-300 p-1 transition-colors hover:border-indigo-500/50"
+              onClick={() => setBilling("monthly")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                billing === "monthly" 
+                  ? "bg-white text-slate-900 shadow-sm" 
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
             >
-                <motion.div 
-                    layout 
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-indigo-600 shadow-md ${
-                        billing === "yearly" ? "translate-x-7 md:translate-x-8" : "translate-x-0"
-                    }`}
-                />
+              Monthly billing
             </button>
-            <span className={`text-sm font-bold ${billing === "yearly" ? "text-slate-800" : "text-slate-400"}`}>
-                Yearly <span className="text-[10px] md:text-xs text-green-600 ml-1 font-bold">(Save ~20%)</span>
-            </span>
+            <button
+              onClick={() => setBilling("yearly")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
+                billing === "yearly" 
+                  ? "bg-white text-slate-900 shadow-sm" 
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Yearly billing
+              <span className="text-[9px] bg-green-150 text-green-700 px-1.5 py-0.5 rounded-full font-extrabold">
+                -20%
+              </span>
+            </button>
           </div>
         </div>
 
-        <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pt-6 pb-6 md:pb-0 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 items-stretch md:items-start">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan._id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              whileHover={{ y: -10 }}
-              className={`relative flex-shrink-0 w-[85vw] md:w-auto md:flex-shrink snap-center p-6 md:p-8 rounded-2xl md:rounded-3xl border transition-all duration-300 flex flex-col h-auto md:h-full ${
-                plan.popular 
-                    ? "bg-white border-indigo-500 shadow-[0_10px_45px_rgba(79,70,229,0.12)] z-10 md:scale-105" 
-                    : "bg-white/70 border-slate-200/80 hover:border-slate-350 shadow-sm"
-              }`}
-              data-cursor="Plan"
-            >
-              {plan.popular && (
-                <div className="absolute -top-3 md:-top-4 left-1/2 -translate-x-1/2 px-3 py-1 md:px-4 md:py-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase text-white shadow-md whitespace-nowrap">
-                    Most Popular
-                </div>
-              )}
+        {/* Pricing Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
+          
+          {/* Left Columns: Invoice Manifest Cards */}
+          <div className="lg:col-span-8 flex flex-row md:grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible pb-6 md:pb-0 scrollbar-none snap-x snap-mandatory">
+            {plans.map((plan, index) => {
+              const currentPrice = billing === "monthly" ? plan.priceMonthly : plan.priceYearly;
+              return (
+                <motion.div
+                  key={plan._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                  className={`relative shrink-0 w-[85vw] md:w-auto snap-center p-6 md:p-7 rounded-3xl border backdrop-blur-xl transition-all duration-300 flex flex-col justify-between ${
+                    plan.popular 
+                      ? "bg-white border-indigo-500 shadow-[0_12px_40px_rgba(79,70,229,0.08)] z-10 md:scale-[1.03]" 
+                      : "bg-white/50 border-slate-200/80 hover:border-slate-350 shadow-sm"
+                  }`}
+                  data-cursor="Plan"
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-[9px] font-bold tracking-widest uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
+                      <Sparkles size={10} /> Popular Choice
+                    </div>
+                  )}
 
-              <div className="mb-4">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-800">{plan.name}</h3>
-                <p className="text-xs md:text-sm text-slate-500 font-medium mt-2 min-h-[30px] md:min-h-[40px]">{plan.desc}</p>
+                  {/* Receipt Header Mockup */}
+                  <div className="border-b border-slate-200/80 pb-4 mb-4 select-none">
+                    <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 font-bold mb-1">
+                      <span className="flex items-center gap-1"><Receipt size={10} /> DEVSAMP_BILL</span>
+                      <span>#00{index+1}</span>
+                    </div>
+                    <h3 className="text-lg font-black text-slate-800">{plan.name}</h3>
+                    <p className="text-[10px] text-slate-450 font-semibold line-clamp-2 mt-1 min-h-[30px] leading-relaxed">
+                      {plan.desc}
+                    </p>
+                  </div>
+
+                  {/* Pricing Details */}
+                  <div className="mb-5 flex items-baseline gap-1 select-none">
+                    <span className="text-3xl font-black text-slate-900 transition-all font-mono">
+                      ${currentPrice}
+                    </span>
+                    <span className="text-xs text-slate-400 font-bold">
+                      /{billing === "monthly" ? "mo" : "yr"}
+                    </span>
+                  </div>
+
+                  {/* Get Started Button */}
+                  <Link 
+                    href={`#contact?service=${encodeURIComponent(plan.name)}`}
+                    className={`w-full py-3 rounded-2xl font-bold mb-6 transition-all flex items-center justify-center gap-2 text-xs md:text-sm ${
+                      plan.popular 
+                        ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/10" 
+                        : "bg-slate-900 hover:bg-slate-800 text-white"
+                    }`}
+                  >
+                    {plan.popular && <Zap size={14} fill="currentColor" />}
+                    Deploy Config
+                  </Link>
+
+                  {/* Bullet points manifest */}
+                  <div className="space-y-3 flex-grow">
+                    {plan.features.map((feature, i) => (
+                      <div key={i} className="flex items-start gap-2.5">
+                        <div className={`p-0.5 rounded-full shrink-0 mt-0.5 ${
+                          plan.popular ? "bg-indigo-55 text-indigo-600" : "bg-slate-100 text-slate-600"
+                        }`}>
+                          <CheckmarkIcon className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="text-[11px] md:text-xs text-slate-650 font-bold leading-normal">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                    {plan.missing && plan.missing.map((feature, i) => (
+                      <div key={`miss-${i}`} className="flex items-start gap-2.5 opacity-35">
+                        <div className="p-0.5 rounded-full bg-slate-50 text-slate-400 shrink-0 mt-0.5">
+                          <X size={12} strokeWidth={3} />
+                        </div>
+                        <span className="text-[11px] md:text-xs text-slate-400 line-through">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Right Column: Custom Interactive Calculator */}
+          <div className="lg:col-span-4 bg-white/70 border border-indigo-100/60 p-6 md:p-7 rounded-3xl shadow-sm backdrop-blur-xl relative">
+            <div className="absolute top-2 right-2">
+              <span className="bg-indigo-50 text-indigo-600 text-[8px] font-bold px-2 py-0.5 rounded uppercase font-mono border border-indigo-100/50">
+                Live Calculator
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-slate-800 mb-2 flex items-center gap-2">
+              <ShieldCheck className="text-indigo-600" size={20} />
+              <span>Scope Evaluator</span>
+            </h3>
+            <p className="text-[10px] text-slate-500 font-semibold mb-6">
+              Estimate project expenses instantly based on development parameters.
+            </p>
+
+            {/* Slider: Pages count */}
+            <div className="space-y-2 mb-6">
+              <div className="flex justify-between text-xs font-bold text-slate-700 select-none">
+                <span>Scale (Pages / Screens)</span>
+                <span className="text-indigo-650 font-mono">{pagesCount} units</span>
               </div>
+              <input 
+                type="range" 
+                min={1} 
+                max={30} 
+                value={pagesCount} 
+                onChange={(e) => setPagesCount(Number(e.target.value))}
+                className="w-full accent-indigo-600 h-1 bg-slate-100 rounded-lg cursor-pointer"
+              />
+              <div className="flex justify-between text-[9px] text-slate-400 font-bold">
+                <span>1 Page</span>
+                <span>30 Pages</span>
+              </div>
+            </div>
 
-              <div className="mb-6 md:mb-8 flex items-end gap-1">
-                <span className="text-3xl md:text-4xl font-extrabold text-slate-900">
-                    ${billing === "monthly" ? plan.priceMonthly : plan.priceYearly}
+            {/* Addons Checklist */}
+            <div className="space-y-3.5 mb-6">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                Additional Modules
+              </span>
+
+              {calcSettings.addons && calcSettings.addons
+                .filter(addon => addon.enabled)
+                .map((addon, idx) => {
+                  const isChecked = selectedAddons.includes(addon.name);
+                  return (
+                    <label 
+                      key={idx}
+                      className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
+                        isChecked 
+                          ? "bg-indigo-50/40 border-indigo-200" 
+                          : "bg-slate-50/50 border-slate-200 hover:border-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <input 
+                          type="checkbox" 
+                          checked={isChecked} 
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedAddons(prev => [...prev, addon.name]);
+                            } else {
+                              setSelectedAddons(prev => prev.filter(name => name !== addon.name));
+                            }
+                          }}
+                          className="accent-indigo-600 w-3.5 h-3.5"
+                        />
+                        <span className="text-xs font-bold text-slate-750">{addon.name}</span>
+                      </div>
+                      <span className="text-xs font-mono font-bold text-indigo-650 bg-white border border-indigo-100 px-1.5 py-0.5 rounded shadow-sm">
+                        +${addon.price}
+                      </span>
+                    </label>
+                  );
+                })}
+            </div>
+
+            {/* Price Output */}
+            <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 select-none">
+              <div className="flex justify-between text-[10px] text-slate-450 font-mono mb-2">
+                <span>ESTIMATED PAYLOAD</span>
+                <span>COMPILATION: OK</span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-black font-mono text-indigo-300">
+                  ${calculatedQuote}
                 </span>
-                <span className="text-sm md:text-base text-slate-400 mb-1">/{billing === "monthly" ? "mo" : "yr"}</span>
+                <span className="text-[10px] text-slate-400 font-bold">est. total</span>
               </div>
 
-              <Link href="#contact" className={`w-full py-3 md:py-4 rounded-xl font-bold mb-6 md:mb-8 transition-all flex items-center justify-center gap-2 text-sm md:text-base ${
-                plan.popular 
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20" 
-                    : "bg-slate-900 hover:bg-slate-800 text-white"
-              }`}>
-                {plan.popular && <Zap size={16} className="md:w-[18px] md:h-[18px]" fill="currentColor" />}
-                Get Started
-              </Link>
-
-              <div className="space-y-3 md:space-y-4 flex-grow">
-                {plan.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                        <div className={`p-1 rounded-full ${plan.popular ? "bg-indigo-100 text-indigo-600" : "bg-slate-100 text-slate-600"}`}>
-                            <Check size={10} className="md:w-3 md:h-3" strokeWidth={3} />
-                        </div>
-                        <span className="text-xs md:text-sm text-slate-600 font-medium">{feature}</span>
-                    </div>
-                ))}
-                {plan.missing && plan.missing.map((feature, i) => (
-                    <div key={`miss-${i}`} className="flex items-center gap-3 opacity-40">
-                        <div className="p-1 rounded-full bg-slate-50 text-slate-400">
-                            <X size={10} className="md:w-3 md:h-3" strokeWidth={3} />
-                        </div>
-                        <span className="text-xs md:text-sm text-slate-400">{feature}</span>
-                    </div>
-                ))}
+              <div className="border-t border-slate-800 mt-4 pt-3 flex justify-between items-center text-[10px] text-slate-500 font-bold">
+                <span>SLA Delivery:</span>
+                <span className="text-slate-300">{pagesCount > 15 ? "3-4 Weeks" : "1-2 Weeks"}</span>
               </div>
-            </motion.div>
-          ))}
+            </div>
+
+            <Link 
+              href={`#contact?customQuote=${calculatedQuote}&pages=${pagesCount}`}
+              className="w-full mt-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 transition-all text-xs md:text-sm shadow-md"
+            >
+              Ship Custom Specifications
+            </Link>
+          </div>
+
         </div>
+
+        {/* Footer Guarantee info */}
+        <div className="bg-white/40 border border-slate-200/80 p-5 rounded-2xl max-w-2xl mx-auto flex items-center gap-4 select-none">
+          <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600 shrink-0">
+            <HelpCircle size={22} />
+          </div>
+          <div>
+            <h4 className="text-xs font-extrabold text-slate-800">Need an enterprise layout agreement?</h4>
+            <p className="text-[10px] text-slate-500 font-medium leading-relaxed mt-0.5">
+              Contact us directly via the setup variable console below or send an inquiry to devsamp1st@gmail.com for comprehensive service plans.
+            </p>
+          </div>
+        </div>
+
       </div>
     </section>
   );

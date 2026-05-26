@@ -1,12 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
   Youtube, 
   Instagram, 
   ArrowUpRight,
-  Bird 
+  Bird,
+  Clock,
+  Terminal
 } from "lucide-react";
 
 // X (Twitter) Icon
@@ -17,6 +20,27 @@ const XIcon = ({ size = 20, className }) => (
 );
 
 const Footer = () => {
+  const [time, setTime] = useState("");
+
+  // Running workspace clock (IST - GMT+5:30)
+  useEffect(() => {
+    const updateTime = () => {
+      const options = {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      };
+      const formatter = new Intl.DateTimeFormat("en-US", options);
+      setTime(formatter.format(new Date()));
+    };
+    
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handlePhoneClick = () => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const phoneNumber = "919330680642";
@@ -48,7 +72,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-transparent text-slate-900 pt-12 pb-20 md:pt-24 md:pb-0 overflow-hidden relative border-t border-slate-200/80">
+    <footer className="bg-transparent text-slate-900 pt-16 pb-24 md:pt-24 md:pb-0 overflow-hidden relative border-t border-slate-200/80">
       
       <motion.div 
         className="container mx-auto px-4 md:px-6 relative z-10"
@@ -61,53 +85,65 @@ const Footer = () => {
         {/* --- TOP CTA --- */}
         <motion.div 
             variants={itemVariants}
-            className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 pb-6 md:mb-24 md:pb-12 border-b border-slate-200"
+            className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 pb-6 md:mb-20 md:pb-10 border-b border-slate-200"
         >
             <div className="max-w-2xl">
-                <h2 className="text-3xl md:text-7xl font-black leading-tight mb-4 md:mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-6xl font-black leading-tight mb-4 md:mb-6 tracking-tight">
                     Have an idea? <br />
-                    <span className="text-slate-400 font-semibold">Let's build it.</span>
+                    <span className="text-slate-400 font-semibold">Let's compile it.</span>
                 </h2>
             </div>
             
             <Link href="/#contact" className="w-full md:w-auto">
                 <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mt-6 md:mt-0 w-full md:w-auto px-6 py-3 md:px-10 md:py-5 rounded-full bg-slate-950 text-white font-bold text-base md:text-xl flex justify-center md:justify-start items-center gap-2 md:gap-3 hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-md shadow-slate-900/10 group"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="mt-6 md:mt-0 w-full md:w-auto px-6 py-4 md:px-8 md:py-4.5 rounded-full bg-slate-950 text-white font-bold text-sm md:text-base flex justify-center items-center gap-2 hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-md group"
                     data-cursor="Start"
                 >
-                    Start Project
-                    <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300 w-5 h-5 md:w-6 md:h-6" />
+                    Initialize Connection
+                    <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300 w-4 h-4 md:w-5 md:h-5" />
                 </motion.button>
             </Link>
         </motion.div>
 
         {/* --- LINKS GRID --- */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-24">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-20">
             
-            {/* 1. Address */}
-            <motion.div variants={itemVariants} className="col-span-2 md:col-span-4">
-                <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter text-slate-900 mb-3 md:mb-6 block">
-                    DEV<span className="text-indigo-650">SAMP</span>
-                </Link>
-                <p className="text-slate-500 text-sm md:text-lg leading-relaxed mb-4 md:mb-6 max-w-sm md:max-w-none font-medium">
-                    A digital product agency crafting world-class websites and apps. 
-                    Based in India, working globally.
-                </p>
-                <div className="flex gap-3 md:gap-4">
+            {/* 1. Address & Clock */}
+            <motion.div variants={itemVariants} className="col-span-2 md:col-span-4 space-y-4">
+                <div>
+                  <Link href="/" className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 block mb-2">
+                      DEV<span className="text-indigo-650">SAMP</span>
+                  </Link>
+                  <p className="text-slate-500 text-xs md:text-sm leading-relaxed max-w-sm font-medium">
+                      A visual products agency compiling MERN Stack, Next.js, and Android apps. 
+                      Based in India, coding globally.
+                  </p>
+                </div>
+
+                {/* Real-time Kolkata Clock */}
+                {time && (
+                  <div className="inline-flex items-center gap-2 bg-slate-100/80 border border-slate-200/50 p-2.5 rounded-2xl font-mono text-[10px] text-slate-600 select-none shadow-inner">
+                    <Clock size={12} className="text-indigo-500 animate-pulse" />
+                    <span>HQ_IST:</span>
+                    <span className="font-bold text-slate-800">{time}</span>
+                  </div>
+                )}
+
+                <div className="flex gap-2.5 pt-2">
                     {[
-                        { href: "https://www.freelancer.in/u/DevSamp", icon: <Bird size={18} className="md:w-5 md:h-5" />, color: "hover:bg-indigo-600 hover:text-white" },
-                        { href: "https://www.youtube.com/@DevSamp1st", icon: <Youtube size={18} className="md:w-5 md:h-5" />, color: "hover:bg-red-600 hover:text-white" },
-                        { href: "https://x.com/devsamp1st", icon: <XIcon size={18} className="md:w-5 md:h-5" />, color: "hover:bg-slate-900 hover:text-white" },
-                        { href: "https://www.instagram.com/devsamp1st/", icon: <Instagram size={18} className="md:w-5 md:h-5" />, color: "hover:bg-pink-600 hover:text-white" }
+                        { href: "https://www.freelancer.in/u/DevSamp", icon: <Bird size={16} />, color: "hover:bg-indigo-600 hover:text-white" },
+                        { href: "https://www.youtube.com/@DevSamp1st", icon: <Youtube size={16} />, color: "hover:bg-red-650 hover:text-white" },
+                        { href: "https://x.com/devsamp1st", icon: <XIcon size={16} />, color: "hover:bg-slate-900 hover:text-white" },
+                        { href: "https://www.instagram.com/devsamp1st/", icon: <Instagram size={16} />, color: "hover:bg-pink-650 hover:text-white" }
                     ].map((social, index) => (
                         <motion.a 
                             key={index}
                             href={social.href} 
                             target="_blank" 
-                            className={`p-2.5 md:p-3 rounded-full bg-slate-100 border border-slate-200 text-slate-600 ${social.color} transition-colors shadow-sm`}
-                            whileHover={{ y: -5 }}
+                            className={`p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-550 ${social.color} transition-colors shadow-sm`}
+                            whileHover={{ y: -3 }}
                             data-cursor="Link"
                         >
                             {social.icon}
@@ -118,15 +154,15 @@ const Footer = () => {
 
             {/* 2. Company Links */}
             <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 md:col-start-6">
-                <h4 className="text-xs md:text-sm font-bold uppercase tracking-widest text-slate-400 mb-4 md:mb-6">Company</h4>
-                <div className="flex flex-col gap-3 md:gap-4">
-                    {["About", "Our Team", "Process", "Contact"].map((item) => (
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Structure</h4>
+                <div className="flex flex-col gap-3 font-semibold text-xs md:text-sm">
+                    {["About", "Team", "Process", "Contact"].map((item) => (
                         <Link 
                             key={item} 
                             href={`/#${item.toLowerCase().replace(" ", "")}`} 
-                            className="block w-fit text-sm md:text-base text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+                            className="block w-fit text-slate-600 hover:text-indigo-650 transition-colors"
                         >
-                            <motion.span whileHover={{ x: 5 }} className="inline-block">
+                            <motion.span whileHover={{ x: 3 }} className="inline-block">
                                 {item}
                             </motion.span>
                         </Link>
@@ -136,20 +172,20 @@ const Footer = () => {
 
             {/* 3. Explore Links */}
             <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
-                <h4 className="text-xs md:text-sm font-bold uppercase tracking-widest text-slate-400 mb-4 md:mb-6">Explore</h4>
-                <div className="flex flex-col gap-3 md:gap-4">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Registry</h4>
+                <div className="flex flex-col gap-3 font-semibold text-xs md:text-sm">
                     {[
                         { name: "Services", href: "/#services" },
                         { name: "Portfolio", href: "/projects" },
                         { name: "Pricing", href: "/#pricing" },
-                        { name: "Blog", href: "/blog" }
+                        { name: "Blogs", href: "/blog" }
                     ].map((item) => (
                         <Link 
                             key={item.name} 
                             href={item.href} 
-                            className="block w-fit text-sm md:text-base text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+                            className="block w-fit text-slate-600 hover:text-indigo-650 transition-colors"
                         >
-                            <motion.span whileHover={{ x: 5 }} className="inline-block">
+                            <motion.span whileHover={{ x: 3 }} className="inline-block">
                                 {item.name}
                             </motion.span>
                         </Link>
@@ -159,22 +195,22 @@ const Footer = () => {
 
              {/* 4. Contact Info */}
              <motion.div variants={itemVariants} className="col-span-2 md:col-span-3">
-                <h4 className="text-xs md:text-sm font-bold uppercase tracking-widest text-slate-400 mb-4 md:mb-6">Contact</h4>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">SMTP Host</h4>
                 <a 
                     href={mailtoLink}
-                    className="block w-fit text-lg md:text-xl font-bold text-slate-800 mb-2 hover:text-indigo-600 transition-colors"
+                    className="block w-fit text-sm md:text-base font-bold text-slate-800 mb-1.5 hover:text-indigo-650 transition-colors"
                     data-cursor="Email"
                 >
-                    <motion.span whileHover={{ x: 5 }} className="inline-block">
+                    <motion.span whileHover={{ x: 3 }} className="inline-block truncate max-w-[200px] md:max-w-none">
                         devsamp1st@gmail.com
                     </motion.span>
                 </a>
                 <p 
                     onClick={handlePhoneClick}
-                    className="w-fit text-lg md:text-xl font-bold text-slate-800 cursor-pointer hover:text-purple-600 transition-colors"
+                    className="w-fit text-sm md:text-base font-bold text-slate-850 cursor-pointer hover:text-purple-600 transition-colors flex items-center gap-1.5"
                     data-cursor="Call"
                 >
-                    <motion.span whileHover={{ x: 5 }} className="inline-block">
+                    <motion.span whileHover={{ x: 3 }} className="inline-block">
                         +91 9330680642
                     </motion.span>
                 </p>
@@ -184,12 +220,12 @@ const Footer = () => {
         {/* --- BOTTOM BAR --- */}
         <motion.div 
             variants={itemVariants}
-            className="border-t border-slate-200 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-slate-400 mb-6 md:mb-8 gap-3 md:gap-0 font-semibold"
+            className="border-t border-slate-200 pt-6 flex flex-col md:flex-row justify-between items-center text-[10px] md:text-xs text-slate-400 mb-6 gap-3 md:gap-0 font-bold"
         >
             <p>&copy; {new Date().getFullYear()} DevSamp Agency.</p>
-            <div className="flex gap-6 md:gap-8">
-                <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacy Policy</Link>
-                <Link href="/terms" className="hover:text-slate-700 transition-colors">Terms of Service</Link>
+            <div className="flex gap-4 md:gap-6 uppercase tracking-wider font-mono">
+                <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>
+                <Link href="/terms" className="hover:text-slate-700 transition-colors">Terms</Link>
                 <Link href="/sitemap" className="hover:text-slate-700 transition-colors">Sitemap</Link>
             </div>
         </motion.div>
@@ -197,13 +233,13 @@ const Footer = () => {
       </motion.div>
 
       {/* BACKGROUND TEXT */}
-      <div className="w-full flex justify-center overflow-hidden pointer-events-none absolute bottom-0 md:static md:bottom-auto z-0">
+      <div className="w-full flex justify-center overflow-hidden pointer-events-none absolute bottom-0 z-0 select-none">
         <motion.h1 
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="text-[15vw] md:text-[18vw] font-black text-slate-900/5 leading-none select-none"
+            className="text-[15vw] md:text-[18vw] font-black text-slate-900/5 leading-none select-none tracking-tighter"
         >
             DEVSAMP
         </motion.h1>

@@ -7,6 +7,9 @@ const ThreeBackground = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) return;
+
     if (!containerRef.current) return;
 
     // --- SETUP ---
@@ -29,7 +32,6 @@ const ThreeBackground = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // --- DETECT DEVICE & ADJUST COMPLEXITY ---
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const gridRows = isMobile ? 15 : 30;
     const gridCols = isMobile ? 15 : 30;
     const spacing = 4;
@@ -212,7 +214,7 @@ const ThreeBackground = () => {
   return (
     <canvas
       ref={containerRef}
-      className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent"
+      className="hidden md:block fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent"
       style={{ mixBlendMode: "multiply", opacity: 0.8 }}
     />
   );

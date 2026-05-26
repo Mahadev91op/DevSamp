@@ -59,7 +59,7 @@ const Testimonials = ({ initialReviews = [] }) => {
   const loopedReviews = [...displayReviews, ...displayReviews];
 
   return (
-    <section className="py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
+    <section className="py-10 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[150px] md:w-[600px] md:h-[300px] bg-indigo-500/5 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 md:px-6 mb-8 md:mb-12 text-center relative z-10">

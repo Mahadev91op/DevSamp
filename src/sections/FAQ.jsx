@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { Terminal, ChevronRight, CornerDownRight } from "lucide-react";
 
 const faqs = [
   {
@@ -32,7 +32,7 @@ const faqs = [
   }
 ];
 
-// 🚀 AI Schema for FAQ
+// AI Schema for FAQ
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -52,7 +52,7 @@ const FAQ = () => {
   return (
     <section className="py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
       
-      {/* 🚀 Inject Schema Script */}
+      {/* Inject Schema Script */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -61,75 +61,102 @@ const FAQ = () => {
       {/* Background Ambience */}
       <div className="absolute right-0 top-0 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 md:px-6 max-w-5xl relative z-10">
+      <div className="container mx-auto px-4 md:px-6 max-w-4xl relative z-10">
         
         {/* Header */}
-        <div className="mb-8 md:mb-16 md:text-center">
-          <h2 className="text-3xl md:text-6xl font-black mb-2 md:mb-4 tracking-tight">
-            Common <span className="text-indigo-600 font-extrabold">Queries</span>
+        <div className="mb-10 md:mb-16 text-center select-none">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3">
+            Diagnostics
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tight">
+            Common <span className="text-indigo-650 font-extrabold">Queries</span>
           </h2>
-          <p className="text-slate-500 text-sm md:text-lg font-semibold">
-            Got questions? We've got answers.
+          <p className="text-slate-500 text-xs md:text-sm font-semibold">
+            Run diagnostic parameters or review the standard documentation logs below.
           </p>
         </div>
 
-        {/* --- FAQ GRID --- */}
-        <div className="grid grid-cols-1 gap-3 md:gap-6">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-              className={`group relative rounded-xl md:rounded-2xl border transition-all duration-500 cursor-pointer overflow-hidden ${
-                activeIndex === index 
-                  ? "bg-indigo-50/50 border-indigo-200 shadow-sm" 
-                  : "bg-white/70 border-slate-200/80 hover:border-slate-350 shadow-sm"
-              }`}
-              data-cursor="Query"
-            >
-              
-              <div className="relative z-10 p-4 md:p-8 flex items-center gap-3 md:gap-6">
-                <span className={`text-lg md:text-2xl font-bold font-mono transition-colors duration-300 ${
-                    activeIndex === index ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-650"
-                }`}>
-                    {faq.id}
-                </span>
-
-                <h3 className={`flex-1 text-sm md:text-2xl font-bold transition-colors duration-300 ${
-                    activeIndex === index ? "text-slate-900" : "text-slate-700 group-hover:text-slate-950"
-                }`}>
-                  {faq.question}
-                </h3>
-
-                <div className={`flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full border transition-all duration-300 ${
-                    activeIndex === index 
-                        ? "bg-indigo-600 border-indigo-600 text-white rotate-180" 
-                        : "border-slate-300 group-hover:border-slate-400 text-slate-600"
-                }`}>
-                    {activeIndex === index ? <Minus size={16} className="md:w-5 md:h-5" /> : <Plus size={16} className="md:w-5 md:h-5" />}
-                </div>
-              </div>
-
-              <AnimatePresence>
-                {activeIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  >
-                    <div className="px-4 pb-4 md:px-8 md:pb-8 pt-0 pl-4 md:pl-[5.5rem] text-slate-600 text-xs md:text-lg leading-relaxed font-medium">
-                      {faq.answer}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {activeIndex === index && (
-                <div className="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
-              )}
-
+        {/* Terminal Accordion Wrapper (Light Theme browser console) */}
+        <div className="bg-white/80 rounded-3xl border border-slate-200/80 shadow-lg overflow-hidden backdrop-blur-xl">
+          
+          {/* Terminal Top Control Bar */}
+          <div className="h-11 bg-slate-100/80 border-b border-slate-200/60 px-4 md:px-6 flex items-center justify-between select-none">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
             </div>
-          ))}
+            <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-mono text-slate-455 font-bold uppercase tracking-wider">
+              <Terminal size={11} className="text-indigo-500" />
+              <span>guest@devsamp:~ $ help --faq</span>
+            </div>
+            <div className="w-10"></div>
+          </div>
+
+          {/* Terminal Console Panel */}
+          <div className="p-4 md:p-6 space-y-3 font-mono">
+            {faqs.map((faq, index) => {
+              const isOpen = activeIndex === index;
+              return (
+                <div
+                  key={index}
+                  className={`border transition-all duration-300 rounded-2xl ${
+                    isOpen 
+                      ? "bg-slate-50/50 border-slate-200 shadow-sm" 
+                      : "bg-transparent border-transparent hover:bg-slate-50/30"
+                  }`}
+                >
+                  {/* Command Row */}
+                  <div
+                    onClick={() => setActiveIndex(isOpen ? null : index)}
+                    className="p-4 flex items-center justify-between cursor-pointer select-none"
+                    data-cursor="Query"
+                  >
+                    <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm">
+                      <span className="text-indigo-600 font-black">$</span>
+                      <span className="text-slate-450 font-bold text-[9px] md:text-xs">get faq-{faq.id}</span>
+                      <span className="text-slate-400 select-none">--title</span>
+                      <h3 className={`font-sans font-bold text-xs md:text-sm transition-colors pl-1 md:pl-2 ${
+                        isOpen ? "text-indigo-650 font-black" : "text-slate-750 hover:text-slate-900"
+                      }`}>
+                        {faq.question}
+                      </h3>
+                    </div>
+
+                    <div className={`p-1 rounded-full border transition-all duration-305 ${
+                      isOpen 
+                        ? "rotate-90 text-indigo-600 border-indigo-250 bg-indigo-50" 
+                        : "text-slate-400 border-slate-200 bg-white"
+                    }`}>
+                      <ChevronRight size={13} />
+                    </div>
+                  </div>
+
+                  {/* STDOUT Response Panel */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                      >
+                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-650 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/50 pt-3 bg-white/40 rounded-b-2xl">
+                          <CornerDownRight size={12} className="text-indigo-500 shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <span className="text-indigo-600 text-[9px] font-bold select-none">[STDOUT] &gt; </span>
+                            <span className="font-sans font-medium text-slate-700 text-xs md:text-sm pl-0.5">{faq.answer}</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                </div>
+              );
+            })}
+          </div>
+
         </div>
 
       </div>
