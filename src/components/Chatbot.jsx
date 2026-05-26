@@ -133,8 +133,8 @@ const Chatbot = () => {
         onClick={() => setIsOpen(!isOpen)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        // FIX: z-[9999] kar diya taaki Navbar (z-1000) ke upar rahe
-        className="fixed bottom-24 right-6 md:right-8 z-[9999] p-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] border border-white/20 transition-all flex items-center justify-center"
+        className="fixed bottom-24 right-6 md:right-8 z-[9999] p-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_4px_20px_rgba(79,70,229,0.3)] border border-indigo-500/20 transition-all flex items-center justify-center"
+        data-cursor="Chat"
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
         
@@ -145,7 +145,7 @@ const Chatbot = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    className="absolute right-full mr-4 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap hidden md:block"
+                    className="absolute right-full mr-4 bg-slate-950 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap hidden md:block border border-slate-800"
                 >
                     Chat with AI
                 </motion.div>
@@ -161,20 +161,19 @@ const Chatbot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            // FIX: z-[9999] here too
-            className="fixed bottom-44 right-4 md:right-8 w-[92vw] md:w-96 h-[550px] max-h-[75vh] bg-[#0a0a0a]/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl z-[9999] flex flex-col overflow-hidden"
+            className="fixed bottom-44 right-4 md:right-8 w-[92vw] md:w-96 h-[550px] max-h-[75vh] bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-2xl z-[9999] flex flex-col overflow-hidden text-slate-800"
           >
             {/* Header */}
-            <div className="p-4 border-b border-white/10 bg-white/5 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg relative">
+            <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg relative">
                     <Bot size={20} className="text-white" />
-                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#0a0a0a] rounded-full animate-pulse"></span>
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full animate-pulse"></span>
                 </div>
                 <div>
-                    <h3 className="font-bold text-white text-sm flex items-center gap-2">DevSamp AI <Sparkles size={12} className="text-yellow-400"/></h3>
-                    <p className="text-[10px] text-blue-400 font-medium">Online & Ready</p>
+                    <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">DevSamp AI <Sparkles size={12} className="text-yellow-500 fill-yellow-500"/></h3>
+                    <p className="text-[10px] text-indigo-650 font-bold">Online & Ready</p>
                 </div>
-                <button onClick={() => setIsOpen(false)} className="ml-auto text-gray-400 hover:text-white"><X size={18}/></button>
+                <button onClick={() => setIsOpen(false)} className="ml-auto text-slate-400 hover:text-slate-700 transition-colors"><X size={18}/></button>
             </div>
 
             {/* Chat Area */}
@@ -187,20 +186,20 @@ const Chatbot = () => {
                         className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                         {msg.type === 'bot' && (
-                            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center mr-2 mt-1 shrink-0">
-                                <Bot size={14} className="text-gray-400"/>
+                            <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center mr-2 mt-1 shrink-0 border border-slate-200/50">
+                                <Bot size={12} className="text-slate-505"/>
                             </div>
                         )}
                         <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
                             msg.type === 'user' 
-                                ? 'bg-blue-600 text-white rounded-br-none' 
-                                : 'bg-[#1a1a1a] border border-white/10 text-gray-200 rounded-bl-none'
+                                ? 'bg-indigo-600 text-white rounded-br-none' 
+                                : 'bg-slate-100 border border-slate-200/60 text-slate-800 rounded-bl-none'
                         }`}>
-                            <p className="whitespace-pre-wrap">{msg.text.split("**").map((chunk, i) => i % 2 === 1 ? <strong key={i} className="text-white font-bold">{chunk}</strong> : chunk)}</p>
+                            <p className="whitespace-pre-wrap">{msg.text.split("**").map((chunk, i) => i % 2 === 1 ? <strong key={i} className="text-slate-950 font-bold">{chunk}</strong> : chunk)}</p>
                         </div>
                         {msg.type === 'user' && (
-                            <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center ml-2 mt-1 shrink-0">
-                                <User size={14} className="text-blue-400"/>
+                            <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center ml-2 mt-1 shrink-0">
+                                <User size={12} className="text-indigo-600"/>
                             </div>
                         )}
                     </motion.div>
@@ -209,18 +208,18 @@ const Chatbot = () => {
                 {/* Typing Animation */}
                 {loading && (
                     <div className="flex justify-start">
-                        <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center mr-2 shrink-0"><Bot size={14} className="text-gray-400"/></div>
-                        <div className="bg-[#1a1a1a] border border-white/10 p-3 rounded-2xl rounded-bl-none flex gap-1 items-center">
-                            <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></span>
-                            <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-75"></span>
-                            <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-150"></span>
+                        <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center mr-2 shrink-0 border border-slate-200/50"><Bot size={12} className="text-slate-505"/></div>
+                        <div className="bg-slate-100 border border-slate-200/60 p-3 rounded-2xl rounded-bl-none flex gap-1 items-center">
+                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-75"></span>
+                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></span>
                         </div>
                     </div>
                 )}
             </div>
 
             {/* Input Area (Footer) */}
-            <div className="p-4 border-t border-white/10 bg-black/40 backdrop-blur-md">
+            <div className="p-4 border-t border-slate-200/80 bg-white">
                 
                 {/* Quick Chips */}
                 <div className="flex gap-2 overflow-x-auto no-scrollbar mb-3 pb-1">
@@ -229,7 +228,7 @@ const Chatbot = () => {
                             key={i} 
                             onClick={() => handleQuickOption(opt)}
                             disabled={loading}
-                            className="text-[10px] whitespace-nowrap bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-500/30 text-gray-300 hover:text-white px-3 py-1.5 rounded-full transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-[10px] whitespace-nowrap bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-500/30 text-slate-600 hover:text-indigo-600 px-3 py-1.5 rounded-full transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
                         >
                             {opt}
                         </button>
@@ -239,7 +238,7 @@ const Chatbot = () => {
                 {/* Input Form */}
                 <form onSubmit={handleSend} className="flex gap-2 items-center relative">
                     <input 
-                        className="flex-1 bg-[#1a1a1a] border border-white/10 rounded-xl pl-4 pr-10 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-gray-600"
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-10 py-3 text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-400 font-medium"
                         placeholder="Type a message..."
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
@@ -248,7 +247,7 @@ const Chatbot = () => {
                     <button 
                         type="submit" 
                         disabled={!inputValue.trim() || loading}
-                        className="absolute right-2 p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all disabled:opacity-0 disabled:scale-0"
+                        className="absolute right-2 p-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all disabled:opacity-0 disabled:scale-0"
                     >
                         <Send size={16} />
                     </button>

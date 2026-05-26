@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Blog from '@/models/Blog';
+import { verifyAdminSession } from '@/lib/auth';
 
 // 1. GET (Fetch All Blogs)
 export async function GET() {
@@ -16,6 +17,10 @@ export async function GET() {
 // 2. POST (Add New Blog)
 export async function POST(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const body = await request.json();
     await connectDB();
     await Blog.create(body);
@@ -28,6 +33,10 @@ export async function POST(request) {
 // 3. PUT (Update Blog)
 export async function PUT(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { id, ...data } = await request.json();
     await connectDB();
     await Blog.findByIdAndUpdate(id, data);
@@ -40,6 +49,10 @@ export async function PUT(request) {
 // 4. DELETE (Remove Blog)
 export async function DELETE(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     await connectDB();

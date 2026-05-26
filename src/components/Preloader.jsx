@@ -36,22 +36,22 @@ const Preloader = () => {
             y: "-100%", 
             transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } // Fast "Curtain" Exit
           }} 
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black text-white"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-50 text-slate-900"
         >
           <div className="text-center">
             {/* Percentage Text */}
             <motion.h1 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-[15vw] md:text-[10vw] font-bold font-mono leading-none tracking-tighter"
+                className="text-[15vw] md:text-[10vw] font-bold font-mono leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"
             >
               {count}%
             </motion.h1>
             
             {/* Loading Bar */}
-            <div className="w-64 h-1 bg-white/20 mt-4 rounded-full overflow-hidden mx-auto">
+            <div className="w-64 h-1.5 bg-slate-200 mt-4 rounded-full overflow-hidden mx-auto">
                 <motion.div 
-                    className="h-full bg-blue-500"
+                    className="h-full bg-gradient-to-r from-blue-600 to-purple-600"
                     style={{ width: `${count}%` }}
                     // Bar animation smooth rahegi bhale hi numbers jump karein
                     transition={{ type: "spring", stiffness: 100 }}

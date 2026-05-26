@@ -31,7 +31,7 @@ export default function ProjectsPage() {
     : projects.filter(project => project.category === activeCategory);
 
   return (
-    <main className="bg-black min-h-screen text-white">
+    <main className="bg-transparent min-h-screen text-slate-900">
       {/* Navbar removed as it's in RootLayout */}
       
       <div className="pt-32 pb-16 px-6 container mx-auto">
@@ -41,11 +41,11 @@ export default function ProjectsPage() {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-bold mb-4"
+            className="text-4xl md:text-6xl font-black mb-4 tracking-tight"
           >
-            All <span className="text-blue-500">Projects</span>
+            All <span className="text-indigo-650 font-extrabold">Projects</span>
           </motion.h1>
-          <p className="text-gray-400">A complete archive of our digital craftsmanship.</p>
+          <p className="text-slate-500 font-semibold">A complete archive of our digital craftsmanship.</p>
         </div>
 
         {/* Filter Buttons */}
@@ -54,11 +54,12 @@ export default function ProjectsPage() {
               <button
                 key={idx}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+                className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 border ${
                   activeCategory === cat
-                    ? "bg-white text-black border-white"
-                    : "bg-transparent text-gray-400 border-white/10 hover:border-white/40"
+                    ? "bg-slate-950 text-white border-slate-950 shadow-sm"
+                    : "bg-white/60 text-slate-655 border-slate-200 hover:border-slate-400"
                 }`}
+                data-cursor="Category"
               >
                 {cat}
               </button>
@@ -76,7 +77,8 @@ export default function ProjectsPage() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 key={project._id}
-                className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white/5 border border-white/10"
+                className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-slate-200/80 shadow-sm"
+                data-cursor="Project"
               >
                 <div className="relative h-[300px] w-full overflow-hidden">
                   <Image
@@ -85,25 +87,25 @@ export default function ProjectsPage() {
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                 </div>
 
                 <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">
+                  <div className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">
                     {project.category}
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
                   
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((t, i) => (
-                        <span key={i} className="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">
+                        <span key={i} className="text-[10px] bg-white/25 px-2 py-1 rounded text-white font-medium">
                             {t}
                         </span>
                     ))}
                   </div>
 
                   <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                    <a href={project.link} target="_blank" className="flex items-center gap-1 text-sm font-medium text-white hover:text-blue-400 transition-colors">
+                    <a href={project.link} target="_blank" className="flex items-center gap-1 text-sm font-bold text-white hover:text-indigo-450 transition-colors">
                         View Project <ExternalLink size={16} />
                     </a>
                   </div>

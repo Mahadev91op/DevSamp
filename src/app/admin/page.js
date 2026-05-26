@@ -176,7 +176,26 @@ const Pagination = ({ total, perPage, current, onChange }) => { const pages = Ma
 
 export default function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/admin/auth");
+        const data = await res.json();
+        if (data.isAuthenticated) {
+          setIsAuthenticated(true);
+          fetchAllData();
+        }
+      } catch (err) {
+        console.error("Session check failed", err);
+      } finally {
+        setIsCheckingSession(false);
+      }
+    };
+    checkSession();
+  }, []);
   const [activeTab, setActiveTab] = useState("dashboard"); 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState(null); 
@@ -241,17 +260,47 @@ export default function AdminPanel() {
 
   const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Environment variable se password check karega
-const handleLogin = (e) => { 
-  e.preventDefault(); 
-  // Ye .env file se password uthayega
-  if (password === process.env.NEXT_PUBLIC_ADMIN_KEY) { 
-    setIsAuthenticated(true); 
-    fetchAllData(); 
-  } else { 
-    showToast("Invalid Passkey", "error"); 
-  } 
-};
+  // Environment variable se password check karega (server-side verify karega)
+  const handleLogin = async (e) => { 
+    e.preventDefault(); 
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsAuthenticated(true);
+        fetchAllData(); 
+        showToast("Access Granted!");
+      } else {
+        showToast(data.message || "Invalid Passkey", "error");
+      }
+    } catch (error) {
+      showToast("Connection failed", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        setIsAuthenticated(false);
+        setPassword("");
+        showToast("Logged out successfully");
+      } else {
+        showToast("Logout failed", "error");
+      }
+    } catch (error) {
+      showToast("Logout error", "error");
+    }
+  };
 
   const fetchAllData = async () => {
     setLoading(true);
@@ -410,6 +459,23 @@ const handleLogin = (e) => {
     setForms(prev => ({ ...prev, clientProject: { ...prev.clientProject, links: [...prev.clientProject.links, newLink] } }));
   };
 
+  if (isCheckingSession) return (
+    <div className="h-screen flex flex-col items-center justify-center bg-[#050505] text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#050505] to-[#050505] pointer-events-none"></div>
+        <div className="relative z-10 text-center space-y-6">
+            <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
+                <div className="absolute inset-0 border-4 border-blue-500/30 rounded-full animate-ping"></div>
+                <div className="absolute inset-0 border-t-4 border-blue-500 rounded-full animate-spin"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-lg font-bold shadow-lg shadow-blue-600/30">DS</div>
+            </div>
+            <div>
+                <h2 className="text-xl font-bold tracking-wide">Securing mainframe...</h2>
+                <p className="text-gray-500 text-xs mt-1 animate-pulse">Decrypting secure session credentials</p>
+            </div>
+        </div>
+    </div>
+  );
+
   if (!isAuthenticated) return (
     <div className="h-screen flex items-center justify-center bg-[#050505] text-white overflow-hidden cursor-default selection:bg-blue-500/30">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#050505] to-[#050505] pointer-events-none"></div>
@@ -450,7 +516,7 @@ const handleLogin = (e) => {
                 <NavItem icon={CreditCard} label="Pricing Plans" id="pricing" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
                 <NavItem icon={Rss} label="Blogs & News" id="blogs" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
             </div>
-            <div className="p-4 border-t border-white/5"><button onClick={() => setIsAuthenticated(false)} className="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-red-900/10 rounded-xl transition-all font-medium text-sm"><LogOut size={18} /> Sign Out</button></div>
+            <div className="p-4 border-t border-white/5"><button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:bg-red-900/10 rounded-xl transition-all font-medium text-sm"><LogOut size={18} /> Sign Out</button></div>
         </aside>
 
         <main className="flex-1 flex flex-col h-full overflow-hidden relative">

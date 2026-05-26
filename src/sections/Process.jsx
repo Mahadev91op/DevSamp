@@ -55,25 +55,22 @@ const Process = () => {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    // CHANGE: py-12 for mobile, py-24 for PC
-    <section id="process" ref={containerRef} className="relative py-12 md:py-24 bg-black text-white overflow-hidden">
+    <section id="process" ref={containerRef} className="relative py-12 md:py-24 bg-transparent text-slate-900 overflow-hidden">
       
-      {/* CHANGE: px-4 for mobile, px-6 for PC */}
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         {/* Header */}
-        {/* CHANGE: mb-10 for mobile, mb-20 for PC */}
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-20">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold mb-4 md:mb-6"
+            className="text-3xl md:text-5xl font-black mb-4 md:mb-6 tracking-tight"
           >
             Our Process For <br />
-            <span className="text-blue-500">Delivering Results</span>
+            <span className="text-indigo-600 font-extrabold">Delivering Results</span>
           </motion.h2>
-          <p className="text-gray-400 text-sm md:text-base">
+          <p className="text-slate-500 text-sm md:text-base font-semibold">
             From chaos to clarity. We follow a proven 5-step framework to ensure your project is delivered on time.
           </p>
         </div>
@@ -82,18 +79,15 @@ const Process = () => {
         <div className="relative max-w-5xl mx-auto">
           
           {/* Central Line (Background - Gray) */}
-          {/* CHANGE: left-4 for mobile (tighter layout), left-1/2 for PC */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-white/10 -translate-x-1/2 md:translate-x-0"></div>
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 -translate-x-1/2 md:translate-x-0"></div>
           
           {/* Central Line (Foreground - Glowing Blue - Animated) */}
-          {/* CHANGE: left-4 for mobile, left-1/2 for PC */}
           <motion.div 
             style={{ height: lineHeight }}
-            className="absolute left-4 md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 -translate-x-1/2 md:translate-x-0 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
+            className="absolute left-4 md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-blue-600 via-indigo-600 to-purple-600 -translate-x-1/2 md:translate-x-0 shadow-[0_0_15px_rgba(79,70,229,0.5)]"
           ></motion.div>
 
           {/* Steps Loop */}
-          {/* CHANGE: space-y-6 for mobile (compact), space-y-24 for PC */}
           <div className="space-y-6 md:space-y-24">
             {steps.map((step, index) => (
               <motion.div
@@ -111,33 +105,27 @@ const Process = () => {
                 <div className="hidden md:block w-5/12"></div>
 
                 {/* 2. Center Node (The Dot on the Line) */}
-                {/* CHANGE: left-4 for mobile, left-1/2 for PC. Size reduced for mobile. */}
                 <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
-                    <div className={`w-6 h-6 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-black ${step.color} shadow-[0_0_20px_rgba(255,255,255,0.3)] flex items-center justify-center text-white font-bold text-[10px] md:text-base`}>
+                    <div className={`w-6 h-6 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-white ${step.color} shadow-[0_4px_10px_rgba(79,70,229,0.2)] flex items-center justify-center text-white font-bold text-[10px] md:text-base`}>
                         {step.id}
                     </div>
                 </div>
 
                 {/* 3. The Content Card */}
-                {/* CHANGE: pl-12 for mobile (to fit next to left-4 line), pl-0 for PC */}
                 <div className="pl-12 md:pl-0 w-full md:w-5/12">
-                  {/* CHANGE: p-5 for mobile, p-8 for PC */}
-                  <div className="group relative bg-white/5 border border-white/10 p-5 md:p-8 rounded-2xl hover:bg-white/10 hover:border-blue-500/30 transition-all duration-300">
+                  <div className="group relative bg-white/70 border border-slate-200/60 p-5 md:p-8 rounded-2xl hover:bg-white hover:border-indigo-500/30 shadow-sm hover:shadow-md transition-all duration-300">
                     
                     {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
 
-                    {/* CHANGE: w-10 h-10 for mobile, w-12 h-12 for PC */}
-                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg ${step.color} bg-opacity-20 flex items-center justify-center mb-3 md:mb-4 text-white border border-white/10`}>
+                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg ${step.color} bg-opacity-20 flex items-center justify-center mb-3 md:mb-4 text-white border border-slate-200/40`}>
                         {step.icon}
                     </div>
 
-                    {/* CHANGE: text-lg for mobile, text-xl for PC */}
-                    <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-slate-800 group-hover:text-indigo-600 transition-colors">
                         {step.title}
                     </h3>
-                    {/* CHANGE: text-xs for mobile, text-sm for PC */}
-                    <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
+                    <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-medium">
                         {step.desc}
                     </p>
                   </div>

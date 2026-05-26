@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Project from '@/models/Project';
+import { verifyAdminSession } from '@/lib/auth';
 
 // 1. DATA LANA (GET)
 export async function GET() {
@@ -16,6 +17,10 @@ export async function GET() {
 // 2. ADD PROJECT (POST)
 export async function POST(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const body = await request.json();
     await connectDB();
     await Project.create(body);
@@ -28,6 +33,10 @@ export async function POST(request) {
 // 3. EDIT PROJECT (PUT)
 export async function PUT(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { id, ...data } = await request.json();
     await connectDB();
     await Project.findByIdAndUpdate(id, data);
@@ -40,6 +49,10 @@ export async function PUT(request) {
 // 4. DELETE PROJECT (DELETE)
 export async function DELETE(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     await connectDB();

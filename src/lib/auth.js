@@ -58,3 +58,18 @@ export async function getSession() {
   if (!session) return null;
   return await decrypt(session);
 }
+
+export async function verifyAdminSession() {
+  try {
+    const cookieStore = await cookies();
+    const session = cookieStore.get("admin_session")?.value;
+    if (!session) return null;
+    const decrypted = await decrypt(session);
+    if (decrypted && decrypted.role === "admin") {
+      return decrypted;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}

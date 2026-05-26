@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Review from '@/models/Review';
+import { verifyAdminSession } from '@/lib/auth';
 
 // 1. GET (Fetch All)
 export async function GET() {
@@ -36,6 +37,10 @@ export async function POST(request) {
 // 3. DELETE (Remove Review)
 export async function DELETE(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     await connectDB();

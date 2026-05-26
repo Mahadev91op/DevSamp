@@ -87,9 +87,9 @@ const Navbar = () => {
     <nav
       className={`fixed w-full z-[1000] top-0 start-0 transition-all duration-300 ${
         isOpen 
-          ? "bg-black py-5 border-b border-white/10"
+          ? "bg-slate-50 py-5 border-b border-slate-200"
           : scrolled
-            ? "bg-black/80 backdrop-blur-md border-b border-white/10 py-3"
+            ? "bg-white/70 backdrop-blur-md border-b border-slate-200/50 py-3 shadow-sm"
             : "bg-transparent py-5"
       }`}
     >
@@ -100,9 +100,34 @@ const Navbar = () => {
             <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-2xl font-bold tracking-tighter text-white"
+                className="text-2xl font-black tracking-tighter text-slate-900 flex items-center"
             >
-              DEV<span className="text-blue-500 group-hover:text-purple-500 transition-colors">SAMP</span>
+              {/* DEV */}
+              <span className="flex">
+                {["D", "E", "V"].map((char, index) => (
+                  <motion.span
+                    key={index}
+                    whileHover={{ y: -4, color: "#2563eb" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                    className="cursor-default"
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
+              {/* SAMP */}
+              <span className="flex text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 ml-0.5">
+                {["S", "A", "M", "P"].map((char, index) => (
+                  <motion.span
+                    key={index}
+                    whileHover={{ y: -4, scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                    className="cursor-default"
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
             </motion.div>
         </Link>
 
@@ -112,10 +137,10 @@ const Navbar = () => {
             <Link 
               key={index} 
               href={link.href} 
-              className="relative text-sm font-medium text-gray-300 hover:text-white transition-colors group"
+              className="relative text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors group"
             >
               {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
           ))}
           
@@ -128,14 +153,14 @@ const Navbar = () => {
              >
                 {/* Profile Trigger */}
                 <motion.div 
-                    className="flex items-center gap-2 cursor-pointer bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-full transition-all"
+                    className="flex items-center gap-2 cursor-pointer bg-slate-100 hover:bg-slate-200 border border-slate-200/60 px-3 py-1.5 rounded-full transition-all"
                     whileHover={{ scale: 1.05 }}
                 >
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
                         {user.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-sm font-medium text-white max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
-                    <ChevronDown size={14} className={`text-gray-400 transition-transform ${isProfileHovered ? "rotate-180" : ""}`} />
+                    <span className="text-sm font-semibold text-slate-800 max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
+                    <ChevronDown size={14} className={`text-slate-500 transition-transform ${isProfileHovered ? "rotate-180" : ""}`} />
                 </motion.div>
 
                 {/* Dropdown Menu */}
@@ -146,17 +171,17 @@ const Navbar = () => {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute right-0 top-full mt-2 w-56 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[60]"
+                            className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-[60]"
                         >
-                            <div className="p-4 border-b border-white/5 bg-white/5">
-                                <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Signed in as</p>
-                                <p className="text-sm text-white font-medium truncate">{user.email}</p>
+                            <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+                                <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Signed in as</p>
+                                <p className="text-sm text-slate-800 font-semibold truncate">{user.email}</p>
                             </div>
                             <div className="p-2">
-                                <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors">
+                                <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-colors">
                                     <LayoutDashboard size={16} className="text-blue-500"/> Dashboard
                                 </Link>
-                                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-colors mt-1">
+                                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors mt-1">
                                     <LogOut size={16}/> Logout
                                 </button>
                             </div>
@@ -169,7 +194,7 @@ const Navbar = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm shadow-lg hover:bg-gray-200 transition-all flex items-center gap-2"
+                  className="bg-slate-950 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-md hover:bg-slate-800 transition-all flex items-center gap-2"
                 >
                   Login <LogIn size={16} />
                 </motion.button>
@@ -179,7 +204,7 @@ const Navbar = () => {
 
         {/* Mobile Toggle Button */}
         <div className="md:hidden z-50">
-          <button onClick={toggleMenu} className="text-white focus:outline-none p-2">
+          <button onClick={toggleMenu} className="text-slate-900 focus:outline-none p-2">
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -192,7 +217,7 @@ const Navbar = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-start pt-32 pb-10 space-y-6 overflow-y-auto h-screen"
+              className="fixed inset-0 bg-slate-50 z-40 flex flex-col items-center justify-start pt-32 pb-10 space-y-6 overflow-y-auto h-screen"
             >
               {navLinks.map((link, index) => (
                 <motion.div
@@ -207,7 +232,7 @@ const Navbar = () => {
                     <Link 
                         href={link.href} 
                         onClick={toggleMenu}
-                        className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 hover:to-blue-500 transition-all block py-1"
+                        className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-slate-900 to-slate-600 hover:to-blue-600 transition-all block py-1"
                     >
                     {link.name}
                     </Link>
@@ -223,24 +248,24 @@ const Navbar = () => {
                 className="flex flex-col items-center gap-4 mt-4 w-full px-6 max-w-sm shrink-0"
               >
                 {user ? (
-                    <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
+                    <div className="w-full bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-lg">
                         <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mx-auto mb-3 shadow-lg">
                             {user.name.charAt(0).toUpperCase()}
                         </div>
-                        <h3 className="text-xl font-bold text-white mb-1">{user.name}</h3>
-                        <p className="text-gray-500 text-sm mb-6 truncate">{user.email}</p>
+                        <h3 className="text-xl font-bold text-slate-800 mb-1">{user.name}</h3>
+                        <p className="text-slate-400 text-sm mb-6 truncate">{user.email}</p>
                         
                         <div className="flex flex-col gap-3">
                             <Link href="/dashboard" onClick={toggleMenu} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2">
                                 <LayoutDashboard size={18}/> Dashboard
                             </Link>
-                            <button onClick={handleLogout} className="w-full py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold rounded-xl flex items-center justify-center gap-2 border border-red-500/20">
+                            <button onClick={handleLogout} className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl flex items-center justify-center gap-2 border border-red-200">
                                 <LogOut size={18}/> Logout
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <Link href="/login" onClick={toggleMenu} className="px-8 py-4 bg-white text-black font-bold rounded-full text-xl w-full text-center hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-white/10">
+                    <Link href="/login" onClick={toggleMenu} className="px-8 py-4 bg-slate-950 text-white font-bold rounded-full text-xl w-full text-center hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10">
                       Login <LogIn size={20} />
                     </Link>
                 )}

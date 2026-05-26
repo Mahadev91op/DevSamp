@@ -7,6 +7,7 @@ import Noise from "@/components/Noise";
 import ScrollToTop from "@/components/ScrollToTop";
 import Preloader from "@/components/Preloader";
 import ClientFeatures from "@/components/ClientFeatures"; 
+import ThreeBackground from "@/components/ThreeBackground";
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -112,7 +113,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#000000",
+  themeColor: "#f8fafc",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -218,10 +219,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body 
-        className={`${inter.variable} ${outfit.variable} bg-black text-white antialiased`}
+        className={`${inter.variable} ${outfit.variable} bg-slate-50 text-slate-900 antialiased`}
         suppressHydrationWarning={true}
       >
         <Preloader />
+        <ThreeBackground />
         <ClientFeatures />
         <Noise />
         <ScrollToTop />

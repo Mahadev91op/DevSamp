@@ -66,7 +66,7 @@ export default function BlogPage() {
   const gridBlogs = featuredBlog ? filteredBlogs.slice(1) : filteredBlogs;
 
   return (
-    <main className="bg-black min-h-screen text-white selection:bg-blue-500/30">
+    <main className="bg-transparent min-h-screen text-slate-900 selection:bg-indigo-500/20">
       {/* Navbar removed */}
       
       <div className="pt-32 pb-24 px-6 container mx-auto max-w-7xl">
@@ -76,27 +76,27 @@ export default function BlogPage() {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
+            className="text-5xl md:text-7xl font-black mb-6 tracking-tight"
           >
-            Insights & <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Updates</span>
+            Insights & <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Updates</span>
           </motion.h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-slate-500 text-lg font-semibold">
             Dive into our latest thoughts, tutorials, and social media buzz.
           </p>
         </div>
 
         {/* --- SEARCH & FILTER BAR --- */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-16 bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-sm">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-16 bg-white/70 border border-slate-200 p-4 rounded-2xl shadow-sm backdrop-blur-sm">
             
             {/* Search Input */}
             <div className="relative w-full md:w-96">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input 
                     type="text" 
                     placeholder="Search articles..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-gray-600"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-slate-900 focus:bg-white focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 font-medium"
                 />
             </div>
 
@@ -108,9 +108,10 @@ export default function BlogPage() {
                         onClick={() => setActiveCategory(cat)}
                         className={`px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all border ${
                             activeCategory === cat 
-                                ? "bg-white text-black border-white" 
-                                : "bg-transparent text-gray-400 border-white/10 hover:text-white hover:border-white/30"
+                                ? "bg-slate-950 text-white border-slate-950 shadow-sm" 
+                                : "bg-transparent text-slate-650 border-slate-200 hover:text-slate-900 hover:border-slate-350"
                         }`}
+                        data-cursor="Category"
                     >
                         {cat}
                     </button>
@@ -125,9 +126,10 @@ export default function BlogPage() {
                 target="_blank"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="block group relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden border border-white/10 mb-16"
+                className="block group relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden border border-slate-200/80 mb-16 shadow-md"
+                data-cursor="Read"
             >
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10 opacity-90 transition-opacity group-hover:opacity-80"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent z-10 opacity-90 transition-opacity group-hover:opacity-85"></div>
                 <img 
                     src={featuredBlog.image} 
                     alt={featuredBlog.title} 
@@ -135,23 +137,23 @@ export default function BlogPage() {
                 />
                 
                 <div className="absolute top-6 left-6 z-20">
-                    <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                    <span className="bg-indigo-650 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
                         Featured
                     </span>
                 </div>
 
                 <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 z-20">
-                    <div className="flex items-center gap-3 text-sm text-blue-300 mb-3 font-medium">
+                    <div className="flex items-center gap-3 text-sm text-indigo-300 mb-3 font-semibold">
                         {featuredBlog.platform === 'youtube' ? <Youtube size={18} /> : <Instagram size={18} />}
                         <span>{new Date(featuredBlog.createdAt).toLocaleDateString()}</span>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 max-w-4xl leading-tight group-hover:text-blue-200 transition-colors">
+                    <h2 className="text-3xl md:text-5xl font-black text-white mb-4 max-w-4xl leading-tight group-hover:text-blue-100 transition-colors tracking-tight">
                         {featuredBlog.title}
                     </h2>
-                    <p className="text-gray-300 text-lg max-w-2xl line-clamp-2 mb-6">
+                    <p className="text-slate-200 text-lg max-w-2xl line-clamp-2 mb-6 font-medium">
                         {featuredBlog.desc}
                     </p>
-                    <div className="inline-flex items-center gap-2 text-white font-bold border-b border-white/20 pb-1 group-hover:border-blue-500 transition-all">
+                    <div className="inline-flex items-center gap-2 text-white font-bold border-b border-white/20 pb-1 group-hover:border-indigo-400 transition-all">
                         Read Full Story <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform"/>
                     </div>
                 </div>
@@ -173,10 +175,11 @@ export default function BlogPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className="group bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all flex flex-col h-full"
+                        className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-indigo-500/30 shadow-sm hover:shadow-md transition-all flex flex-col h-full"
+                        data-cursor="Read"
                     >
                         {/* Thumbnail */}
-                        <div className="w-full aspect-video bg-gray-900 relative overflow-hidden">
+                        <div className="w-full aspect-video bg-slate-100 relative overflow-hidden">
                             <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             
                             {/* Overlay Icon */}
@@ -185,7 +188,7 @@ export default function BlogPage() {
                             </div>
 
                             <div className="absolute top-4 left-4">
-                                <span className={`text-[10px] font-bold px-2 py-1 rounded backdrop-blur-md border border-white/10 uppercase tracking-wider ${blog.platform === 'youtube' ? 'bg-red-900/40 text-red-100' : 'bg-pink-900/40 text-pink-100'}`}>
+                                <span className={`text-[10px] font-bold px-2 py-1 rounded backdrop-blur-md border border-white/10 uppercase tracking-wider ${blog.platform === 'youtube' ? 'bg-red-600 text-white' : 'bg-pink-600 text-white'}`}>
                                     {blog.category}
                                 </span>
                             </div>
@@ -193,34 +196,35 @@ export default function BlogPage() {
 
                         {/* Content */}
                         <div className="p-6 flex flex-col flex-grow">
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                            <div className="flex items-center gap-2 text-xs text-slate-400 font-bold mb-3">
                                 <Calendar size={12} />
                                 <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                             </div>
                             
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
+                            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">
                                 {blog.title}
                             </h3>
-                            <p className="text-gray-400 text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
+                            <p className="text-slate-500 text-sm leading-relaxed mb-4 flex-grow line-clamp-3 font-medium">
                                 {blog.desc}
                             </p>
                             
-                            <div className="text-sm font-bold text-white flex items-center gap-1 group-hover:gap-2 transition-all mt-auto pt-4 border-t border-white/5">
-                                Open Link <ExternalLink size={14} className="text-blue-500"/>
+                            <div className="text-sm font-bold text-slate-800 flex items-center gap-1 group-hover:gap-2 group-hover:text-indigo-600 transition-all mt-auto pt-4 border-t border-slate-100">
+                                Open Link <ExternalLink size={14} className="text-indigo-600"/>
                             </div>
                         </div>
                     </motion.a>
                 ))
             ) : (
                 <div className="col-span-full py-20 text-center">
-                    <div className="inline-block p-4 rounded-full bg-white/5 mb-4">
-                        <Filter size={32} className="text-gray-500" />
+                    <div className="inline-block p-4 rounded-full bg-slate-100 mb-4 border border-slate-200">
+                        <Filter size={32} className="text-slate-400" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white">No blogs found</h3>
-                    <p className="text-gray-400 mt-2">Try adjusting your search or filters.</p>
+                    <h3 className="text-2xl font-bold text-slate-900">No blogs found</h3>
+                    <p className="text-slate-500 font-medium mt-2">Try adjusting your search or filters.</p>
                     <button 
                         onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}
-                        className="mt-6 px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors"
+                        className="mt-6 px-6 py-2.5 bg-slate-950 text-white font-bold rounded-full hover:bg-slate-800 transition-colors shadow-sm"
+                        data-cursor="Clear"
                     >
                         Clear Filters
                     </button>

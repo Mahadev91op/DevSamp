@@ -63,13 +63,13 @@ const Team = () => {
   if (teamMembers.length === 0) return null;
 
   return (
-    <section id="team" className="py-12 md:py-24 bg-black text-white overflow-hidden">
+    <section id="team" className="py-12 md:py-24 bg-transparent text-slate-900 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-6 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4">
-            The <span className="text-blue-500">Squad</span>
+          <h2 className="text-3xl md:text-5xl font-black mb-2 md:mb-4 tracking-tight">
+            The <span className="text-indigo-600">Squad</span>
           </h2>
-          <p className="text-sm md:text-base text-gray-400">Meet the people who make the magic happen.</p>
+          <p className="text-sm md:text-base text-slate-500 font-semibold">Meet the people who make the magic happen.</p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-[400px] md:h-[500px] w-full">
@@ -79,13 +79,14 @@ const Team = () => {
               layout
               onClick={() => setActiveId(member._id)}
               onHoverStart={() => setActiveId(member._id)}
-              className={`relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out border border-white/10 ${
+              className={`relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out border border-slate-200 shadow-sm ${
                 activeId === member._id 
                   ? "flex-[3] grayscale-0" 
                   : "flex-[1] grayscale hover:grayscale-0"
               }`}
+              data-cursor="Squad"
             >
-              {/* FIX: Using standard <img> with Thumbnail Link */}
+              {/* Using standard <img> with Thumbnail Link */}
               <img 
                 src={getGoogleDriveImage(member.image)}
                 alt={member.name} 
@@ -94,11 +95,11 @@ const Team = () => {
                 loading="eager"
               />
               
-              {/* Fallback Black Background */}
-              <div className="absolute inset-0 bg-gray-900 -z-10"></div>
+              {/* Fallback Light/Black Background */}
+              <div className="absolute inset-0 bg-slate-100 -z-10"></div>
               
-              <div className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${
-                activeId === member._id ? "opacity-0" : "opacity-60"
+              <div className={`absolute inset-0 bg-slate-900/10 transition-opacity duration-300 ${
+                activeId === member._id ? "opacity-0" : "opacity-40"
               }`}></div>
 
               {activeId === member._id ? (
@@ -106,23 +107,23 @@ const Team = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="absolute bottom-0 left-0 w-full p-5 md:p-8 bg-gradient-to-t from-black/90 via-black/60 to-transparent"
+                    className="absolute bottom-0 left-0 w-full p-5 md:p-8 bg-gradient-to-t from-slate-950/90 via-slate-950/60 to-transparent"
                 >
                     <div className="flex justify-between items-end">
                         <div>
                             <h3 className="text-xl md:text-3xl font-bold text-white mb-1">{member.name}</h3>
-                            <p className="text-blue-400 text-xs md:text-base font-medium mb-1 md:mb-3">{member.role}</p>
-                            <p className="text-gray-300 text-[10px] md:text-sm max-w-xs line-clamp-2 md:line-clamp-none">{member.desc}</p>
+                            <p className="text-indigo-300 text-xs md:text-base font-semibold mb-1 md:mb-3">{member.role}</p>
+                            <p className="text-slate-200 text-[10px] md:text-sm max-w-xs line-clamp-2 md:line-clamp-none font-medium">{member.desc}</p>
                         </div>
                         
                         <div className="flex flex-col md:flex-row gap-2 md:gap-3">
-                            <a href="https://www.freelancer.in/u/DevSamp" target="_blank" className="p-1.5 md:p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
+                            <a href="https://www.freelancer.in/u/DevSamp" target="_blank" className="p-1.5 md:p-2 rounded-full bg-white/20 hover:bg-indigo-600 text-white transition-all">
                                 <Bird size={16} className="md:w-5 md:h-5" />
                             </a>
-                            <a href="https://www.youtube.com/@DevSamp1st" target="_blank" className="p-1.5 md:p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
+                            <a href="https://www.youtube.com/@DevSamp1st" target="_blank" className="p-1.5 md:p-2 rounded-full bg-white/20 hover:bg-indigo-600 text-white transition-all">
                                 <Youtube size={16} className="md:w-5 md:h-5" />
                             </a>
-                            <a href="https://x.com/devsamp1st" target="_blank" className="p-1.5 md:p-2 rounded-full bg-white/20 hover:bg-white text-white hover:text-black transition-all">
+                            <a href="https://x.com/devsamp1st" target="_blank" className="p-1.5 md:p-2 rounded-full bg-white/20 hover:bg-indigo-600 text-white transition-all">
                                 <XIcon size={16} className="md:w-5 md:h-5" />
                             </a>
                         </div>
@@ -130,13 +131,13 @@ const Team = () => {
                 </motion.div>
               ) : (
                 <div className="absolute top-1/2 left-4 -translate-y-1/2 md:top-auto md:left-1/2 md:bottom-8 md:translate-y-0 md:-translate-x-1/2 md:rotate-[-90deg] whitespace-nowrap">
-                    <p className="text-sm md:text-xl font-bold tracking-widest text-white/80 uppercase">{member.name}</p>
+                    <p className="text-sm md:text-xl font-bold tracking-widest text-slate-700 uppercase">{member.name}</p>
                 </div>
               )}
 
               {activeId !== member._id && (
-                <div className="absolute top-1/2 right-4 -translate-y-1/2 md:top-auto md:right-auto md:bottom-6 md:left-1/2 md:-translate-x-1/2 p-1.5 md:p-2 rounded-full bg-white/10 backdrop-blur-md">
-                    <Plus className="text-white" size={16} />
+                <div className="absolute top-1/2 right-4 -translate-y-1/2 md:top-auto md:right-auto md:bottom-6 md:left-1/2 md:-translate-x-1/2 p-1.5 md:p-2 rounded-full bg-slate-200/80 backdrop-blur-md border border-slate-300/50 shadow-sm">
+                    <Plus className="text-slate-800" size={16} />
                 </div>
               )}
             </motion.div>

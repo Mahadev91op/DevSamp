@@ -1,4 +1,12 @@
 import mongoose from "mongoose";
+import dns from "node:dns";
+
+// Force Node.js to use Google DNS to resolve MongoDB Atlas SRV records correctly (fixes ECONNREFUSED querySrv bugs)
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+} catch (err) {
+  console.warn("Failed to set custom DNS servers:", err);
+}
 
 const MONGODB_URI = process.env.MONGODB_URI;
 

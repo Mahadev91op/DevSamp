@@ -14,7 +14,7 @@ const ProgressBar = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 z-[100]"
+      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 z-[10001]"
       style={{ scaleX, transformOrigin: "0%" }}
     />
   );

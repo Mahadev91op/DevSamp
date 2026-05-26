@@ -1,13 +1,25 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import ClientProject from '@/models/ClientProject';
-import { sendEmail } from '@/lib/email'; // <-- Import Helper
+import { sendEmail } from '@/lib/email';
+import { verifyAdminSession, getSession } from '@/lib/auth';
 
 // 1. GET
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
+    
+    const isAdmin = await verifyAdminSession();
+    const clientSession = await getSession();
+
+    // Block if neither admin nor the client matching the requested email
+    if (!isAdmin) {
+      if (!clientSession || !email || clientSession.user.email !== email) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      }
+    }
+
     await connectDB();
     
     let projects;
@@ -26,6 +38,10 @@ export async function GET(request) {
 // 2. POST
 export async function POST(request) {
   try {
+    const isAdmin = await verifyAdminSession();
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const body = await request.json();
     await connectDB();
     await ClientProject.create(body);
@@ -46,6 +62,10 @@ export async function POST(request) {
 // 3. PUT (Update Status & Notify)
 export async function PUT(request) {
   try {
+    const isAdmin = await verifyAdminSession();
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { id, ...data } = await request.json();
     await connectDB();
 
@@ -84,6 +104,10 @@ export async function PUT(request) {
 // 4. DELETE
 export async function DELETE(request) {
   try {
+    const isAdmin = await verifyAdminSession();
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     await connectDB();

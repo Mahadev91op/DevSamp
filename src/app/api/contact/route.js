@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Contact from '@/models/Contact';
 import { sendEmail } from '@/lib/email';
+import { verifyAdminSession } from '@/lib/auth';
 
 // 1. DATA SAVE KARNA (POST)
 export async function POST(request) {
@@ -86,6 +87,10 @@ export async function POST(request) {
 
 export async function GET() {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     await connectDB();
     const contacts = await Contact.find().sort({ createdAt: -1 });
     return NextResponse.json({ contacts }, { status: 200 });
@@ -96,6 +101,10 @@ export async function GET() {
 
 export async function DELETE(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     await connectDB();
@@ -108,6 +117,10 @@ export async function DELETE(request) {
 
 export async function PUT(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { id, status } = await request.json();
     await connectDB();
     await Contact.findByIdAndUpdate(id, { status });

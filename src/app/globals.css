@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* Slate 50 background */
+  --foreground: #0f172a; /* Slate 900 foreground */
 }
 
 @theme inline {
@@ -12,65 +12,44 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Force light theme by ignoring preferences */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  cursor: none; /* Hide default cursor for custom cursor */
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
-}
-
-body {
-  cursor: none; /* Default cursor hide kar diya */
-  font-family: var(--font-inter); /* Default text font */
-}
-
-/* Headings ke liye Naya Font */
+/* Headings Font */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-outfit);
+  font-family: var(--font-outfit), sans-serif;
 }
 
-/* --- CUSTOM SCROLLBAR (Chrome/Safari/Edge) --- */
+/* --- CUSTOM SCROLLBAR (Light Theme) --- */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000; 
+  background: #f1f5f9; /* Slate 100 track */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333; 
+  background: #cbd5e1; /* Slate 300 thumb */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6; /* Hover par Blue */
+  background: #3b82f6; /* Blue 500 on hover */
 }
 
-/* Text Selection Color */
+/* Text Selection Color (Light Theme Blue) */
 ::selection {
-  background: rgba(59, 130, 246, 0.3); /* Blue selection */
-  color: white;
+  background: rgba(59, 130, 246, 0.2); 
+  color: #0f172a;
 }
 
-/* src/app/globals.css ke end mein add karein */
-
+/* Noise overlay modified for subtle light-theme texture */
 .noise-bg {
   position: fixed;
   top: -50%;
@@ -82,7 +61,7 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent url('http://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
   background-repeat: repeat;
   animation: bg-animation .2s infinite;
-  opacity: 0.05; /* Noise ki intensity (Kam=Clean, Zyada=Grainy) */
+  opacity: 0.025; /* Highly subtle on light backgrounds */
   visibility: visible;
   pointer-events: none;
   z-index: 40;

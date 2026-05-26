@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Service from '@/models/Service';
+import { verifyAdminSession } from '@/lib/auth';
 
 // 1. SERVICES LANA (GET)
 export async function GET() {
@@ -16,6 +17,10 @@ export async function GET() {
 // 2. NEW SERVICE ADD KARNA (POST)
 export async function POST(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { title, desc, icon, color, gradient } = await request.json();
     await connectDB();
     await Service.create({ title, desc, icon, color, gradient });
@@ -28,6 +33,10 @@ export async function POST(request) {
 // 3. SERVICE DELETE KARNA (DELETE)
 export async function DELETE(request) {
   try {
+    const adminSession = await verifyAdminSession();
+    if (!adminSession) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     await connectDB();

@@ -32,7 +32,7 @@ export default async function Home() {
   const services = await getServices();
 
   return (
-    <main className="flex min-h-screen flex-col bg-black">
+    <main className="flex min-h-screen flex-col bg-transparent">
       <Hero />
       <Services initialServices={services} /> 
       <About />
