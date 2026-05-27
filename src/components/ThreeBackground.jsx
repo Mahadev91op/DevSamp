@@ -8,7 +8,6 @@ const ThreeBackground = () => {
 
   useEffect(() => {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (isMobile) return;
 
     if (!containerRef.current) return;
 
@@ -214,7 +213,7 @@ const ThreeBackground = () => {
   return (
     <canvas
       ref={containerRef}
-      className="hidden md:block fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent"
+      className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent"
       style={{ mixBlendMode: "multiply", opacity: 0.8 }}
     />
   );

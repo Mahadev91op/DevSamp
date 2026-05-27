@@ -166,7 +166,13 @@ const Hero = () => {
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               
-              <Link href="#portfolio" className="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-lg transition-all flex justify-center shadow-sm" data-cursor="Work">
+              <Link 
+                href="https://mahadev-portfolio-tau.vercel.app/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-lg transition-all flex justify-center shadow-sm" 
+                data-cursor="Work"
+              >
                 View Portfolio
               </Link>
             </div>

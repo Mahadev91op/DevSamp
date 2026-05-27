@@ -8,13 +8,13 @@ import * as LucideIcons from "lucide-react";
 // Bento Layout mapping helper
 const getBentoClasses = (idx) => {
   const layouts = [
-    "md:col-span-2 md:row-span-1 h-[260px] md:h-[320px]", // Web Dev
-    "md:col-span-1 md:row-span-2 h-[380px] md:h-[660px]", // UI/UX
-    "md:col-span-1 md:row-span-1 h-[240px] md:h-[320px]", // SEO / Performance
-    "md:col-span-1 md:row-span-1 h-[240px] md:h-[320px]", // Mobile App
-    "md:col-span-1 md:row-span-1 h-[240px] md:h-[320px]", // E-Commerce
+    "md:col-span-2 md:row-span-1 h-[350px] md:h-[320px]", // Web Dev
+    "md:col-span-1 md:row-span-2 h-[350px] md:h-[660px]", // UI/UX
+    "md:col-span-1 md:row-span-1 h-[350px] md:h-[320px]", // SEO / Performance
+    "md:col-span-1 md:row-span-1 h-[350px] md:h-[320px]", // Mobile App
+    "md:col-span-1 md:row-span-1 h-[350px] md:h-[320px]", // E-Commerce
   ];
-  return layouts[idx % layouts.length] || "md:col-span-1 md:row-span-1 h-[240px] md:h-[320px]";
+  return layouts[idx % layouts.length] || "md:col-span-1 md:row-span-1 h-[350px] md:h-[320px]";
 };
 
 // --- WIDGET 1: Web Dev Live Code Compiler Simulator ---
@@ -24,38 +24,38 @@ const WebDevWidget = () => {
   const [isRounded, setIsRounded] = useState(true);
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row gap-4 items-stretch select-none font-sans text-xs">
+    <div className="w-full h-full flex flex-row gap-3 items-stretch select-none font-sans text-xs">
       {/* Code Editor Mock */}
-      <div className="flex-1 bg-slate-950 text-slate-300 rounded-xl p-3 font-mono border border-white/5 flex flex-col justify-between">
+      <div className="flex-1 bg-slate-950 text-slate-300 rounded-xl p-3 font-mono border border-white/5 flex flex-col justify-between min-w-0">
         <div>
-          <div className="flex gap-1.5 mb-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+          <div className="flex gap-1.5 mb-2">
+            <span className="w-2 h-2 rounded-full bg-red-500"></span>
+            <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
           </div>
-          <div className="text-[10px] text-slate-500 mb-2">// config variables</div>
-          <div className="space-y-1 text-[10px]">
+          <div className="text-[9px] text-slate-500 mb-1.5">// config variables</div>
+          <div className="space-y-1 text-[9px]">
             <div className="flex justify-between items-center hover:bg-white/5 px-1 py-0.5 rounded cursor-pointer" onClick={() => setBtnColor(btnColor === "#4f46e5" ? "#ec4899" : "#4f46e5")}>
-              <span>--primary-color:</span>
+              <span>--primary:</span>
               <span className="font-bold text-indigo-400">{btnColor}</span>
             </div>
             <div className="flex justify-between items-center hover:bg-white/5 px-1 py-0.5 rounded cursor-pointer" onClick={() => setIsRounded(!isRounded)}>
-              <span>--border-radius:</span>
+              <span>--rounded:</span>
               <span className="font-bold text-pink-400">{isRounded ? "999px" : "8px"}</span>
             </div>
           </div>
         </div>
-        <div className="text-[9px] text-slate-600 font-bold border-t border-slate-900 pt-2">
-          Click lines to hot-reload preview
+        <div className="text-[8px] text-slate-600 font-bold border-t border-slate-900 pt-1.5 mt-2">
+          Click lines to reload
         </div>
       </div>
 
       {/* Render Preview Mock */}
-      <div className="w-full md:w-[150px] bg-slate-50 rounded-xl border border-slate-200/60 p-4 flex flex-col justify-center items-center gap-3">
-        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Preview</span>
+      <div className="w-[95px] md:w-[150px] bg-slate-50 rounded-xl border border-slate-200/60 p-2 md:p-4 flex flex-col justify-center items-center gap-2 md:gap-3 shrink-0">
+        <span className="text-[8px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Preview</span>
         <motion.button 
           animate={{ backgroundColor: btnColor, borderRadius: isRounded ? "999px" : "8px" }}
-          className="px-4 py-2 text-white font-bold text-[10px] shadow-lg shadow-indigo-500/15"
+          className="px-2.5 md:px-4 py-1.5 md:py-2 text-white font-bold text-[8px] md:text-[10px] shadow-lg shadow-indigo-500/15"
         >
           DevSamp
         </motion.button>
@@ -69,9 +69,9 @@ const UIUXWidget = () => {
   const [sliderVal, setSliderVal] = useState(50);
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 relative justify-between select-none">
+    <div className="w-full h-full flex flex-col gap-3 relative justify-between select-none">
       {/* Visual Sandbox Box */}
-      <div className="flex-1 bg-slate-950 rounded-2xl relative overflow-hidden border border-white/5">
+      <div className="h-[120px] md:h-auto md:flex-1 bg-slate-950 rounded-2xl relative overflow-hidden border border-white/5">
         
         {/* Underlay: Wireframe Sketch */}
         <div className="absolute inset-0 p-5 flex flex-col justify-between font-mono text-[9px] text-indigo-400/50">
@@ -177,7 +177,7 @@ const Services = ({ initialServices = [] }) => {
     
     // Fallback decorative elements for other slots
     return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-50 border border-slate-200/50 rounded-2xl relative overflow-hidden">
+      <div className="w-full h-[120px] md:h-full flex items-center justify-center bg-slate-50 border border-slate-200/50 rounded-2xl relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/5 via-transparent to-transparent"></div>
         <div className="text-center font-mono text-[9px] text-slate-400 p-4">
           <span className="block font-bold uppercase tracking-wider mb-2">Micro-Services Engine</span>
@@ -225,7 +225,7 @@ const Services = ({ initialServices = [] }) => {
         </div>
 
         {/* --- BENTO GRID SYSTEM --- */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:auto-rows-fr">
+        <div className="grid grid-flow-col grid-rows-2 overflow-x-auto md:grid-flow-row md:grid-rows-none md:grid-cols-3 md:overflow-visible gap-6 pb-6 md:pb-0 scrollbar-none snap-x snap-mandatory">
           {servicesData.map((service, idx) => {
             const IconComponent = LucideIcons[service.icon] || LucideIcons.HelpCircle;
             const bentoClass = getBentoClasses(idx);
@@ -237,7 +237,7 @@ const Services = ({ initialServices = [] }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: (idx % 3) * 0.1 }}
-                className={`group bg-white/40 border border-slate-200/80 p-6 md:p-8 rounded-3xl backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.01)] flex flex-col justify-between relative overflow-hidden transition-all duration-500 hover:border-indigo-500/30 ${bentoClass}`}
+                className={`group bg-white/40 border border-slate-200/80 p-5 md:p-8 rounded-3xl backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.01)] flex flex-col justify-between relative overflow-hidden transition-all duration-500 hover:border-indigo-500/30 w-[290px] sm:w-[330px] shrink-0 snap-start md:w-auto md:shrink-0 ${bentoClass}`}
               >
                 {/* Glow effect on hover */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

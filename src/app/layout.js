@@ -219,7 +219,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body 
-        className={`${inter.variable} ${outfit.variable} bg-slate-50 text-slate-900 antialiased`}
+        className={`${inter.variable} ${outfit.variable} text-slate-900 antialiased`}
         suppressHydrationWarning={true}
       >
         <Preloader />
