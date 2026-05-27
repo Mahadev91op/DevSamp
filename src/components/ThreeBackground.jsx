@@ -31,9 +31,10 @@ const ThreeBackground = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // --- DETECT DEVICE & ADJUST COMPLEXITY ---
-    const gridRows = isMobile ? 15 : 30;
-    const gridCols = isMobile ? 15 : 30;
-    const spacing = 4;
+    // Reduced particle grid size to optimize vertex counts (20x20 on PC, 12x12 on Mobile) to prevent GPU lag
+    const gridRows = isMobile ? 12 : 20;
+    const gridCols = isMobile ? 12 : 20;
+    const spacing = isMobile ? 8 : 6;
     const particleCount = gridRows * gridCols;
 
     // --- CREATE CUSTOM ROUND DOT TEXTURE ---
@@ -148,6 +149,9 @@ const ThreeBackground = () => {
       const positionsAttr = geometry.attributes.position;
       const positionsArray = positionsAttr.array;
 
+      // Allocate vector once per frame (only on desktop)
+      const mouse3D = !isMobile ? new THREE.Vector3(mouse.x * 40, mouse.y * 25, 0) : null;
+
       // Update particle heights based on wave formula and mouse interaction
       for (let i = 0; i < particleCount; i++) {
         const data = gridData[i];
@@ -156,17 +160,16 @@ const ThreeBackground = () => {
         let z = Math.sin(time + data.waveOffset) * 2.5;
         z += Math.cos(time * 0.8 + data.waveOffset * 1.5) * 1.5;
 
-        // Apply mouse distortion if cursor is active
-        const px = positionsArray[i * 3];
-        const py = positionsArray[i * 3 + 1];
+        if (!isMobile && mouse3D) {
+          // Apply mouse distortion if cursor is active
+          const px = positionsArray[i * 3];
+          const py = positionsArray[i * 3 + 1];
+          const dist = Math.sqrt((px - mouse3D.x) ** 2 + (py - mouse3D.y) ** 2);
 
-        // Project mouse coordinates into 3D world approximate coordinates
-        const mouse3D = new THREE.Vector3(mouse.x * 40, mouse.y * 25, 0);
-        const dist = Math.sqrt((px - mouse3D.x) ** 2 + (py - mouse3D.y) ** 2);
-
-        if (dist < 20) {
-          const force = (20 - dist) / 20; // 0 to 1
-          z += force * 12 * Math.sin(time * 2);
+          if (dist < 20) {
+            const force = (20 - dist) / 20; // 0 to 1
+            z += force * 12 * Math.sin(time * 2);
+          }
         }
 
         positionsArray[i * 3 + 2] = z;

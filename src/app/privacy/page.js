@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye } from "lucide-react";
@@ -8,7 +7,6 @@ import { Shield, Lock, Eye } from "lucide-react";
 export default function PrivacyPage() {
   return (
     <main className="bg-black min-h-screen text-white selection:bg-blue-500/30">
-      <Navbar />
       
       <div className="pt-32 pb-24 px-6 container mx-auto max-w-4xl">
         {/* Header */}

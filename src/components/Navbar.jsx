@@ -49,10 +49,15 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    let active = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const isScrolled = window.scrollY > 30;
+      if (isScrolled !== active) {
+        active = isScrolled;
+        setScrolled(isScrolled);
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

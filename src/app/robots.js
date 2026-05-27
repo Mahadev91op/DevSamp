@@ -1,5 +1,5 @@
 export default function robots() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.devsamp.online';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://devsamp.online';
 
   return {
     rules: [

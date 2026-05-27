@@ -17,7 +17,9 @@ export const revalidate = 60;
 
 // 🚀 HOMEPAGE TITLE (Very Important for Ranking)
 export const metadata = {
-  title: "Website Developer & App Development Agency | DevSamp",
+  title: {
+    absolute: "Website Developer & App Development Agency | DevSamp",
+  },
   description: "Hire the best Website Developer team at DevSamp. We provide custom Web Development, MERN Stack, and Next.js services globally.",
   alternates: {
     canonical: 'https://devsamp.online',

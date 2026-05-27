@@ -134,6 +134,12 @@ export default function RootLayout({ children }) {
         "telephone": "+91-9330680642",
         "email": "devsamp1st@gmail.com",
         "priceRange": "$$",
+        "logo": "https://devsamp.online/icon-512.png",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "48"
+        },
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Chinsurah",

@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 const CustomCursor = () => {
   const pathname = usePathname();
-  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const [cursorText, setCursorText] = useState("");
   const [isMobile, setIsMobile] = useState(false);
+
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -17,39 +19,55 @@ const CustomCursor = () => {
   }, []);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const updateMousePosition = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      const x = e.clientX;
+      const y = e.clientY;
       
-      const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
-      if (hoveredElement) {
-        let el = hoveredElement;
-        let isClickable = false;
-        let customText = "";
-
-        // Crawl up the DOM tree to find clickable elements and custom cursor text
-        while (el && el !== document.body) {
-          const style = window.getComputedStyle(el);
-          if (
-            style.cursor === "pointer" ||
-            el.tagName === "A" ||
-            el.tagName === "BUTTON" ||
-            el.getAttribute("role") === "button"
-          ) {
-            isClickable = true;
-            customText = el.getAttribute("data-cursor") || "";
-            break;
-          }
-          el = el.parentElement;
-        }
-
-        setIsHovering(isClickable);
-        setCursorText(customText);
+      // Update DOM styles directly for 120Hz/144Hz screen native performance (0ms React lag)
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${x - 4}px, ${y - 4}px, 0)`;
+      }
+      if (ringRef.current) {
+        const offset = isHovering ? 28 : 16;
+        ringRef.current.style.transform = `translate3d(${x - offset}px, ${y - offset}px, 0)`;
       }
     };
 
-    window.addEventListener("mousemove", updateMousePosition);
-    return () => window.removeEventListener("mousemove", updateMousePosition);
-  }, []);
+    const handleMouseOver = (e) => {
+      let el = e.target;
+      if (!el) return;
+      let isClickable = false;
+      let customText = "";
+
+      while (el && el !== document.body && el.parentElement) {
+        if (
+          el.tagName === "A" ||
+          el.tagName === "BUTTON" ||
+          el.getAttribute("role") === "button" ||
+          el.classList.contains("cursor-pointer") ||
+          el.getAttribute("data-cursor")
+        ) {
+          isClickable = true;
+          customText = el.getAttribute("data-cursor") || "";
+          break;
+        }
+        el = el.parentElement;
+      }
+
+      setIsHovering(isClickable);
+      setCursorText(customText);
+    };
+
+    window.addEventListener("mousemove", updateMousePosition, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
+
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, [isMobile, isHovering]);
 
   if (isMobile || (pathname && pathname.startsWith("/admin"))) {
     return null;
@@ -58,29 +76,28 @@ const CustomCursor = () => {
   return (
     <>
       {/* Inner Dot */}
-      <motion.div
+      <div
+        ref={dotRef}
         className="hidden lg:block fixed top-0 left-0 w-2 h-2 bg-indigo-600 rounded-full pointer-events-none z-[9999]"
-        animate={{
-          x: mousePosition.x - 4,
-          y: mousePosition.y - 4,
-          scale: isHovering ? 0 : 1,
+        style={{
+          willChange: "transform",
+          transform: "translate3d(-100px, -100px, 0)",
         }}
-        transition={{ type: "spring", stiffness: 600, damping: 30 }}
       />
       
       {/* Outer Ring / Glow Bubble */}
-      <motion.div
-        className="hidden lg:block fixed top-0 left-0 border rounded-full pointer-events-none z-[9998] flex items-center justify-center text-[10px] font-bold tracking-wider uppercase text-white shadow-sm"
-        animate={{
-          x: mousePosition.x - (isHovering ? 28 : 16),
-          y: mousePosition.y - (isHovering ? 28 : 16),
-          width: isHovering ? 56 : 32,
-          height: isHovering ? 56 : 32,
+      <div
+        ref={ringRef}
+        className="hidden lg:block fixed top-0 left-0 border rounded-full pointer-events-none z-[9998] flex items-center justify-center text-[10px] font-bold tracking-wider uppercase text-white shadow-sm transition-[width,height,background-color,border-color,box-shadow] duration-200 ease-out"
+        style={{
+          willChange: "transform, width, height",
+          transform: "translate3d(-100px, -100px, 0)",
+          width: isHovering ? "56px" : "32px",
+          height: isHovering ? "56px" : "32px",
           backgroundColor: isHovering ? "rgba(79, 70, 229, 0.95)" : "rgba(79, 70, 229, 0.05)",
           borderColor: isHovering ? "rgb(79, 70, 229)" : "rgba(79, 70, 229, 0.4)",
           boxShadow: isHovering ? "0 4px 20px rgba(79, 70, 229, 0.3)" : "none",
         }}
-        transition={{ type: "spring", stiffness: 350, damping: 25 }}
       >
         <AnimatePresence>
           {isHovering && cursorText && (
@@ -94,7 +111,7 @@ const CustomCursor = () => {
             </motion.span>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </>
   );
 };
