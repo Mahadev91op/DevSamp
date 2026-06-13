@@ -77,10 +77,10 @@ const FAQ = () => {
         </div>
 
         {/* Terminal Accordion Wrapper (Light Theme browser console) */}
-        <div className="bg-white/80 rounded-3xl border border-slate-200/80 shadow-lg overflow-hidden backdrop-blur-xl">
+        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-lg overflow-hidden">
           
           {/* Terminal Top Control Bar */}
-          <div className="h-11 bg-slate-100/80 border-b border-slate-200/60 px-4 md:px-6 flex items-center justify-between select-none">
+          <div className="h-11 bg-slate-100 border-b border-slate-200/60 px-4 md:px-6 flex items-center justify-between select-none">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
@@ -141,7 +141,7 @@ const FAQ = () => {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 320, damping: 28 }}
                       >
-                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-650 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/50 pt-3 bg-white/40 rounded-b-2xl">
+                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-650 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/50 pt-3 bg-slate-50/50 rounded-b-2xl">
                           <CornerDownRight size={12} className="text-indigo-500 shrink-0 mt-0.5" />
                           <div className="space-y-1">
                             <span className="text-indigo-600 text-[9px] font-bold select-none">[STDOUT] &gt; </span>

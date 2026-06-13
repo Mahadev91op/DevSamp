@@ -94,7 +94,7 @@ const Testimonials = ({ initialReviews = [] }) => {
             loopedReviews.map((item, index) => (
                 <div
                 key={`${item._id}-${index}`}
-                className="flex-shrink-0 w-[85vw] md:w-[450px] p-6 md:p-8 rounded-2xl bg-white border border-slate-200/80 backdrop-blur-sm flex flex-col justify-between hover:bg-indigo-50/10 hover:border-indigo-200/60 shadow-sm hover:shadow-md transition-all duration-300"
+                className="flex-shrink-0 w-[85vw] md:w-[450px] p-6 md:p-8 rounded-2xl bg-white border border-slate-200/80 flex flex-col justify-between hover:bg-indigo-50/10 hover:border-indigo-200/60 shadow-sm hover:shadow-md transition-all duration-300"
                 data-cursor="Drag"
                 >
                 <div>

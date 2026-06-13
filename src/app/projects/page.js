@@ -105,12 +105,12 @@ export default function ProjectsPage() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
                   key={project._id}
-                  className="group relative rounded-3xl overflow-hidden bg-white/40 border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.015)] backdrop-blur-xl h-[410px] flex flex-col justify-between"
+                  className="group relative rounded-3xl overflow-hidden bg-white/85 border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.015)] h-[410px] flex flex-col justify-between"
                   data-cursor="Project"
                 >
                   <div className="relative h-[220px] w-full overflow-hidden bg-slate-100/50">
                     {/* Console Header */}
-                    <div className="absolute top-0 left-0 right-0 h-8 bg-slate-950/80 backdrop-blur-sm z-20 px-3 flex items-center justify-between text-[9px] font-mono text-slate-400 select-none">
+                    <div className="absolute top-0 left-0 right-0 h-8 bg-slate-950/90 z-20 px-3 flex items-center justify-between text-[9px] font-mono text-slate-400 select-none">
                       <span className="flex items-center gap-1"><Terminal size={10} className="text-indigo-400" /> index.js</span>
                       <span className="text-indigo-400">v{version}</span>
                     </div>
@@ -125,16 +125,16 @@ export default function ProjectsPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                     
                     <div className="absolute bottom-3 left-4 z-20 flex gap-2">
-                      <span className="bg-slate-900/60 backdrop-blur-sm text-[8px] text-slate-300 font-mono font-bold px-1.5 py-0.5 rounded border border-white/10 uppercase">
+                      <span className="bg-slate-900/85 text-[8px] text-slate-300 font-mono font-bold px-1.5 py-0.5 rounded border border-white/10 uppercase">
                         V: {version}
                       </span>
-                      <span className="bg-indigo-650/85 backdrop-blur-sm text-[8px] text-white font-mono font-bold px-1.5 py-0.5 rounded uppercase">
+                      <span className="bg-indigo-650/95 text-[8px] text-white font-mono font-bold px-1.5 py-0.5 rounded uppercase">
                         {project.category}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-5 flex flex-col justify-between flex-1 relative z-20 bg-white/20">
+                  <div className="p-5 flex flex-col justify-between flex-1 relative z-20 bg-transparent">
                     <div>
                       <div className="flex justify-between items-center mb-1.5">
                         <span className="text-indigo-650 text-[9px] font-extrabold uppercase tracking-widest">

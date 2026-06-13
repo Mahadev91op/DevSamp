@@ -129,7 +129,7 @@ const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="lg:col-span-1 bg-white/40 border border-slate-200/80 rounded-3xl p-6 md:p-8 flex flex-row lg:flex-col justify-between items-center lg:items-start hover:bg-white/60 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.015)] transition-all duration-300"
+            className="lg:col-span-1 bg-white/85 border border-slate-200/80 rounded-3xl p-6 md:p-8 flex flex-row lg:flex-col justify-between items-center lg:items-start hover:bg-white/95 shadow-[0_8px_30px_rgb(0,0,0,0.015)] transition-all duration-300"
           >
             <div>
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-indigo-50 border border-slate-100 flex items-center justify-center text-indigo-600 mb-2 md:mb-6 shadow-sm">
@@ -151,7 +151,7 @@ const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-1 bg-white/40 border border-slate-200/80 rounded-3xl p-6 md:p-8 relative overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.015)] backdrop-blur-xl transition-all duration-300"
+            className="lg:col-span-1 bg-white/85 border border-slate-200/80 rounded-3xl p-6 md:p-8 relative overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.015)] transition-all duration-300"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-[50px] rounded-full pointer-events-none"></div>
             
@@ -173,7 +173,7 @@ const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="lg:col-span-2 bg-white/40 border border-slate-200/80 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.015)] backdrop-blur-xl transition-all duration-300"
+            className="lg:col-span-2 bg-white/85 border border-slate-200/80 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.015)] transition-all duration-300"
           >
             {/* Left side: Tech Icon selector grid */}
             <div className="flex-1 flex flex-col justify-between gap-4">

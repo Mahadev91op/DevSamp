@@ -181,7 +181,7 @@ const Hero = () => {
 
           {/* --- RIGHT SIDE: PIPELINE HUD SANDBOX --- */}
           <div className="lg:col-span-5 relative">
-            <div className="w-full bg-white/40 border border-slate-200/80 p-6 rounded-3xl backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col gap-6">
+            <div className="w-full bg-white/85 border border-slate-200/80 p-6 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col gap-6">
               
               {/* Top controls */}
               <div className="flex justify-between items-center border-b border-slate-200/55 pb-4">

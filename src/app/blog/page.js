@@ -87,7 +87,7 @@ export default function BlogPage() {
         </div>
 
         {/* --- SEARCH & FILTER BAR (Console style) --- */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-16 bg-white/70 border border-slate-200/80 p-4 rounded-2xl shadow-sm backdrop-blur-xl">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-16 bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm">
             
             {/* Search Input styled as query box */}
             <div className="relative w-full md:w-96 select-none">
@@ -167,7 +167,7 @@ export default function BlogPage() {
                           href={blog.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block bg-white/50 border border-slate-200 hover:border-indigo-200/80 p-5 md:p-6 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.01)] hover:shadow-md transition-all relative overflow-hidden"
+                          className="block bg-white/90 border border-slate-200 hover:border-indigo-200/80 p-5 md:p-6 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.01)] hover:shadow-md transition-all relative overflow-hidden"
                           data-cursor="Read"
                         >
                           <div className="flex flex-col md:flex-row gap-6">
@@ -210,7 +210,7 @@ export default function BlogPage() {
                   );
                 })
             ) : (
-                <div className="py-20 text-center select-none bg-white/40 border border-dashed border-slate-200 rounded-3xl">
+                <div className="py-20 text-center select-none bg-white/80 border border-dashed border-slate-200 rounded-3xl">
                     <div className="inline-block p-4 rounded-full bg-slate-100 border border-slate-200 mb-3 text-slate-400">
                         <Terminal size={32} />
                     </div>

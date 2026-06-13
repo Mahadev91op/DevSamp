@@ -35,16 +35,29 @@
 /* Force light theme by ignoring preferences */
 body {
   background-color: #f1f5f9;
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  cursor: none; /* Hide default cursor for custom cursor */
+}
+
+/* GPU-Accelerated fixed background element to prevent scroll paint storm */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -20;
+  background-color: #f1f5f9;
   background-image: 
     radial-gradient(at 0% 0%, rgba(255, 255, 255, 1) 0px, transparent 50%),
     radial-gradient(at 50% 0%, rgba(248, 250, 252, 0.8) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(226, 232, 240, 0.9) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(241, 245, 249, 1) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(203, 213, 225, 0.6) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: var(--foreground);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
-  cursor: none; /* Hide default cursor for custom cursor */
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
 }
 
 /* Headings Font */
@@ -79,33 +92,13 @@ h1, h2, h3, h4, h5, h6 {
 /* Noise overlay modified for subtle light-theme texture */
 .noise-bg {
   position: fixed;
-  top: -50%;
-  left: -50%;
-  right: -50%;
-  bottom: -50%;
-  width: 200%;
-  height: 200vh;
-  background: transparent url('http://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.022'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  animation: bg-animation .2s infinite;
-  opacity: 0.025; /* Highly subtle on light backgrounds */
-  visibility: visible;
   pointer-events: none;
   z-index: 40;
-}
-
-@keyframes bg-animation {
-    0% { transform: translate(0,0) }
-    10% { transform: translate(-5%,-5%) }
-    20% { transform: translate(-10%,5%) }
-    30% { transform: translate(5%,-10%) }
-    40% { transform: translate(-5%,15%) }
-    50% { transform: translate(-10%,5%) }
-    60% { transform: translate(15%,0) }
-    70% { transform: translate(0,10%) }
-    80% { transform: translate(-15%,0) }
-    90% { transform: translate(10%,5%) }
-    100% { transform: translate(5%,0) }
 }
 
 /* Hide scrollbar utility */
@@ -131,9 +124,34 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-backdrop-filter: blur(6px) !important;
 }
 
-/* Force hardware GPU acceleration on bento and portfolio cards */
-.group, [data-cursor] {
+/* Disable backdrop blurs on mobile/tablets to prevent rendering bottleneck */
+@media (max-width: 1024px) {
+  .backdrop-blur-xl, .backdrop-blur-lg, .backdrop-blur-md {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Force hardware GPU acceleration only on cursor layer to save GPU memory */
+[data-cursor] {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   will-change: transform;
+}
+
+/* Restore native browser text caret inside input fields and textareas */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+[contenteditable="true"],
+.custom-scrollbar input,
+.custom-scrollbar textarea {
+  cursor: text !important;
+}
+
+select {
+  cursor: pointer !important;
 }

@@ -161,7 +161,7 @@ const Process = () => {
                 
                 {/* 1. Left/Right card content (takes half size) */}
                 <div className="w-full md:w-5/12 flex flex-col justify-center">
-                  <div className={`group relative bg-white/40 border border-slate-200/80 p-6 md:p-8 rounded-3xl backdrop-blur-xl transition-all duration-500 hover:shadow-xl ${step.borderColor}`}>
+                  <div className={`group relative bg-white/85 border border-slate-200/80 p-6 md:p-8 rounded-3xl transition-all duration-500 hover:shadow-xl ${step.borderColor}`}>
                     
                     {/* Node bubble inside card */}
                     <div className="flex justify-between items-center mb-5">

@@ -28,6 +28,7 @@ const CheckmarkIcon = ({ className }) => (
 const Pricing = ({ initialPlans = [] }) => {
   const [plans] = useState(initialPlans); 
   const [billing, setBilling] = useState("monthly");
+  const [showCompare, setShowCompare] = useState(false); // Compare plans modal trigger
   
   // Interactive Calculator State
   const [pagesCount, setPagesCount] = useState(5);
@@ -121,6 +122,17 @@ const Pricing = ({ initialPlans = [] }) => {
               </span>
             </button>
           </div>
+
+          {/* Compare blueprints button */}
+          <div className="mt-6 select-none">
+            <button
+              onClick={() => setShowCompare(true)}
+              className="text-xs font-bold text-indigo-650 hover:text-indigo-850 flex items-center gap-1.5 mx-auto transition-colors cursor-pointer"
+              data-cursor="Compare"
+            >
+              <HelpCircle size={14} /> Compare Blueprint Specifications
+            </button>
+          </div>
         </div>
 
         {/* Pricing Layout */}
@@ -137,10 +149,10 @@ const Pricing = ({ initialPlans = [] }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.4 }}
-                  className={`relative shrink-0 w-[85vw] md:w-auto snap-center p-6 md:p-7 rounded-3xl border backdrop-blur-xl transition-all duration-300 flex flex-col justify-between ${
+                  className={`relative shrink-0 w-[85vw] md:w-auto snap-center p-6 md:p-7 rounded-3xl border transition-all duration-300 flex flex-col justify-between ${
                     plan.popular 
                       ? "bg-white border-indigo-500 shadow-[0_12px_40px_rgba(79,70,229,0.08)] z-10 md:scale-[1.03]" 
-                      : "bg-white/50 border-slate-200/80 hover:border-slate-350 shadow-sm"
+                      : "bg-white/85 border-slate-200/80 hover:border-slate-350 shadow-sm"
                   }`}
                   data-cursor="Plan"
                 >
@@ -174,7 +186,7 @@ const Pricing = ({ initialPlans = [] }) => {
 
                   {/* Get Started Button */}
                   <Link 
-                    href={`#contact?service=${encodeURIComponent(plan.name)}`}
+                    href={`/?service=${encodeURIComponent(plan.name)}#contact`}
                     className={`w-full py-3 rounded-2xl font-bold mb-6 transition-all flex items-center justify-center gap-2 text-xs md:text-sm ${
                       plan.popular 
                         ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/10" 
@@ -216,7 +228,7 @@ const Pricing = ({ initialPlans = [] }) => {
           </div>
 
           {/* Right Column: Custom Interactive Calculator */}
-          <div className="lg:col-span-4 bg-white/70 border border-indigo-100/60 p-6 md:p-7 rounded-3xl shadow-sm backdrop-blur-xl relative">
+          <div className="lg:col-span-4 bg-white/90 border border-indigo-100/60 p-6 md:p-7 rounded-3xl shadow-sm relative">
             <div className="absolute top-2 right-2">
               <span className="bg-indigo-50 text-indigo-600 text-[8px] font-bold px-2 py-0.5 rounded uppercase font-mono border border-indigo-100/50">
                 Live Calculator
@@ -306,14 +318,36 @@ const Pricing = ({ initialPlans = [] }) => {
                 <span className="text-[10px] text-slate-400 font-bold">est. total</span>
               </div>
 
-              <div className="border-t border-slate-800 mt-4 pt-3 flex justify-between items-center text-[10px] text-slate-500 font-bold">
+              {/* Itemized pricing breakdown */}
+              <div className="border-t border-slate-850 mt-3 pt-3 space-y-1 text-[9px] text-slate-400 font-mono select-none">
+                <div className="flex justify-between">
+                  <span>Base Price:</span>
+                  <span>${calcSettings.basePrice}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Screens ({pagesCount} × ${calcSettings.pricePerPage}):</span>
+                  <span>${pagesCount * calcSettings.pricePerPage}</span>
+                </div>
+                {selectedAddons.length > 0 && (
+                  <div className="flex justify-between">
+                    <span>Add-ons Cost:</span>
+                    <span>
+                      ${calcSettings.addons
+                        .filter(addon => selectedAddons.includes(addon.name))
+                        .reduce((sum, addon) => sum + addon.price, 0)}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-slate-800 mt-3.5 pt-3 flex justify-between items-center text-[10px] text-slate-500 font-bold">
                 <span>SLA Delivery:</span>
                 <span className="text-slate-300">{pagesCount > 15 ? "3-4 Weeks" : "1-2 Weeks"}</span>
               </div>
             </div>
 
             <Link 
-              href={`#contact?customQuote=${calculatedQuote}&pages=${pagesCount}`}
+              href={`/?customQuote=${calculatedQuote}&pages=${pagesCount}&addons=${encodeURIComponent(selectedAddons.join(','))}#contact`}
               className="w-full mt-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 transition-all text-xs md:text-sm shadow-md"
             >
               Ship Custom Specifications
@@ -323,7 +357,7 @@ const Pricing = ({ initialPlans = [] }) => {
         </div>
 
         {/* Footer Guarantee info */}
-        <div className="bg-white/40 border border-slate-200/80 p-5 rounded-2xl max-w-2xl mx-auto flex items-center gap-4 select-none">
+        <div className="bg-white/80 border border-slate-200/80 p-5 rounded-2xl max-w-2xl mx-auto flex items-center gap-4 select-none">
           <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600 shrink-0">
             <HelpCircle size={22} />
           </div>
@@ -336,6 +370,127 @@ const Pricing = ({ initialPlans = [] }) => {
         </div>
 
       </div>
+
+      {/* Compare blueprints Modal */}
+      <AnimatePresence>
+        {showCompare && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center px-4">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              onClick={() => setShowCompare(false)} 
+              className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" 
+            />
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }} 
+              animate={{ scale: 1, opacity: 1 }} 
+              exit={{ scale: 0.95, opacity: 0 }} 
+              className="relative bg-white border border-slate-200 p-6 md:p-8 rounded-3xl w-full max-w-3xl shadow-2xl text-slate-900 max-h-[85vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4 select-none">
+                <div>
+                  <h3 className="text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+                    <Sparkles size={18} className="text-indigo-600" /> Compare Blueprints
+                  </h3>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider font-mono">technical comparisons manifest</p>
+                </div>
+                <button 
+                  onClick={() => setShowCompare(false)} 
+                  className="text-slate-400 hover:text-slate-700 transition-colors p-1"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-200 bg-slate-50 font-mono text-[10px] text-slate-500 font-bold uppercase select-none">
+                      <th className="p-3">Specification Parameter</th>
+                      <th className="p-3 text-center">Starter</th>
+                      <th className="p-3 text-center text-indigo-600">Pro</th>
+                      <th className="p-3 text-center">Enterprise</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                    <tr>
+                      <td className="p-3 font-bold">Base Cost (Monthly)</td>
+                      <td className="p-3 text-center font-mono">$29</td>
+                      <td className="p-3 text-center font-mono text-indigo-600 font-bold">$79</td>
+                      <td className="p-3 text-center font-mono">$199</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">Base Cost (Yearly)</td>
+                      <td className="p-3 text-center font-mono">$290</td>
+                      <td className="p-3 text-center font-mono text-indigo-600 font-bold">$790</td>
+                      <td className="p-3 text-center font-mono">$1990</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">Scale (Projects)</td>
+                      <td className="p-3 text-center text-slate-500">1 Project</td>
+                      <td className="p-3 text-center text-indigo-600 font-bold">5 Projects</td>
+                      <td className="p-3 text-center text-slate-500">Unlimited</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">Mobile Responsive</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">SEO & Analytics</td>
+                      <td className="p-3 text-center text-slate-500">Basic</td>
+                      <td className="p-3 text-center text-indigo-600 font-bold">Advanced Dashboard</td>
+                      <td className="p-3 text-center text-slate-500">Custom Real-time</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">Database Integration</td>
+                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes (MongoDB)</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes (Fully Managed)</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">CMS Panel (Admin dashboard)</td>
+                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">Support Service Level</td>
+                      <td className="p-3 text-center text-slate-500">Email</td>
+                      <td className="p-3 text-center text-indigo-600 font-bold">Priority Chat & Email</td>
+                      <td className="p-3 text-center text-slate-500">24/7 Phone & Slack</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">White Labeling</td>
+                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">Dedicated Manager</td>
+                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-emerald-500">✓ Yes</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-6 text-center select-none">
+                <button
+                  onClick={() => setShowCompare(false)}
+                  className="px-6 py-2.5 bg-slate-950 text-white rounded-xl font-bold text-xs hover:bg-slate-800 transition-all shadow-sm"
+                >
+                  Close Console
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

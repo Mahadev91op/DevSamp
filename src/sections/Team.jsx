@@ -96,7 +96,7 @@ const Team = () => {
         </div>
 
         {/* Coder Workspace Console */}
-        <div className="bg-white/60 border border-slate-200/80 rounded-3xl overflow-hidden shadow-lg backdrop-blur-xl flex flex-col md:grid md:grid-cols-12 min-h-[550px] transition-all duration-300">
+        <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-lg flex flex-col md:grid md:grid-cols-12 min-h-[550px] transition-all duration-300">
           
           {/* Left Panel: File Explorer (Sidebar) */}
           <div className="col-span-3 border-r border-slate-200/80 bg-slate-100/40 p-4 md:p-6 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto whitespace-nowrap md:whitespace-normal scrollbar-none select-none">
@@ -127,7 +127,7 @@ const Team = () => {
           </div>
 
           {/* Right Panel: Active File Editor Window */}
-          <div className="col-span-9 flex flex-col h-full bg-white/30">
+          <div className="col-span-9 flex flex-col h-full bg-transparent">
             {/* Editor Window Bar */}
             <div className="h-11 border-b border-slate-200/80 bg-slate-50/50 px-4 md:px-6 flex items-center justify-between select-none">
               <div className="flex items-center gap-1.5">

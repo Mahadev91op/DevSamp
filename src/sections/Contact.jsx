@@ -33,13 +33,16 @@ const Contact = () => {
       const customQuote = searchParams.get("customQuote");
       const pages = searchParams.get("pages");
       const chosenService = searchParams.get("service");
+      const addons = searchParams.get("addons");
 
       let msg = "";
       let svc = "";
 
       if (customQuote && pages) {
         svc = "Web Development";
-        msg = `Hi DevSamp team! I evaluated my project scope using your quote tool. Specifications:\n- Scale: ${pages} pages\n- Estimated Budget: $${customQuote}\nI would like to discuss this config.`;
+        const addonsList = addons ? decodeURIComponent(addons).split(',').join(', ') : '';
+        const addonsLine = addonsList ? `\n- Chosen Add-ons: ${addonsList}` : '';
+        msg = `Hi DevSamp team! I evaluated my project scope using your quote tool. Specifications:\n- Scale: ${pages} pages\n- Estimated Budget: $${customQuote}${addonsLine}\nI would like to discuss this config.`;
       } else if (chosenService) {
         svc = chosenService;
         msg = `Hi DevSamp team! I am interested in deploying the "${chosenService}" pricing configuration. Please reach out to me.`;

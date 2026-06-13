@@ -237,7 +237,7 @@ const Services = ({ initialServices = [] }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: (idx % 3) * 0.1 }}
-                className={`group bg-white/40 border border-slate-200/80 p-5 md:p-8 rounded-3xl backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.01)] flex flex-col justify-between relative overflow-hidden transition-all duration-500 hover:border-indigo-500/30 w-[290px] sm:w-[330px] shrink-0 snap-start md:w-auto md:shrink-0 ${bentoClass}`}
+                className={`group bg-white/85 border border-slate-200/80 p-5 md:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.01)] flex flex-col justify-between relative overflow-hidden transition-all duration-500 hover:border-indigo-500/30 w-[290px] sm:w-[330px] shrink-0 snap-start md:w-auto md:shrink-0 ${bentoClass}`}
               >
                 {/* Glow effect on hover */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 const CustomCursor = () => {
   const pathname = usePathname();
   const [isHovering, setIsHovering] = useState(false);
+  const [isOverInput, setIsOverInput] = useState(false); // Hide cursor when over text input fields
   const [cursorText, setCursorText] = useState("");
   const [isMobile, setIsMobile] = useState(false);
 
@@ -40,22 +41,35 @@ const CustomCursor = () => {
       if (!el) return;
       let isClickable = false;
       let customText = "";
+      let isInput = false;
 
-      while (el && el !== document.body && el.parentElement) {
+      let tempEl = el;
+      while (tempEl && tempEl !== document.body && tempEl.parentElement) {
         if (
-          el.tagName === "A" ||
-          el.tagName === "BUTTON" ||
-          el.getAttribute("role") === "button" ||
-          el.classList.contains("cursor-pointer") ||
-          el.getAttribute("data-cursor")
+          tempEl.tagName === "INPUT" ||
+          tempEl.tagName === "TEXTAREA" ||
+          tempEl.tagName === "SELECT" ||
+          tempEl.hasAttribute("contenteditable") ||
+          tempEl.classList.contains("cursor-text")
         ) {
-          isClickable = true;
-          customText = el.getAttribute("data-cursor") || "";
+          isInput = true;
           break;
         }
-        el = el.parentElement;
+        if (
+          tempEl.tagName === "A" ||
+          tempEl.tagName === "BUTTON" ||
+          tempEl.getAttribute("role") === "button" ||
+          tempEl.classList.contains("cursor-pointer") ||
+          tempEl.getAttribute("data-cursor")
+        ) {
+          isClickable = true;
+          customText = tempEl.getAttribute("data-cursor") || "";
+          break;
+        }
+        tempEl = tempEl.parentElement;
       }
 
+      setIsOverInput(isInput);
       setIsHovering(isClickable);
       setCursorText(customText);
     };
@@ -80,23 +94,26 @@ const CustomCursor = () => {
         ref={dotRef}
         className="hidden lg:block fixed top-0 left-0 w-2 h-2 bg-indigo-600 rounded-full pointer-events-none z-[9999]"
         style={{
-          willChange: "transform",
+          willChange: "transform, opacity",
           transform: "translate3d(-100px, -100px, 0)",
+          opacity: isOverInput ? 0 : 1,
+          transition: "opacity 0.15s ease",
         }}
       />
       
       {/* Outer Ring / Glow Bubble */}
       <div
         ref={ringRef}
-        className="hidden lg:block fixed top-0 left-0 border rounded-full pointer-events-none z-[9998] flex items-center justify-center text-[10px] font-bold tracking-wider uppercase text-white shadow-sm transition-[width,height,background-color,border-color,box-shadow] duration-200 ease-out"
+        className="hidden lg:block fixed top-0 left-0 border rounded-full pointer-events-none z-[9998] flex items-center justify-center text-[10px] font-bold tracking-wider uppercase text-white shadow-sm transition-[width,height,background-color,border-color,box-shadow,opacity] duration-200 ease-out"
         style={{
-          willChange: "transform, width, height",
+          willChange: "transform, width, height, opacity",
           transform: "translate3d(-100px, -100px, 0)",
           width: isHovering ? "56px" : "32px",
           height: isHovering ? "56px" : "32px",
           backgroundColor: isHovering ? "rgba(79, 70, 229, 0.95)" : "rgba(79, 70, 229, 0.05)",
           borderColor: isHovering ? "rgb(79, 70, 229)" : "rgba(79, 70, 229, 0.4)",
           boxShadow: isHovering ? "0 4px 20px rgba(79, 70, 229, 0.3)" : "none",
+          opacity: isOverInput ? 0 : 1,
         }}
       >
         <AnimatePresence>

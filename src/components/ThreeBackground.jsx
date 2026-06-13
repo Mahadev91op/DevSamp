@@ -28,7 +28,7 @@ const ThreeBackground = () => {
       alpha: true 
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     // --- DETECT DEVICE & ADJUST COMPLEXITY ---
     // Reduced particle grid size to optimize vertex counts (20x20 on PC, 12x12 on Mobile) to prevent GPU lag
@@ -128,7 +128,7 @@ const ThreeBackground = () => {
       mouse.targetY = -(event.clientY / window.innerHeight) * 2 + 1;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     // --- ANIMATION LOOP ---
     let animationFrameId;
@@ -164,9 +164,12 @@ const ThreeBackground = () => {
           // Apply mouse distortion if cursor is active
           const px = positionsArray[i * 3];
           const py = positionsArray[i * 3 + 1];
-          const dist = Math.sqrt((px - mouse3D.x) ** 2 + (py - mouse3D.y) ** 2);
+          const dx = px - mouse3D.x;
+          const dy = py - mouse3D.y;
+          const distSqr = dx * dx + dy * dy;
 
-          if (dist < 20) {
+          if (distSqr < 400) {
+            const dist = Math.sqrt(distSqr);
             const force = (20 - dist) / 20; // 0 to 1
             z += force * 12 * Math.sin(time * 2);
           }
@@ -217,7 +220,7 @@ const ThreeBackground = () => {
     <canvas
       ref={containerRef}
       className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent"
-      style={{ mixBlendMode: "multiply", opacity: 0.8 }}
+      style={{ opacity: 0.8 }}
     />
   );
 };
