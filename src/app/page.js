@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Hero from "@/sections/Hero";
 import Services from "@/sections/Services"; 
 import About from "@/sections/About";
@@ -11,6 +12,13 @@ import Contact from "@/sections/Contact";
 import Footer from "@/components/Footer";
 import Blogs from "@/sections/Blogs";
 import { getProjects, getBlogs, getReviews, getPricing, getServices } from "@/lib/data";
+import { 
+  ServicesSkeleton, 
+  PortfolioSkeleton, 
+  PricingSkeleton, 
+  BlogsSkeleton, 
+  TestimonialsSkeleton 
+} from "@/components/Skeletons";
 
 // 🚀 REVALIDATION: High Performance + SEO
 export const revalidate = 60; 
@@ -26,25 +34,55 @@ export const metadata = {
   },
 };
 
-export default async function Home() {
-  const projects = await getProjects();
-  const blogs = await getBlogs();
-  const reviews = await getReviews();
-  const pricingPlans = await getPricing();
+// 🚀 SERVER-SIDE DATA FETCHING WRAPPERS FOR STREAMING
+async function ServicesSection() {
   const services = await getServices();
+  return <Services initialServices={services} />;
+}
 
+async function PortfolioSection() {
+  const projects = await getProjects();
+  return <Portfolio initialProjects={projects} />;
+}
+
+async function PricingSection() {
+  const pricingPlans = await getPricing();
+  return <Pricing initialPlans={pricingPlans} />;
+}
+
+async function BlogsSection() {
+  const blogs = await getBlogs();
+  return <Blogs initialBlogs={blogs} />;
+}
+
+async function TestimonialsSection() {
+  const reviews = await getReviews();
+  return <Testimonials initialReviews={reviews} />;
+}
+
+export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-transparent">
       <Hero />
-      <Services initialServices={services} /> 
+      <Suspense fallback={<ServicesSkeleton />}>
+        <ServicesSection />
+      </Suspense>
       <About />
       <Team />
       <Process />
-      <Portfolio initialProjects={projects} />
-      <Pricing initialPlans={pricingPlans} />
-      <Blogs initialBlogs={blogs} />
+      <Suspense fallback={<PortfolioSkeleton />}>
+        <PortfolioSection />
+      </Suspense>
+      <Suspense fallback={<PricingSkeleton />}>
+        <PricingSection />
+      </Suspense>
+      <Suspense fallback={<BlogsSkeleton />}>
+        <BlogsSection />
+      </Suspense>
       <FAQ /> 
-      <Testimonials initialReviews={reviews} />
+      <Suspense fallback={<TestimonialsSkeleton />}>
+        <TestimonialsSection />
+      </Suspense>
       <Contact />
       <Footer />
     </main>

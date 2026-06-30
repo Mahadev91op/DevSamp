@@ -95,7 +95,7 @@ const About = () => {
             transition={{ delay: 0.2 }}
             className="text-slate-600 text-base md:text-lg leading-relaxed font-semibold"
           >
-            DevSamp is not just an agency; it's a software engineering lab where ideas turn into high-performance web applications. We bridge the gap between creative visual designs and strict, complex back-end code.
+            DevSamp is not just an agency; it&apos;s a software engineering lab where ideas turn into high-performance web applications. We bridge the gap between creative visual designs and strict, complex back-end code.
           </motion.p>
         </div>
 
@@ -163,7 +163,7 @@ const About = () => {
               We do not just blindly code. We analyze your market, study your users, and engineer architecture models that build business value.
             </p>
             <a href="#contact" className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors" data-cursor="Strategy">
-              Let's talk strategy <ArrowUpRight size={14} />
+              Let&apos;s talk strategy <ArrowUpRight size={14} />
             </a>
           </motion.div>
 

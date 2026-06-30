@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Check, X, Zap, Receipt, ShieldCheck, HelpCircle, Sparkles } from "lucide-react";
@@ -33,7 +33,6 @@ const Pricing = ({ initialPlans = [] }) => {
   // Interactive Calculator State
   const [pagesCount, setPagesCount] = useState(5);
   const [selectedAddons, setSelectedAddons] = useState([]);
-  const [calculatedQuote, setCalculatedQuote] = useState(499);
   const [calcSettings, setCalcSettings] = useState({
     basePrice: 299,
     pricePerPage: 40,
@@ -63,7 +62,7 @@ const Pricing = ({ initialPlans = [] }) => {
   }, []);
 
   // Recalculate estimated price
-  useEffect(() => {
+  const calculatedQuote = useMemo(() => {
     let base = calcSettings.basePrice;
     base += pagesCount * calcSettings.pricePerPage;
     if (calcSettings.addons && calcSettings.addons.length > 0) {
@@ -73,7 +72,7 @@ const Pricing = ({ initialPlans = [] }) => {
         }
       });
     }
-    setCalculatedQuote(base);
+    return base;
   }, [pagesCount, selectedAddons, calcSettings]);
 
   return (

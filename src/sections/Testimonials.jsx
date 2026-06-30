@@ -71,7 +71,7 @@ const Testimonials = ({ initialReviews = [] }) => {
         >
           Client <span className="text-indigo-600 font-extrabold">Stories</span>
         </motion.h2>
-        <p className="text-slate-500 text-sm md:text-base font-semibold mb-6 md:mb-8">Don't just take our word for it.</p>
+        <p className="text-slate-500 text-sm md:text-base font-semibold mb-6 md:mb-8">Don&apos;t just take our word for it.</p>
         
         <button 
             onClick={() => setIsModalOpen(true)}
@@ -99,7 +99,7 @@ const Testimonials = ({ initialReviews = [] }) => {
                 >
                 <div>
                     <Quote className="text-indigo-600 mb-3 md:mb-4 opacity-50" size={24} />
-                    <p className="text-sm md:text-lg text-slate-700 font-medium leading-relaxed mb-4 md:mb-6 line-clamp-4 md:line-clamp-none">"{item.text}"</p>
+                    <p className="text-sm md:text-lg text-slate-700 font-medium leading-relaxed mb-4 md:mb-6 line-clamp-4 md:line-clamp-none">&quot;{item.text}&quot;</p>
                 </div>
                 
                 <div className="flex items-center gap-3 md:gap-4">

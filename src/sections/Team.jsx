@@ -206,19 +206,19 @@ const Team = () => {
                       exit={{ opacity: 0, x: -10 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <span className="text-pink-400 font-bold">const</span> <span className="text-blue-300">developer</span> = &#123;<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">name</span>: <span className="text-green-300">"{activeMember.name}"</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">role</span>: <span className="text-green-300">"{activeMember.role}"</span>,<br />
+                       <span className="text-pink-400 font-bold">const</span> <span className="text-blue-300">developer</span> = &#123;<br />
+                      &nbsp;&nbsp;<span className="text-purple-400">name</span>: <span className="text-green-300">&quot;{activeMember.name}&quot;</span>,<br />
+                      &nbsp;&nbsp;<span className="text-purple-400">role</span>: <span className="text-green-300">&quot;{activeMember.role}&quot;</span>,<br />
                       &nbsp;&nbsp;<span className="text-purple-400">focus</span>: [
                       {activeSkills.map((s, idx) => (
                         <span key={idx} className="text-yellow-200">
-                          {idx > 0 && ", "}"{s.name.split(" ")[0]}"
+                          {idx > 0 && ", "}&quot;{s.name.split(" ")[0]}&quot;
                         </span>
                       ))}
                       ],<br />
                       &nbsp;&nbsp;<span className="text-purple-400">integrity</span>: <span className="text-orange-400">99.8</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">diagnostics</span>: <span className="text-teal-400">"Online"</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">manifest</span>: <span className="text-gray-400">"{activeMember.desc}"</span><br />
+                      &nbsp;&nbsp;<span className="text-purple-400">diagnostics</span>: <span className="text-teal-400">&quot;Online&quot;</span>,<br />
+                      &nbsp;&nbsp;<span className="text-purple-400">manifest</span>: <span className="text-gray-400">&quot;{activeMember.desc}&quot;</span><br />
                       &#125;;
                     </motion.div>
                   </AnimatePresence>

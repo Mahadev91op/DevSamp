@@ -33,7 +33,7 @@ const WebDevWidget = () => {
             <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
             <span className="w-2 h-2 rounded-full bg-green-500"></span>
           </div>
-          <div className="text-[9px] text-slate-500 mb-1.5">// config variables</div>
+          <div className="text-[9px] text-slate-500 mb-1.5">{"// config variables"}</div>
           <div className="space-y-1 text-[9px]">
             <div className="flex justify-between items-center hover:bg-white/5 px-1 py-0.5 rounded cursor-pointer" onClick={() => setBtnColor(btnColor === "#4f46e5" ? "#ec4899" : "#4f46e5")}>
               <span>--primary:</span>

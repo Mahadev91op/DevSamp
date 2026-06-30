@@ -1,7 +1,7 @@
 // src/app/blog/page.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -16,10 +16,11 @@ import {
   Terminal,
   ChevronRight
 } from "lucide-react";
+import { BlogsSkeleton } from "@/components/Skeletons";
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
-  const [filteredBlogs, setFilteredBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [categories, setCategories] = useState(["All"]);
@@ -32,20 +33,21 @@ export default function BlogPage() {
         const data = await res.json();
         const fetchedBlogs = data.blogs || [];
         setBlogs(fetchedBlogs);
-        setFilteredBlogs(fetchedBlogs);
 
         // Unique Categories Extraction
         const cats = ["All", ...new Set(fetchedBlogs.map(b => b.category))];
         setCategories(cats);
       } catch (error) {
         console.error("Failed to fetch blogs", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBlogs();
   }, []);
 
   // 2. Filtering Logic (Search + Category)
-  useEffect(() => {
+  const filteredBlogs = useMemo(() => {
     let result = blogs;
 
     // Filter by Category
@@ -61,7 +63,7 @@ export default function BlogPage() {
       );
     }
 
-    setFilteredBlogs(result);
+    return result;
   }, [searchQuery, activeCategory, blogs]);
 
   return (
@@ -87,43 +89,48 @@ export default function BlogPage() {
         </div>
 
         {/* --- SEARCH & FILTER BAR (Console style) --- */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-16 bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm">
-            
-            {/* Search Input styled as query box */}
-            <div className="relative w-full md:w-96 select-none">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xs font-bold">
-                  $ grep
-                </span>
-                <input 
-                    type="text" 
-                    placeholder="search articles..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-16 pr-4 py-3 text-sm text-slate-900 focus:bg-white focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 font-medium"
-                />
-            </div>
+        {!loading && (
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-16 bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm">
+              
+              {/* Search Input styled as query box */}
+              <div className="relative w-full md:w-96 select-none">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xs font-bold">
+                    $ grep
+                  </span>
+                  <input 
+                      type="text" 
+                      placeholder="search articles..." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-16 pr-4 py-3 text-sm text-slate-900 focus:bg-white focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 font-medium"
+                  />
+              </div>
 
-            {/* Category Tabs */}
-            <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none select-none">
-                {categories.map((cat) => (
-                    <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        className={`px-4.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
-                            activeCategory === cat 
-                                ? "bg-slate-950 text-white border-slate-950 shadow-sm" 
-                                : "bg-transparent text-slate-550 border-slate-200 hover:text-slate-900 hover:border-slate-350"
-                        }`}
-                        data-cursor="Category"
-                    >
-                        {cat}
-                    </button>
-                ))}
-            </div>
-        </div>
+              {/* Category Tabs */}
+              <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none select-none">
+                  {categories.map((cat) => (
+                      <button
+                          key={cat}
+                          onClick={() => setActiveCategory(cat)}
+                          className={`px-4.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
+                              activeCategory === cat 
+                                  ? "bg-slate-950 text-white border-slate-950 shadow-sm" 
+                                  : "bg-transparent text-slate-550 border-slate-200 hover:text-slate-900 hover:border-slate-350"
+                          }`}
+                          data-cursor="Category"
+                      >
+                          {cat}
+                      </button>
+                  ))}
+              </div>
+          </div>
+        )}
 
         {/* --- TIMELINE LIST --- */}
-        <div className="relative border-l border-slate-200/80 ml-4 md:ml-8 pl-8 md:pl-10 space-y-12">
+        {loading ? (
+          <BlogsSkeleton count={3} />
+        ) : (
+          <div className="relative border-l border-slate-200/80 ml-4 md:ml-8 pl-8 md:pl-10 space-y-12">
           
           <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent pointer-events-none"></div>
 
@@ -188,7 +195,7 @@ export default function BlogPage() {
                                   <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-pink-600'}`}>
                                     {blog.platform === 'youtube' ? 'Video' : 'Social'}
                                   </span>
-                                  <span className="text-slate-400 text-[9px] font-bold">in category "{blog.category || "Updates"}"</span>
+                                  <span className="text-slate-400 text-[9px] font-bold">in category &quot;{blog.category || "Updates"}&quot;</span>
                                 </div>
                                 
                                 <h3 className="text-base md:text-lg font-black text-slate-800 mb-1 group-hover:text-indigo-650 transition-colors line-clamp-1 leading-tight">
@@ -227,6 +234,7 @@ export default function BlogPage() {
             )}
           </AnimatePresence>
         </div>
+        )}
 
       </div>
 

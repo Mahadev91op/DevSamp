@@ -55,7 +55,7 @@ export default function Dashboard() {
         })
         .catch((err) => setLoading(false));
     }
-  }, []);
+  }, [router]);
 
  const handleLogout = async () => {
   await fetch("/api/auth/logout", { method: "POST" }); // Cookie clear

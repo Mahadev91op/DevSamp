@@ -49,11 +49,13 @@ const Contact = () => {
       }
 
       if (svc || msg) {
-        setFormData(prev => ({
-          ...prev,
-          service: svc || prev.service,
-          message: msg || prev.message
-        }));
+        setTimeout(() => {
+          setFormData(prev => ({
+            ...prev,
+            service: svc || prev.service,
+            message: msg || prev.message
+          }));
+        }, 0);
       }
     }
   }, [searchParams]);
@@ -153,7 +155,7 @@ const Contact = () => {
               viewport={{ once: true }}
               className="text-3xl md:text-5xl font-black mb-4 tracking-tight leading-tight"
             >
-              Let's build something <br />
+              Let&apos;s build something <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-650 font-extrabold">
                 extraordinary.
               </span>

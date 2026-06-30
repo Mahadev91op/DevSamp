@@ -98,7 +98,7 @@ const Blogs = ({ initialBlogs = [] }) => {
                           <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-pink-600'}`}>
                             {blog.platform === 'youtube' ? 'Video' : 'Social'}
                           </span>
-                          <span className="text-slate-400 text-[9px] font-bold">in category "{blog.category || "Updates"}"</span>
+                          <span className="text-slate-400 text-[9px] font-bold">in category &quot;{blog.category || "Updates"}&quot;</span>
                         </div>
                         
                         <h3 className="text-base md:text-lg font-black text-slate-800 mb-1 group-hover:text-indigo-650 transition-colors line-clamp-1 leading-tight">

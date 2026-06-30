@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
   LayoutDashboard, Users, Layers, Plus, Loader2, LogOut, Menu, X, 
   CheckCircle, AlertCircle, Briefcase, PenBox, 
@@ -200,24 +200,6 @@ export default function AdminPanel() {
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const res = await fetch("/api/admin/auth");
-        const data = await res.json();
-        if (data.isAuthenticated) {
-          setIsAuthenticated(true);
-          fetchAllData();
-        }
-      } catch (err) {
-        console.error("Session check failed", err);
-      } finally {
-        setIsCheckingSession(false);
-      }
-    };
-    checkSession();
-  }, []);
-  
   const [activeTab, setActiveTab] = useState("dashboard"); 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState(null); 
@@ -332,7 +314,7 @@ export default function AdminPanel() {
     }
   };
 
-  const fetchAllData = async () => {
+  const fetchAllData = useCallback(async () => {
     setLoading(true);
     try {
       const endpoints = ["contact", "services", "team", "projects", "pricing", "reviews", "blogs", "client-projects"];
@@ -357,7 +339,25 @@ export default function AdminPanel() {
       }
     } catch (e) { showToast("Sync Failed", "error"); }
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/admin/auth");
+        const data = await res.json();
+        if (data.isAuthenticated) {
+          setIsAuthenticated(true);
+          fetchAllData();
+        }
+      } catch (err) {
+        console.error("Session check failed", err);
+      } finally {
+        setIsCheckingSession(false);
+      }
+    };
+    checkSession();
+  }, [fetchAllData]);
 
   const handleSaveCalcSettings = async (e) => {
     e.preventDefault();

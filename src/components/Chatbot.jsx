@@ -15,7 +15,7 @@ const Chatbot = () => {
   const scrollRef = useRef(null);
 
   // Admin panel par hide karein
-  if (pathname && pathname.startsWith("/admin")) return null;
+  const isAdmin = pathname && pathname.startsWith("/admin");
 
   // --- 1. SMART GREETING ON LOAD ---
   useEffect(() => {
@@ -25,9 +25,11 @@ const Chatbot = () => {
     else if (hour < 18) greeting = "Good Afternoon!";
     else greeting = "Good Evening!";
 
-    setMessages([
-      { id: 1, type: "bot", text: `${greeting} I'm DevSamp AI. 🤖\nAsk me about our **Services**, **Pricing**, or **Tech Stack**!` }
-    ]);
+    setTimeout(() => {
+      setMessages([
+        { id: 1, type: "bot", text: `${greeting} I'm DevSamp AI. 🤖\nAsk me about our **Services**, **Pricing**, or **Tech Stack**!` }
+      ]);
+    }, 0);
   }, []);
 
   // --- AUTO SCROLL TO BOTTOM ---
@@ -196,6 +198,8 @@ const Chatbot = () => {
   };
 
   const quickOptions = ["View Pricing", "Our Services", "Contact Info", "Tech Stack"];
+
+  if (isAdmin) return null;
 
   return (
     <>

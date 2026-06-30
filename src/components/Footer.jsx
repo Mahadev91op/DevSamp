@@ -90,7 +90,7 @@ const Footer = () => {
             <div className="max-w-2xl">
                 <h2 className="text-3xl md:text-6xl font-black leading-tight mb-4 md:mb-6 tracking-tight">
                     Have an idea? <br />
-                    <span className="text-slate-400 font-semibold">Let's compile it.</span>
+                    <span className="text-slate-400 font-semibold">Let&apos;s compile it.</span>
                 </h2>
             </div>
             

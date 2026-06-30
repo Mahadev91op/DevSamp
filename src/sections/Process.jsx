@@ -132,7 +132,7 @@ const Process = () => {
             DevOps <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Release Pipeline</span>
           </motion.h2>
           <p className="text-slate-500 text-sm md:text-base font-semibold px-2">
-            Click "Run Pipeline" on any stage card to simulate our software build logs and see how we deliver precision.
+            Click &quot;Run Pipeline&quot; on any stage card to simulate our software build logs and see how we deliver precision.
           </p>
         </div>
 

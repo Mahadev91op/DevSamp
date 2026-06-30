@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import { ExternalLink, Terminal, Cpu } from "lucide-react";
+import { PortfolioSkeleton } from "@/components/Skeletons";
 
 // Google Drive Image Formatter to prevent blurry thumbnails
 const getGoogleDriveImage = (url) => {
@@ -27,6 +28,7 @@ const getGoogleDriveImage = (url) => {
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
 
   useEffect(() => {
@@ -37,6 +39,8 @@ export default function ProjectsPage() {
         setProjects(data.projects || []);
       } catch (error) {
         console.error("Failed to fetch projects", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProjects();
@@ -58,7 +62,7 @@ export default function ProjectsPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-55 border border-indigo-100 text-[10px] font-bold text-indigo-650 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-55 border border-indigo-100 text-[10px] font-bold text-indigo-655 uppercase tracking-widest mb-3"
           >
             Archive Index
           </motion.div>
@@ -75,27 +79,33 @@ export default function ProjectsPage() {
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12 select-none">
-            {categories.map((cat, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4.5 py-2.5 rounded-full text-xs md:text-sm font-bold transition-all duration-305 border ${
-                  activeCategory === cat
-                    ? "bg-slate-950 text-white border-slate-950 shadow-sm"
-                    : "bg-white/60 text-slate-655 border-slate-200 hover:border-slate-400 hover:text-slate-900"
-                }`}
-                data-cursor="Category"
-              >
-                {cat}
-              </button>
-            ))}
-        </div>
+        {!loading && (
+          <div className="flex flex-wrap justify-center gap-2 mb-12 select-none">
+              {categories.map((cat, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4.5 py-2.5 rounded-full text-xs md:text-sm font-bold transition-all duration-305 border ${
+                    activeCategory === cat
+                      ? "bg-slate-950 text-white border-slate-950 shadow-sm"
+                      : "bg-white/60 text-slate-655 border-slate-200 hover:border-slate-400 hover:text-slate-900"
+                  }`}
+                  data-cursor="Category"
+                >
+                  {cat}
+                </button>
+              ))}
+          </div>
+        )}
 
         {/* Projects Grid */}
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => {
+        {loading ? (
+          <PortfolioSkeleton count={6} />
+        ) : (
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, index) => {
+
               const version = `2.${(index + 1) % 4}.${(index * 3) % 9}`;
               return (
                 <motion.div
@@ -168,6 +178,7 @@ export default function ProjectsPage() {
             })}
           </AnimatePresence>
         </motion.div>
+        )}
 
       </div>
 
