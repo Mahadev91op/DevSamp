@@ -9,7 +9,11 @@ import {
   ArrowUpRight,
   Bird,
   Clock,
-  Terminal
+  Terminal,
+  Cpu,
+  Boxes,
+  ShieldCheck,
+  Code2
 } from "lucide-react";
 
 // X (Twitter) Icon
@@ -19,7 +23,7 @@ const XIcon = ({ size = 20, className }) => (
   </svg>
 );
 
-const Footer = () => {
+const Footer = ({ products = [], services = [], siteSettings = null }) => {
   const [time, setTime] = useState("");
 
   // Running workspace clock (IST - GMT+5:30)
@@ -41,34 +45,34 @@ const Footer = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const emailAddress = siteSettings?.contactEmail || "devsamp1st@gmail.com";
+  const phoneNumber = siteSettings?.contactPhone || "+91 9330680642";
+
   const handlePhoneClick = () => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const phoneNumber = "919330680642";
-    const message = "Hello DevSamp, I checked your website and would like to discuss a project.";
+    const cleanPhone = phoneNumber.replace(/[^0-9]/g, "");
+    const message = "Hello DevSamp, I checked your website and would like to discuss an ecosystem project.";
 
     if (isMobile) {
-      window.location.href = `tel:+${phoneNumber}`;
+      window.location.href = `tel:+${cleanPhone}`;
     } else {
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+      window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, "_blank");
     }
   };
 
-  const emailAddress = "devsamp1st@gmail.com";
-  const subject = "Project Inquiry - DevSamp";
-  const body = "Hello Team,\n\nI am interested in your services.\n\nName:\nProject Details:\n\nThanks.";
-  const mailtoLink = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailtoLink = `mailto:${emailAddress}?subject=Inquiry%20regarding%20DevSamp%20Ecosystem&body=Hello%20DevSamp%20Team,%0A%0AI%20am%20interested%20in%20discussing%20a%20project.`;
 
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
+    hidden: { y: 15, opacity: 0 },
+    show: { y: 0, opacity: 1, transition: { duration: 0.4, ease: "easeOut" } },
   };
 
   return (
@@ -82,167 +86,189 @@ const Footer = () => {
         viewport={{ once: true, margin: "-100px" }}
       >
         
-        {/* --- TOP CTA --- */}
+        {/* --- TOP CTA BANNER --- */}
         <motion.div 
-            variants={itemVariants}
-            className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 pb-6 md:mb-20 md:pb-10 border-b border-slate-200"
+          variants={itemVariants}
+          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 pb-8 md:mb-16 md:pb-12 border-b border-slate-200"
         >
-            <div className="max-w-2xl">
-                <h2 className="text-3xl md:text-6xl font-black leading-tight mb-4 md:mb-6 tracking-tight">
-                    Have an idea? <br />
-                    <span className="text-slate-400 font-semibold">Let&apos;s compile it.</span>
-                </h2>
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3">
+              DevSamp Ecosystem
             </div>
-            
-            <Link href="/#contact" className="w-full md:w-auto">
-                <motion.button 
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="mt-6 md:mt-0 w-full md:w-auto px-6 py-4 md:px-8 md:py-4.5 rounded-full bg-slate-950 text-white font-bold text-sm md:text-base flex justify-center items-center gap-2 hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-md group"
-                    data-cursor="Start"
-                >
-                    Initialize Connection
-                    <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300 w-4 h-4 md:w-5 md:h-5" />
-                </motion.button>
+            <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tight">
+              Ready to engineer your <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+                digital future?
+              </span>
+            </h2>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto mt-6 md:mt-0">
+            <Link href="/#products" className="w-full sm:w-auto">
+              <button 
+                className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white border border-slate-300 text-slate-800 font-bold text-xs md:text-sm hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2"
+                data-cursor="Products"
+              >
+                <Boxes size={14} className="text-indigo-600" /> Explore Products
+              </button>
             </Link>
+            <Link href="/#contact" className="w-full sm:w-auto">
+              <button 
+                className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-slate-950 text-white font-bold text-xs md:text-sm flex items-center justify-center gap-2 hover:bg-indigo-600 transition-all shadow-md group"
+                data-cursor="Connect"
+              >
+                Initialize Connection
+                <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300 w-4 h-4" />
+              </button>
+            </Link>
+          </div>
         </motion.div>
 
-        {/* --- LINKS GRID --- */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-20">
-            
-            {/* 1. Address & Clock */}
-            <motion.div variants={itemVariants} className="col-span-2 md:col-span-4 space-y-4">
-                <div>
-                  <Link href="/" className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 block mb-2">
-                      DEV<span className="text-indigo-650">SAMP</span>
-                  </Link>
-                  <p className="text-slate-500 text-xs md:text-sm leading-relaxed max-w-sm font-medium">
-                      A visual products agency compiling MERN Stack, Next.js, and Android apps. 
-                      Based in India, coding globally.
-                  </p>
-                </div>
+        {/* --- 6-COLUMN ECOSYSTEM GRID --- */}
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 mb-12 md:mb-16">
+          
+          {/* 1. Identity & Real-Time IST Node */}
+          <motion.div variants={itemVariants} className="col-span-2 md:col-span-4 space-y-4">
+            <div>
+              <Link href="/" className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 flex items-center gap-2 mb-2">
+                <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-black">DS</span>
+                <span>DEV<span className="text-indigo-650">SAMP</span></span>
+              </Link>
+              <p className="text-slate-500 text-xs md:text-sm leading-relaxed max-w-sm font-semibold">
+                A connected technology ecosystem delivering enterprise software products, full-stack solutions, and developer infrastructure.
+              </p>
+            </div>
 
-                {/* Real-time Kolkata Clock */}
-                {time && (
-                  <div className="inline-flex items-center gap-2 bg-slate-100/80 border border-slate-200/50 p-2.5 rounded-2xl font-mono text-[10px] text-slate-600 select-none shadow-inner">
-                    <Clock size={12} className="text-indigo-500 animate-pulse" />
-                    <span>HQ_IST:</span>
-                    <span className="font-bold text-slate-800">{time}</span>
-                  </div>
-                )}
+            {/* Real-time Kolkata Clock */}
+            {time && (
+              <div className="inline-flex items-center gap-2 bg-white border border-slate-200/80 p-2.5 rounded-2xl font-mono text-[10px] text-slate-600 select-none shadow-sm">
+                <Clock size={12} className="text-indigo-500 animate-pulse" />
+                <span>HQ_NODE (IST):</span>
+                <span className="font-bold text-slate-900">{time}</span>
+              </div>
+            )}
 
-                <div className="flex gap-2.5 pt-2">
-                    {[
-                        { href: "https://www.freelancer.in/u/DevSamp", icon: <Bird size={16} />, color: "hover:bg-indigo-600 hover:text-white" },
-                        { href: "https://www.youtube.com/@DevSamp1st", icon: <Youtube size={16} />, color: "hover:bg-red-650 hover:text-white" },
-                        { href: "https://x.com/devsamp1st", icon: <XIcon size={16} />, color: "hover:bg-slate-900 hover:text-white" },
-                        { href: "https://www.instagram.com/devsamp1st/", icon: <Instagram size={16} />, color: "hover:bg-pink-650 hover:text-white" }
-                    ].map((social, index) => (
-                        <motion.a 
-                            key={index}
-                            href={social.href} 
-                            target="_blank" 
-                            className={`p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-550 ${social.color} transition-colors shadow-sm`}
-                            whileHover={{ y: -3 }}
-                            data-cursor="Link"
-                        >
-                            {social.icon}
-                        </motion.a>
-                    ))}
-                </div>
-            </motion.div>
-
-            {/* 2. Company Links */}
-            <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 md:col-start-6">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Structure</h4>
-                <div className="flex flex-col gap-3 font-semibold text-xs md:text-sm">
-                    {["About", "Team", "Process", "Contact"].map((item) => (
-                        <Link 
-                            key={item} 
-                            href={`/#${item.toLowerCase().replace(" ", "")}`} 
-                            className="block w-fit text-slate-600 hover:text-indigo-650 transition-colors"
-                        >
-                            <motion.span whileHover={{ x: 3 }} className="inline-block">
-                                {item}
-                            </motion.span>
-                        </Link>
-                    ))}
-                </div>
-            </motion.div>
-
-            {/* 3. Explore Links */}
-            <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Registry</h4>
-                <div className="flex flex-col gap-3 font-semibold text-xs md:text-sm">
-                    {[
-                        { name: "Services", href: "/#services" },
-                        { name: "Portfolio", href: "/projects" },
-                        { name: "Pricing", href: "/#pricing" },
-                        { name: "Blogs", href: "/blog" }
-                    ].map((item) => (
-                        <Link 
-                            key={item.name} 
-                            href={item.href} 
-                            className="block w-fit text-slate-600 hover:text-indigo-650 transition-colors"
-                        >
-                            <motion.span whileHover={{ x: 3 }} className="inline-block">
-                                {item.name}
-                            </motion.span>
-                        </Link>
-                    ))}
-                </div>
-            </motion.div>
-
-             {/* 4. Contact Info */}
-             <motion.div variants={itemVariants} className="col-span-2 md:col-span-3">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">SMTP Host</h4>
-                <a 
-                    href={mailtoLink}
-                    className="block w-fit text-sm md:text-base font-bold text-slate-800 mb-1.5 hover:text-indigo-650 transition-colors"
-                    data-cursor="Email"
+            {/* Social Channels */}
+            <div className="flex gap-2 pt-1">
+              {[
+                { href: "https://www.freelancer.in/u/DevSamp", icon: <Bird size={15} />, color: "hover:bg-indigo-600 hover:text-white" },
+                { href: "https://www.youtube.com/@DevSamp1st", icon: <Youtube size={15} />, color: "hover:bg-red-600 hover:text-white" },
+                { href: "https://x.com/devsamp1st", icon: <XIcon size={15} />, color: "hover:bg-slate-900 hover:text-white" },
+                { href: "https://www.instagram.com/devsamp1st/", icon: <Instagram size={15} />, color: "hover:bg-pink-600 hover:text-white" }
+              ].map((social, index) => (
+                <motion.a 
+                  key={index}
+                  href={social.href} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`p-2.5 rounded-xl bg-white border border-slate-200/70 text-slate-500 ${social.color} transition-colors shadow-sm`}
+                  whileHover={{ y: -2 }}
+                  data-cursor="Social"
                 >
-                    <motion.span whileHover={{ x: 3 }} className="inline-block truncate max-w-[200px] md:max-w-none">
-                        devsamp1st@gmail.com
-                    </motion.span>
-                </a>
-                <p 
-                    onClick={handlePhoneClick}
-                    className="w-fit text-sm md:text-base font-bold text-slate-850 cursor-pointer hover:text-purple-600 transition-colors flex items-center gap-1.5"
-                    data-cursor="Call"
-                >
-                    <motion.span whileHover={{ x: 3 }} className="inline-block">
-                        +91 9330680642
-                    </motion.span>
-                </p>
-            </motion.div>
+                  {social.icon}
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* 2. Products */}
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
+            <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3.5 flex items-center gap-1.5">
+              <Boxes size={12} className="text-indigo-500" /> Products
+            </h4>
+            <div className="flex flex-col gap-2.5 font-bold text-xs">
+              {[
+                { name: "MedERP Pro", href: "/#products" },
+                { name: "DevScale Core", href: "/#products" },
+                { name: "FlowPulse POS", href: "/#products" },
+                { name: "OmniDesk AI", href: "/#products" },
+              ].map((item, idx) => (
+                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-650 transition-colors">
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* 3. Services */}
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
+            <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3.5 flex items-center gap-1.5">
+              <Cpu size={12} className="text-indigo-500" /> Services
+            </h4>
+            <div className="flex flex-col gap-2.5 font-bold text-xs">
+              {[
+                { name: "SaaS Development", href: "/#services" },
+                { name: "Next.js Web Apps", href: "/#services" },
+                { name: "Mobile Applications", href: "/#services" },
+                { name: "AI Workflow Solutions", href: "/#services" },
+              ].map((item, idx) => (
+                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-650 transition-colors">
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* 4. Developers & Platform */}
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
+            <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3.5 flex items-center gap-1.5">
+              <Terminal size={12} className="text-indigo-500" /> Developers
+            </h4>
+            <div className="flex flex-col gap-2.5 font-bold text-xs">
+              {[
+                { name: "REST APIs", href: "/#developers" },
+                { name: "Documentation", href: "/#developers" },
+                { name: "SDKs & Webhooks", href: "/#developers" },
+                { name: "Ecosystem Graph", href: "/#ecosystem" },
+              ].map((item, idx) => (
+                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-650 transition-colors">
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* 5. Company & Contact */}
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
+            <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3.5 flex items-center gap-1.5">
+              <ShieldCheck size={12} className="text-indigo-500" /> Company
+            </h4>
+            <div className="flex flex-col gap-2.5 font-bold text-xs">
+              {[
+                { name: "Philosophy", href: "/#about" },
+                { name: "Engineering Squad", href: "/#team" },
+                { name: "Release Logs", href: "/blog" },
+                { name: "Portfolio", href: "/projects" },
+              ].map((item, idx) => (
+                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-650 transition-colors">
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
         </div>
 
         {/* --- BOTTOM BAR --- */}
         <motion.div 
-            variants={itemVariants}
-            className="border-t border-slate-200 pt-6 flex flex-col md:flex-row justify-between items-center text-[10px] md:text-xs text-slate-400 mb-6 gap-3 md:gap-0 font-bold"
+          variants={itemVariants}
+          className="border-t border-slate-200 pt-6 flex flex-col md:flex-row justify-between items-center text-[10px] md:text-xs text-slate-500 mb-6 gap-3 md:gap-0 font-bold"
         >
-            <p>&copy; {new Date().getFullYear()} DevSamp Agency.</p>
-            <div className="flex gap-4 md:gap-6 uppercase tracking-wider font-mono">
-                <Link href="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>
-                <Link href="/terms" className="hover:text-slate-700 transition-colors">Terms</Link>
-                <Link href="/sitemap" className="hover:text-slate-700 transition-colors">Sitemap</Link>
-            </div>
+          <p>&copy; {new Date().getFullYear()} DevSamp Ecosystem. All rights reserved.</p>
+          <div className="flex gap-4 md:gap-6 uppercase tracking-wider font-mono">
+            <Link href="/privacy" className="hover:text-slate-900 transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-slate-900 transition-colors">Terms</Link>
+            <Link href="/sitemap" className="hover:text-slate-900 transition-colors">Sitemap</Link>
+          </div>
         </motion.div>
 
       </motion.div>
 
-      {/* BACKGROUND TEXT */}
+      {/* BACKGROUND BRANDING TEXT */}
       <div className="w-full flex justify-center overflow-hidden pointer-events-none absolute bottom-0 z-0 select-none">
-        <motion.h1 
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true }}
-            className="text-[15vw] md:text-[18vw] font-black text-slate-900/5 leading-none select-none tracking-tighter"
-        >
-            DEVSAMP
-        </motion.h1>
+        <h1 className="text-[15vw] md:text-[18vw] font-black text-slate-900/[0.03] leading-none select-none tracking-tighter">
+          DEVSAMP
+        </h1>
       </div>
 
     </footer>

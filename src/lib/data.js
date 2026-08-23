@@ -4,6 +4,12 @@ import Blog from "@/models/Blog";
 import Review from "@/models/Review";
 import Pricing from "@/models/Pricing";
 import Service from "@/models/Service";
+import Product from "@/models/Product";
+import EcosystemItem from "@/models/EcosystemItem";
+import Industry from "@/models/Industry";
+import CaseStudy from "@/models/CaseStudy";
+import HomepageSection from "@/models/HomepageSection";
+import SiteSetting from "@/models/SiteSetting";
 
 export async function getProjects() {
   try {
@@ -11,16 +17,18 @@ export async function getProjects() {
     const projects = await Project.find().sort({ createdAt: -1 }).lean();
     return JSON.parse(JSON.stringify(projects));
   } catch (error) {
+    console.error("Error fetching projects:", error);
     return [];
   }
 }
 
-export async function getBlogs() {
+export async function getBlogs(limit = 3) {
   try {
     await connectDB();
-    const blogs = await Blog.find().sort({ createdAt: -1 }).limit(3).lean();
+    const blogs = await Blog.find().sort({ createdAt: -1 }).limit(limit).lean();
     return JSON.parse(JSON.stringify(blogs));
   } catch (error) {
+    console.error("Error fetching blogs:", error);
     return [];
   }
 }
@@ -28,12 +36,10 @@ export async function getBlogs() {
 export async function getReviews() {
   try {
     await connectDB();
-    
-    // FIX: 'approved: true' hata diya gaya hai taaki saare reviews dikhen
     const reviews = await Review.find().sort({ createdAt: -1 }).lean();
-    
     return JSON.parse(JSON.stringify(reviews));
   } catch (error) {
+    console.error("Error fetching reviews:", error);
     return [];
   }
 }
@@ -44,6 +50,7 @@ export async function getPricing() {
     const plans = await Pricing.find().sort({ priceMonthly: 1 }).lean();
     return JSON.parse(JSON.stringify(plans));
   } catch (error) {
+    console.error("Error fetching pricing:", error);
     return [];
   }
 }
@@ -51,9 +58,135 @@ export async function getPricing() {
 export async function getServices() {
   try {
     await connectDB();
-    const services = await Service.find().sort({ order: 1 }).lean();
+    const services = await Service.find().sort({ order: 1, createdAt: -1 }).lean();
     return JSON.parse(JSON.stringify(services));
   } catch (error) {
+    console.error("Error fetching services:", error);
     return [];
+  }
+}
+
+export async function getProducts(query = {}) {
+  try {
+    await connectDB();
+    const filter = { isActive: { $ne: false }, ...query };
+    const products = await Product.find(filter).sort({ order: 1, createdAt: -1 }).lean();
+    return JSON.parse(JSON.stringify(products));
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+}
+
+export async function getEcosystemItems() {
+  try {
+    await connectDB();
+    const items = await EcosystemItem.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: 1 }).lean();
+    return JSON.parse(JSON.stringify(items));
+  } catch (error) {
+    console.error("Error fetching ecosystem items:", error);
+    return [];
+  }
+}
+
+export async function getIndustries() {
+  try {
+    await connectDB();
+    const industries = await Industry.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: 1 }).lean();
+    return JSON.parse(JSON.stringify(industries));
+  } catch (error) {
+    console.error("Error fetching industries:", error);
+    return [];
+  }
+}
+
+export async function getCaseStudies(limit = 6) {
+  try {
+    await connectDB();
+    const caseStudies = await CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: -1 }).limit(limit).lean();
+    return JSON.parse(JSON.stringify(caseStudies));
+  } catch (error) {
+    console.error("Error fetching case studies:", error);
+    return [];
+  }
+}
+
+export async function getHomepageSections() {
+  try {
+    await connectDB();
+    const sections = await HomepageSection.find().sort({ order: 1 }).lean();
+    return JSON.parse(JSON.stringify(sections));
+  } catch (error) {
+    console.error("Error fetching homepage sections:", error);
+    return [];
+  }
+}
+
+export async function getSiteSettings() {
+  try {
+    await connectDB();
+    const setting = await SiteSetting.findOne({ key: "main" }).lean();
+    if (setting) return JSON.parse(JSON.stringify(setting));
+    return null;
+  } catch (error) {
+    console.error("Error fetching site settings:", error);
+    return null;
+  }
+}
+
+// Unified parallel aggregate for homepage rendering
+export async function getHomepageData() {
+  try {
+    await connectDB();
+    const [
+      sections,
+      settings,
+      products,
+      services,
+      ecosystemItems,
+      industries,
+      caseStudies,
+      reviews,
+      blogs,
+      projects
+    ] = await Promise.all([
+      HomepageSection.find().sort({ order: 1 }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
+      Service.find().sort({ order: 1 }).lean(),
+      EcosystemItem.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
+      Review.find().sort({ createdAt: -1 }).limit(10).lean(),
+      Blog.find().sort({ createdAt: -1 }).limit(3).lean(),
+      Project.find().sort({ createdAt: -1 }).limit(6).lean()
+    ]);
+
+    return {
+      sections: JSON.parse(JSON.stringify(sections || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      ecosystemItems: JSON.parse(JSON.stringify(ecosystemItems || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+      reviews: JSON.parse(JSON.stringify(reviews || [])),
+      blogs: JSON.parse(JSON.stringify(blogs || [])),
+      projects: JSON.parse(JSON.stringify(projects || []))
+    };
+  } catch (error) {
+    console.error("Error aggregating homepage data:", error);
+    return {
+      sections: [],
+      settings: null,
+      products: [],
+      services: [],
+      ecosystemItems: [],
+      industries: [],
+      caseStudies: [],
+      reviews: [],
+      blogs: [],
+      projects: []
+    };
   }
 }

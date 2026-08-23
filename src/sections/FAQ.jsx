@@ -2,37 +2,36 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, ChevronRight, CornerDownRight } from "lucide-react";
+import { Terminal, ChevronRight, CornerDownRight, Sparkles } from "lucide-react";
 
 const faqs = [
   {
     id: "01",
-    question: "How much does a website cost?",
-    answer: "Every project is unique. A basic website starts at $499, while custom web applications depend on the complexity. We provide a detailed quote after our initial discovery call."
+    question: "What is the DevSamp Ecosystem and how does it work?",
+    answer: "DevSamp is a connected technology ecosystem that combines vertical SaaS software products, bespoke fullstack engineering services, and open developer infrastructure. Clients can license pre-built software products, commission custom engineering pods, or integrate via our developer APIs."
   },
   {
     id: "02",
-    question: "How long does it take to build a website?",
-    answer: "On average, a standard business website takes 2-4 weeks. Larger custom projects or e-commerce platforms can take 6-10 weeks depending on the features required."
+    question: "Can we license a DevSamp software product (like MedERP) and request custom extensions?",
+    answer: "Yes! All DevSamp products are engineered with modular microservices and open API gateways. We can deploy a dedicated private instance and customize workflows specifically for your enterprise requirements."
   },
   {
     id: "03",
-    question: "Do you provide support after launch?",
-    answer: "Absolutely! We offer 1 month of free support with every project to ensure everything runs smoothly. After that, you can subscribe to our maintenance packages."
+    question: "What tech stack and engineering standards do you use?",
+    answer: "Our core stack is built on Next.js 15 App Router, React 19, Tailwind CSS, Node.js microservices, and MongoDB Atlas. All codebases adhere to strict TypeScript/JavaScript conventions, automated CI/CD linting, and 100 PageSpeed optimization."
   },
   {
     id: "04",
-    question: "Will my website be mobile-friendly?",
-    answer: "Yes. We follow a 'Mobile-First' approach. Your website will look and perform perfectly on all devices—phones, tablets, and desktops."
+    question: "Do you offer post-launch SLA, security patching, and maintenance?",
+    answer: "Yes, every custom project and SaaS deployment includes dedicated post-launch warranty and SLA support. We offer tiered engineering retainers for 24/7 monitoring, security patches, and ongoing feature development."
   },
   {
     id: "05",
-    question: "Can I update the website content myself?",
-    answer: "Yes! We build websites using modern CMS (Content Management Systems) or provide a custom dashboard, so you can easily edit text and images without coding."
+    question: "How do we initialize a project or schedule an architectural discovery call?",
+    answer: "You can submit your project parameters directly through our interactive contact compiler below or email us at devsamp1st@gmail.com. Our engineering lead will review your specifications and schedule a discovery call within 24 hours."
   }
 ];
 
-// AI Schema for FAQ
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -46,11 +45,15 @@ const faqSchema = {
   }))
 };
 
-const FAQ = () => {
+const FAQ = ({ sectionData = null }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const badge = sectionData?.badge || "Diagnostics";
+  const title = sectionData?.title || "Frequently Asked Questions";
+  const description = sectionData?.description || "Run diagnostic queries or explore documentation regarding project scoping, product licensing, and SLA terms.";
+
   return (
-    <section className="py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
       
       {/* Inject Schema Script */}
       <script
@@ -59,36 +62,36 @@ const FAQ = () => {
       />
 
       {/* Background Ambience */}
-      <div className="absolute right-0 top-0 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6 max-w-4xl relative z-10">
         
         {/* Header */}
-        <div className="mb-10 md:mb-16 text-center select-none">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3">
-            Diagnostics
+        <div className="mb-10 md:mb-14 text-center select-none">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3">
+            <Sparkles size={12} /> {badge}
           </div>
           <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tight">
-            Common <span className="text-indigo-650 font-extrabold">Queries</span>
+            {title}
           </h2>
-          <p className="text-slate-500 text-xs md:text-sm font-semibold">
-            Run diagnostic parameters or review the standard documentation logs below.
+          <p className="text-slate-600 text-xs md:text-sm font-semibold max-w-xl mx-auto">
+            {description}
           </p>
         </div>
 
-        {/* Terminal Accordion Wrapper (Light Theme browser console) */}
+        {/* Terminal Accordion Wrapper */}
         <div className="bg-white rounded-3xl border border-slate-200/80 shadow-lg overflow-hidden">
           
           {/* Terminal Top Control Bar */}
-          <div className="h-11 bg-slate-100 border-b border-slate-200/60 px-4 md:px-6 flex items-center justify-between select-none">
+          <div className="h-11 bg-slate-100/80 border-b border-slate-200/60 px-4 md:px-6 flex items-center justify-between select-none">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
             </div>
-            <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-mono text-slate-455 font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-mono text-slate-500 font-bold uppercase tracking-wider">
               <Terminal size={11} className="text-indigo-500" />
-              <span>guest@devsamp:~ $ help --faq</span>
+              <span>guest@devsamp:~ $ help --ecosystem-faq</span>
             </div>
             <div className="w-10"></div>
           </div>
@@ -102,8 +105,8 @@ const FAQ = () => {
                   key={index}
                   className={`border transition-all duration-300 rounded-2xl ${
                     isOpen 
-                      ? "bg-slate-50/50 border-slate-200 shadow-sm" 
-                      : "bg-transparent border-transparent hover:bg-slate-50/30"
+                      ? "bg-slate-50/60 border-slate-200 shadow-xs" 
+                      : "bg-transparent border-transparent hover:bg-slate-50/40"
                   }`}
                 >
                   {/* Command Row */}
@@ -114,18 +117,18 @@ const FAQ = () => {
                   >
                     <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm">
                       <span className="text-indigo-600 font-black">$</span>
-                      <span className="text-slate-450 font-bold text-[9px] md:text-xs">get faq-{faq.id}</span>
-                      <span className="text-slate-400 select-none">--title</span>
+                      <span className="text-slate-400 font-bold text-[9px] md:text-xs">get faq-{faq.id}</span>
+                      <span className="text-slate-300 select-none">--title</span>
                       <h3 className={`font-sans font-bold text-xs md:text-sm transition-colors pl-1 md:pl-2 ${
-                        isOpen ? "text-indigo-650 font-black" : "text-slate-750 hover:text-slate-900"
+                        isOpen ? "text-indigo-650 font-black" : "text-slate-800 hover:text-slate-950"
                       }`}>
                         {faq.question}
                       </h3>
                     </div>
 
-                    <div className={`p-1 rounded-full border transition-all duration-305 ${
+                    <div className={`p-1 rounded-full border transition-all duration-300 ${
                       isOpen 
-                        ? "rotate-90 text-indigo-600 border-indigo-250 bg-indigo-50" 
+                        ? "rotate-90 text-indigo-600 border-indigo-200 bg-indigo-50" 
                         : "text-slate-400 border-slate-200 bg-white"
                     }`}>
                       <ChevronRight size={13} />
@@ -141,7 +144,7 @@ const FAQ = () => {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 320, damping: 28 }}
                       >
-                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-650 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/50 pt-3 bg-slate-50/50 rounded-b-2xl">
+                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-700 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/50 pt-3 bg-slate-50/50 rounded-b-2xl">
                           <CornerDownRight size={12} className="text-indigo-500 shrink-0 mt-0.5" />
                           <div className="space-y-1">
                             <span className="text-indigo-600 text-[9px] font-bold select-none">[STDOUT] &gt; </span>

@@ -25,10 +25,10 @@ const outfit = Outfit({
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://devsamp.online'),
   title: {
-    default: "DevSamp | Top Website Developer & App Agency in India",
-    template: "%s | DevSamp Agency"
+    default: "DevSamp | Technology • Software Products • SaaS • Digital Ecosystem",
+    template: "%s | DevSamp Ecosystem"
   },
-  description: "DevSamp is a leading AI-powered Website Developer Agency in India. We specialize in custom Web Development, MERN Stack, Next.js, and Mobile Apps.",
+  description: "DevSamp is a software engineering company powering modern enterprises with scalable software products, cloud SaaS platforms, and bespoke technology solutions.",
   
   verification: {
     google: 'D6c5A0ciZ3q-98yon-nn2GAVcNvwoKhWvCeYV9GT2Mg',
@@ -36,17 +36,15 @@ export const metadata = {
 
   // Keywords for AI + Search Engines
   keywords: [
-    "Web Development", "App Development", "UI/UX Design", "Next.js Agency", "React Developers", 
-    "Digital Agency India", "DevSamp", "Freelance Web Developer", "SEO Services", "Website Design",
-    "Website Developer", "Website Developer in India", "Best Website Developer", 
-    "Hire Website Developer India", "Web Development Company India", "Professional Website Developer",
-    "Custom Website Developer", "Business Website Maker", "Ecommerce Website Developer",
-    "Web Developer near me", "MERN Stack Developer India", "Full Stack Developer"
+    "DevSamp", "Software Products", "SaaS Platform", "Next.js 15", "Technology Ecosystem",
+    "Hospital ERP", "MedERP", "Multi-Tenant SaaS", "Web Development", "App Development", 
+    "UI/UX Design", "Full Stack Engineering", "React Developers", "Developer APIs", 
+    "Cloud Architecture", "Digital Solutions", "Custom Software India"
   ],
 
   authors: [{ name: "DevSamp Team", url: "https://devsamp.online/" }],
   creator: "DevSamp",
-  publisher: "DevSamp Agency",
+  publisher: "DevSamp Ecosystem",
   
   formatDetection: {
     email: false,
@@ -62,16 +60,16 @@ export const metadata = {
   },
   
   openGraph: {
-    title: "DevSamp | Best Website Developer Agency",
-    description: "Hire the top 1% Website Developers in India. We build high-performance websites and apps.",
+    title: "DevSamp | Technology • Software Products • SaaS • Digital Ecosystem",
+    description: "DevSamp powers modern enterprises with scalable software products, cloud platforms, and bespoke technology solutions.",
     url: 'https://devsamp.online/',
-    siteName: 'DevSamp Agency',
+    siteName: 'DevSamp Ecosystem',
     images: [
       {
         url: '/icon-512.png',
         width: 512,
         height: 512,
-        alt: 'DevSamp Agency Logo',
+        alt: 'DevSamp Ecosystem Logo',
       },
     ],
     locale: 'en_US',
@@ -80,8 +78,8 @@ export const metadata = {
   
   twitter: {
     card: 'summary_large_image',
-    title: 'DevSamp | Top Website Developer',
-    description: 'Transforming ideas into digital reality. #1 Web Development Agency.',
+    title: 'DevSamp | Technology & Software Products Ecosystem',
+    description: 'Transforming enterprises through modern software products, cloud engineering, and developer platforms.',
     images: ['/icon-512.png'], 
     creator: '@devsamp1st',
   },
@@ -121,51 +119,19 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
-  // 🚀 AI OPTIMIZED SCHEMA (ProfessionalService + Service)
+  // Schema.org Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "ProfessionalService", // AI Isse Agency Samajhta Hai
+        "@type": "Organization",
         "name": "DevSamp",
         "image": "https://devsamp.online/icon-512.png",
-        "@id": "https://devsamp.online",
+        "@id": "https://devsamp.online/#organization",
         "url": "https://devsamp.online",
         "telephone": "+91-9330680642",
         "email": "devsamp1st@gmail.com",
-        "priceRange": "$$",
         "logo": "https://devsamp.online/icon-512.png",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "reviewCount": "48"
-        },
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Chinsurah",
-          "addressLocality": "Hooghly",
-          "addressRegion": "WB",
-          "postalCode": "712101",
-          "addressCountry": "IN"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 22.90,
-          "longitude": 88.39
-        },
-        "openingHoursSpecification": {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-          ],
-          "opens": "09:00",
-          "closes": "21:00"
-        },
         "sameAs": [
           "https://x.com/devsamp1st",
           "https://www.instagram.com/devsamp1st/",
@@ -174,43 +140,24 @@ export default function RootLayout({ children }) {
           "https://www.linkedin.com/company/devsamp"
         ]
       },
-      // 🚀 Service Schema (AI Yahi Dhoondhta Hai)
       {
-        "@type": "Service",
-        "serviceType": "Website Development",
-        "provider": {
-          "@id": "https://devsamp.online"
-        },
-        "areaServed": {
-          "@type": "Country",
-          "name": "India"
-        },
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "Web Development Services",
-          "itemListElement": [
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "Custom Website Development"
-              }
-            },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "E-commerce Website Design"
-              }
-            },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "Next.js & React Applications"
-              }
-            }
-          ]
+        "@type": "WebSite",
+        "@id": "https://devsamp.online/#website",
+        "url": "https://devsamp.online",
+        "name": "DevSamp Ecosystem",
+        "publisher": {
+          "@id": "https://devsamp.online/#organization"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "MedERP Pro",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web, Cloud",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
         }
       }
     ]

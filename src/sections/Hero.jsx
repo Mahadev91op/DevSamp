@@ -5,75 +5,95 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { 
   ArrowRight, 
-  Paintbrush, 
+  Boxes, 
   Cpu, 
-  Database, 
-  Globe, 
+  Terminal, 
+  GitBranch, 
   Play, 
-  Terminal,
-  CheckCircle2
+  ShieldCheck, 
+  Sparkles,
+  ArrowUpRight,
+  Layers,
+  Activity
 } from "lucide-react";
 
-const nodes = [
+const telemetryNodes = [
   { 
-    id: "design", 
-    label: "Creative UX/UI", 
-    icon: Paintbrush, 
-    color: "from-blue-500 to-cyan-500",
+    id: "products", 
+    label: "SaaS Products", 
+    icon: Boxes, 
+    color: "from-blue-600 to-cyan-500",
+    status: "4 Live",
     logs: [
-      "> compiling design assets...",
-      "✓ Figma prototypes exported",
-      "✓ CSS layout grid compiled: 60fps achieved",
-      "✓ Micro-interactions: Active"
+      "> routing /api/v1/products...",
+      "✓ MedERP Pro: Health check 200 OK (14ms)",
+      "✓ DevScale Core: Multi-tenant mesh initialized",
+      "✓ FlowPulse POS: Offline sync engine ready"
     ]
   },
   { 
-    id: "engine", 
-    label: "Next.js Core", 
-    icon: Cpu, 
-    color: "from-purple-500 to-pink-500",
+    id: "services", 
+    label: "Tech Services", 
+    icon: Layers, 
+    color: "from-indigo-600 to-purple-600",
+    status: "60fps HMR",
     logs: [
-      "> building server components...",
-      "✓ SSR & Hydration pipeline initialised",
-      "✓ Route components compiled in 0.08s",
-      "✓ Server Actions security check: Passed"
+      "> building custom engineering pod...",
+      "✓ Next.js App Router & Server Actions compiled",
+      "✓ Database indexes optimized: 8ms latency",
+      "✓ UI/UX Micro-interactions: Active"
     ]
   },
   { 
-    id: "apis", 
-    label: "Secure APIs", 
-    icon: Database, 
-    color: "from-orange-500 to-red-500",
+    id: "developers", 
+    label: "Dev Platform", 
+    icon: Terminal, 
+    color: "from-purple-600 to-pink-500",
+    status: "REST/Hooks",
     logs: [
-      "> establishing secure handshake...",
-      "✓ Database connection pooled successfully",
-      "✓ JWT + httpOnly sessions validated",
-      "✓ API Latency: 24ms (Ultra-fast)"
+      "> validating developer auth gateways...",
+      "✓ OpenAPI 3.1 specifications mounted",
+      "✓ Event-driven webhooks: 0 queued drops",
+      "✓ SDK Packages: Node, Python, React ready"
     ]
   },
   { 
-    id: "deploy", 
-    label: "Edge Deploy", 
-    icon: Globe, 
-    color: "from-emerald-500 to-green-500",
+    id: "ecosystem", 
+    label: "Cloud Mesh", 
+    icon: GitBranch, 
+    color: "from-emerald-500 to-teal-500",
+    status: "99.9% SLA",
     logs: [
-      "> deploying to edge networks...",
-      "✓ Global CDN caching warm-up complete",
-      "✓ Core Web Vitals: LCP 0.6s / FID 12ms",
-      "✓ PageSpeed Index: 100/100 (Perfect)"
+      "> establishing global edge mesh...",
+      "✓ Vercel & AWS Edge clusters synchronized",
+      "✓ Core Web Vitals: LCP 0.5s / FID 10ms",
+      "✓ DevSamp Connected Ecosystem: ONLINE"
     ]
   }
 ];
 
-const Hero = () => {
-  const [activeNode, setActiveNode] = useState("design");
-  const [terminalLogs, setTerminalLogs] = useState(nodes[0].logs);
+const Hero = ({ sectionData = null, siteSettings = null }) => {
+  const [activeNode, setActiveNode] = useState("products");
+  const [terminalLogs, setTerminalLogs] = useState(telemetryNodes[0].logs);
   const [compiling, setCompiling] = useState(false);
   const [compileProgress, setCompileProgress] = useState(0);
 
+  // Dynamic content resolution
+  const eyebrow = sectionData?.badge || siteSettings?.heroEyebrow || "Technology • Products • Ecosystem";
+  const heading = sectionData?.title || siteSettings?.heroTitle || "Building, Operating & Scaling Digital Ecosystems with Next-Gen Products & Engineering";
+  const description = sectionData?.description || siteSettings?.heroDescription || "DevSamp powers forward-thinking enterprises with scalable software products, fullstack digital solutions, and an interconnected developer ecosystem.";
+  const primaryCta = {
+    text: sectionData?.ctaText || siteSettings?.heroPrimaryCta?.text || "Explore Products",
+    link: sectionData?.ctaLink || siteSettings?.heroPrimaryCta?.link || "/#products",
+  };
+  const secondaryCta = {
+    text: sectionData?.secondaryCtaText || siteSettings?.heroSecondaryCta?.text || "Explore Ecosystem",
+    link: sectionData?.secondaryCtaLink || siteSettings?.heroSecondaryCta?.link || "/#ecosystem",
+  };
+
   useEffect(() => {
     if (activeNode) {
-      const selected = nodes.find(n => n.id === activeNode);
+      const selected = telemetryNodes.find(n => n.id === activeNode);
       if (selected) {
         setTerminalLogs(selected.logs);
       }
@@ -84,198 +104,222 @@ const Hero = () => {
     if (compiling) return;
     setCompiling(true);
     setCompileProgress(0);
-    setTerminalLogs(["> starting full system compilation..."]);
+    setTerminalLogs(["> initiating global ecosystem compilation pipeline..."]);
 
     const steps = [
-      { progress: 25, node: "design", log: "> [1/4] Compiling responsive layout assets..." },
-      { progress: 50, node: "engine", log: "> [2/4] Optimizing Next.js client/server boundary..." },
-      { progress: 75, node: "apis", log: "> [3/4] Auditing API route handshake protocols..." },
-      { progress: 100, node: "deploy", log: "> [4/4] Deploying production bundle to Vercel edge..." }
+      { progress: 25, node: "products", log: "> [1/4] Inspecting SaaS product cluster health..." },
+      { progress: 50, node: "services", log: "> [2/4] Verifying engineering microservices & SSR boundary..." },
+      { progress: 75, node: "developers", log: "> [3/4] Validating developer API gateway & webhooks..." },
+      { progress: 100, node: "ecosystem", log: "> [4/4] Synchronizing global edge nodes & telemetry..." }
     ];
 
     for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise(resolve => setTimeout(resolve, 600));
       setCompileProgress(steps[i].progress);
       setActiveNode(steps[i].node);
-      setTerminalLogs(prev => [...prev, steps[i].log, ...nodes.find(n => n.id === steps[i].node).logs]);
+      const matched = telemetryNodes.find(n => n.id === steps[i].node);
+      setTerminalLogs(prev => [...prev, steps[i].log, ...(matched ? matched.logs : [])]);
     }
 
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setTerminalLogs(prev => [...prev, "✓ BUILD SUCCESSFUL! Mainframe engine deployed.", "✓ DevSamp main core active."]);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    setTerminalLogs(prev => [
+      ...prev, 
+      "✓ ECOSYSTEM SYNCHRONIZATION COMPLETE!",
+      "✓ All 4 nodes operational across DevSamp network."
+    ]);
     setCompiling(false);
   };
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent overflow-hidden pt-28 pb-20 md:pt-36 md:pb-32">
+    <section className="relative w-full min-h-[92vh] flex items-center justify-center bg-transparent overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
       
-      {/* Architect Blueprint grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none"></div>
+      {/* Blueprint grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />
       
       {/* Soft color highlights */}
-      <div className="absolute top-[10%] left-[20%] w-[350px] h-[250px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[300px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-[10%] left-[15%] w-[400px] h-[300px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[15%] right-[10%] w-[450px] h-[350px] bg-indigo-500/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
-          {/* --- LEFT SIDE: HIGH-END COPYWRITING --- */}
-          <div className="lg:col-span-7 space-y-8 text-left">
+          {/* --- LEFT SIDE: HIGH-IMPACT ECOSYSTEM HERO --- */}
+          <div className="lg:col-span-7 space-y-7 text-left">
             
-            {/* Status Badge */}
+            {/* Status Eyebrow Badge */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs md:text-sm text-slate-600 font-bold shadow-sm"
+              transition={{ duration: 0.4 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 text-xs font-bold text-slate-700 shadow-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
               </span>
-              Engineering Digital Masterpieces
+              <span className="tracking-wide">{eyebrow}</span>
             </motion.div>
 
-            {/* Custom Interactive Heading */}
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] md:leading-[1.05]">
-              We code the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">complex.</span> <br />
-              We design the <span className="underline decoration-indigo-500/30 decoration-8 underline-offset-4">creative.</span>
-            </h1>
+            {/* Main Dynamic Heading */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1] md:leading-[1.08]"
+            >
+              Building, operating & scaling{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+                digital ecosystems.
+              </span>
+            </motion.h1>
 
-            {/* Subtext */}
-            <p className="text-base md:text-lg text-slate-600 max-w-xl leading-relaxed font-semibold">
-              We are a team of professional website developers and designers who build blazing fast, custom-engineered softwares and websites that set new industry standards.
-            </p>
+            {/* Supporting paragraph */}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-slate-600 text-base md:text-lg max-w-2xl leading-relaxed font-semibold"
+            >
+              {description}
+            </motion.p>
 
-            {/* Interactive tag clouds */}
-            <div className="flex flex-wrap gap-2.5 max-w-xl">
-              {["Next.js 15", "MERN Stack", "Creative UI/UX", "High Performance", "SaaS Core", "SEO & PageSpeed 100"].map((tag, idx) => (
-                <motion.span
+            {/* Ecosystem Pills */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex flex-wrap gap-2 pt-1"
+            >
+              {[
+                "SaaS Software Products",
+                "Fullstack Engineering",
+                "REST APIs & Webhooks",
+                "Cloud & DevOps Mesh",
+                "HIPAA / ERP Systems",
+                "Sub-second Latency"
+              ].map((tag, idx) => (
+                <span
                   key={idx}
-                  whileHover={{ scale: 1.05, borderColor: "rgba(99, 102, 241, 0.4)" }}
-                  className="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-bold text-slate-500 cursor-default shadow-sm select-none transition-colors"
+                  className="px-3 py-1 rounded-xl bg-white/80 border border-slate-200/80 text-[11px] font-bold text-slate-600 shadow-sm"
                 >
                   {tag}
-                </motion.span>
+                </span>
               ))}
-            </div>
+            </motion.div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto pt-4">
-              <Link href="#contact" className="w-full sm:w-auto group px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25" data-cursor="Hire">
-                Hire Dev Agency 
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-3.5 pt-3"
+            >
+              <Link href={primaryCta.link} className="w-full sm:w-auto">
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full sm:w-auto px-7 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 group"
+                  data-cursor="Products"
+                >
+                  <Boxes size={16} />
+                  <span>{primaryCta.text}</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </motion.button>
               </Link>
               
-              <Link 
-                href="https://mahadev-portfolio-tau.vercel.app/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-lg transition-all flex justify-center shadow-sm" 
-                data-cursor="Work"
-              >
-                View Portfolio
+              <Link href={secondaryCta.link} className="w-full sm:w-auto">
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full sm:w-auto px-7 py-4 rounded-full border border-slate-300 bg-white/90 hover:bg-slate-50 text-slate-800 font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2 shadow-sm" 
+                  data-cursor="Ecosystem"
+                >
+                  <Cpu size={16} className="text-indigo-600" />
+                  <span>{secondaryCta.text}</span>
+                </motion.button>
               </Link>
-            </div>
+            </motion.div>
 
           </div>
 
-          {/* --- RIGHT SIDE: PIPELINE HUD SANDBOX --- */}
+          {/* --- RIGHT SIDE: INTERACTIVE ECOSYSTEM HUD --- */}
           <div className="lg:col-span-5 relative">
-            <div className="w-full bg-white/85 border border-slate-200/80 p-6 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col gap-6">
+            <div className="w-full bg-white/90 border border-slate-200/80 p-5 md:p-6 rounded-3xl shadow-xl relative overflow-hidden flex flex-col gap-5">
               
               {/* Top controls */}
-              <div className="flex justify-between items-center border-b border-slate-200/55 pb-4">
-                <div>
-                  <h3 className="font-extrabold text-sm text-slate-800 tracking-wide uppercase">Sandbox Console</h3>
-                  <p className="text-[10px] text-slate-400 font-bold">Interactive pipeline interface</p>
+              <div className="flex justify-between items-center border-b border-slate-100 pb-3.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                    <Activity size={14} />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-xs md:text-sm text-slate-900 tracking-wide uppercase">Ecosystem Telemetry</h3>
+                    <p className="text-[9px] text-slate-450 font-bold">Interactive node orchestrator</p>
+                  </div>
                 </div>
                 
                 <button 
                   onClick={triggerFullBuild} 
                   disabled={compiling}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 text-xs font-bold transition-all"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 text-xs font-bold transition-all shadow-sm"
                 >
-                  <Play size={12} className={compiling ? "animate-spin" : ""} />
-                  {compiling ? "Compiling..." : "Run Build"}
+                  <Play size={11} className={compiling ? "animate-spin" : ""} />
+                  <span>{compiling ? "Syncing..." : "Sync Nodes"}</span>
                 </button>
               </div>
 
-              {/* SVG connection wire system */}
-              <div className="relative h-24 flex justify-between items-center px-4">
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-                  <path 
-                    d="M 40,48 L 320,48" 
-                    stroke="#e2e8f0" 
-                    strokeWidth="3" 
-                    fill="none" 
-                  />
-                  {compiling && (
-                    <motion.path 
-                      d="M 40,48 L 320,48" 
-                      stroke="url(#wireGrad)" 
-                      strokeWidth="3" 
-                      fill="none" 
-                      strokeDasharray="15 35"
-                      animate={{ strokeDashoffset: [-100, 0] }}
-                      transition={{ ease: "linear", duration: 1.5, repeat: Infinity }}
-                    />
-                  )}
-                  <defs>
-                    <linearGradient id="wireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#3b82f6" />
-                      <stop offset="50%" stopColor="#a855f7" />
-                      <stop offset="100%" stopColor="#10b981" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-
-                {nodes.map((node, idx) => {
+              {/* Connected node selector */}
+              <div className="grid grid-cols-2 gap-2.5">
+                {telemetryNodes.map((node) => {
                   const NodeIcon = node.icon;
                   const isActive = activeNode === node.id;
                   return (
                     <div 
                       key={node.id} 
-                      onMouseEnter={() => !compiling && setActiveNode(node.id)}
-                      className="relative z-10 flex flex-col items-center gap-2 group cursor-pointer"
+                      onClick={() => !compiling && setActiveNode(node.id)}
+                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                        isActive 
+                          ? "bg-slate-950 text-white border-slate-950 shadow-md" 
+                          : "bg-slate-50/70 border-slate-200/70 hover:bg-white text-slate-700"
+                      }`}
                     >
-                      <motion.div 
-                        animate={isActive ? { scale: 1.15 } : { scale: 1 }}
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all ${
-                          isActive 
-                            ? `bg-gradient-to-br ${node.color} text-white border-transparent shadow-lg shadow-indigo-500/20` 
-                            : "bg-white text-slate-400 border-slate-200 hover:border-indigo-500/40 hover:text-slate-700"
-                        }`}
-                      >
-                        <NodeIcon size={18} />
-                      </motion.div>
-                      <span className={`text-[9px] font-extrabold uppercase tracking-wide transition-colors ${
-                        isActive ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"
-                      }`}>
-                        {node.label}
-                      </span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className={`p-1.5 rounded-lg shrink-0 ${
+                          isActive ? "bg-white/10 text-indigo-400" : "bg-white text-slate-500 shadow-xs"
+                        }`}>
+                          <NodeIcon size={14} />
+                        </div>
+                        <div className="truncate">
+                          <p className="text-xs font-black truncate leading-tight">{node.label}</p>
+                          <p className={`text-[8px] font-mono font-bold ${isActive ? "text-slate-400" : "text-slate-450"}`}>{node.status}</p>
+                        </div>
+                      </div>
+                      <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                        isActive ? "bg-emerald-400 animate-pulse" : "bg-slate-300"
+                      }`} />
                     </div>
                   );
                 })}
               </div>
 
-              {/* Simulated Terminal Screen */}
-              <div className="bg-slate-950 text-slate-300 font-mono text-[10px] p-4 rounded-2xl h-44 overflow-y-auto custom-scrollbar flex flex-col gap-1.5 shadow-inner relative border border-white/5">
-                <div className="absolute top-2 right-3 text-[8px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1 select-none">
-                  <Terminal size={10} /> bash
+              {/* Terminal Logs Window */}
+              <div className="bg-slate-950 text-slate-300 font-mono text-[10px] p-4 rounded-2xl h-40 overflow-y-auto custom-scrollbar flex flex-col gap-1.5 shadow-inner relative border border-white/5">
+                <div className="absolute top-2 right-3 text-[8px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1 select-none">
+                  <Terminal size={10} /> ecosystem-console
                 </div>
                 
                 <AnimatePresence mode="popLayout">
                   {terminalLogs.map((log, index) => (
                     <motion.div 
                       key={log + index}
-                      initial={{ opacity: 0, x: -10 }}
+                      initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0 }}
                       className={`${
                         log.startsWith("✓") 
-                          ? "text-emerald-400 font-semibold" 
+                          ? "text-emerald-400 font-bold" 
                           : log.startsWith(">") 
-                            ? "text-blue-400" 
+                            ? "text-blue-400 font-medium" 
                             : "text-slate-400"
                       }`}
                     >
@@ -285,11 +329,11 @@ const Hero = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Progress Bar (Compiling UI) */}
+              {/* Compilation Progress Bar */}
               {compiling && (
                 <div className="space-y-1.5">
-                  <div className="flex justify-between text-[9px] font-bold text-slate-400 uppercase">
-                    <span>Compiling Node Packets</span>
+                  <div className="flex justify-between text-[9px] font-bold text-slate-500 uppercase font-mono">
+                    <span>Mesh Packets Sync</span>
                     <span>{compileProgress}%</span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
