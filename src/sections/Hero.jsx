@@ -17,6 +17,8 @@ import {
   Activity
 } from "lucide-react";
 
+const smoothEase = [0.16, 1, 0.3, 1];
+
 const telemetryNodes = [
   { 
     id: "products", 
@@ -114,14 +116,14 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
     ];
 
     for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 600));
+      await new Promise(resolve => setTimeout(resolve, 400));
       setCompileProgress(steps[i].progress);
       setActiveNode(steps[i].node);
       const matched = telemetryNodes.find(n => n.id === steps[i].node);
       setTerminalLogs(prev => [...prev, steps[i].log, ...(matched ? matched.logs : [])]);
     }
 
-    await new Promise(resolve => setTimeout(resolve, 400));
+    await new Promise(resolve => setTimeout(resolve, 300));
     setTerminalLogs(prev => [
       ...prev, 
       "✓ ECOSYSTEM SYNCHRONIZATION COMPLETE!",
@@ -131,27 +133,27 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
   };
 
   return (
-    <section className="relative w-full min-h-[92vh] flex items-center justify-center bg-transparent overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
+    <section className="relative w-full min-h-[92vh] flex items-center justify-center bg-transparent overflow-hidden pt-24 pb-12 md:pt-28 md:pb-16">
       
       {/* Blueprint grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />
       
       {/* Soft color highlights */}
-      <div className="absolute top-[10%] left-[15%] w-[400px] h-[300px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[15%] right-[10%] w-[450px] h-[350px] bg-indigo-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-[10%] left-[15%] w-[400px] h-[300px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[15%] right-[10%] w-[450px] h-[350px] bg-indigo-500/10 rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="relative z-10 container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <div className="ecosystem-container relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
           {/* --- LEFT SIDE: HIGH-IMPACT ECOSYSTEM HERO --- */}
-          <div className="lg:col-span-7 space-y-7 text-left">
+          <div className="lg:col-span-7 space-y-5 text-left min-w-0">
             
             {/* Status Eyebrow Badge */}
             <motion.div
-              initial={{ opacity: 0, y: -15 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 text-xs font-bold text-slate-700 shadow-sm"
+              transition={{ duration: 0.6, ease: smoothEase }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-xs"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -160,79 +162,57 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
               <span className="tracking-wide">{eyebrow}</span>
             </motion.div>
 
-            {/* Main Dynamic Heading */}
-            <motion.h1 
+            {/* Headline with calibrated fluid typography */}
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1] md:leading-[1.08]"
+              transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
+              className="text-fluid-display font-black tracking-tight text-slate-950 leading-[1.12]"
             >
-              Building, operating & scaling{" "}
+              Building, Operating & Scaling{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-                digital ecosystems.
+                Digital Ecosystems
               </span>
             </motion.h1>
 
-            {/* Supporting paragraph */}
-            <motion.p 
+            {/* Supporting Description */}
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-slate-600 text-base md:text-lg max-w-2xl leading-relaxed font-semibold"
+              transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
+              className="text-slate-600 text-fluid-lead font-normal max-w-xl leading-relaxed"
             >
               {description}
             </motion.p>
 
-            {/* Ecosystem Pills */}
-            <motion.div 
+            {/* CTA Actions */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-wrap gap-2 pt-1"
+              transition={{ duration: 0.6, ease: smoothEase, delay: 0.24 }}
+              className="flex flex-wrap items-center gap-3.5 pt-1.5"
             >
-              {[
-                "SaaS Software Products",
-                "Fullstack Engineering",
-                "REST APIs & Webhooks",
-                "Cloud & DevOps Mesh",
-                "HIPAA / ERP Systems",
-                "Sub-second Latency"
-              ].map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 rounded-xl bg-white/80 border border-slate-200/80 text-[11px] font-bold text-slate-600 shadow-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* Action Buttons */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-3.5 pt-3"
-            >
-              <Link href={primaryCta.link} className="w-full sm:w-auto">
-                <motion.button 
+              <Link href={primaryCta.link}>
+                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-7 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 group"
+                  transition={{ duration: 0.2 }}
+                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-slate-950/15 flex items-center gap-2 group cursor-pointer"
                   data-cursor="Products"
                 >
                   <Boxes size={16} />
                   <span>{primaryCta.text}</span>
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
-              
-              <Link href={secondaryCta.link} className="w-full sm:w-auto">
-                <motion.button 
+
+              <Link href={secondaryCta.link}>
+                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-7 py-4 rounded-full border border-slate-300 bg-white/90 hover:bg-slate-50 text-slate-800 font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2 shadow-sm" 
-                  data-cursor="Ecosystem"
+                  transition={{ duration: 0.2 }}
+                  className="px-6 py-3 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+                  data-cursor="Map"
                 >
                   <Cpu size={16} className="text-indigo-600" />
                   <span>{secondaryCta.text}</span>
@@ -240,113 +220,130 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
               </Link>
             </motion.div>
 
+            {/* Live Ecosystem Telemetry Micro-Pill */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease: smoothEase, delay: 0.32 }}
+              className="pt-1.5 flex flex-wrap items-center gap-3 text-xs font-mono font-bold text-slate-500"
+            >
+              <span className="flex items-center gap-1.5 text-emerald-600 font-extrabold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                4 Live Flagship SaaS
+              </span>
+              <span>•</span>
+              <span>Next.js 15 App Architecture</span>
+              <span>•</span>
+              <span>Global Edge SLA</span>
+            </motion.div>
+
           </div>
 
-          {/* --- RIGHT SIDE: INTERACTIVE ECOSYSTEM HUD --- */}
-          <div className="lg:col-span-5 relative">
-            <div className="w-full bg-white/90 border border-slate-200/80 p-5 md:p-6 rounded-3xl shadow-xl relative overflow-hidden flex flex-col gap-5">
-              
-              {/* Top controls */}
-              <div className="flex justify-between items-center border-b border-slate-100 pb-3.5">
+          {/* --- RIGHT SIDE: STRICT FIXED-DIMENSION ZERO-SHIFT HUD SANDBOX --- */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
+            className="lg:col-span-5 bg-slate-950 text-slate-200 rounded-3xl border border-white/15 shadow-2xl p-5 font-mono text-xs flex flex-col justify-between h-[430px] min-h-[430px] max-h-[430px] relative overflow-hidden shrink-0"
+          >
+            {/* Ambient inner glow */}
+            <div className="absolute top-0 right-0 w-44 h-44 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Top Bar */}
+            <div className="shrink-0">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3.5">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
-                    <Activity size={14} />
+                  <div className="flex gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
                   </div>
-                  <div>
-                    <h3 className="font-black text-xs md:text-sm text-slate-900 tracking-wide uppercase">Ecosystem Telemetry</h3>
-                    <p className="text-[9px] text-slate-450 font-bold">Interactive node orchestrator</p>
-                  </div>
+                  <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider pl-1.5">
+                    devsamp://telemetry-hud
+                  </span>
                 </div>
-                
-                <button 
-                  onClick={triggerFullBuild} 
-                  disabled={compiling}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 text-xs font-bold transition-all shadow-sm"
-                >
-                  <Play size={11} className={compiling ? "animate-spin" : ""} />
-                  <span>{compiling ? "Syncing..." : "Sync Nodes"}</span>
-                </button>
+
+                <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+                  LIVE MESH
+                </span>
               </div>
 
-              {/* Connected node selector */}
-              <div className="grid grid-cols-2 gap-2.5">
+              {/* 4 Interactive Telemetry Nodes Grid */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {telemetryNodes.map((node) => {
                   const NodeIcon = node.icon;
-                  const isActive = activeNode === node.id;
+                  const isSelected = activeNode === node.id;
+
                   return (
-                    <div 
-                      key={node.id} 
-                      onClick={() => !compiling && setActiveNode(node.id)}
-                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                        isActive 
-                          ? "bg-slate-950 text-white border-slate-950 shadow-md" 
-                          : "bg-slate-50/70 border-slate-200/70 hover:bg-white text-slate-700"
+                    <button
+                      key={node.id}
+                      onClick={() => setActiveNode(node.id)}
+                      className={`p-2.5 rounded-2xl border text-left transition-all duration-200 relative overflow-hidden cursor-pointer ${
+                        isSelected
+                          ? "bg-white/15 border-indigo-400 shadow-md shadow-indigo-500/20"
+                          : "bg-white/5 border-white/10 hover:border-white/20 text-slate-300"
                       }`}
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className={`p-1.5 rounded-lg shrink-0 ${
-                          isActive ? "bg-white/10 text-indigo-400" : "bg-white text-slate-500 shadow-xs"
-                        }`}>
-                          <NodeIcon size={14} />
+                      <div className="flex justify-between items-start mb-1">
+                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white bg-gradient-to-tr ${node.color} shadow-xs`}>
+                          <NodeIcon size={13} />
                         </div>
-                        <div className="truncate">
-                          <p className="text-xs font-black truncate leading-tight">{node.label}</p>
-                          <p className={`text-[8px] font-mono font-bold ${isActive ? "text-slate-400" : "text-slate-450"}`}>{node.status}</p>
-                        </div>
+                        <span className="text-[9px] font-bold text-slate-400">
+                          {node.status}
+                        </span>
                       </div>
-                      <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                        isActive ? "bg-emerald-400 animate-pulse" : "bg-slate-300"
-                      }`} />
-                    </div>
+                      <span className="text-xs font-bold text-white block truncate">
+                        {node.label}
+                      </span>
+                    </button>
                   );
                 })}
               </div>
+            </div>
 
-              {/* Terminal Logs Window */}
-              <div className="bg-slate-950 text-slate-300 font-mono text-[10px] p-4 rounded-2xl h-40 overflow-y-auto custom-scrollbar flex flex-col gap-1.5 shadow-inner relative border border-white/5">
-                <div className="absolute top-2 right-3 text-[8px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1 select-none">
-                  <Terminal size={10} /> ecosystem-console
-                </div>
-                
-                <AnimatePresence mode="popLayout">
-                  {terminalLogs.map((log, index) => (
-                    <motion.div 
-                      key={log + index}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0 }}
-                      className={`${
-                        log.startsWith("✓") 
-                          ? "text-emerald-400 font-bold" 
-                          : log.startsWith(">") 
-                            ? "text-blue-400 font-medium" 
-                            : "text-slate-400"
-                      }`}
-                    >
-                      {log}
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+            {/* Fixed-Height Console Output Screen */}
+            <div className="bg-black/75 rounded-2xl border border-white/10 p-3 h-[135px] min-h-[135px] max-h-[135px] text-[11px] space-y-1 leading-relaxed text-slate-300 font-mono overflow-y-auto scrollbar-none shrink-0">
+              <div className="flex justify-between text-[10px] text-slate-500 font-bold border-b border-white/10 pb-1 mb-1">
+                <span>ACTIVE NODE: {activeNode.toUpperCase()}</span>
+                <span>LATENCY: &lt;15ms</span>
               </div>
+              {terminalLogs.map((log, idx) => (
+                <p key={idx} className={log.startsWith("✓") ? "text-emerald-400 font-bold" : log.startsWith(">") ? "text-indigo-300 font-semibold" : "text-slate-300"}>
+                  {log}
+                </p>
+              ))}
+            </div>
 
-              {/* Compilation Progress Bar */}
-              {compiling && (
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-[9px] font-bold text-slate-500 uppercase font-mono">
-                    <span>Mesh Packets Sync</span>
+            {/* Fixed-Height Bottom Pipeline Trigger */}
+            <div className="h-9 border-t border-white/10 pt-2 flex items-center justify-between gap-3 shrink-0">
+              {compiling ? (
+                <div className="flex-1 space-y-1">
+                  <div className="flex justify-between text-[10px] text-slate-300 font-bold">
+                    <span>Syncing Ecosystem Mesh...</span>
                     <span>{compileProgress}%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-                    <motion.div 
-                      animate={{ width: `${compileProgress}%` }}
-                      className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-500"
+                  <div className="w-full bg-white/15 h-1.5 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-indigo-500 h-full transition-all duration-300"
+                      style={{ width: `${compileProgress}%` }}
                     />
                   </div>
                 </div>
+              ) : (
+                <>
+                  <span className="text-[11px] text-slate-400 font-medium">Sync all 4 nodes in real-time</span>
+                  <button
+                    onClick={triggerFullBuild}
+                    className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-indigo-600/30 cursor-pointer"
+                  >
+                    <Play size={11} className="fill-current" />
+                    <span>Run Sync Pipeline</span>
+                  </button>
+                </>
               )}
-
             </div>
-          </div>
+
+          </motion.div>
 
         </div>
       </div>

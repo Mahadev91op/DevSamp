@@ -11,11 +11,11 @@ import CaseStudy from "@/models/CaseStudy";
 import HomepageSection from "@/models/HomepageSection";
 import SiteSetting from "@/models/SiteSetting";
 
-export async function getProjects() {
+export async function getProjects(limit = 6) {
   try {
     await connectDB();
-    const projects = await Project.find().sort({ createdAt: -1 }).lean();
-    return JSON.parse(JSON.stringify(projects));
+    const projects = await Project.find().sort({ createdAt: -1 }).limit(limit).lean();
+    return JSON.parse(JSON.stringify(projects || []));
   } catch (error) {
     console.error("Error fetching projects:", error);
     return [];
@@ -26,18 +26,18 @@ export async function getBlogs(limit = 3) {
   try {
     await connectDB();
     const blogs = await Blog.find().sort({ createdAt: -1 }).limit(limit).lean();
-    return JSON.parse(JSON.stringify(blogs));
+    return JSON.parse(JSON.stringify(blogs || []));
   } catch (error) {
     console.error("Error fetching blogs:", error);
     return [];
   }
 }
 
-export async function getReviews() {
+export async function getReviews(limit = 10) {
   try {
     await connectDB();
-    const reviews = await Review.find().sort({ createdAt: -1 }).lean();
-    return JSON.parse(JSON.stringify(reviews));
+    const reviews = await Review.find().sort({ createdAt: -1 }).limit(limit).lean();
+    return JSON.parse(JSON.stringify(reviews || []));
   } catch (error) {
     console.error("Error fetching reviews:", error);
     return [];
@@ -48,52 +48,109 @@ export async function getPricing() {
   try {
     await connectDB();
     const plans = await Pricing.find().sort({ priceMonthly: 1 }).lean();
-    return JSON.parse(JSON.stringify(plans));
+    return JSON.parse(JSON.stringify(plans || []));
   } catch (error) {
     console.error("Error fetching pricing:", error);
     return [];
   }
 }
 
-export async function getServices() {
+export async function getServices(limit = null) {
   try {
     await connectDB();
-    const services = await Service.find().sort({ order: 1, createdAt: -1 }).lean();
-    return JSON.parse(JSON.stringify(services));
+    let query = Service.find().sort({ order: 1, createdAt: -1 });
+    if (limit) query = query.limit(limit);
+    const services = await query.lean();
+    return JSON.parse(JSON.stringify(services || []));
   } catch (error) {
     console.error("Error fetching services:", error);
     return [];
   }
 }
 
-export async function getProducts(query = {}) {
+/**
+ * Fetch featured products for homepage (controlled subset)
+ */
+export async function getProducts(query = {}, limit = 6) {
   try {
     await connectDB();
     const filter = { isActive: { $ne: false }, ...query };
-    const products = await Product.find(filter).sort({ order: 1, createdAt: -1 }).lean();
-    return JSON.parse(JSON.stringify(products));
+    const products = await Product.find(filter)
+      .select("name slug tagline description category status featured logoIcon gradient capabilities pricingSnippet productUrl docsUrl version order")
+      .sort({ order: 1, createdAt: -1 })
+      .limit(limit)
+      .lean();
+    return JSON.parse(JSON.stringify(products || []));
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
   }
 }
 
+/**
+ * Fetch all products with pagination and category search for /products listing page
+ */
+export async function getPaginatedProducts({ page = 1, limit = 12, category = "All", search = "" } = {}) {
+  try {
+    await connectDB();
+    const filter = { isActive: { $ne: false } };
+    if (category && category !== "All") {
+      filter.category = category;
+    }
+    if (search && search.trim()) {
+      filter.$or = [
+        { name: { $regex: search.trim(), $options: "i" } },
+        { tagline: { $regex: search.trim(), $options: "i" } },
+        { description: { $regex: search.trim(), $options: "i" } },
+      ];
+    }
+
+    const skip = (Math.max(1, page) - 1) * limit;
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .sort({ order: 1, createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Product.countDocuments(filter),
+    ]);
+
+    return {
+      products: JSON.parse(JSON.stringify(products || [])),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit) || 1,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching paginated products:", error);
+    return { products: [], meta: { total: 0, page: 1, limit: 12, totalPages: 1 } };
+  }
+}
+
 export async function getEcosystemItems() {
   try {
     await connectDB();
-    const items = await EcosystemItem.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: 1 }).lean();
-    return JSON.parse(JSON.stringify(items));
+    const items = await EcosystemItem.find({ isActive: { $ne: false } })
+      .sort({ order: 1, createdAt: 1 })
+      .lean();
+    return JSON.parse(JSON.stringify(items || []));
   } catch (error) {
     console.error("Error fetching ecosystem items:", error);
     return [];
   }
 }
 
-export async function getIndustries() {
+export async function getIndustries(limit = 8) {
   try {
     await connectDB();
-    const industries = await Industry.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: 1 }).lean();
-    return JSON.parse(JSON.stringify(industries));
+    const industries = await Industry.find({ isActive: { $ne: false } })
+      .sort({ order: 1, createdAt: 1 })
+      .limit(limit)
+      .lean();
+    return JSON.parse(JSON.stringify(industries || []));
   } catch (error) {
     console.error("Error fetching industries:", error);
     return [];
@@ -103,8 +160,11 @@ export async function getIndustries() {
 export async function getCaseStudies(limit = 6) {
   try {
     await connectDB();
-    const caseStudies = await CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: -1 }).limit(limit).lean();
-    return JSON.parse(JSON.stringify(caseStudies));
+    const caseStudies = await CaseStudy.find({ isActive: { $ne: false } })
+      .sort({ order: 1, createdAt: -1 })
+      .limit(limit)
+      .lean();
+    return JSON.parse(JSON.stringify(caseStudies || []));
   } catch (error) {
     console.error("Error fetching case studies:", error);
     return [];
@@ -115,7 +175,7 @@ export async function getHomepageSections() {
   try {
     await connectDB();
     const sections = await HomepageSection.find().sort({ order: 1 }).lean();
-    return JSON.parse(JSON.stringify(sections));
+    return JSON.parse(JSON.stringify(sections || []));
   } catch (error) {
     console.error("Error fetching homepage sections:", error);
     return [];
@@ -134,7 +194,7 @@ export async function getSiteSettings() {
   }
 }
 
-// Unified parallel aggregate for homepage rendering
+// Unified parallel aggregate for homepage rendering with projections and limits
 export async function getHomepageData() {
   try {
     await connectDB();
@@ -152,11 +212,11 @@ export async function getHomepageData() {
     ] = await Promise.all([
       HomepageSection.find().sort({ order: 1 }).lean(),
       SiteSetting.findOne({ key: "main" }).lean(),
-      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
-      Service.find().sort({ order: 1 }).lean(),
+      Product.find({ isActive: { $ne: false } }).limit(6).sort({ order: 1 }).lean(),
+      Service.find().limit(6).sort({ order: 1 }).lean(),
       EcosystemItem.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
-      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
-      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).lean(),
+      Industry.find({ isActive: { $ne: false } }).limit(4).sort({ order: 1 }).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).limit(3).sort({ order: 1 }).lean(),
       Review.find().sort({ createdAt: -1 }).limit(10).lean(),
       Blog.find().sort({ createdAt: -1 }).limit(3).lean(),
       Project.find().sort({ createdAt: -1 }).limit(6).lean()

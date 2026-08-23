@@ -17,12 +17,12 @@ const CaseStudies = ({ initialCaseStudies = [], sectionData = null }) => {
   const description = sectionData?.description || "Real-world engineering deliverables and measurable business outcomes powered by the DevSamp ecosystem.";
 
   return (
-    <section id="case-studies" className="py-16 md:py-28 bg-transparent text-slate-900 relative overflow-hidden">
+    <section id="case-studies" className="py-16 md:py-28 bg-white border-b border-slate-200/60 text-slate-900 relative overflow-hidden">
       
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="ecosystem-container relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-14 md:mb-20 min-w-0">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ const CaseStudies = ({ initialCaseStudies = [], sectionData = null }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black mb-3 tracking-tight leading-tight"
+            className="text-fluid-h2 font-black mb-3 tracking-tight leading-tight text-slate-900"
           >
             {title}
           </motion.h2>
@@ -44,14 +44,14 @@ const CaseStudies = ({ initialCaseStudies = [], sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-slate-600 text-sm md:text-base font-semibold"
+            className="text-slate-600 text-fluid-body font-semibold"
           >
             {description}
           </motion.p>
         </div>
 
         {/* Case Studies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 min-w-0">
           {caseStudies.map((study, idx) => (
             <motion.div
               key={study._id || idx}
@@ -59,52 +59,52 @@ const CaseStudies = ({ initialCaseStudies = [], sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group bg-white/90 border border-slate-200/80 hover:border-indigo-500/40 p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="group bg-slate-50/70 border border-slate-200/80 hover:bg-white hover:border-indigo-500/40 p-6 md:p-8 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between min-w-0"
             >
-              <div>
+              <div className="min-w-0">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 uppercase">
+                  <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 uppercase truncate max-w-[120px]">
                     {study.industry}
                   </span>
-                  <span className="text-xs font-bold text-slate-500">{study.clientName}</span>
+                  <span className="text-xs font-bold text-slate-500 truncate max-w-[120px]">{study.clientName}</span>
                 </div>
 
-                <h3 className="text-xl font-black text-slate-900 mb-4 group-hover:text-indigo-600 transition-colors leading-tight">
+                <h3 className="text-xl font-black text-slate-900 mb-4 group-hover:text-indigo-600 transition-colors leading-tight truncate">
                   {study.title}
                 </h3>
 
                 <div className="space-y-3 mb-6 text-xs">
                   <div>
                     <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider block">The Challenge</span>
-                    <p className="text-slate-600 font-medium leading-relaxed mt-0.5">{study.problem}</p>
+                    <p className="text-slate-600 font-medium leading-relaxed mt-0.5 line-clamp-2">{study.problem}</p>
                   </div>
                   <div>
                     <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider block">The Solution</span>
-                    <p className="text-slate-600 font-medium leading-relaxed mt-0.5">{study.solution}</p>
+                    <p className="text-slate-600 font-medium leading-relaxed mt-0.5 line-clamp-2">{study.solution}</p>
                   </div>
                   <div>
                     <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider block">Outcome & Metrics</span>
-                    <p className="text-slate-800 font-bold leading-relaxed mt-0.5">{study.outcome}</p>
+                    <p className="text-slate-800 font-bold leading-relaxed mt-0.5 line-clamp-2">{study.outcome}</p>
                   </div>
                 </div>
 
                 {/* Metrics Badges */}
                 {study.metrics && study.metrics.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2 pt-4 border-t border-slate-100">
+                  <div className="grid grid-cols-2 gap-2 pt-4 border-t border-slate-200/60">
                     {study.metrics.map((m, mIdx) => (
-                      <div key={mIdx} className="bg-slate-50 border border-slate-100 p-2.5 rounded-xl text-center">
-                        <span className="text-base font-black font-mono text-indigo-600 block">{m.value}</span>
-                        <span className="text-[9px] font-bold text-slate-500 uppercase">{m.label}</span>
+                      <div key={mIdx} className="bg-white border border-slate-200/80 p-2.5 rounded-xl text-center min-w-0">
+                        <span className="text-base font-black font-mono text-indigo-600 block truncate">{m.value}</span>
+                        <span className="text-[9px] font-bold text-slate-500 uppercase truncate block">{m.label}</span>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-100">
+              <div className="pt-6 mt-6 border-t border-slate-200/60">
                 <a
                   href={study.link || "#contact"}
-                  className="w-full py-2.5 rounded-xl bg-slate-950 text-white hover:bg-indigo-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 rounded-xl bg-slate-950 text-white hover:bg-indigo-600 text-xs font-bold transition-all flex items-center justify-center gap-1.5 shrink-0"
                 >
                   <span>Read Full Case Study</span>
                   <ArrowUpRight size={13} />

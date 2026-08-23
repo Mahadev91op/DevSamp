@@ -11,6 +11,8 @@ import {
   Sparkles
 } from "lucide-react";
 
+const smoothEase = [0.16, 1, 0.3, 1];
+
 const trustPillars = [
   {
     icon: Lock,
@@ -44,74 +46,76 @@ const TrustSection = ({ sectionData = null }) => {
   const description = sectionData?.description || "Technical rigor and infrastructure guarantees built directly into our software products and custom deployments.";
 
   return (
-    <section id="trust" className="py-16 md:py-28 bg-transparent text-slate-900 relative overflow-hidden">
+    <section id="trust" className="py-16 md:py-24 bg-white border-b border-slate-200/60 text-slate-900 relative overflow-hidden">
       
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="ecosystem-container relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-bold text-emerald-700 uppercase tracking-widest mb-3.5"
+            transition={{ duration: 0.6, ease: smoothEase }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[11px] font-bold text-emerald-700 uppercase tracking-widest mb-3"
           >
             <ShieldCheck size={12} /> {badge}
           </motion.div>
           <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black mb-3 tracking-tight leading-tight"
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
+            className="text-fluid-h2 font-black mb-2.5 tracking-tight leading-tight text-slate-950"
           >
             {title}
           </motion.h2>
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-slate-600 text-sm md:text-base font-semibold"
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
+            className="text-slate-600 text-fluid-body font-normal"
           >
             {description}
           </motion.p>
         </div>
 
         {/* 4 Trust Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 max-w-5xl mx-auto min-w-0">
           {trustPillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group bg-white/85 border border-slate-200/80 hover:border-emerald-500/40 p-6 md:p-7 rounded-3xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
+                className="group bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-emerald-500/40 p-6 md:p-7 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between min-w-0"
               >
-                <div>
+                <div className="min-w-0">
                   <div className="flex justify-between items-start mb-5">
-                    <div className="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div className="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
                       <Icon size={20} />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200/60 text-slate-600 uppercase">
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 uppercase">
                       {pillar.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-base md:text-lg font-black text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors">
+                  <h3 className="text-base md:text-lg font-black text-slate-900 mb-1.5 group-hover:text-emerald-700 transition-colors truncate">
                     {pillar.title}
                   </h3>
                   
-                  <p className="text-slate-500 text-xs font-semibold leading-relaxed">
+                  <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed">
                     {pillar.description}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono text-slate-400 font-bold">
+                <div className="mt-6 pt-4 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-mono text-slate-400 font-bold">
                   <span>GUARANTEE</span>
-                  <span className="text-emerald-600">✓ ENFORCED</span>
+                  <span className="text-emerald-600 font-extrabold">✓ ENFORCED</span>
                 </div>
               </motion.div>
             );

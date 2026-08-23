@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, ChevronRight, CornerDownRight, Sparkles } from "lucide-react";
 
+const smoothEase = [0.16, 1, 0.3, 1];
+
 const faqs = [
   {
     id: "01",
@@ -53,7 +55,7 @@ const FAQ = ({ sectionData = null }) => {
   const description = sectionData?.description || "Run diagnostic queries or explore documentation regarding project scoping, product licensing, and SLA terms.";
 
   return (
-    <section className="py-16 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/70 text-slate-900 relative overflow-hidden">
       
       {/* Inject Schema Script */}
       <script
@@ -62,71 +64,88 @@ const FAQ = ({ sectionData = null }) => {
       />
 
       {/* Background Ambience */}
-      <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute right-0 top-0 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container mx-auto px-4 md:px-6 max-w-4xl relative z-10">
+      <div className="ecosystem-container max-w-3xl relative z-10">
         
         {/* Header */}
-        <div className="mb-10 md:mb-14 text-center select-none">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3">
+        <div className="mb-10 md:mb-14 text-center select-none min-w-0">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: smoothEase }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
+          >
             <Sparkles size={12} /> {badge}
-          </div>
-          <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tight">
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
+            className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950"
+          >
             {title}
-          </h2>
-          <p className="text-slate-600 text-xs md:text-sm font-semibold max-w-xl mx-auto">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
+            className="text-slate-600 text-fluid-body font-normal max-w-lg mx-auto"
+          >
             {description}
-          </p>
+          </motion.p>
         </div>
 
         {/* Terminal Accordion Wrapper */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-lg overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden min-w-0">
           
           {/* Terminal Top Control Bar */}
-          <div className="h-11 bg-slate-100/80 border-b border-slate-200/60 px-4 md:px-6 flex items-center justify-between select-none">
-            <div className="flex items-center gap-1.5">
+          <div className="h-11 bg-slate-100/90 border-b border-slate-200/70 px-4 md:px-6 flex items-center justify-between select-none min-w-0">
+            <div className="flex items-center gap-2 shrink-0">
               <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
             </div>
-            <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-mono text-slate-500 font-bold uppercase tracking-wider">
-              <Terminal size={11} className="text-indigo-500" />
-              <span>guest@devsamp:~ $ help --ecosystem-faq</span>
+            <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider truncate">
+              <Terminal size={12} className="text-indigo-600 shrink-0" />
+              <span className="truncate">guest@devsamp:~ $ help --ecosystem-faq</span>
             </div>
-            <div className="w-10"></div>
+            <div className="w-6 shrink-0"></div>
           </div>
 
           {/* Terminal Console Panel */}
-          <div className="p-4 md:p-6 space-y-3 font-mono">
+          <div className="p-3.5 md:p-5 space-y-2.5 font-mono min-w-0">
             {faqs.map((faq, index) => {
               const isOpen = activeIndex === index;
               return (
                 <div
                   key={index}
-                  className={`border transition-all duration-300 rounded-2xl ${
+                  className={`border transition-all duration-300 rounded-2xl min-w-0 ${
                     isOpen 
-                      ? "bg-slate-50/60 border-slate-200 shadow-xs" 
+                      ? "bg-slate-50/80 border-slate-200 shadow-xs" 
                       : "bg-transparent border-transparent hover:bg-slate-50/40"
                   }`}
                 >
                   {/* Command Row */}
                   <div
                     onClick={() => setActiveIndex(isOpen ? null : index)}
-                    className="p-4 flex items-center justify-between cursor-pointer select-none"
+                    className="p-3.5 md:p-4 flex items-center justify-between cursor-pointer select-none min-w-0 gap-3"
                     data-cursor="Query"
                   >
-                    <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm">
-                      <span className="text-indigo-600 font-black">$</span>
-                      <span className="text-slate-400 font-bold text-[9px] md:text-xs">get faq-{faq.id}</span>
-                      <span className="text-slate-300 select-none">--title</span>
-                      <h3 className={`font-sans font-bold text-xs md:text-sm transition-colors pl-1 md:pl-2 ${
-                        isOpen ? "text-indigo-650 font-black" : "text-slate-800 hover:text-slate-950"
+                    <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm min-w-0 flex-1">
+                      <span className="text-indigo-600 font-black shrink-0">$</span>
+                      <span className="text-slate-400 font-bold text-[11px] shrink-0">get faq-{faq.id}</span>
+                      <h3 className={`font-sans font-bold text-xs sm:text-sm transition-colors pl-1 min-w-0 flex-1 truncate ${
+                        isOpen ? "text-indigo-700 font-black" : "text-slate-800 hover:text-slate-950"
                       }`}>
                         {faq.question}
                       </h3>
                     </div>
 
-                    <div className={`p-1 rounded-full border transition-all duration-300 ${
+                    <div className={`p-1 rounded-full border transition-all duration-300 shrink-0 ${
                       isOpen 
                         ? "rotate-90 text-indigo-600 border-indigo-200 bg-indigo-50" 
                         : "text-slate-400 border-slate-200 bg-white"
@@ -144,11 +163,11 @@ const FAQ = ({ sectionData = null }) => {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 320, damping: 28 }}
                       >
-                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-700 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/50 pt-3 bg-slate-50/50 rounded-b-2xl">
-                          <CornerDownRight size={12} className="text-indigo-500 shrink-0 mt-0.5" />
-                          <div className="space-y-1">
-                            <span className="text-indigo-600 text-[9px] font-bold select-none">[STDOUT] &gt; </span>
-                            <span className="font-sans font-medium text-slate-700 text-xs md:text-sm pl-0.5">{faq.answer}</span>
+                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-700 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/60 pt-3 bg-slate-50/60 rounded-b-2xl min-w-0">
+                          <CornerDownRight size={13} className="text-indigo-600 shrink-0 mt-0.5" />
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <span className="text-indigo-600 text-[10px] font-bold select-none">[STDOUT] &gt; </span>
+                            <span className="font-sans font-normal text-slate-600 text-xs sm:text-sm pl-0.5 leading-relaxed block">{faq.answer}</span>
                           </div>
                         </div>
                       </motion.div>

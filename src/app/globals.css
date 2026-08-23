@@ -1,43 +1,72 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc; /* Slate 50 background */
-  --foreground: #0f172a; /* Slate 900 foreground */
+  /* 3-Level Background Hierarchy */
+  --bg-base: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f1f5f9;
+  --bg-surface-dark: #090d16;
+  
+  /* High-Contrast Text Tokens */
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  /* Border Tokens */
+  --border-subtle: rgba(226, 232, 240, 0.95);
+  --border-strong: rgba(203, 213, 225, 1);
+  --border-accent: rgba(99, 102, 241, 0.4);
+
+  /* Semantic Accents */
+  --accent-primary: #4f46e5;
+  --accent-secondary: #06b6d4;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+
+  /* Smooth Animation Easing */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 
   --color-indigo-650: #493ee1;
   --color-indigo-655: #463be0;
   --color-indigo-55: #d4dafe;
   --color-indigo-150: #b6c3fd;
-  --color-slate-650: #3d4b5f;
+  --color-slate-650: #334155;
   --color-slate-805: #172032;
   --color-slate-850: #141d2e;
   --color-slate-105: #ebf0f5;
   --color-slate-150: #e8edf4;
   --color-slate-205: #d8e1eb;
   --color-slate-250: #d0dae5;
-  --color-slate-350: #b0c0d4;
-  --color-slate-450: #7c8ca3;
-  --color-purple-650: #892be4;
-  --color-red-650: #cb2121;
-  --color-red-655: #c41e1e;
-  --color-green-150: #ccfad9;
-  --color-blue-150: #cde2fe;
-  --color-yellow-150: #fef4a6;
+  --color-slate-350: #94a3b8;
+  --color-slate-450: #64748b;
 }
 
-/* Force light theme by ignoring preferences */
+/* Smooth Scrolling & Body Configuration */
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
-  background-color: #f1f5f9;
-  color: var(--foreground);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
-  cursor: none; /* Hide default cursor for custom cursor */
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  cursor: none; /* Custom interactive cursor */
 }
 
 /* GPU-Accelerated fixed background element to prevent scroll paint storm */
@@ -49,7 +78,7 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -20;
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
   background-image: 
     radial-gradient(at 0% 0%, rgba(255, 255, 255, 1) 0px, transparent 50%),
     radial-gradient(at 50% 0%, rgba(248, 250, 252, 0.8) 0px, transparent 50%),
@@ -60,32 +89,96 @@ body::before {
   pointer-events: none;
 }
 
-/* Headings Font */
+/* Headings Font - Inherit text color cleanly so text-white in dark containers works */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-outfit), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* Unified Responsive Ecosystem Container */
+.ecosystem-container {
+  width: 100%;
+  max-width: 82rem; /* 1312px - balanced modern width */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .ecosystem-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ecosystem-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Balanced, Sleek & Highly Readable Fluid Typography */
+.text-fluid-display {
+  font-size: clamp(2rem, 3.2vw + 0.8rem, 3.6rem);
+  line-height: 1.12;
+  font-weight: 900;
+}
+
+.text-fluid-h1 {
+  font-size: clamp(1.75rem, 2.5vw + 0.6rem, 2.85rem);
+  line-height: 1.16;
+  font-weight: 900;
+}
+
+.text-fluid-h2 {
+  font-size: clamp(1.45rem, 1.8vw + 0.5rem, 2.25rem);
+  line-height: 1.22;
+  font-weight: 900;
+}
+
+.text-fluid-h3 {
+  font-size: clamp(1.15rem, 1.2vw + 0.3rem, 1.5rem);
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.text-fluid-lead {
+  font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1.125rem);
+  line-height: 1.65;
+  font-weight: 500;
+}
+
+.text-fluid-body {
+  font-size: clamp(0.875rem, 0.25vw + 0.8rem, 0.975rem);
+  line-height: 1.6;
+  font-weight: 500;
 }
 
 /* --- CUSTOM SCROLLBAR (Light Theme) --- */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9; /* Slate 100 track */
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* Slate 300 thumb */
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6; /* Blue 500 on hover */
+  background: #6366f1;
 }
 
-/* Text Selection Color (Light Theme Blue) */
+/* Text Selection Color */
 ::selection {
-  background: rgba(59, 130, 246, 0.2); 
+  background: rgba(99, 102, 241, 0.25); 
   color: #0f172a;
 }
 
@@ -110,10 +203,22 @@ h1, h2, h3, h4, h5, h6 {
   scrollbar-width: none;
 }
 
+/* Smooth Interactive Card & Button Transitions */
+.smooth-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.25s ease;
+  will-change: transform;
+}
+
+.smooth-card:hover {
+  transform: translateY(-3px);
+}
+
 /* Optimize backdrop filter blurs globally to prevent GPU scrolling lag */
 .backdrop-blur-xl {
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 .backdrop-blur-lg {
   backdrop-filter: blur(8px) !important;
@@ -132,26 +237,30 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Force hardware GPU acceleration only on cursor layer to save GPU memory */
+/* Hardware GPU acceleration for custom cursor */
 [data-cursor] {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   will-change: transform;
 }
 
-/* Restore native browser text caret inside input fields and textareas */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="search"],
-input[type="number"],
-textarea,
-[contenteditable="true"],
-.custom-scrollbar input,
-.custom-scrollbar textarea {
+/* Giant brand text outline */
+.text-outline {
+  -webkit-text-stroke: 1.5px rgba(203, 213, 225, 0.6);
+  color: transparent;
+  transition: -webkit-text-stroke 0.4s ease, color 0.4s ease;
+}
+
+.text-outline:hover {
+  -webkit-text-stroke: 1.5px rgba(99, 102, 241, 0.8);
+  color: rgba(99, 102, 241, 0.05);
+}
+
+/* Native browser text caret inside input fields and textareas */
+input, textarea, [contenteditable="true"] {
   cursor: text !important;
 }
 
-select {
-  cursor: pointer !important;
+select, button, a {
+  cursor: pointer;
 }

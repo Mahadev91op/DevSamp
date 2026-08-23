@@ -16,7 +16,7 @@ const navLinks = [
   { name: "Ecosystem", href: "/#ecosystem" },
   { name: "Developers", href: "/#developers" },
   { name: "Resources", href: "/blog" },
-  { name: "Company", href: "/#about" },
+  { name: "Company", href: "/#why-devsamp" },
 ];
 
 const Navbar = () => {
@@ -78,18 +78,18 @@ const Navbar = () => {
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`w-full max-w-6xl rounded-full border transition-all duration-300 pointer-events-auto flex items-center justify-between px-5 md:px-7 py-2.5 ${
+          className={`w-full max-w-5xl rounded-full border transition-all duration-300 pointer-events-auto flex items-center justify-between px-5 md:px-6 py-2 ${
             scrolled 
-              ? "bg-white/80 backdrop-blur-xl border-slate-200/90 shadow-md shadow-slate-900/5"
-              : "bg-white/50 backdrop-blur-md border-slate-200/50 shadow-sm"
+              ? "bg-white/85 backdrop-blur-xl border-slate-200/90 shadow-md shadow-slate-900/5"
+              : "bg-white/60 backdrop-blur-md border-slate-200/60 shadow-xs"
           }`}
         >
           {/* Logo */}
           <Link href="/" className="relative group flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-650 flex items-center justify-center text-white font-black text-sm shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-650 flex items-center justify-center text-white font-black text-xs shadow-xs group-hover:scale-105 transition-transform">
               DS
             </div>
-            <div className="text-xl font-black tracking-tighter text-slate-900 flex items-center">
+            <div className="text-lg font-black tracking-tight text-slate-900 flex items-center">
               <span>DEV</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-650 ml-0.5">SAMP</span>
             </div>
@@ -103,13 +103,13 @@ const Navbar = () => {
                 href={link.href} 
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="relative px-3.5 py-1.5 text-xs font-extrabold text-slate-650 hover:text-slate-950 transition-colors uppercase tracking-wider"
+                className="relative px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-950 transition-colors"
               >
                 <span className="relative z-10">{link.name}</span>
                 {hoveredIndex === index && (
                   <motion.span 
                     layoutId="navCapsule"
-                    className="absolute inset-0 bg-slate-100 rounded-full -z-0"
+                    className="absolute inset-0 bg-slate-100/90 rounded-full -z-0"
                     transition={{ type: "spring", stiffness: 350, damping: 26 }}
                   />
                 )}
@@ -120,8 +120,8 @@ const Navbar = () => {
           {/* Actions: User Auth & Contact / Demo CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Link href="/#contact">
-              <button className="text-xs font-extrabold text-slate-700 hover:text-indigo-650 transition-colors px-3 py-1.5 uppercase tracking-wider flex items-center gap-1">
-                Book Demo <ArrowUpRight size={13} />
+              <button className="text-xs font-bold text-slate-700 hover:text-indigo-600 transition-colors px-2.5 py-1.5 flex items-center gap-1 cursor-pointer">
+                <span>Book Demo</span> <ArrowUpRight size={13} />
               </button>
             </Link>
 
@@ -132,10 +132,10 @@ const Navbar = () => {
                 onMouseLeave={() => setIsProfileHovered(false)}
               >
                 <motion.div 
-                  className="flex items-center gap-2 cursor-pointer bg-slate-100/70 border border-slate-200/60 pl-2 pr-3 py-1 rounded-full transition-all"
+                  className="flex items-center gap-2 cursor-pointer bg-slate-100 border border-slate-200 pl-2 pr-3 py-1 rounded-full transition-all"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-black text-xs shadow-sm">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-black text-[10px] shadow-xs">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-xs font-bold text-slate-800 max-w-[80px] truncate">{user.name.split(' ')[0]}</span>
@@ -149,18 +149,18 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 5, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-[60] font-mono text-[10px]"
+                      className="absolute right-0 top-full mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-[60] font-mono text-[11px]"
                     >
                       <div className="p-3 border-b border-slate-100 bg-slate-50/50">
-                        <p className="text-[8px] text-slate-400 uppercase tracking-wider font-bold">session user</p>
-                        <p className="text-slate-700 font-bold truncate">{user.email}</p>
+                        <p className="text-[9px] text-slate-400 uppercase tracking-wider font-bold">session user</p>
+                        <p className="text-slate-800 font-bold truncate">{user.email}</p>
                       </div>
                       <div className="p-1">
-                        <Link href="/dashboard" className="flex items-center gap-2 px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-colors font-bold">
-                          <LayoutDashboard size={12} className="text-blue-500"/> Dashboard
+                        <Link href="/dashboard" className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-slate-950 hover:bg-slate-50 rounded-xl transition-colors font-bold">
+                          <LayoutDashboard size={13} className="text-blue-500"/> Dashboard
                         </Link>
-                        <button onClick={handleLogout} className="w-full flex items-center gap-2 px-3 py-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors font-bold text-left mt-0.5">
-                          <LogOut size={12}/> Logout
+                        <button onClick={handleLogout} className="w-full flex items-center gap-2 px-3 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-colors font-bold text-left mt-0.5">
+                          <LogOut size={13}/> Logout
                         </button>
                       </div>
                     </motion.div>
@@ -172,9 +172,9 @@ const Navbar = () => {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="bg-slate-950 text-white px-5 py-2 rounded-full font-bold text-xs shadow-sm hover:bg-slate-800 transition-all flex items-center gap-1.5 uppercase tracking-wider"
+                  className="bg-slate-950 text-white px-4 py-1.5 rounded-full font-bold text-xs shadow-xs hover:bg-indigo-600 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  Login <LogIn size={13} />
+                  <span>Login</span> <LogIn size={12} />
                 </motion.button>
               </Link>
             )}
@@ -182,16 +182,16 @@ const Navbar = () => {
 
           {/* Mobile Right CTA */}
           <div className="md:hidden flex items-center gap-2">
-            <Link href="/#contact" className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-800 text-[10px] font-bold uppercase tracking-wider">
+            <Link href="/#contact" className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-[11px] font-bold">
               Demo
             </Link>
             {user ? (
-              <Link href="/dashboard" className="w-7 h-7 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black text-xs shadow">
+              <Link href="/dashboard" className="w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black text-[10px] shadow-xs">
                 {user.name.charAt(0).toUpperCase()}
               </Link>
             ) : (
-              <Link href="/login" className="p-1.5 text-slate-700">
-                <LogIn size={18} />
+              <Link href="/login" className="p-1 text-slate-700">
+                <LogIn size={16} />
               </Link>
             )}
           </div>
@@ -204,7 +204,7 @@ const Navbar = () => {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="bg-white/90 backdrop-blur-xl border border-slate-200/80 py-2.5 px-6 rounded-full shadow-lg flex items-center justify-between w-full max-w-md"
+          className="bg-white/90 backdrop-blur-xl border border-slate-200/80 py-2 px-5 rounded-full shadow-lg flex items-center justify-between w-full max-w-sm"
         >
           {[
             { icon: Boxes, href: "/#products", label: "Products" },
@@ -218,8 +218,8 @@ const Navbar = () => {
               href={item.href}
               className="flex flex-col items-center gap-0.5 text-slate-500 hover:text-indigo-650 transition-colors"
             >
-              <item.icon size={18} />
-              <span className="text-[8px] font-bold uppercase tracking-wider">{item.label}</span>
+              <item.icon size={16} />
+              <span className="text-[9px] font-bold">{item.label}</span>
             </Link>
           ))}
         </motion.div>

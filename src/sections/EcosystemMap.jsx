@@ -19,6 +19,8 @@ import {
   GitBranch
 } from "lucide-react";
 
+const smoothEase = [0.16, 1, 0.3, 1];
+
 // Fallback nodes if database is yet to be seeded
 const defaultNodes = [
   {
@@ -85,7 +87,7 @@ const defaultNodes = [
     statusBadge: "Global Clients",
     metrics: "150+ Deployed",
     color: "from-amber-500 to-orange-500",
-    linkUrl: "/#work"
+    linkUrl: "/#contact"
   },
   {
     nodeId: "support",
@@ -109,66 +111,68 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
 
   const badge = sectionData?.badge || "Interactive Graph";
   const title = sectionData?.title || "The DevSamp Connected Ecosystem";
-  const description = sectionData?.description || "Explore how software products, custom services, developer platforms, and integrations interoperate under DevSamp's unified architecture.";
+  const description = sectionData?.description || "Explore how products, services, developers, integrations, and partners interoperate seamlessly within our infrastructure.";
 
   return (
-    <section id="ecosystem" className="py-16 md:py-28 bg-transparent text-slate-900 relative overflow-hidden">
+    <section id="ecosystem" className="py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/70 text-slate-900 relative overflow-hidden">
       
       {/* Background Ambience */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="ecosystem-container relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14 min-w-0">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3.5"
+            transition={{ duration: 0.6, ease: smoothEase }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
           >
             <Activity size={12} /> {badge}
           </motion.div>
           <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black mb-3 tracking-tight leading-tight"
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
+            className="text-fluid-h2 font-black mb-2.5 tracking-tight leading-tight text-slate-950"
           >
             {title}
           </motion.h2>
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-slate-600 text-sm md:text-base font-semibold"
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
+            className="text-slate-600 text-fluid-body font-normal"
           >
             {description}
           </motion.p>
         </div>
 
         {/* Interactive Layout: Graph Mesh Grid + Active Node Inspector */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-stretch min-w-0">
           
           {/* Left / Main: Visual Interactive Nodes Orbit */}
-          <div className="lg:col-span-8 bg-white/90 border border-slate-200/80 p-6 md:p-8 rounded-3xl shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[440px]">
+          <div className="lg:col-span-8 bg-white border border-slate-200/90 p-5 sm:p-6 md:p-8 rounded-3xl shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[420px] min-w-0">
             
             {/* Top Toolbar */}
-            <div className="flex justify-between items-center border-b border-slate-100 pb-4 mb-6">
+            <div className="flex justify-between items-center border-b border-slate-200/70 pb-3 mb-5">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="font-mono text-xs font-bold text-slate-700 uppercase tracking-wider">
                   Live Topology Mesh
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-slate-400 font-bold">
+              <span className="text-[11px] font-mono text-slate-400 font-bold">
                 Nodes active: {nodes.length}
               </span>
             </div>
 
             {/* Nodes Grid Display */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 my-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 my-auto min-w-0">
               {nodes.map((node) => {
                 const NodeIcon = LucideIcons[node.icon] || Cpu;
                 const isSelected = selectedNodeId === node.nodeId;
@@ -176,34 +180,38 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
                 return (
                   <motion.div
                     key={node.nodeId}
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedNodeId(node.nodeId)}
-                    className={`p-4 rounded-2xl border cursor-pointer transition-all duration-300 flex flex-col justify-between h-[120px] select-none ${
+                    className={`p-3.5 rounded-2xl border cursor-pointer transition-all duration-300 flex flex-col justify-between h-[115px] select-none min-w-0 ${
                       isSelected
-                        ? "bg-slate-950 text-white border-slate-950 shadow-lg"
-                        : "bg-slate-50/70 border-slate-200/80 hover:bg-white text-slate-800"
+                        ? "!bg-slate-950 !border-slate-800 shadow-md ring-2 ring-indigo-500/50"
+                        : "bg-slate-50/80 border-slate-200 hover:bg-white text-slate-800 hover:border-slate-300 shadow-xs"
                     }`}
                   >
                     <div className="flex justify-between items-start">
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                      <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${
                         isSelected 
-                          ? "bg-white/10 text-indigo-400" 
-                          : "bg-white text-indigo-600 shadow-xs border border-slate-100"
+                          ? "!bg-indigo-600 !text-white shadow-xs" 
+                          : "bg-white text-indigo-600 shadow-xs border border-slate-200"
                       }`}>
-                        <NodeIcon size={16} />
+                        <NodeIcon size={15} />
                       </div>
-                      <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
-                        isSelected ? "bg-white/10 text-slate-300" : "bg-slate-200/60 text-slate-500"
+                      <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded truncate max-w-[65px] uppercase ${
+                        isSelected ? "!bg-white/20 !text-white font-extrabold" : "!bg-slate-200/80 !text-slate-700 font-bold"
                       }`}>
                         {node.category}
                       </span>
                     </div>
 
-                    <div>
-                      <h4 className="text-xs font-black truncate">{node.title}</h4>
+                    <div className="min-w-0">
+                      <h4 className={`text-xs font-black truncate ${
+                        isSelected ? "!text-white font-extrabold" : "!text-slate-900"
+                      }`}>
+                        {node.title}
+                      </h4>
                       <p className={`text-[9px] font-mono font-bold truncate mt-0.5 ${
-                        isSelected ? "text-slate-400" : "text-slate-450"
+                        isSelected ? "!text-indigo-300 font-extrabold" : "!text-slate-500"
                       }`}>
                         {node.statusBadge || "Active"}
                       </p>
@@ -214,54 +222,54 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
             </div>
 
             {/* Bottom Telemetry Bar */}
-            <div className="border-t border-slate-100 pt-4 mt-6 flex flex-col sm:flex-row justify-between items-center text-[10px] font-mono text-slate-400 font-bold gap-2">
-              <span className="flex items-center gap-1.5">
-                <Workflow size={12} className="text-indigo-500" />
+            <div className="border-t border-slate-200/70 pt-3.5 mt-5 flex flex-col sm:flex-row justify-between items-center text-[11px] font-mono text-slate-400 font-bold gap-2">
+              <span className="flex items-center gap-1.5 text-slate-600">
+                <Workflow size={12} className="text-indigo-600" />
                 Inter-node latency: &lt;12ms
               </span>
-              <span>Click nodes above to inspect live module specifications</span>
+              <span className="text-center sm:text-right">Click nodes above to inspect module specifications</span>
             </div>
 
           </div>
 
           {/* Right: Active Node Detail Inspector */}
-          <div className="lg:col-span-4 bg-white border border-indigo-100/70 p-6 md:p-8 rounded-3xl shadow-lg relative flex flex-col justify-between">
-            <div className="space-y-6">
+          <div className="lg:col-span-4 bg-white border border-indigo-100 p-6 md:p-8 rounded-3xl shadow-sm relative flex flex-col justify-between min-w-0">
+            <div className="space-y-5 min-w-0">
               
               {/* Header */}
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white bg-gradient-to-tr ${selectedNode.color || "from-blue-600 to-indigo-600"} shadow-md`}>
+              <div className="flex items-start justify-between min-w-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white bg-gradient-to-tr ${selectedNode.color || "from-blue-600 to-indigo-600"} shadow-sm shrink-0`}>
                     <SelectedIcon size={22} />
                   </div>
-                  <div>
-                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-indigo-600">
+                  <div className="min-w-0">
+                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-indigo-600 block">
                       Module Details
                     </span>
-                    <h3 className="text-lg font-black text-slate-900">{selectedNode.title}</h3>
+                    <h3 className="text-lg font-black text-slate-900 truncate">{selectedNode.title}</h3>
                   </div>
                 </div>
               </div>
 
               {/* Description */}
-              <div className="bg-slate-50 border border-slate-200/60 p-4 rounded-2xl">
-                <p className="text-slate-600 text-xs font-semibold leading-relaxed">
+              <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl">
+                <p className="text-slate-700 text-xs sm:text-sm font-normal leading-relaxed">
                   {selectedNode.shortDesc}
                 </p>
               </div>
 
               {/* Node Metrics Specs */}
-              <div className="space-y-3 font-mono text-xs">
-                <div className="flex justify-between py-2 border-b border-slate-100">
-                  <span className="text-slate-400 font-bold">NODE_CATEGORY</span>
+              <div className="space-y-2.5 font-mono text-xs">
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-400 font-bold">CATEGORY</span>
                   <span className="text-slate-800 font-bold uppercase">{selectedNode.category}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-slate-100">
-                  <span className="text-slate-400 font-bold">TELEMETRY_SLA</span>
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-400 font-bold">TELEMETRY</span>
                   <span className="text-emerald-600 font-bold">{selectedNode.metrics || "99.9% Uptime"}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-slate-100">
-                  <span className="text-slate-400 font-bold">STATUS_STATE</span>
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-400 font-bold">STATUS</span>
                   <span className="text-indigo-600 font-bold">{selectedNode.statusBadge || "Active Core"}</span>
                 </div>
               </div>
@@ -269,14 +277,14 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
             </div>
 
             {/* Action CTA */}
-            <div className="pt-6 mt-6 border-t border-slate-100">
+            <div className="pt-5 mt-5 border-t border-slate-100">
               <Link href={selectedNode.linkUrl || "#contact"}>
                 <button 
-                  className="w-full py-3.5 rounded-2xl bg-slate-950 hover:bg-indigo-600 text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2 group"
+                  className="w-full py-3.5 rounded-2xl bg-slate-950 hover:bg-indigo-600 text-white text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 group cursor-pointer"
                   data-cursor="Open"
                 >
-                  <span>Explore {selectedNode.title}</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  <span className="truncate">Explore {selectedNode.title}</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform shrink-0" />
                 </button>
               </Link>
             </div>

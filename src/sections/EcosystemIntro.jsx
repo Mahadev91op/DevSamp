@@ -6,14 +6,11 @@ import {
   Boxes, 
   Layers, 
   Terminal, 
-  GitBranch, 
-  Users, 
-  ShieldCheck, 
   Sparkles,
-  ArrowRight,
   Workflow
 } from "lucide-react";
-import Link from "next/link";
+
+const smoothEase = [0.16, 1, 0.3, 1];
 
 const ecosystemPillars = [
   {
@@ -62,44 +59,46 @@ const EcosystemIntro = ({ sectionData = null }) => {
   const description = sectionData?.description || "DevSamp bridges the gap between pre-built software products, bespoke engineering services, and developer infrastructure into one cohesive, scalable ecosystem.";
 
   return (
-    <section id="ecosystem-intro" className="relative py-16 md:py-24 bg-transparent text-slate-900 overflow-hidden">
+    <section id="ecosystem-intro" className="relative py-16 md:py-24 bg-white/70 border-b border-slate-200/60 text-slate-900 overflow-hidden">
       
       {/* Background soft glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="ecosystem-container relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3.5"
+            transition={{ duration: 0.6, ease: smoothEase }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
           >
             <Sparkles size={12} /> {badge}
           </motion.div>
           <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black mb-4 tracking-tight leading-tight"
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
+            className="text-fluid-h2 font-black mb-3 tracking-tight leading-tight text-slate-950"
           >
             {title}
           </motion.h2>
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-slate-600 text-sm md:text-base font-semibold leading-relaxed"
+            transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
+            className="text-slate-600 text-fluid-body font-normal leading-relaxed"
           >
             {description}
           </motion.p>
         </div>
 
         {/* 4 Connected Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 min-w-0">
           {ecosystemPillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             const isSelected = activePillar === idx;
@@ -107,43 +106,43 @@ const EcosystemIntro = ({ sectionData = null }) => {
             return (
               <motion.div
                 key={pillar.id}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
                 onMouseEnter={() => setActivePillar(idx)}
-                className={`group relative p-6 md:p-7 rounded-3xl border transition-all duration-300 flex flex-col justify-between cursor-pointer ${
+                className={`group relative p-6 md:p-7 rounded-3xl border transition-all duration-300 flex flex-col justify-between cursor-pointer min-w-0 ${
                   isSelected 
-                    ? "bg-white border-indigo-500/50 shadow-xl shadow-indigo-500/10 -translate-y-1" 
-                    : "bg-white/80 border-slate-200/80 hover:border-slate-300 shadow-sm"
+                    ? "bg-white border-indigo-500/50 shadow-lg shadow-indigo-500/10 -translate-y-1" 
+                    : "bg-slate-50/80 border-slate-200/90 hover:bg-white hover:border-slate-300 shadow-xs"
                 }`}
               >
-                <div>
+                <div className="min-w-0">
                   {/* Top Bar: Icon & Badge */}
                   <div className="flex justify-between items-start mb-5">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white bg-gradient-to-tr ${pillar.gradient} shadow-md group-hover:scale-105 transition-transform`}>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white bg-gradient-to-tr ${pillar.gradient} shadow-sm group-hover:scale-105 transition-transform shrink-0`}>
                       <Icon size={20} />
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200/60 text-slate-500 uppercase">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 uppercase">
                       {pillar.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-black text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-base md:text-lg font-black text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
                     {pillar.title}
                   </h3>
                   
-                  <p className="text-slate-500 text-xs font-semibold leading-relaxed mb-6">
+                  <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed mb-5">
                     {pillar.desc}
                   </p>
                 </div>
 
                 {/* Key Points */}
-                <div className="pt-4 border-t border-slate-100 space-y-2">
+                <div className="pt-4 border-t border-slate-200/70 space-y-2">
                   {pillar.points.map((pt, pIdx) => (
-                    <div key={pIdx} className="flex items-center gap-2 text-[11px] font-bold text-slate-700">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                      <span>{pt}</span>
+                    <div key={pIdx} className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 shrink-0" />
+                      <span className="truncate">{pt}</span>
                     </div>
                   ))}
                 </div>
