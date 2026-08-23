@@ -250,3 +250,42 @@ export async function getHomepageData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for About page rendering
+ */
+export async function getAboutData() {
+  try {
+    await connectDB();
+    const AboutPage = (await import("@/models/AboutPage")).default;
+    const Team = (await import("@/models/Team")).default;
+
+    const [aboutDoc, settings, teamMembers, industries, products, services] = await Promise.all([
+      AboutPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Team.find().sort({ createdAt: 1 }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+    ]);
+
+    return {
+      about: aboutDoc ? JSON.parse(JSON.stringify(aboutDoc)) : null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      teamMembers: JSON.parse(JSON.stringify(teamMembers || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+    };
+  } catch (error) {
+    console.error("Error aggregating about page data:", error);
+    return {
+      about: null,
+      settings: null,
+      teamMembers: [],
+      industries: [],
+      products: [],
+      services: [],
+    };
+  }
+}

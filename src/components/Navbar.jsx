@@ -6,17 +6,20 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Boxes, Layers, Cpu, Terminal, Rss, Mail,
-  LayoutDashboard, LogOut, ChevronDown, LogIn, Sparkles, ArrowUpRight
+  LayoutDashboard, LogOut, ChevronDown, LogIn, Sparkles, ArrowUpRight,
+  Info, Compass
 } from "lucide-react";
+
+const smoothEase = [0.16, 1, 0.3, 1];
 
 // Ecosystem Navigation Links
 const navLinks = [
-  { name: "Products", href: "/#products" },
-  { name: "Services", href: "/#services" },
-  { name: "Ecosystem", href: "/#ecosystem" },
-  { name: "Developers", href: "/#developers" },
-  { name: "Resources", href: "/blog" },
-  { name: "Company", href: "/#why-devsamp" },
+  { name: "Products", href: "/#products", match: "/products" },
+  { name: "Services", href: "/#services", match: "/services" },
+  { name: "Ecosystem", href: "/#ecosystem", match: "/#ecosystem" },
+  { name: "Developers", href: "/#developers", match: "/#developers" },
+  { name: "About", href: "/about", match: "/about" },
+  { name: "Devlogs", href: "/blog", match: "/blog" },
 ];
 
 const Navbar = () => {
@@ -56,7 +59,7 @@ const Navbar = () => {
   useEffect(() => {
     let active = false;
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 25;
+      const isScrolled = window.scrollY > 20;
       if (isScrolled !== active) {
         active = isScrolled;
         setScrolled(isScrolled);
@@ -72,57 +75,88 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Floating Header (Desktop Navbar) */}
-      <header className="fixed top-0 left-0 right-0 z-[1000] flex justify-center p-3 md:p-4 select-none pointer-events-none">
+      {/* Floating Header (Desktop Dynamic Island Navbar) */}
+      <header className="fixed top-0 left-0 right-0 z-[1000] flex justify-center p-3 md:p-5 select-none pointer-events-none">
         <motion.nav
-          initial={{ y: -30, opacity: 0 }}
+          initial={{ y: -35, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`w-full max-w-5xl rounded-full border transition-all duration-300 pointer-events-auto flex items-center justify-between px-5 md:px-6 py-2 ${
+          transition={{ duration: 0.6, ease: smoothEase }}
+          className={`w-full max-w-5xl rounded-full border transition-all duration-400 pointer-events-auto flex items-center justify-between px-5 md:px-7 py-2.5 md:py-3 relative ${
             scrolled 
-              ? "bg-white/85 backdrop-blur-xl border-slate-200/90 shadow-md shadow-slate-900/5"
-              : "bg-white/60 backdrop-blur-md border-slate-200/60 shadow-xs"
+              ? "bg-white/90 backdrop-blur-2xl border-slate-200/90 shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/5"
+              : "bg-white/75 backdrop-blur-xl border-slate-200/70 shadow-sm"
           }`}
         >
+          {/* Subtle glowing ambient gradient border edge */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 opacity-50 pointer-events-none -z-10" />
+
           {/* Logo */}
-          <Link href="/" className="relative group flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-650 flex items-center justify-center text-white font-black text-xs shadow-xs group-hover:scale-105 transition-transform">
-              DS
+          <Link href="/" className="relative group flex items-center gap-2.5 shrink-0" data-cursor="DevSamp">
+            <div className="relative">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xs shadow-sm shadow-indigo-600/30 group-hover:scale-105 transition-transform duration-300">
+                DS
+              </div>
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
             </div>
-            <div className="text-lg font-black tracking-tight text-slate-900 flex items-center">
+
+            <div className="text-lg font-black tracking-tight text-slate-950 flex items-center">
               <span>DEV</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-650 ml-0.5">SAMP</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 ml-0.5">SAMP</span>
             </div>
           </Link>
 
-          {/* Desktop Nav Items */}
-          <div className="hidden lg:flex items-center space-x-1 relative">
-            {navLinks.map((link, index) => (
-              <Link 
-                key={index} 
-                href={link.href} 
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="relative px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-950 transition-colors"
-              >
-                <span className="relative z-10">{link.name}</span>
-                {hoveredIndex === index && (
-                  <motion.span 
-                    layoutId="navCapsule"
-                    className="absolute inset-0 bg-slate-100/90 rounded-full -z-0"
-                    transition={{ type: "spring", stiffness: 350, damping: 26 }}
-                  />
-                )}
-              </Link>
-            ))}
+          {/* Desktop Nav Items with Spring Capsule Slider */}
+          <div className="hidden lg:flex items-center space-x-1 relative bg-slate-100/70 p-1 rounded-full border border-slate-200/60 backdrop-blur-sm">
+            {navLinks.map((link, index) => {
+              const isActive = pathname === link.match || (link.match !== "/" && pathname?.startsWith(link.match));
+              
+              return (
+                <Link 
+                  key={index} 
+                  href={link.href} 
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className={`relative px-3.5 py-1.5 text-xs font-bold transition-colors rounded-full ${
+                    isActive 
+                      ? "text-indigo-700 font-extrabold" 
+                      : "text-slate-700 hover:text-slate-950"
+                  }`}
+                >
+                  <span className="relative z-10">{link.name}</span>
+
+                  {/* Hover capsule */}
+                  {hoveredIndex === index && (
+                    <motion.span 
+                      layoutId="navHoverCapsule"
+                      className="absolute inset-0 bg-white rounded-full shadow-xs -z-0"
+                      transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                    />
+                  )}
+
+                  {/* Active persistent indicator if not hovered elsewhere */}
+                  {isActive && hoveredIndex === null && (
+                    <motion.span 
+                      layoutId="navActiveCapsule"
+                      className="absolute inset-0 bg-white/95 rounded-full shadow-xs border border-indigo-100 -z-0"
+                      transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </div>
           
           {/* Actions: User Auth & Contact / Demo CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2.5 shrink-0">
             <Link href="/#contact">
-              <button className="text-xs font-bold text-slate-700 hover:text-indigo-600 transition-colors px-2.5 py-1.5 flex items-center gap-1 cursor-pointer">
-                <span>Book Demo</span> <ArrowUpRight size={13} />
-              </button>
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="text-xs font-bold text-slate-800 hover:text-indigo-600 transition-colors px-3 py-1.5 flex items-center gap-1.5 cursor-pointer rounded-full hover:bg-slate-100/60"
+              >
+                <span>Book Demo</span> 
+                <ArrowUpRight size={13} className="text-indigo-600" />
+              </motion.button>
             </Link>
 
             {user ? (
@@ -132,7 +166,7 @@ const Navbar = () => {
                 onMouseLeave={() => setIsProfileHovered(false)}
               >
                 <motion.div 
-                  className="flex items-center gap-2 cursor-pointer bg-slate-100 border border-slate-200 pl-2 pr-3 py-1 rounded-full transition-all"
+                  className="flex items-center gap-2 cursor-pointer bg-slate-100 hover:bg-slate-200/80 border border-slate-200 pl-2 pr-3 py-1.5 rounded-full transition-all"
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-black text-[10px] shadow-xs">
@@ -172,7 +206,8 @@ const Navbar = () => {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="bg-slate-950 text-white px-4 py-1.5 rounded-full font-bold text-xs shadow-xs hover:bg-indigo-600 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="bg-slate-950 hover:bg-indigo-600 text-white px-4 py-2 rounded-full font-bold text-xs shadow-xs hover:shadow-md hover:shadow-indigo-600/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  data-cursor="Login"
                 >
                   <span>Login</span> <LogIn size={12} />
                 </motion.button>
@@ -182,16 +217,16 @@ const Navbar = () => {
 
           {/* Mobile Right CTA */}
           <div className="md:hidden flex items-center gap-2">
-            <Link href="/#contact" className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-[11px] font-bold">
+            <Link href="/#contact" className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-800 text-[11px] font-bold">
               Demo
             </Link>
             {user ? (
-              <Link href="/dashboard" className="w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black text-[10px] shadow-xs">
+              <Link href="/dashboard" className="w-7 h-7 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black text-xs shadow-xs">
                 {user.name.charAt(0).toUpperCase()}
               </Link>
             ) : (
-              <Link href="/login" className="p-1 text-slate-700">
-                <LogIn size={16} />
+              <Link href="/login" className="p-1.5 text-slate-700">
+                <LogIn size={18} />
               </Link>
             )}
           </div>
@@ -204,24 +239,30 @@ const Navbar = () => {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="bg-white/90 backdrop-blur-xl border border-slate-200/80 py-2 px-5 rounded-full shadow-lg flex items-center justify-between w-full max-w-sm"
+          className="bg-white/90 backdrop-blur-2xl border border-slate-200/90 py-2 px-4 rounded-full shadow-xl flex items-center justify-between w-full max-w-sm"
         >
           {[
             { icon: Boxes, href: "/#products", label: "Products" },
             { icon: Layers, href: "/#services", label: "Services" },
             { icon: Cpu, href: "/#ecosystem", label: "Ecosystem" },
-            { icon: Terminal, href: "/#developers", label: "Devs" },
+            { icon: Info, href: "/about", label: "About" },
             { icon: Mail, href: "/#contact", label: "Contact" }
-          ].map((item, idx) => (
-            <Link 
-              key={idx}
-              href={item.href}
-              className="flex flex-col items-center gap-0.5 text-slate-500 hover:text-indigo-650 transition-colors"
-            >
-              <item.icon size={16} />
-              <span className="text-[9px] font-bold">{item.label}</span>
-            </Link>
-          ))}
+          ].map((item, idx) => {
+            const isTabActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+
+            return (
+              <Link 
+                key={idx}
+                href={item.href}
+                className={`flex flex-col items-center gap-0.5 transition-colors px-2 py-1 rounded-xl ${
+                  isTabActive ? "text-indigo-600 font-extrabold" : "text-slate-500 hover:text-slate-900"
+                }`}
+              >
+                <item.icon size={16} />
+                <span className="text-[9px] font-bold">{item.label}</span>
+              </Link>
+            );
+          })}
         </motion.div>
       </div>
     </>

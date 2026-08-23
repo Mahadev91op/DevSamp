@@ -44,3 +44,32 @@ export function errorResponse(
     { status }
   );
 }
+
+/**
+ * ApiResponse class wrapper
+ */
+export class ApiResponse {
+  static success(data = {}, message = "Success", meta = {}, status = 200) {
+    return NextResponse.json(
+      {
+        success: true,
+        message,
+        data,
+        meta,
+      },
+      { status }
+    );
+  }
+
+  static internalError(message = "An unexpected error occurred.", details = {}) {
+    return errorResponse("INTERNAL_ERROR", message, 500, details);
+  }
+
+  static notFound(message = "Resource not found.") {
+    return errorResponse("NOT_FOUND", message, 404);
+  }
+
+  static badRequest(message = "Bad request.", details = {}) {
+    return errorResponse("BAD_REQUEST", message, 400, details);
+  }
+}

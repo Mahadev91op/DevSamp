@@ -385,6 +385,364 @@ async function seed() {
   }
   console.log("✓ Industry verticals verified/seeded.");
 
+  // 6. Seed About Page Data
+  const AboutPageSchema = new mongoose.Schema({}, { strict: false });
+  const AboutPage = mongoose.models.AboutPage || mongoose.model("AboutPage", AboutPageSchema);
+
+  const defaultAboutData = {
+    key: "main",
+    status: "published",
+    isDemo: true,
+    hero: {
+      eyebrow: "About DevSamp",
+      title: "Building the technology layer for the next generation of digital businesses.",
+      description: "DevSamp is a connected technology ecosystem combining scalable software products, full-stack digital solutions, and developer infrastructure to empower compounding business growth.",
+      badge: "Technology • Products • Ecosystem"
+    },
+    overview: {
+      companyType: "Technology Ecosystem & Software Products Company",
+      focus: "SaaS Platforms, Digital Infrastructure & Bespoke Engineering",
+      model: "Product-First Engineering & Dedicated Pods",
+      orientation: "Multi-Tenant Architecture, Edge Telemetry & High Availability",
+      points: [
+        {
+          title: "4 Flagship SaaS Products",
+          description: "Production ERPs, billing engines, and offline-first POS systems in active operation.",
+          icon: "Boxes"
+        },
+        {
+          title: "100% In-House Engineering",
+          description: "Direct developer pods specializing in Next.js 15, Node microservices, and high-performance databases.",
+          icon: "Cpu"
+        },
+        {
+          title: "Standardized API Protocol",
+          description: "Interconnected REST gateways, webhooks, and unified RBAC authentication across all products.",
+          icon: "Workflow"
+        },
+        {
+          title: "SLA-Backed Reliability",
+          description: "24/7 infrastructure telemetry, automated CI/CD patch pipelines, and direct escalation channels.",
+          icon: "ShieldCheck"
+        }
+      ]
+    },
+    story: {
+      title: "From Agile Engineering Pod to an Interconnected Product Ecosystem",
+      introduction: "DevSamp began with a fundamental premise: modern high-growth businesses don't just need isolated freelance software builds; they require unified, compounding digital infrastructure and enterprise-grade software products.",
+      chapters: [
+        {
+          year: "2023",
+          title: "The Foundation: Specialized Engineering",
+          description: "Started as a dedicated full-stack engineering pod building complex web platforms, APIs, and cloud infrastructure for fast-growing businesses.",
+          highlight: "Custom Engineering DNA",
+          order: 1
+        },
+        {
+          year: "2024",
+          title: "First Vertical Product: MedERP Pro",
+          description: "Identified deep fragmentation in healthcare clinical operations and engineered MedERP Pro—a full HIPAA-ready hospital orchestration platform.",
+          highlight: "First Flagship SaaS",
+          order: 2
+        },
+        {
+          year: "2025",
+          title: "Ecosystem Architecture & Multi-Tenancy",
+          description: "Expanded product portfolio with DevScale Core and FlowPulse POS, while developing our unified developer API gateway and telemetry mesh.",
+          highlight: "Multi-Product Mesh",
+          order: 3
+        },
+        {
+          year: "2026 & Beyond",
+          title: "The Global Connected Ecosystem",
+          description: "Unifying products, bespoke engineering pods, and open developer infrastructure to power next-generation business workflows globally.",
+          highlight: "The Future Layer",
+          order: 4
+        }
+      ]
+    },
+    founders: [
+      {
+        name: "Mahadev Mondal",
+        role: "Founder & Lead Architect",
+        bio: "Full-stack engineer, systems architect, and product designer passionate about Next.js, multi-tenant cloud ecosystems, and high-performance developer tools.",
+        quote: "Software should be engineered as an appreciating asset, not disposable code.",
+        expertise: ["Next.js & React 19", "Multi-Tenant Cloud Systems", "API Gateways & Security", "Product Design"],
+        socialLinks: {
+          linkedin: "https://www.linkedin.com/in/mahadev-mondal",
+          github: "https://github.com/Mahadev91op",
+          twitter: "https://x.com/devsamp1st"
+        },
+        order: 1,
+        status: "published"
+      }
+    ],
+    mission: {
+      title: "Our Mission",
+      statement: "To engineer scalable software products and resilient digital infrastructure that empower businesses to compound digital value.",
+      description: "We eliminate technical debt and execution friction by unifying SaaS products, bespoke engineering pods, and open developer protocols under one reliable ecosystem.",
+      visualBadge: "Operational Focus"
+    },
+    vision: {
+      title: "Our Vision",
+      statement: "To become the central technology operating system for modern high-growth enterprises.",
+      presentState: "Operating 4 flagship vertical SaaS platforms and deploying custom engineering solutions.",
+      buildingState: "Unifying API gateways, multi-tenant boilerplate foundations, and autonomous workflow nodes.",
+      futureState: "A global interconnected developer and product ecosystem powering mission-critical commerce, healthcare, and finance."
+    },
+    visionPillars: [
+      {
+        title: "Software Products",
+        description: "Vertical SaaS applications engineered for specific industry domains with multi-tenant isolation.",
+        icon: "Boxes",
+        badge: "Core Asset",
+        order: 1
+      },
+      {
+        title: "Bespoke Engineering Pods",
+        description: "Dedicated development squads tackling high-complexity architectures and custom client platforms.",
+        icon: "Layers",
+        badge: "Custom Scope",
+        order: 2
+      },
+      {
+        title: "Developer Gateway & SDKs",
+        description: "Universal REST APIs, webhooks, and type-safe boilerplates to empower internal and third-party devs.",
+        icon: "Terminal",
+        badge: "Extensibility",
+        order: 3
+      },
+      {
+        title: "Interconnected Ecosystem Mesh",
+        description: "Cross-product telemetry, shared authentication, and standardized data exchange pipelines.",
+        icon: "Workflow",
+        badge: "Unified Protocol",
+        order: 4
+      }
+    ],
+    capabilities: [
+      {
+        title: "Full-Stack Web Architecture",
+        description: "Next.js 15 App Router, React 19 Server Components, SSR, and micro-frontend orchestration.",
+        icon: "Cpu",
+        category: "Engineering",
+        order: 1
+      },
+      {
+        title: "Multi-Tenant SaaS Engineering",
+        description: "Database isolation, automated tenant provisioning, stripe/payment billing meshes, and RBAC.",
+        icon: "Boxes",
+        category: "SaaS",
+        order: 2
+      },
+      {
+        title: "High-Performance Cloud & Edge",
+        description: "Global edge caching, serverless compute, containerized deployments, and sub-50ms regional latency.",
+        icon: "Server",
+        category: "Infrastructure",
+        order: 3
+      },
+      {
+        title: "API Gateways & Real-Time Mesh",
+        description: "OpenAPI 3.1 specifications, webhook dispatchers, WebSockets, and event-driven architectures.",
+        icon: "Workflow",
+        category: "APIs",
+        order: 4
+      },
+      {
+        title: "High-Precision UI/UX Design",
+        description: "Vercel-level interactive design systems, fluid responsive typography, and micro-interactions.",
+        icon: "Sparkles",
+        category: "Design",
+        order: 5
+      },
+      {
+        title: "Enterprise Security & SLA",
+        description: "JWT session encryption, automated CI/CD lint pipelines, dependency patching, and 99.9% uptime SLA.",
+        icon: "ShieldCheck",
+        category: "Security",
+        order: 6
+      }
+    ],
+    engineeringPrinciples: [
+      {
+        title: "Engineered for 10x Scale",
+        description: "We architect databases and API contracts anticipating exponential traffic growth from day one.",
+        icon: "TrendingUp",
+        badge: "Scalability",
+        order: 1
+      },
+      {
+        title: "Simplicity Over Cleverness",
+        description: "Readable, maintainable codebases with strict conventions always beat overly complex abstractions.",
+        icon: "Code2",
+        badge: "Maintainability",
+        order: 2
+      },
+      {
+        title: "Zero Layout Shift & Instant 60fps",
+        description: "Every interaction, animation, and layout must load instantaneously with optimal Core Web Vitals.",
+        icon: "Zap",
+        badge: "Performance",
+        order: 3
+      },
+      {
+        title: "Security & RBAC by Default",
+        description: "HTTP-only cookie sessions, granular permission scopes, and strict input sanitization at every layer.",
+        icon: "Lock",
+        badge: "Security",
+        order: 4
+      }
+    ],
+    technologyApproach: {
+      title: "Our Approach to Technology Selection",
+      description: "We don't chase transient framework trends. We carefully evaluate tools on production stability, long-term maintainability, developer speed, and runtime performance.",
+      pillars: [
+        {
+          title: "Next.js & React Core",
+          description: "The premier standard for server-rendered web applications, SEO performance, and dynamic routing.",
+          icon: "Cpu"
+        },
+        {
+          title: "MongoDB Atlas & Node.js",
+          description: "Battle-tested document storage with optimized index trees and horizontal scale characteristics.",
+          icon: "Database"
+        },
+        {
+          title: "Tailwind CSS Design System",
+          description: "Utility-first design tokens ensuring micro-precision layout consistency and minimal CSS payload.",
+          icon: "Layers"
+        },
+        {
+          title: "Framer Motion Physics",
+          description: "GPU-accelerated cubic-bezier and spring physics that enrich user experience without lagging.",
+          icon: "Sparkles"
+        }
+      ]
+    },
+    milestones: [
+      {
+        year: "2023",
+        title: "DevSamp Inception",
+        description: "Founded as an agile technology engineering company.",
+        badge: "Foundation",
+        order: 1
+      },
+      {
+        year: "2024",
+        title: "MedERP Pro Launch",
+        description: "Released first flagship vertical SaaS for hospital & clinical management.",
+        badge: "Flagship SaaS",
+        order: 2
+      },
+      {
+        year: "2025",
+        title: "Ecosystem Architecture",
+        description: "Unified multi-tenant foundations, developer SDKs, and REST gateway.",
+        badge: "Ecosystem",
+        order: 3
+      },
+      {
+        year: "2026",
+        title: "Global Scaling & Multi-Product Mesh",
+        description: "Serving high-growth businesses and scaling the connected software platform.",
+        badge: "Scale",
+        order: 4
+      }
+    ],
+    culture: {
+      title: "Our Culture & Internal DNA",
+      description: "We operate with the agility of a startup and the technical discipline of an enterprise engineering firm.",
+      values: [
+        {
+          title: "Extreme Ownership",
+          description: "Every team member takes end-to-end responsibility for what they ship.",
+          icon: "CheckCircle2"
+        },
+        {
+          title: "Continuous Learning",
+          description: "Constantly sharpening our architectural knowledge and adopting better engineering patterns.",
+          icon: "BookOpen"
+        },
+        {
+          title: "Speed With Precision",
+          description: "Moving fast without breaking architectural integrity or compromising quality.",
+          icon: "Zap"
+        },
+        {
+          title: "Transparent Communication",
+          description: "Direct, honest feedback and clear documentation for clients and colleagues alike.",
+          icon: "MessageSquare"
+        }
+      ]
+    },
+    careers: {
+      title: "Build the Future of Digital Ecosystems",
+      description: "We are always excited to connect with talented full-stack engineers, UI designers, and systems architects who take pride in writing pristine code.",
+      cultureStatement: "Distributed team, asynchronous workflow, high agency, and direct impact on real production products.",
+      ctaText: "Connect with Our Founders",
+      ctaLink: "/#contact",
+      openPositionsCount: 0
+    },
+    community: {
+      title: "Community & Knowledge Sharing",
+      description: "We regularly publish architectural devlogs, UI libraries, and fullstack tutorials on YouTube and social platforms.",
+      initiatives: [
+        {
+          title: "Engineering Devlogs & YouTube",
+          description: "In-depth technical walkthroughs on Next.js, fullstack engineering, and product design.",
+          link: "https://www.youtube.com/@DevSamp1st"
+        },
+        {
+          title: "Open Source Boilerplates",
+          description: "Curated templates and architectural starter kits for modern web developers.",
+          link: "https://github.com/Mahadev91op"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "Who is DevSamp and what is your core mission?",
+        answer: "DevSamp is a connected technology ecosystem that combines vertical SaaS software products, bespoke engineering services, and developer infrastructure to help businesses build and scale digital assets.",
+        order: 1
+      },
+      {
+        question: "Is DevSamp an agency or a product company?",
+        answer: "DevSamp is a product-first technology company. We build and operate our own software products (like MedERP Pro) while also deploying dedicated engineering pods for clients who need custom platforms built to SaaS standards.",
+        order: 2
+      },
+      {
+        question: "Can we hire DevSamp to build our custom software or SaaS?",
+        answer: "Yes. Our engineering pod accepts select custom development projects, applying the same multi-tenant architecture, security standards, and high-performance UI systems we use in our own products.",
+        order: 3
+      },
+      {
+        question: "Where is DevSamp based and how do we work together?",
+        answer: "DevSamp is headquartered in India and works with clients and partners globally through async communication, sprint milestones, and dedicated SLA retainers.",
+        order: 4
+      }
+    ],
+    finalCta: {
+      title: "Build what's next with the DevSamp Ecosystem.",
+      description: "Whether you are looking to deploy enterprise software products or partner with an elite engineering pod, we are ready to build with you.",
+      primaryCta: {
+        text: "Explore Products",
+        link: "/products"
+      },
+      secondaryCta: {
+        text: "Start a Conversation",
+        link: "/#contact"
+      }
+    }
+  };
+
+  await AboutPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultAboutData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ About page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
@@ -394,3 +752,4 @@ seed().catch((err) => {
   console.error("❌ Seeding failed:", err);
   process.exit(1);
 });
+

@@ -1,6 +1,7 @@
 import { ProductRepository } from "@/server/repositories/product.repository";
 import { EcosystemRepository } from "@/server/repositories/ecosystem.repository";
 import { SectionRepository } from "@/server/repositories/section.repository";
+import { AboutRepository } from "@/server/repositories/about.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import Industry from "@/models/Industry";
@@ -8,6 +9,7 @@ import CaseStudy from "@/models/CaseStudy";
 import Review from "@/models/Review";
 import Blog from "@/models/Blog";
 import Service from "@/models/Service";
+import Team from "@/models/Team";
 
 export class CmsService {
   /**
@@ -47,6 +49,30 @@ export class CmsService {
       caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
       reviews: JSON.parse(JSON.stringify(reviews || [])),
       blogs: JSON.parse(JSON.stringify(blogs || []))
+    };
+  }
+
+  /**
+   * Aggregate complete About page payload
+   */
+  static async getAboutPayload() {
+    await connectDB();
+    const [aboutDoc, settings, teamMembers, industries, products, services] = await Promise.all([
+      AboutRepository.getPublishedAboutContent(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Team.find().sort({ createdAt: 1 }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      ProductRepository.findAll({ limit: 4 }),
+      Service.find().sort({ order: 1 }).limit(6).lean()
+    ]);
+
+    return {
+      about: aboutDoc || null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      teamMembers: JSON.parse(JSON.stringify(teamMembers || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || []))
     };
   }
 
