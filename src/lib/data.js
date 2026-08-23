@@ -358,3 +358,48 @@ export async function getVisionData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Mission page rendering with in-memory caching
+ */
+export async function getMissionData() {
+  const cached = getCachedData("mission_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const MissionPage = (await import("@/models/MissionPage")).default;
+    const CaseStudy = (await import("@/models/CaseStudy")).default;
+
+    const [missionDoc, settings, industries, products, services, caseStudies] = await Promise.all([
+      MissionPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean(),
+    ]);
+
+    const result = {
+      mission: missionDoc ? JSON.parse(JSON.stringify(missionDoc)) : null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+    };
+
+    setCachedData("mission_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating mission page data:", error);
+    return {
+      mission: null,
+      settings: null,
+      industries: [],
+      products: [],
+      services: [],
+      caseStudies: [],
+    };
+  }
+}

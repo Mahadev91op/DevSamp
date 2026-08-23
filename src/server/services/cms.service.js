@@ -3,6 +3,7 @@ import { EcosystemRepository } from "@/server/repositories/ecosystem.repository"
 import { SectionRepository } from "@/server/repositories/section.repository";
 import { AboutRepository } from "@/server/repositories/about.repository";
 import { VisionRepository } from "@/server/repositories/vision.repository";
+import { MissionRepository } from "@/server/repositories/mission.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import Industry from "@/models/Industry";
@@ -96,6 +97,30 @@ export class CmsService {
       industries: JSON.parse(JSON.stringify(industries || [])),
       products: JSON.parse(JSON.stringify(products || [])),
       services: JSON.parse(JSON.stringify(services || []))
+    };
+  }
+
+  /**
+   * Aggregate complete Mission page payload
+   */
+  static async getMissionPayload() {
+    await connectDB();
+    const [missionDoc, settings, industries, products, services, caseStudies] = await Promise.all([
+      MissionRepository.getPublishedMissionContent(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      ProductRepository.findAll({ limit: 6 }),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean()
+    ]);
+
+    return {
+      mission: missionDoc || null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || []))
     };
   }
 

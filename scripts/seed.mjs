@@ -1135,10 +1135,294 @@ async function seed() {
   );
   console.log("✓ Vision page content verified/seeded.");
 
+  // 8. Seed Mission Page Default Content
+  const MissionPageSchema = new mongoose.Schema({}, { strict: false });
+  const MissionPage = mongoose.models.MissionPage || mongoose.model("MissionPage", MissionPageSchema);
+
+  const defaultMissionData = {
+    key: "main",
+    status: "published",
+    isDemo: true,
+    hero: {
+      eyebrow: "DevSamp Mission",
+      title: "Building Reliable, Scalable Digital Products for Modern Businesses.",
+      description: "We exist to eliminate technical debt and execution friction by engineering high-performance software products, robust cloud architectures, and dedicated development pods.",
+      badge: "Operational Purpose",
+      missionPill: "Product-First Engineering"
+    },
+    statement: {
+      title: "The Core Mandate",
+      statement: "Customers aur businesses ke liye reliable, scalable digital products banana.",
+      englishTranslation: "Engineering reliable, scalable digital products and technology assets for businesses and end-users.",
+      description: "Every line of code, database schema, and interface interaction we build is focused on delivering measurable operational stability, effortless scalability, and compounding business value.",
+      highlightBadge: "Everyday Execution"
+    },
+    meanings: [
+      {
+        key: "reliable",
+        title: "Reliable Systems",
+        subtitle: "Zero Panic at Scale",
+        description: "Software that works predictably 24/7 without silent data corruption, unhandled crashes, or unexpected downtime.",
+        icon: "ShieldCheck",
+        badge: "BASELINE",
+        order: 1
+      },
+      {
+        key: "scalable",
+        title: "Scalable Architecture",
+        subtitle: "10x Growth Ready",
+        description: "Multi-tenant database isolation, sub-10ms compound indexes, and edge routing designed to scale without costly rewrites.",
+        icon: "TrendingUp",
+        badge: "ARCHITECTURE",
+        order: 2
+      },
+      {
+        key: "digitalProducts",
+        title: "Digital Products",
+        subtitle: "Real Operational Value",
+        description: "Vertical SaaS suites and web platforms engineered to solve tangible operational bottlenecks in real industries.",
+        icon: "Boxes",
+        badge: "SOFTWARE",
+        order: 3
+      },
+      {
+        key: "customerValue",
+        title: "Measurable Value",
+        subtitle: "Compounding Business ROI",
+        description: "Transforming technology investments into long-term appreciating business assets with direct ROI.",
+        icon: "Target",
+        badge: "IMPACT",
+        order: 4
+      }
+    ],
+    audiences: [
+      {
+        title: "Ambitious Startups",
+        description: "Founders needing production-ready SaaS architectures, rapid iteration, and clean codebase foundations.",
+        targetNeed: "Rapid MVP to SaaS Scale",
+        icon: "Zap",
+        badge: "VELOCITY",
+        order: 1
+      },
+      {
+        title: "Growing Businesses & Retail",
+        description: "Multi-branch operators requiring automated billing, real-time inventory sync, and unified ERPs.",
+        targetNeed: "Operational Automation",
+        icon: "Building2",
+        badge: "AUTOMATION",
+        order: 2
+      },
+      {
+        title: "Healthcare & Clinical Networks",
+        description: "Hospitals and diagnostic labs demanding HIPAA-ready compliance, doctor workflows, and high security.",
+        targetNeed: "Compliance & Availability",
+        icon: "Activity",
+        badge: "COMPLIANCE",
+        order: 3
+      },
+      {
+        title: "Enterprise Engineering Pods",
+        description: "Companies seeking dedicated, in-house software architects to build custom high-complexity web platforms.",
+        targetNeed: "Dedicated SLA Retainers",
+        icon: "Users",
+        badge: "DEDICATED PODS",
+        order: 4
+      }
+    ],
+    capabilities: [
+      {
+        title: "Vertical SaaS Software Products",
+        description: "Battle-tested platforms like MedERP Pro and FlowPulse POS built for specific business verticals.",
+        category: "Products",
+        icon: "Boxes",
+        badge: "FLAGSHIP",
+        order: 1
+      },
+      {
+        title: "Bespoke Full-Stack Web Platforms",
+        description: "High-performance Next.js 15, Node.js, and MongoDB platforms custom-crafted for enterprise clients.",
+        category: "Engineering",
+        icon: "Cpu",
+        badge: "CUSTOM SCOPE",
+        order: 2
+      },
+      {
+        title: "Unified API Gateways & Webhooks",
+        description: "Standardized REST interfaces and event dispatchers enabling cross-system interoperability.",
+        category: "APIs",
+        icon: "Workflow",
+        badge: "INTEGRATION",
+        order: 3
+      },
+      {
+        title: "Autonomous Operational Pipelines",
+        description: "Sub-50ms deterministic automation for billing, report parsing, and multi-tenant telemetry.",
+        category: "Automation",
+        icon: "Zap",
+        badge: "EFFICIENCY",
+        order: 4
+      }
+    ],
+    reliability: {
+      title: "Reliability is Our Engineering Baseline",
+      description: "Reliability is not an optional premium feature—it is the foundational standard for every product we ship.",
+      principles: [
+        { title: "Defensive Error Boundaries", description: "Every UI component and server action is wrapped with graceful fallback states and zero white screens.", icon: "ShieldCheck", badge: "UI SAFETY" },
+        { title: "Strict Input Sanitization & RBAC", description: "Cryptographically verified session cookies, scope validation, and schema assertions at API boundaries.", icon: "Lock", badge: "SECURITY" },
+        { title: "Automated Telemetry & Health Logging", description: "Instant error reporting, sub-second latency tracing, and automated cluster recovery alerts.", icon: "Activity", badge: "OBSERVABILITY" },
+        { title: "Zero Layout Shift & Instant 60fps", description: "Strictly reserved container geometries ensuring rock-solid visual stability during fast data loads.", icon: "Zap", badge: "PERFORMANCE" }
+      ]
+    },
+    scalability: {
+      title: "Architected for Exponential Growth",
+      description: "How our multi-tenant schemas, cached database indexes, and edge routing scale effortlessly without requiring costly rewrites.",
+      stages: [
+        { stage: "STAGE 01", title: "Clean Modular Monolith", description: "Maintainable schema structures with zero circular dependencies or microservice sprawl." },
+        { stage: "STAGE 02", title: "Compound Database Indexing", description: "Sub-10ms query execution across 10M+ documents with tenant-keyed index trees." },
+        { stage: "STAGE 03", title: "Global Multi-Tenant Edge Mesh", description: "Decentralized read replicas and edge caching for sub-15ms worldwide response times." }
+      ]
+    },
+    customerValue: {
+      title: "Connecting Engineering to Business Outcomes",
+      description: "We measure technical success not by lines of code written, but by operational hours saved, downtime prevented, and business revenue compounded.",
+      valuePillars: [
+        { title: "Zero Legacy Technical Debt", description: "Codebases engineered with strict conventions that don't need expensive rewrites next year.", icon: "TrendingUp" },
+        { title: "100% In-House Accountability", description: "Direct pairing with software architects who write code—no outsourced middlemen.", icon: "Users" },
+        { title: "Accelerated Time-to-Production", description: "Battle-tested boilerplates and standardized components shorten delivery timelines.", icon: "Zap" },
+        { title: "Continuous SLA Guardianship", description: "Dedicated retainers guaranteeing system patches, security updates, and priority support.", icon: "ShieldCheck" }
+      ]
+    },
+    process: [
+      { stepNumber: "01", title: "Understand", description: "Deep architectural discovery into business workflows, edge cases, and user bottlenecks.", deliverable: "System Requirement Spec", icon: "HelpCircle", order: 1 },
+      { stepNumber: "02", title: "Plan & Architect", description: "Data schema design, database index strategy, API contracts, and UX wireframes.", deliverable: "Technical Blueprint", icon: "Compass", order: 2 },
+      { stepNumber: "03", title: "Build In-House", description: "Sprint-driven fullstack development with Next.js 15, Tailwind, and MongoDB Atlas.", deliverable: "Production Codebase", icon: "Code2", order: 3 },
+      { stepNumber: "04", title: "Test & Benchmark", description: "Strict type validation, Core Web Vitals profiling, and load testing under concurrency.", deliverable: "Zero-Defect QA Report", icon: "ShieldCheck", order: 4 },
+      { stepNumber: "05", title: "Deploy & Telemetry", description: "CI/CD automated pipeline launch with SSL, CDN caching, and 24/7 uptime monitoring.", deliverable: "Live Production Node", icon: "Zap", order: 5 },
+      { stepNumber: "06", title: "Iterate & Compound", description: "Ongoing performance tuning, feature expansions, and automated background optimization.", deliverable: "Compounding Growth", icon: "TrendingUp", order: 6 }
+    ],
+    uxPhilosophy: {
+      title: "Design Built for Speed and Clarity",
+      description: "Digital products must be intuitive, accessible, and blisteringly fast. Zero visual jitter, responsive fluid layouts, and sub-100ms interaction feedback.",
+      principles: [
+        { title: "Information Hierarchy", description: "Clean typographic scale ensuring users locate critical business data instantly without cognitive fatigue.", icon: "Sparkles" },
+        { title: "Sub-100ms Feedback", description: "Instant micro-interactions, optimistic state updates, and buttery-smooth cubic-bezier transitions.", icon: "Zap" },
+        { title: "Responsive Fluidity", description: "Pixel-perfect adaptation across mobile, tablet, laptop, and ultra-wide displays.", icon: "Smartphone" },
+        { title: "Accessibility by Default", description: "High-contrast text ratios, semantic HTML5 hierarchy, and complete keyboard navigability.", icon: "CheckCircle2" }
+      ]
+    },
+    engineeringPrinciples: [
+      { title: "Build for Real Problems", description: "Every component must solve an actual business need. We never build speculative fluff.", icon: "Target", badge: "PURPOSE", order: 1 },
+      { title: "Keep Systems Maintainable", description: "Readable code with clear conventions always triumphs over opaque, clever abstractions.", icon: "Code2", badge: "READABILITY", order: 2 },
+      { title: "Security by Default", description: "HTTP-only cookie sessions, granular RBAC scopes, and strict input validation at every layer.", icon: "Lock", badge: "SECURITY", order: 3 },
+      { title: "Automate Repetitive Work", description: "Sub-50ms deterministic pipelines for reporting, synchronization, and testing.", icon: "Cpu", badge: "AUTOMATION", order: 4 }
+    ],
+    continuousLoop: {
+      title: "The Continuous Engineering Loop",
+      description: "We do not build once and walk away. Our systems evolve through continuous telemetry, monitoring, user feedback, and iterative performance tuning.",
+      steps: [
+        { step: "BUILD", label: "01. Build Clean", description: "Deploy modular, type-safe architecture.", icon: "Code2" },
+        { step: "LEARN", label: "02. Learn Fast", description: "Capture real-time user telemetry & error metrics.", icon: "Activity" },
+        { step: "IMPROVE", label: "03. Improve Daily", description: "Refactor bottlenecks and streamline interfaces.", icon: "TrendingUp" },
+        { step: "SCALE", label: "04. Scale Globally", description: "Expand traffic capacity with zero downtime.", icon: "Globe" }
+      ]
+    },
+    missionInPractice: [
+      {
+        title: "MedERP Pro Clinical Suite",
+        principle: "Reliable Healthcare Software",
+        realExample: "Engineered full hospital orchestration managing IPD, OPD, pharmacy inventory, and lab reporting.",
+        outcome: "Zero clinical workflow downtime & instant patient triage.",
+        icon: "Activity",
+        order: 1
+      },
+      {
+        title: "FlowPulse Multi-Branch POS",
+        principle: "High-Speed Retail Systems",
+        realExample: "Sub-50ms offline-first barcode billing engine synchronized across distributed retail branches.",
+        outcome: "Blistering checkout speed even during network outages.",
+        icon: "Boxes",
+        order: 2
+      },
+      {
+        title: "Dedicated Enterprise Pods",
+        principle: "Custom Fullstack Engineering",
+        realExample: "Deploying senior engineering pods for bespoke fintech, marketplace, and SaaS platforms.",
+        outcome: "100% in-house code delivered with zero architectural debt.",
+        icon: "Users",
+        order: 3
+      }
+    ],
+    pillars: [
+      { title: "Reliability", description: "Systems that operate predictably under peak business loads.", icon: "ShieldCheck", badge: "CORE", order: 1 },
+      { title: "Scalability", description: "Architectures designed to handle 10x traffic growth without rewrites.", icon: "TrendingUp", badge: "GROWTH", order: 2 },
+      { title: "Speed & 60fps", description: "Instant Core Web Vitals, sub-10ms queries, and fast page loads.", icon: "Zap", badge: "PERFORMANCE", order: 3 },
+      { title: "Customer Value", description: "Delivering compounding ROI and eliminating execution headaches.", icon: "Target", badge: "ROI", order: 4 },
+      { title: "Security & RBAC", description: "Enterprise-grade session encryption, RBAC, and data isolation.", icon: "Lock", badge: "SAFETY", order: 5 },
+      { title: "Direct Ownership", description: "Senior engineers taking end-to-end pride in what we ship.", icon: "Users", badge: "CRAFT", order: 6 }
+    ],
+    qualityTrust: {
+      title: "Engineering Standards You Can Trust",
+      description: "Direct access to senior architects, transparent async documentation, automated regression testing, and production-grade SLAs.",
+      points: [
+        { title: "100% In-House Precision", description: "Zero outsourcing. Every line of code is written and verified by core DevSamp engineers.", icon: "Code2" },
+        { title: "Transparent Async Workflows", description: "Clear sprint milestones, detailed architecture documentation, and recorded walkthroughs.", icon: "Compass" },
+        { title: "Automated QA & Linting", description: "Continuous integration pipelines enforcing zero layout shift and strict schema types.", icon: "CheckCircle2" },
+        { title: "Guaranteed SLA Guardianship", description: "24/7 technical monitoring, security patch deployment, and priority escalation channels.", icon: "ShieldCheck" }
+      ]
+    },
+    evidence: [
+      { value: "4+", label: "FLAGSHIP PRODUCTS", description: "Production vertical SaaS platforms in active operation.", source: "DevSamp Platform", public: true, order: 1 },
+      { value: "100%", label: "IN-HOUSE CODE", description: "Zero outsourced engineering or unmaintainable templates.", source: "Engineering Audit", public: true, order: 2 },
+      { value: "99.9%", label: "SLA AVAILABILITY", description: "High-availability multi-tenant cloud infrastructure.", source: "Telemetry Monitoring", public: true, order: 3 }
+    ],
+    faqs: [
+      {
+        question: "What is DevSamp's core mission?",
+        answer: "DevSamp's mission is to build reliable, scalable digital products for customers and businesses, eliminating technical debt and delivering compounding software value.",
+        order: 1
+      },
+      {
+        question: "What does 'reliable' mean at DevSamp?",
+        answer: "Reliable means software that works predictably 24/7—with zero unhandled crashes, defensive error boundaries, secure session handling, and sub-second operational latency.",
+        order: 2
+      },
+      {
+        question: "What does 'scalable' mean in your engineering approach?",
+        answer: "Scalable means architectures built with compound database index trees, multi-tenant schema isolation, and modular components that scale 10x without needing expensive code rewrites.",
+        order: 3
+      },
+      {
+        question: "Does DevSamp build custom software or only its own SaaS?",
+        answer: "Both. We build and operate our own software products (like MedERP Pro) while also deploying dedicated engineering pods for clients who need custom platforms built to the same enterprise standards.",
+        order: 4
+      }
+    ],
+    finalCta: {
+      title: "Build Reliable, Scalable Software with DevSamp.",
+      description: "Whether you need to deploy production-ready vertical SaaS platforms or partner with a dedicated engineering pod, we are ready to build.",
+      primaryCta: {
+        text: "Explore Services",
+        link: "/#services"
+      },
+      secondaryCta: {
+        text: "Start a Conversation",
+        link: "/#contact"
+      }
+    }
+  };
+
+  await MissionPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultMissionData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Mission page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
 }
+
 
 
 seed().catch((err) => {

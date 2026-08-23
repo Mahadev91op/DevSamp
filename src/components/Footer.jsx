@@ -2,24 +2,33 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Youtube, 
   Instagram, 
+  Linkedin,
   ArrowUpRight,
-  Bird,
   Clock,
   Terminal,
   Cpu,
   Boxes,
   ShieldCheck,
-  Code2
+  Code2,
+  ChevronDown,
+  Layers,
+  Activity,
+  Compass,
+  Lock,
+  Sparkles,
+  Mail,
+  CheckCircle2
 } from "lucide-react";
+import { navigationConfig } from "@/config/navigation";
 
 const smoothEase = [0.16, 1, 0.3, 1];
 
 // X (Twitter) Icon
-const XIcon = ({ size = 18, className }) => (
+const XIcon = ({ size = 16, className }) => (
   <svg role="img" viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg">
     <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
   </svg>
@@ -27,8 +36,9 @@ const XIcon = ({ size = 18, className }) => (
 
 const Footer = ({ products = [], services = [], siteSettings = null }) => {
   const [time, setTime] = useState("");
+  const [openMobileColumn, setOpenMobileColumn] = useState(null);
 
-  // Running workspace clock (IST - GMT+5:30)
+  // Live workspace clock (IST - GMT+5:30)
   useEffect(() => {
     const updateTime = () => {
       const options = {
@@ -77,8 +87,12 @@ const Footer = ({ products = [], services = [], siteSettings = null }) => {
     show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: smoothEase } },
   };
 
+  const toggleMobileCol = (colId) => {
+    setOpenMobileColumn(openMobileColumn === colId ? null : colId);
+  };
+
   return (
-    <footer className="bg-transparent text-slate-900 pt-16 pb-24 md:pt-20 md:pb-0 overflow-hidden relative border-t border-slate-200/80">
+    <footer className="bg-transparent text-slate-900 pt-16 pb-20 md:pt-20 md:pb-8 overflow-hidden relative border-t border-slate-200/80">
       
       <motion.div 
         className="ecosystem-container relative z-10"
@@ -95,163 +109,137 @@ const Footer = ({ products = [], services = [], siteSettings = null }) => {
         >
           <div className="max-w-xl min-w-0">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
-              DevSamp Ecosystem
+              DevSamp Connected Ecosystem
             </div>
             <h2 className="text-fluid-h2 font-black leading-tight tracking-tight text-slate-950">
-              Ready to engineer your <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-                digital future?
-              </span>
+              Ready to Architect Your Next Digital Platform?
             </h2>
+            <p className="text-slate-600 text-fluid-body mt-2 font-normal">
+              Deploy our proprietary software platforms or partner with a dedicated senior engineering pod.
+            </p>
           </div>
-          
-          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto mt-2 md:mt-0">
-            <Link href="/#products" className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-5 py-3 rounded-full bg-white border border-slate-300 text-slate-800 font-bold text-xs sm:text-sm hover:bg-slate-50 transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-                data-cursor="Products"
-              >
-                <Boxes size={15} className="text-indigo-600" /> Explore Products
-              </button>
-            </Link>
-            <Link href="/#contact" className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-5 py-3 rounded-full bg-slate-950 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-indigo-600 transition-all shadow-sm group cursor-pointer"
+
+          <div className="flex flex-wrap items-center gap-3.5 shrink-0">
+            <Link href="/#contact" prefetch={true}>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white text-xs sm:text-sm font-bold transition-all shadow-md flex items-center gap-2 group cursor-pointer"
                 data-cursor="Connect"
               >
-                <span>Initialize Connection</span>
-                <ArrowUpRight className="group-hover:rotate-45 transition-transform duration-300 w-3.5 h-3.5" />
-              </button>
+                <span>Initialize Conversation</span>
+                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </motion.button>
             </Link>
+
+            <button
+              onClick={handlePhoneClick}
+              className="px-5 py-3 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+              data-cursor="Call"
+            >
+              <span>{phoneNumber}</span>
+            </button>
           </div>
         </motion.div>
 
-        {/* --- 6-COLUMN ECOSYSTEM GRID --- */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-8 mb-8 md:mb-10">
+        {/* --- 6-COLUMN DIRECTORY GRID (DESKTOP) & ACCORDION (MOBILE) --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 pb-12 min-w-0">
           
-          {/* 1. Identity & Real-Time IST Node */}
-          <motion.div variants={itemVariants} className="col-span-2 md:col-span-4 space-y-4">
-            <div>
-              <Link href="/" className="text-xl font-black tracking-tight text-slate-900 flex items-center gap-2 mb-2">
-                <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-black">DS</span>
-                <span>DEV<span className="text-indigo-650">SAMP</span></span>
-              </Link>
-              <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-sm font-normal">
-                A connected technology ecosystem delivering enterprise software products, full-stack solutions, and developer infrastructure.
-              </p>
-            </div>
-
-            {/* Real-time Kolkata Clock */}
-            {time && (
-              <div className="inline-flex items-center gap-2 bg-white border border-slate-200/80 p-2.5 rounded-2xl font-mono text-[11px] text-slate-600 select-none shadow-xs">
-                <Clock size={12} className="text-indigo-500 animate-pulse" />
-                <span>HQ_NODE (IST):</span>
-                <span className="font-bold text-slate-900">{time}</span>
+          {/* Column 1: Brand & Status */}
+          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 lg:col-span-1 space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xs shadow-xs">
+                DS
               </div>
-            )}
+              <span className="text-base font-black text-slate-950 tracking-tight">
+                DEVSAMP
+              </span>
+            </div>
 
-            {/* Social Channels */}
-            <div className="flex gap-2 pt-1">
-              {[
-                { href: "https://www.freelancer.in/u/DevSamp", icon: <Bird size={15} />, color: "hover:bg-indigo-600 hover:text-white" },
-                { href: "https://www.youtube.com/@DevSamp1st", icon: <Youtube size={15} />, color: "hover:bg-red-600 hover:text-white" },
-                { href: "https://x.com/devsamp1st", icon: <XIcon size={15} />, color: "hover:bg-slate-900 hover:text-white" },
-                { href: "https://www.instagram.com/devsamp1st/", icon: <Instagram size={15} />, color: "hover:bg-pink-600 hover:text-white" }
-              ].map((social, index) => (
-                <motion.a 
-                  key={index} 
-                  href={social.href} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={`p-2.5 rounded-xl bg-white border border-slate-200/70 text-slate-500 ${social.color} transition-colors shadow-xs`}
-                  whileHover={{ y: -2 }}
-                  data-cursor="Social"
-                >
-                  {social.icon}
-                </motion.a>
-              ))}
+            <p className="text-xs text-slate-500 font-normal leading-relaxed">
+              Software engineering company powering modern enterprises with reliable SaaS products and dedicated engineering pods.
+            </p>
+
+            {/* Live IST Workspace Clock */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100/90 border border-slate-200/80 text-[11px] font-mono text-slate-700 font-bold">
+              <Clock size={12} className="text-indigo-600 animate-pulse" />
+              <span>IST: {time || "12:00:00 PM"}</span>
+            </div>
+
+            {/* Operational Status */}
+            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-600 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+              <span className="text-emerald-700">ALL SYSTEMS OPERATIONAL</span>
             </div>
           </motion.div>
 
-          {/* 2. Products */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-1.5">
-              <Boxes size={13} className="text-indigo-600" /> Products
-            </h4>
-            <div className="flex flex-col gap-2 font-medium text-xs sm:text-sm">
-              {[
-                { name: "MedERP Pro", href: "/#products" },
-                { name: "DevScale Core", href: "/#products" },
-                { name: "FlowPulse POS", href: "/#products" },
-                { name: "OmniDesk AI", href: "/#products" },
-              ].map((item, idx) => (
-                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-600 transition-colors">
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+          {/* Columns 2-6: Config-Driven Directory Columns */}
+          {navigationConfig.footer.columns.map((col) => (
+            <motion.div key={col.id} variants={itemVariants} className="col-span-1">
+              
+              {/* Desktop Column Header */}
+              <h3 className="hidden md:flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-950 mb-3.5">
+                {col.title}
+              </h3>
 
-          {/* 3. Services */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-1.5">
-              <Cpu size={13} className="text-indigo-600" /> Services
-            </h4>
-            <div className="flex flex-col gap-2 font-medium text-xs sm:text-sm">
-              {[
-                { name: "SaaS Development", href: "/#services" },
-                { name: "Next.js Web Apps", href: "/#services" },
-                { name: "Mobile Applications", href: "/#services" },
-                { name: "AI Workflow Solutions", href: "/#services" },
-              ].map((item, idx) => (
-                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-600 transition-colors">
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+              {/* Mobile Accordion Header */}
+              <button
+                onClick={() => toggleMobileCol(col.id)}
+                className="md:hidden w-full py-2 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-950 border-b border-slate-100"
+              >
+                <span>{col.title}</span>
+                <ChevronDown 
+                  size={14} 
+                  className={`transition-transform text-slate-400 ${openMobileColumn === col.id ? "rotate-180 text-indigo-600" : ""}`}
+                />
+              </button>
 
-          {/* 4. Developers & Platform */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-1.5">
-              <Terminal size={13} className="text-indigo-600" /> Developers
-            </h4>
-            <div className="flex flex-col gap-2 font-medium text-xs sm:text-sm">
-              {[
-                { name: "REST APIs", href: "/#developers" },
-                { name: "Documentation", href: "/#developers" },
-                { name: "Webhooks", href: "/#developers" },
-                { name: "API Status", href: "/#developers" },
-              ].map((item, idx) => (
-                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-600 transition-colors">
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+              {/* Desktop Links List */}
+              <div className="hidden md:flex flex-col gap-2 font-medium text-xs">
+                {col.items.map((item, idx) => {
+                  if (item.enabled === false) return null;
+                  return (
+                    <Link
+                      key={idx}
+                      href={item.href}
+                      prefetch={true}
+                      className="text-slate-600 hover:text-indigo-600 transition-colors py-0.5"
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
 
-          {/* 5. Company & Trust */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-1.5">
-              <ShieldCheck size={13} className="text-indigo-600" /> Company
-            </h4>
-            <div className="flex flex-col gap-2 font-medium text-xs sm:text-sm">
-              {[
-                { name: "About DevSamp", href: "/about" },
-                { name: "Vision 2035", href: "/vision" },
-                { name: "Why DevSamp", href: "/#why-devsamp" },
-                { name: "Case Studies", href: "/#case-studies" },
-                { name: "Changelog", href: "/blog" },
-                { name: "Contact Pod", href: "/#contact" },
-              ].map((item, idx) => (
-                <Link key={idx} href={item.href} className="text-slate-600 hover:text-indigo-600 transition-colors">
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+              {/* Mobile Collapsible Links */}
+              <AnimatePresence>
+                {openMobileColumn === col.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="md:hidden flex flex-col gap-2 py-3 pl-2 font-medium text-xs"
+                  >
+                    {col.items.map((item, idx) => {
+                      if (item.enabled === false) return null;
+                      return (
+                        <Link
+                          key={idx}
+                          href={item.href}
+                          prefetch={true}
+                          className="text-slate-600 hover:text-indigo-600 transition-colors py-1"
+                        >
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-
+            </motion.div>
+          ))}
 
         </div>
 
@@ -262,28 +250,76 @@ const Footer = ({ products = [], services = [], siteSettings = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: smoothEase }}
-            className="text-[13vw] font-black tracking-tighter leading-none text-outline uppercase font-sans select-none block"
+            className="text-[16vw] font-black tracking-tighter leading-none text-slate-900/[0.04] whitespace-nowrap uppercase"
           >
             DEVSAMP
           </motion.div>
         </div>
 
-        {/* --- BOTTOM TELEMETRY BAR --- */}
-        <motion.div 
+        {/* --- BOTTOM BAR: LEGAL & COPYRIGHT & SOCIAL --- */}
+        <motion.div
           variants={itemVariants}
-          className="border-t border-slate-200 pt-5 pb-12 md:pb-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 font-medium gap-3"
+          className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500"
         >
+          {/* Dynamic Copyright */}
           <div>
             © {new Date().getFullYear()} DevSamp Ecosystem. All rights reserved.
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-slate-900 transition-colors">Privacy Policy</Link>
-            <span>•</span>
-            <Link href="/terms" className="hover:text-slate-900 transition-colors">Terms of Service</Link>
-            <span>•</span>
-            <Link href="/sitemap" className="hover:text-slate-900 transition-colors">Sitemap</Link>
+          {/* Legal Links */}
+          <div className="flex flex-wrap items-center gap-4">
+            {navigationConfig.footer.legalLinks.map((leg, idx) => (
+              <Link
+                key={idx}
+                href={leg.href}
+                prefetch={true}
+                className="hover:text-indigo-600 transition-colors"
+              >
+                {leg.label}
+              </Link>
+            ))}
           </div>
+
+          {/* Configured Social Icons */}
+          <div className="flex items-center gap-3">
+            <a
+              href="https://x.com/devsamp1st"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-colors shadow-2xs"
+              aria-label="X (formerly Twitter)"
+            >
+              <XIcon size={14} />
+            </a>
+            <a
+              href="https://www.instagram.com/devsamp1st/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-colors shadow-2xs"
+              aria-label="Instagram"
+            >
+              <Instagram size={14} />
+            </a>
+            <a
+              href="https://www.youtube.com/@DevSamp1st"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-colors shadow-2xs"
+              aria-label="YouTube"
+            >
+              <Youtube size={14} />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/devsamp"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-colors shadow-2xs"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={14} />
+            </a>
+          </div>
+
         </motion.div>
 
       </motion.div>
