@@ -1,139 +1,210 @@
-Markdown
+# DevSamp — Technology, Software Products & SaaS Ecosystem 🚀
 
-# DevSamp - Full-Stack Digital Agency Solution 🚀
+**DevSamp** is a modern, high-performance technology platform and software product ecosystem. It unifies proprietary vertical SaaS products (e.g. *MedERP Pro*, *DevScale Core*, *FlowPulse POS*, *OmniDesk AI*), custom engineering services, developer platforms, and a comprehensive Admin CRM/CMS.
 
-**DevSamp** is a modern, high-performance website built for Digital Agencies, IT Companies, and Freelancers. It features a complete **Admin CRM** for managing leads and projects, along with a dedicated **Client Dashboard** for tracking progress and billing.
+Built with **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS**, and **MongoDB Atlas**.
 
-Built with **Next.js 14 (App Router)**, **MongoDB**, and **Tailwind CSS**.
+---
+
+## 🌟 Ecosystem Overview
+
+DevSamp is designed around three core pillars:
+1. **Software Products & SaaS Platforms**: Production-grade software systems engineered for rapid enterprise deployment and high concurrency.
+2. **Technology & Engineering Services**: Custom Next.js web systems, mobile applications, cloud DevOps, and high-performance database architectures.
+3. **Developer & Integration Platform**: Open REST APIs, event-driven webhooks, modular SDKs, and partner ecosystem mesh.
+
+---
+
+## 🏗️ System Architecture (Modular Monolith)
+
+DevSamp follows a layered modular-monolith architecture:
+
+```
+[Experience Layer]  -> Next.js 16 App Router (Marketing, Portals, Admin)
+       ↓
+[API Gateway]       -> /api/v1/* & /api/* with Standard { success, data, meta } Envelopes
+       ↓
+[Auth & RBAC]       -> Central Sessions, JWT/httpOnly Cookies, Server-Side Permissions
+       ↓
+[Domain Services]   -> CMS, Products, Subscriptions, Entitlements, Billing, Support
+       ↓
+[Repositories]      -> Isolated MongoDB Data Access Layer
+       ↓
+[Database]          -> Clustered MongoDB Atlas with DNS Resolution & Connection Pooling
+```
+
+> 📖 **Full Architectural Specification**: See [SYSTEM_DESIGN.md](./SYSTEM_DESIGN.md) and [docs/SYSTEM_DESIGN.md](./docs/SYSTEM_DESIGN.md).
 
 ---
 
 ## ✨ Key Features
 
-### 🎨 Frontend (User Facing)
-- **Modern UI/UX**: Built with Tailwind CSS and Framer Motion for smooth animations.
-- **PWA Ready**: Installable as a mobile app.
-- **AI Chatbot**: Built-in chatbot to answer basic queries about services and pricing.
-- **Service & Portfolio Showcase**: Dynamic sections managed via Admin Panel.
-- **Contact Form**: Real-time entry to database + Email notifications.
+### 🌐 Public Ecosystem Homepage (CMS-Driven)
+- **Ecosystem Hero**: Interactive live node telemetry and system compilation simulator.
+- **Ecosystem Introduction**: 4-layer connected architecture breakdown.
+- **Flagship Products Showcase**: Dynamic SaaS catalog with capability tags, status indicators, and direct links.
+- **Bento Engineering Services**: Interactive widgets (live compiler, UI/UX prototype slider, Lighthouse score gauge).
+- **Interactive Ecosystem Graph**: Real-time topology map with node inspection and dependency linking.
+- **Value Matrix ("Why DevSamp")**: Architectural differentiators and product DNA.
+- **Domain Solutions**: Tailored architectures for Healthcare, Fintech, Retail POS, and Startups.
+- **Developer Platform**: Interactive code sandbox (Node.js, cURL, Python), OpenAPI specs, and webhook highlights.
+- **Trust & Security**: Verifiable infrastructure guarantees (RBAC, edge mesh, CI/CD, 24/7 SLA).
+- **Client Stories & Changelog**: Verified client feedback carousel and Git branch timeline devlogs.
+- **Terminal FAQ**: Command-line style diagnostic accordion with Schema.org `FAQPage` structured data.
 
-### 🛠️ Admin Panel (CMS & CRM)
-- **Leads Management**: Track inquiries from "New" to "Closed".
-- **Project Management**: Create projects for clients, update status, and upload files.
-- **CMS**: Add/Edit/Delete Services, Team Members, Pricing Plans, and Blogs.
-- **Analytics**: Visual graphs for daily and weekly leads.
-- **Magic Blog**: Auto-fetch video details from YouTube links to create blog posts.
+### 🛠️ Admin Control Plane (`/admin`)
+- **CMS & Content Management**: Create and manage Products, Services, Team Members, Pricing Plans, and Blogs.
+- **CRM & Lead Pipeline**: Inquiries tracking, time-range analytics graphs, and export capabilities.
+- **Project Progress Dashboard**: Client project tracking, milestone timelines, and document sharing.
 
-### 👤 Client Dashboard
-- **Live Progress**: Clients can see their project timeline and current status.
-- **File Sharing**: Download contracts, invoices, and upload requirements.
-- **Billing System**: View budget, paid amount, and download PDF invoices.
+### 👤 Client Dashboard (`/dashboard`)
+- **Real-Time Project Timeline**: Stage tracking (Discovery $\rightarrow$ UI/UX $\rightarrow$ Dev $\rightarrow$ QA $\rightarrow$ Launch).
+- **Billing & Documents**: Invoices, budgets, and automated PDF downloads.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **Database**: [MongoDB](https://www.mongodb.com/) (Mongoose)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **File Storage**: [Cloudinary](https://cloudinary.com/)
-- **Emails**: [Nodemailer](https://nodemailer.com/)
-- **PDF Generation**: jsPDF
+- **Framework**: Next.js 16.0.7 (App Router, Server Components, Streaming Suspense)
+- **UI & Runtime**: React 19.2.0, Framer Motion, GSAP, Three.js
+- **Styling**: Tailwind CSS v4 (`@tailwindcss/postcss`)
+- **Database & ORM**: MongoDB Atlas, Mongoose 9.0.1
+- **Icons**: Lucide React
+- **Auth & Crypto**: Jose (JWT), BcryptJS
+- **Media & Storage**: Cloudinary SDK
+- **Communications**: Nodemailer (SMTP)
 
 ---
 
 ## 🚀 Getting Started
 
-Follow these steps to set up the project locally.
-
 ### 1. Prerequisites
-Ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [MongoDB](https://www.mongodb.com/) (Local or Atlas URL)
+- **Node.js** (v18.17 or higher, Recommended: v20+)
+- **MongoDB** Atlas URI or Local MongoDB instance
 
-### 2. Clone the Repository
+### 2. Installation
 ```bash
-git clone [https://github.com/yourusername/devsamp.git](https://github.com/yourusername/devsamp.git)
+git clone https://github.com/Mahadev91op/DevSamp-Final.git
 cd devsamp
-3. Install Dependencies
-Bash
-
 npm install
-4. Configure Environment Variables
-Create a .env file in the root directory and add the following keys:
+```
 
-Code snippet
+### 3. Environment Variables
+Create a `.env.local` file in the root directory:
 
-# Database Connection
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/devsamp
+```env
+# MongoDB Atlas Connection
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/devsamp_db?retryWrites=true&w=majority
 
-# Admin Security (Required to access /admin)
-NEXT_PUBLIC_ADMIN_KEY=your_secret_admin_passkey
+# Admin Panel Security Key
+NEXT_PUBLIC_ADMIN_KEY=your_admin_secret_key
 
-# Authentication Secret (Any random string)
-JWT_SECRET=supersecretkey123
+# JWT Session Secret
+JWT_SECRET=your_jwt_secret_key
 
-# Cloudinary (For File/Image Uploads)
-CLOUDINARY_CLOUD_NAME=your_cloud_name
+# Cloudinary (File & Image Uploads)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
-# Email Service (For Contact Form & Notifications)
+# Email SMTP Gateway
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
 
 # Public URL
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-5. Run the Development Server
-Bash
+```
 
+### 4. Database Baseline Seeding
+To initialize the CMS sections, default products, and ecosystem nodes, start the server and run the seed endpoint:
+```bash
+# Start development server
 npm run dev
-Open http://localhost:3000 with your browser to see the result.
 
-📂 Project Structure
+# In another terminal or browser, visit:
+curl http://localhost:3000/api/seed
+```
+
+### 5. Production Build
+```bash
+npm run build
+npm start
+```
+
+---
+
+## 📂 Project Structure
+
+```
 devsamp/
+├── docs/                        # Complete System Architecture & ADRs
+│   ├── SYSTEM_DESIGN.md         # Comprehensive system design blueprint
+│   └── ARCHITECTURE.md          # Architectural decision records
+├── SYSTEM_DESIGN.md             # Root system design quick reference
 ├── src/
-│   ├── app/                 # Next.js App Router Pages
-│   │   ├── admin/           # Admin Dashboard Routes
-│   │   ├── dashboard/       # Client Dashboard Routes
-│   │   ├── api/             # Backend API Routes
-│   │   └── ...              # Public Pages (Home, Services, etc.)
-│   ├── components/          # Reusable React Components
-│   ├── lib/                 # Utility functions (DB connect, Email)
-│   ├── models/              # Mongoose Database Models
-│   └── sections/            # Landing Page Sections (Hero, About, etc.)
-├── public/                  # Static assets (images, icons)
-└── ...
-🔐 How to Access Admin Panel
-Go to /admin in your browser.
+│   ├── app/                     # Next.js App Router (Experience Layer)
+│   │   ├── admin/               # Admin CRM & CMS Control Plane
+│   │   ├── dashboard/           # Customer Portal
+│   │   ├── api/                 # API Gateway (/api/v1 & /api/*)
+│   │   │   ├── homepage/        # Unified Homepage Aggregator
+│   │   │   ├── products/        # Products Catalog API
+│   │   │   ├── ecosystem/       # Ecosystem Topology API
+│   │   │   └── seed/            # Idempotent Database Seeder
+│   │   ├── layout.js            # Root Layout & SEO Schema.org
+│   │   └── page.js              # Dynamic Homepage Orchestrator
+│   ├── components/              # Reusable UI & Layout Components
+│   │   ├── Navbar.jsx           # Ecosystem Pill Navigation
+│   │   ├── Footer.jsx           # 6-Column Ecosystem Footer
+│   │   └── Skeletons.jsx        # Streaming Suspense Fallbacks
+│   ├── sections/                # Modular Section Components
+│   │   ├── Hero.jsx             # Ecosystem Hero & Telemetry HUD
+│   │   ├── EcosystemIntro.jsx   # 4-Layer Connected Pillars
+│   │   ├── FeaturedProducts.jsx # SaaS Product Showcase
+│   │   ├── Services.jsx         # Bento Services & Sandbox Widgets
+│   │   ├── EcosystemMap.jsx     # Interactive Node Topology Graph
+│   │   ├── WhyDevSamp.jsx       # Value Matrix & Engineering DNA
+│   │   ├── IndustriesSection.jsx# Vertical Industry Solutions
+│   │   ├── CaseStudies.jsx      # Verified Client Outcomes
+│   │   ├── DeveloperSection.jsx # Code Sandbox & Developer Platform
+│   │   ├── TrustSection.jsx     # Reliability & Security Matrix
+│   │   ├── Testimonials.jsx     # Verified Client Reviews Carousel
+│   │   ├── Blogs.jsx            # Git Branch Changelog & Releases
+│   │   ├── FAQ.jsx              # Terminal Diagnostic FAQ
+│   │   └── FinalCTA.jsx         # Conclusion Banner
+│   ├── server/                  # Server-Side Domain Architecture
+│   │   ├── services/            # Domain Services (CMS, Product, Entitlement)
+│   │   └── repositories/        # Data Access Repositories (Product, Ecosystem, Section)
+│   ├── models/                  # MongoDB Database Schemas
+│   │   ├── Product.js
+│   │   ├── EcosystemItem.js
+│   │   ├── Industry.js
+│   │   ├── CaseStudy.js
+│   │   ├── HomepageSection.js
+│   │   ├── SiteSetting.js
+│   │   ├── Service.js
+│   │   ├── Project.js
+│   │   ├── Review.js
+│   │   ├── Blog.js
+│   │   ├── Pricing.js
+│   │   ├── Team.js
+│   │   ├── ClientProject.js
+│   │   ├── Contact.js
+│   │   └── User.js
+│   └── lib/                     # Core Utilities (DB, Auth, API Envelope, Data)
+└── public/                      # Static assets, icons & PWA manifest
+```
 
-It will ask for a Passkey.
+---
 
-Enter the value you set for NEXT_PUBLIC_ADMIN_KEY in your .env file.
+## 🔒 Security & Quality Standards
 
-🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+- **Server-Side Authorization**: All administrative mutations and tenant operations require server-validated sessions.
+- **Tenant Isolation**: Queries strictly enforce `organizationId` scoping.
+- **Standardized API Envelope**: All new endpoints return `{ success: true, data: {}, meta: {} }` or structured error objects with unique `requestId` tracing.
+- **No Fake Data Rule**: UI components gracefully handle empty datasets without rendering fabricated testimonials or metrics.
 
-Fork the Project
+---
 
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
+## 📄 License
 
-Commit your Changes (git commit -m 'Add some AmazingFeature')
-
-Push to the Branch (git push origin feature/AmazingFeature)
-
-Open a Pull Request
-
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
-
-Developed with ❤️ by [Your Name]
-
-
-### Is file me kya khaas hai?
-1.  **Professional Structure:** Standard Github format use kiya gaya hai (Features -> Stack -> Install -> Usage).
-2.  **Environment Variables Guide:** Maine `.env` waala section clear likha hai kyunki `NEXT_PUBLIC_ADMIN_KEY` aur `CLOUDINARY` keys ke bina yeh project chalega nahi.
-3.  **Admin Access Info:** Naye user ko aksar pata nahi chalta ki Admin panel kaise khulega, isliye wo alag se mention kiya hai.
-
-Aap bas `[Your Name]` aur repository URL ko replace kar dena!
+Distributed under the MIT License. Built with ❤️ by the **DevSamp Engineering Team**.

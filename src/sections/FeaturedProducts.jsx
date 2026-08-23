@@ -6,6 +6,7 @@ import Link from "next/link";
 import * as LucideIcons from "lucide-react";
 import { 
   ArrowRight, 
+  ArrowUpRight,
   ExternalLink, 
   Boxes, 
   Sparkles, 
