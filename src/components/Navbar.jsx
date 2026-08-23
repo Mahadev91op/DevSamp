@@ -17,10 +17,11 @@ const navLinks = [
   { name: "Products", href: "/#products", match: "/products" },
   { name: "Services", href: "/#services", match: "/services" },
   { name: "Ecosystem", href: "/#ecosystem", match: "/#ecosystem" },
-  { name: "Developers", href: "/#developers", match: "/#developers" },
+  { name: "Vision", href: "/vision", match: "/vision" },
   { name: "About", href: "/about", match: "/about" },
-  { name: "Devlogs", href: "/blog", match: "/blog" },
+  { name: "Developers", href: "/#developers", match: "/#developers" },
 ];
+
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -114,6 +115,7 @@ const Navbar = () => {
                 <Link 
                   key={index} 
                   href={link.href} 
+                  prefetch={true}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={`relative px-3.5 py-1.5 text-xs font-bold transition-colors rounded-full ${
@@ -123,6 +125,7 @@ const Navbar = () => {
                   }`}
                 >
                   <span className="relative z-10">{link.name}</span>
+
 
                   {/* Hover capsule */}
                   {hoveredIndex === index && (
@@ -254,11 +257,13 @@ const Navbar = () => {
               <Link 
                 key={idx}
                 href={item.href}
+                prefetch={true}
                 className={`flex flex-col items-center gap-0.5 transition-colors px-2 py-1 rounded-xl ${
                   isTabActive ? "text-indigo-600 font-extrabold" : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 <item.icon size={16} />
+
                 <span className="text-[9px] font-bold">{item.label}</span>
               </Link>
             );

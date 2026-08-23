@@ -8,6 +8,9 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Preloader from "@/components/Preloader";
 import ClientFeatures from "@/components/ClientFeatures"; 
 import ThreeBackground from "@/components/ThreeBackground";
+import TopProgressBar from "@/components/TopProgressBar";
+import { Suspense } from "react";
+
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -175,6 +178,9 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} ${outfit.variable} text-slate-900 antialiased`}
         suppressHydrationWarning={true}
       >
+        <Suspense fallback={null}>
+          <TopProgressBar />
+        </Suspense>
         <Preloader />
         <ThreeBackground />
         <ClientFeatures />
@@ -183,6 +189,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
       </body>
+
     </html>
   );
 }

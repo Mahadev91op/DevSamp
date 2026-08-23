@@ -238,6 +238,7 @@ const Footer = ({ products = [], services = [], siteSettings = null }) => {
             <div className="flex flex-col gap-2 font-medium text-xs sm:text-sm">
               {[
                 { name: "About DevSamp", href: "/about" },
+                { name: "Vision 2035", href: "/vision" },
                 { name: "Why DevSamp", href: "/#why-devsamp" },
                 { name: "Case Studies", href: "/#case-studies" },
                 { name: "Changelog", href: "/blog" },
@@ -249,6 +250,7 @@ const Footer = ({ products = [], services = [], siteSettings = null }) => {
               ))}
             </div>
           </motion.div>
+
 
 
         </div>

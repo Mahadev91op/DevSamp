@@ -743,10 +743,403 @@ async function seed() {
   );
   console.log("✓ About page content verified/seeded.");
 
+  // 7. Seed Vision Page Default Content
+  const VisionPageSchema = new mongoose.Schema({}, { strict: false });
+  const VisionPage = mongoose.models.VisionPage || mongoose.model("VisionPage", VisionPageSchema);
+
+  const defaultVisionData = {
+    key: "main",
+    status: "published",
+    isDemo: true,
+    hero: {
+      eyebrow: "DevSamp Vision 2035",
+      title: "Engineering the Global Operating Layer for Connected Enterprise Software.",
+      description: "A 10–15 year strategic horizon to unify vertical SaaS applications, autonomous engineering pods, and universal developer protocols into an interconnected software ecosystem.",
+      badge: "Strategic Horizon 2026–2035",
+      horizonPill: "15-Year Architecture Strategy"
+    },
+    statement: {
+      title: "The Central Thesis",
+      statement: "To evolve from an elite product-engineering firm into the decentralized technology backbone that powers modern global digital commerce, healthcare, and infrastructure.",
+      description: "Software over the next decade must transition from isolated, brittle monoliths into compounding, interconnected ecosystems with shared intelligence, instant edge sync, and sub-10ms operational latency.",
+      highlightBadge: "Decade Horizon"
+    },
+    reasons: [
+      {
+        title: "The Problem of Fragmented Toolchains",
+        problem: "Modern enterprises stitch together 20+ disparate SaaS subscriptions with brittle zaps and fragile custom glue code.",
+        opportunity: "A unified ecosystem layer where multi-tenant apps share authentication, billing, events, and telemetry natively.",
+        direction: "DevSamp bridges independent business apps into a single interconnected mesh.",
+        icon: "Layers",
+        order: 1
+      },
+      {
+        title: "The Compounding Software Dilemma",
+        problem: "Most software built today depreciates rapidly into legacy technical debt requiring expensive rewrites.",
+        opportunity: "Architecting modular platforms from day one with strict schema contracts, micro-optimizations, and zero layout shift.",
+        direction: "Every DevSamp system is engineered as an appreciating asset that scales 10x without architectural rewrites.",
+        icon: "TrendingUp",
+        order: 2
+      },
+      {
+        title: "The Need for High-Agency Autonomous Infrastructure",
+        problem: "Repetitive operational workflows in healthcare, retail, and finance consume massive human engineering overhead.",
+        opportunity: "Deterministic, edge-orchestrated workflow nodes that automate mission-critical billing, inventory, and diagnostics.",
+        direction: "Embedding safe, sub-50ms automated pipelines directly into core SaaS products.",
+        icon: "Cpu",
+        order: 3
+      }
+    ],
+    phases: [
+      {
+        phaseKey: "phase-01",
+        title: "Vertical SaaS Foundations",
+        timeframe: "2023 – 2025",
+        description: "Deploying high-impact vertical products (MedERP Pro, DevScale Core) while executing bespoke enterprise platforms.",
+        objectives: [
+          "Establish HIPAA-ready hospital ERP architecture",
+          "Deploy multi-tenant billing & role-based access",
+          "Deliver 100% in-house client platforms with zero technical debt"
+        ],
+        milestones: [
+          "MedERP Pro clinical suite in production",
+          "Standardized Next.js 15 + MongoDB core library"
+        ],
+        badge: "PHASE 01 • ACTIVE FOUNDATION",
+        order: 1
+      },
+      {
+        phaseKey: "phase-02",
+        title: "The Unified Platform Mesh",
+        timeframe: "2026 – 2028",
+        description: "Interconnecting all standalone software products through a universal REST API gateway, shared telemetry, and developer SDKs.",
+        objectives: [
+          "Launch public developer API gateway with sub-25ms response time",
+          "Deploy unified identity & single sign-on across all DevSamp apps",
+          "Expand vertical SaaS into retail POS (FlowPulse) and invoicing"
+        ],
+        milestones: [
+          "Universal Developer Hub live",
+          "Global multi-region edge mesh operational"
+        ],
+        badge: "PHASE 02 • IN PROGRESS",
+        order: 2
+      },
+      {
+        phaseKey: "phase-03",
+        title: "Autonomous Workflow Orchestration",
+        timeframe: "2029 – 2031",
+        description: "Introducing automated event streams, deterministic decision pipelines, and edge-native intelligence across business nodes.",
+        objectives: [
+          "Automate cross-product financial reconciliation and inventory sync",
+          "Deploy zero-configuration developer extensions & plugins",
+          "Establish enterprise SLA pods with automated self-healing clusters"
+        ],
+        milestones: [
+          "Real-time event streaming network",
+          "Automated operational workflows across 500+ enterprises"
+        ],
+        badge: "PHASE 03 • PLANNED",
+        order: 3
+      },
+      {
+        phaseKey: "phase-04",
+        title: "Global Autonomous Operating Layer",
+        timeframe: "2032 – 2035",
+        description: "DevSamp becomes the default decentralized operating layer for next-generation digital businesses worldwide.",
+        objectives: [
+          "Power mission-critical operations across 10+ core industries",
+          "Sub-10ms global edge synchronization",
+          "Fully open-source and modular developer infrastructure"
+        ],
+        milestones: [
+          "Global interconnected technology backbone",
+          "Ecosystem powering millions of daily transactional workflows"
+        ],
+        badge: "PHASE 04 • STRATEGIC DESTINATION",
+        order: 4
+      }
+    ],
+    ecosystemLayers: [
+      {
+        layerName: "DEVSAMP CORE INFRASTRUCTURE",
+        role: "Foundation Layer",
+        description: "Multi-tenant database clusters, edge CDN, global encryption, and session isolation.",
+        components: ["Next.js 15 Hybrid Runtime", "MongoDB Atlas Mesh", "Edge Key-Value Sync", "Zero-Trust RBAC"],
+        icon: "Cpu",
+        order: 1
+      },
+      {
+        layerName: "UNIFIED APPLICATION & API LAYER",
+        role: "Presentation & Integration",
+        description: "Vertical SaaS suites and developer gateways communicating over standardized REST and event webhooks.",
+        components: ["MedERP Pro Suite", "FlowPulse POS", "DevScale Core", "Open REST Gateway"],
+        icon: "Boxes",
+        order: 2
+      },
+      {
+        layerName: "ORGANIZATIONS & TENANCY MESH",
+        role: "Business Execution",
+        description: "Granular enterprise organizations with custom domain routing, SLA retainers, and telemetry streams.",
+        components: ["Hospital Networks", "Fintech Operators", "E-Commerce Brands", "Enterprise Engineering Pods"],
+        icon: "Building2",
+        order: 3
+      },
+      {
+        layerName: "GLOBAL END-USER EXPERIENCES",
+        role: "Interaction Layer",
+        description: "Sub-50ms web interfaces, mobile web PWA clients, and instant offline-first dashboards.",
+        components: ["Doctors & Clinicians", "Store Managers", "Platform Engineers", "End Consumers"],
+        icon: "Users",
+        order: 4
+      }
+    ],
+    pillars: [
+      {
+        title: "Product-First Engineering",
+        shortDescription: "We build and operate production SaaS platforms before offering architecture services to clients.",
+        description: "Every pattern we deploy has been battle-tested on our own revenue-generating software.",
+        icon: "Boxes",
+        metric: "100% In-House",
+        badge: "FOUNDATION",
+        order: 1
+      },
+      {
+        title: "Shared Infrastructure Mesh",
+        shortDescription: "One reliable multi-tenant backbone powering authentication, billing, and webhooks across all apps.",
+        description: "Eliminates duplicate engineering and creates an effortlessly compounding software suite.",
+        icon: "Layers",
+        metric: "Unified Core",
+        badge: "ARCHITECTURE",
+        order: 2
+      },
+      {
+        title: "Open Developer Protocols",
+        shortDescription: "Comprehensive REST APIs, event-driven webhooks, and SDKs for global developers.",
+        description: "Empowering developers to extend, integrate, and automate workflows effortlessly.",
+        icon: "Terminal",
+        metric: "REST & Webhooks",
+        badge: "EXTENSIBILITY",
+        order: 3
+      },
+      {
+        title: "Deterministic Automation",
+        shortDescription: "Sub-50ms automated decision pipelines eliminating manual operational overhead.",
+        description: "Reliable, audit-compliant background workflows that accelerate business velocity.",
+        icon: "Cpu",
+        metric: "<50ms Latency",
+        badge: "EFFICIENCY",
+        order: 4
+      },
+      {
+        title: "SLA-Backed Enterprise Pods",
+        shortDescription: "Direct access to software architects who write code and guarantee system reliability.",
+        description: "Eliminating agency middle-managers and providing dedicated 24/7 technical guardianship.",
+        icon: "ShieldCheck",
+        metric: "99.9% Uptime",
+        badge: "RELIABILITY",
+        order: 5
+      },
+      {
+        title: "Zero Architectural Debt",
+        shortDescription: "Enforcing strict type safety, clean schemas, and instant 60fps Core Web Vitals.",
+        description: "Software engineered as an appreciating asset designed to endure for decades.",
+        icon: "TrendingUp",
+        metric: "10x Scalability",
+        badge: "QUALITY",
+        order: 6
+      }
+    ],
+    productVision: {
+      title: "The Evolution of DevSamp Software",
+      description: "How our software model transitions from custom project development to reusable multi-tenant platforms, specialized vertical SaaS suites, and a self-orchestrating product mesh.",
+      evolutionSteps: [
+        {
+          from: "Isolated Agency Builds",
+          to: "Reusable Architectural Foundations",
+          description: "Transitioning one-off client builds into standardized, hardened Next.js and MongoDB templates.",
+          status: "COMPLETED"
+        },
+        {
+          from: "Fragmented Standalone Tools",
+          to: "Vertical SaaS Flagships (MedERP Pro)",
+          description: "Engineering dedicated, industry-specific SaaS platforms that solve deep operational workflows.",
+          status: "ACTIVE"
+        },
+        {
+          from: "Single-App Deployments",
+          to: "The Interconnected Product Mesh",
+          description: "Unifying all apps under shared authentication, cross-product data sync, and single billing.",
+          status: "IN PROGRESS"
+        },
+        {
+          from: "Manual Business Ops",
+          to: "Autonomous Business Operating Layer",
+          description: "Software that self-reconciles, monitors telemetry, and triggers deterministic actions globally.",
+          status: "2030+ HORIZON"
+        }
+      ]
+    },
+    platformVision: {
+      title: "One Unified Infrastructure Underneath Multiple Vertical Products",
+      description: "Shared core services—including universal authentication, tenant isolation, automated telemetry, global billing, and event webhooks—power every application we ship.",
+      sharedCapabilities: [
+        { name: "Universal Identity & RBAC", description: "Single sign-on, cryptographic JWT cookie sessions, and granular permission scopes.", icon: "Lock" },
+        { name: "Multi-Tenant Isolation", description: "Zero cross-tenant data leakage with automated collection indexing and schema security.", icon: "ShieldCheck" },
+        { name: "Event Mesh & Webhooks", description: "Real-time pub/sub event dispatchers with retry backoff and idempotency guarantees.", icon: "Workflow" },
+        { name: "Global Telemetry & Health", description: "Sub-second error telemetry, runtime vital logging, and automated SLA health alerts.", icon: "Activity" }
+      ]
+    },
+    aiDirection: {
+      title: "Deterministic Autonomous Workflows",
+      description: "We focus on high-precision, low-latency automated intelligence—not gimmicks. Our systems eliminate operational bottlenecks in clinical workflows, inventory forecasting, and financial reconciliation.",
+      focusAreas: [
+        { title: "Clinical & Diagnostic Automation", description: "Automated lab report parsing, diagnostic triage assistance, and patient workflow routing in MedERP Pro.", latencyTarget: "<40ms", icon: "Cpu" },
+        { title: "Smart Inventory & Stock Telemetry", description: "Predictive re-ordering algorithms for multi-branch retail and pharmaceutical warehouses.", latencyTarget: "<25ms", icon: "TrendingUp" },
+        { title: "Automated DevOps & Anomaly Detection", description: "Continuous index monitoring, slow-query tracing, and automated zero-downtime hot patches.", latencyTarget: "Real-time", icon: "Terminal" }
+      ]
+    },
+    developerVision: {
+      title: "An Open Platform for Global Builders",
+      description: "Opening our REST gateways, event webhooks, and modular SDKs so external engineering teams can build custom applications directly on DevSamp infrastructure.",
+      tools: [
+        { name: "Open REST API Gateway", description: "Uniform JSON payloads, rate-limiting, and comprehensive OpenAPI 3.1 documentation.", icon: "Terminal" },
+        { name: "Webhook Dispatcher", description: "Cryptographically signed HTTP POST webhooks with delivery guarantees and replay logs.", icon: "Workflow" },
+        { name: "Type-Safe Client SDKs", description: "Lightweight JavaScript and Node.js SDKs with zero third-party dependencies.", icon: "Code2" },
+        { name: "Starter Architecture Kits", description: "Production boilerplates for Next.js 15, Tailwind, and MongoDB Atlas.", icon: "Boxes" }
+      ]
+    },
+    techDirection: {
+      title: "Next-Decade Engineering Standards",
+      description: "Building on immutable server state, zero-overhead edge streaming, sub-10ms database indexes, and end-to-end type safety.",
+      standards: [
+        { title: "Server-First Next.js 15 & React 19", description: "Zero client-side JS bundle bloat with streaming SSR and Suspense boundaries.", icon: "Cpu", badge: "FRAMEWORK" },
+        { title: "Optimized Mongo Document Index Trees", description: "Compound index structures guaranteeing sub-10ms query times at 10M+ documents.", icon: "Database", badge: "DATA LAYER" },
+        { title: "Instant 60fps & Zero Visual Shift", description: "GPU-accelerated animations, strictly reserved layout boxes, and 100/100 Core Web Vitals.", icon: "Zap", badge: "UI PHYSICS" },
+        { title: "End-to-End Type Safety & RBAC", description: "Strict schema contracts, payload validation, and HTTP-only encrypted session cookies.", icon: "Lock", badge: "SECURITY" }
+      ]
+    },
+    roadmap: [
+      {
+        title: "MedERP Pro Clinical Suite v2.0",
+        category: "Product",
+        timeframe: "Q2 2026",
+        description: "Offline-first clinical synchronization, automated pharmacy billing, and diagnostic PACS integration.",
+        status: "in-progress",
+        public: true,
+        order: 1
+      },
+      {
+        title: "Universal Developer REST Gateway",
+        category: "Developer",
+        timeframe: "Q3 2026",
+        description: "Public API portal with automated API key generation, rate limits, and webhook listeners.",
+        status: "planned",
+        public: true,
+        order: 2
+      },
+      {
+        title: "FlowPulse Multi-Branch Retail POS",
+        category: "Product",
+        timeframe: "Q4 2026",
+        description: "Cloud POS with sub-50ms barcode scanning, thermal printing drivers, and multi-store inventory sync.",
+        status: "planned",
+        public: true,
+        order: 3
+      },
+      {
+        title: "Global Multi-Tenant Edge Mesh",
+        category: "Platform",
+        timeframe: "2027",
+        description: "Decentralized read replicas and global session edge caching for sub-15ms worldwide latency.",
+        status: "future",
+        public: true,
+        order: 4
+      }
+    ],
+    principles: [
+      {
+        title: "Think in Decades, Build for Tomorrow",
+        description: "We make architectural decisions that compound in value over 10+ years rather than taking quick shortcuts.",
+        icon: "Compass",
+        order: 1
+      },
+      {
+        title: "Radical Simplicity Over Complexity",
+        description: "The best systems are readable, modular, and easy to maintain by any senior software engineer.",
+        icon: "Code2",
+        order: 2
+      },
+      {
+        title: "Build What Solves Real Operational Pain",
+        description: "We don't build vaporware or speculative toys. Every tool solves genuine business bottlenecks.",
+        icon: "Target",
+        order: 3
+      },
+      {
+        title: "Uncompromising Quality & 60fps Speed",
+        description: "Every pixel, database query, and animation must be tuned for instantaneous, butter-smooth execution.",
+        icon: "Zap",
+        order: 4
+      }
+    ],
+    futureState: {
+      title: "The DevSamp 2035 Destination",
+      visionDestination: "A global interconnected network of vertical SaaS platforms, engineering pods, and developer nodes operating with 99.99% uptime and zero friction.",
+      coreOutcomes: [
+        { metric: "10+", label: "CORE INDUSTRIES", desc: "Healthcare, retail, finance, supply chain, and education." },
+        { metric: "<10ms", label: "GLOBAL EDGE LATENCY", desc: "Instantaneous state synchronization worldwide." },
+        { metric: "100%", label: "IN-HOUSE PRECISION", desc: "No outsourced debt, zero compromised quality." }
+      ]
+    },
+    faqs: [
+      {
+        question: "What is DevSamp's 10–15 year long-term vision?",
+        answer: "DevSamp is evolving into a comprehensive connected technology ecosystem that combines vertical SaaS products, bespoke engineering pods, and developer infrastructure into a unified global operating layer.",
+        order: 1
+      },
+      {
+        question: "Is DevSamp focused on products or client engineering?",
+        answer: "Both. We are a product-first technology company. We build and operate our own software platforms while also deploying dedicated engineering pods for clients who need custom platforms built to SaaS standards.",
+        order: 2
+      },
+      {
+        question: "What role will AI and automation play in DevSamp's future?",
+        answer: "We focus on deterministic, low-latency workflow automation—such as automated lab report analysis in MedERP Pro, inventory forecasting in FlowPulse, and self-healing system telemetry—without speculative buzzwords.",
+        order: 3
+      },
+      {
+        question: "How can businesses collaborate with DevSamp today?",
+        answer: "Businesses can deploy our existing vertical SaaS products (like MedERP Pro) or commission a dedicated engineering pod to architect custom software platforms.",
+        order: 4
+      }
+    ],
+    finalCta: {
+      title: "Shape the Future of Digital Ecosystems with DevSamp.",
+      description: "Whether you are looking to deploy enterprise software products or partner with an elite engineering pod, we are ready to build with you.",
+      primaryCta: {
+        text: "Explore Software Products",
+        link: "/products"
+      },
+      secondaryCta: {
+        text: "Initialize Conversation",
+        link: "/#contact"
+      }
+    }
+  };
+
+  await VisionPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultVisionData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Vision page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
 }
+
 
 seed().catch((err) => {
   console.error("❌ Seeding failed:", err);

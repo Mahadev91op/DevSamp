@@ -97,11 +97,8 @@ export default async function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
       />
 
-      {/* Global Interactive Elements */}
-      <CustomCursor />
-      <Navbar />
-
       <main className="relative z-10">
+
         
         {/* Section 01: Hero */}
         <AboutHero data={about?.hero} />

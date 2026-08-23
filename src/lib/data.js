@@ -11,6 +11,22 @@ import CaseStudy from "@/models/CaseStudy";
 import HomepageSection from "@/models/HomepageSection";
 import SiteSetting from "@/models/SiteSetting";
 
+// In-Memory Fast Cache with 60s TTL for sub-millisecond responses
+const cacheStore = new Map();
+const CACHE_TTL_MS = 60 * 1000;
+
+function getCachedData(key) {
+  const item = cacheStore.get(key);
+  if (item && Date.now() - item.timestamp < CACHE_TTL_MS) {
+    return item.data;
+  }
+  return null;
+}
+
+function setCachedData(key, data) {
+  cacheStore.set(key, { data, timestamp: Date.now() });
+}
+
 export async function getProjects(limit = 6) {
   try {
     await connectDB();
@@ -194,8 +210,11 @@ export async function getSiteSettings() {
   }
 }
 
-// Unified parallel aggregate for homepage rendering with projections and limits
+// Unified parallel aggregate for homepage rendering with in-memory caching
 export async function getHomepageData() {
+  const cached = getCachedData("homepage_data");
+  if (cached) return cached;
+
   try {
     await connectDB();
     const [
@@ -222,7 +241,7 @@ export async function getHomepageData() {
       Project.find().sort({ createdAt: -1 }).limit(6).lean()
     ]);
 
-    return {
+    const result = {
       sections: JSON.parse(JSON.stringify(sections || [])),
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
       products: JSON.parse(JSON.stringify(products || [])),
@@ -234,6 +253,9 @@ export async function getHomepageData() {
       blogs: JSON.parse(JSON.stringify(blogs || [])),
       projects: JSON.parse(JSON.stringify(projects || []))
     };
+
+    setCachedData("homepage_data", result);
+    return result;
   } catch (error) {
     console.error("Error aggregating homepage data:", error);
     return {
@@ -252,9 +274,12 @@ export async function getHomepageData() {
 }
 
 /**
- * Unified parallel aggregate for About page rendering
+ * Unified parallel aggregate for About page rendering with in-memory caching
  */
 export async function getAboutData() {
+  const cached = getCachedData("about_data");
+  if (cached) return cached;
+
   try {
     await connectDB();
     const AboutPage = (await import("@/models/AboutPage")).default;
@@ -269,7 +294,7 @@ export async function getAboutData() {
       Service.find().sort({ order: 1 }).limit(6).lean(),
     ]);
 
-    return {
+    const result = {
       about: aboutDoc ? JSON.parse(JSON.stringify(aboutDoc)) : null,
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
       teamMembers: JSON.parse(JSON.stringify(teamMembers || [])),
@@ -277,12 +302,56 @@ export async function getAboutData() {
       products: JSON.parse(JSON.stringify(products || [])),
       services: JSON.parse(JSON.stringify(services || [])),
     };
+
+    setCachedData("about_data", result);
+    return result;
   } catch (error) {
     console.error("Error aggregating about page data:", error);
     return {
       about: null,
       settings: null,
       teamMembers: [],
+      industries: [],
+      products: [],
+      services: [],
+    };
+  }
+}
+
+/**
+ * Unified parallel aggregate for Vision page rendering with in-memory caching
+ */
+export async function getVisionData() {
+  const cached = getCachedData("vision_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const VisionPage = (await import("@/models/VisionPage")).default;
+
+    const [visionDoc, settings, industries, products, services] = await Promise.all([
+      VisionPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+    ]);
+
+    const result = {
+      vision: visionDoc ? JSON.parse(JSON.stringify(visionDoc)) : null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+    };
+
+    setCachedData("vision_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating vision page data:", error);
+    return {
+      vision: null,
+      settings: null,
       industries: [],
       products: [],
       services: [],
