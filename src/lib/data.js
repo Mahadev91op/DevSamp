@@ -403,3 +403,51 @@ export async function getMissionData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Ecosystem page rendering with in-memory caching
+ */
+export async function getEcosystemData() {
+  const cached = getCachedData("ecosystem_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const EcosystemPage = (await import("@/models/EcosystemPage")).default;
+    const EcosystemItem = (await import("@/models/EcosystemItem")).default;
+
+    const [ecosystemDoc, settings, ecosystemNodes, industries, products, services, caseStudies] = await Promise.all([
+      EcosystemPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      EcosystemItem.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: 1 }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean(),
+    ]);
+
+    const result = {
+      ecosystem: ecosystemDoc ? JSON.parse(JSON.stringify(ecosystemDoc)) : null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      ecosystemNodes: JSON.parse(JSON.stringify(ecosystemNodes || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+    };
+
+    setCachedData("ecosystem_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating ecosystem page data:", error);
+    return {
+      ecosystem: null,
+      settings: null,
+      ecosystemNodes: [],
+      industries: [],
+      products: [],
+      services: [],
+      caseStudies: [],
+    };
+  }
+}

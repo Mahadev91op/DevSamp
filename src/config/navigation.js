@@ -44,8 +44,8 @@ export const navigationConfig = {
     {
       id: "ecosystem",
       label: "Ecosystem",
-      href: "/#ecosystem",
-      match: "/#ecosystem",
+      href: "/ecosystem",
+      match: ["/ecosystem", "/#ecosystem"],
       enabled: true,
       hasDropdown: true,
       description: "How our software products, services, and cloud nodes interoperate.",
@@ -53,9 +53,10 @@ export const navigationConfig = {
         {
           title: "TOPOLOGY & ARCHITECTURE",
           items: [
-            { label: "Ecosystem Topology", href: "/#ecosystem", description: "Explore the live connected system mesh", icon: "Cpu", enabled: true },
-            { label: "Platform Foundation", href: "/vision#platform", description: "Shared identity, multi-tenant isolation, and event bus", icon: "Layers", enabled: true },
-            { label: "Case Studies", href: "/#case-studies", description: "Verified production delivery and client outcomes", icon: "CheckCircle2", enabled: true },
+            { label: "Ecosystem Overview", href: "/ecosystem", description: "How everything inside DevSamp connects", icon: "Cpu", enabled: true, badge: "CORE" },
+            { label: "Interactive Topology", href: "/ecosystem#topology", description: "Explore the live connected system mesh", icon: "Activity", enabled: true },
+            { label: "Platform Foundation", href: "/ecosystem#foundation", description: "Shared identity, multi-tenant isolation, and event bus", icon: "Layers", enabled: true },
+            { label: "Engagement Flows", href: "/ecosystem#flow", description: "Product, service, and custom hybrid pathways", icon: "Workflow", enabled: true },
           ]
         }
       ]
@@ -166,7 +167,7 @@ export const navigationConfig = {
           { label: "About DevSamp", href: "/about", enabled: true },
           { label: "Our Mission", href: "/mission", enabled: true },
           { label: "Vision 2035", href: "/vision", enabled: true },
-          { label: "Connected Ecosystem", href: "/#ecosystem", enabled: true },
+          { label: "Connected Ecosystem", href: "/ecosystem", enabled: true },
           { label: "Engineering Pods", href: "/about#leadership", enabled: true },
           { label: "Why DevSamp", href: "/#why-devsamp", enabled: true },
         ]

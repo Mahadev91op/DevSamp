@@ -4,6 +4,7 @@ import { SectionRepository } from "@/server/repositories/section.repository";
 import { AboutRepository } from "@/server/repositories/about.repository";
 import { VisionRepository } from "@/server/repositories/vision.repository";
 import { MissionRepository } from "@/server/repositories/mission.repository";
+import { EcosystemPageRepository } from "@/server/repositories/ecosystem-page.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import Industry from "@/models/Industry";
@@ -121,6 +122,40 @@ export class CmsService {
       products: JSON.parse(JSON.stringify(products || [])),
       services: JSON.parse(JSON.stringify(services || [])),
       caseStudies: JSON.parse(JSON.stringify(caseStudies || []))
+    };
+  }
+
+  /**
+   * Aggregate complete Ecosystem page payload
+   */
+  static async getEcosystemPayload() {
+    await connectDB();
+    const [
+      ecosystemDoc,
+      settings,
+      ecosystemNodes,
+      products,
+      services,
+      industries,
+      caseStudies
+    ] = await Promise.all([
+      EcosystemPageRepository.getPublishedEcosystemContent(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      EcosystemRepository.findAll(),
+      ProductRepository.findAll({ limit: 6 }),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean(),
+    ]);
+
+    return {
+      ecosystem: ecosystemDoc || null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      ecosystemNodes: JSON.parse(JSON.stringify(ecosystemNodes || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
     };
   }
 

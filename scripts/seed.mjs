@@ -1418,6 +1418,89 @@ async function seed() {
   );
   console.log("✓ Mission page content verified/seeded.");
 
+  // 9. Seed Ecosystem Page Default Content
+  const EcosystemPageSchema = new mongoose.Schema({}, { strict: false });
+  const EcosystemPage = mongoose.models.EcosystemPage || mongoose.model("EcosystemPage", EcosystemPageSchema);
+
+  const defaultEcosystemData = {
+    key: "main",
+    status: "published",
+    isDemo: false,
+    hero: {
+      eyebrow: "DevSamp Ecosystem",
+      title: "One Interconnected Digital Ecosystem. Multiple Software Capabilities.",
+      description: "DevSamp brings together proprietary software products, bespoke engineering pods, open developer infrastructure, and continuous cloud operations into a unified digital operating layer.",
+      badge: "Enterprise Architecture",
+      statusPill: "4 Live SaaS • Multi-Tenant Mesh • Global Edge SLA",
+      primaryCta: {
+        text: "Explore Architecture",
+        link: "#architecture"
+      },
+      secondaryCta: {
+        text: "View Topology Map",
+        link: "#topology"
+      }
+    },
+    definition: {
+      eyebrow: "Ecosystem Defined",
+      title: "What Does \"Ecosystem\" Mean at DevSamp?",
+      statement: "DevSamp is not an isolated agency building disposable websites. We are an interconnected software ecosystem combining products, custom engineering, and developer platforms.",
+      description: "Every component we engineer—from healthcare ERPs to retail POS systems, custom API gateways, and client engineering pods—is designed to interoperate, share telemetry, and compound long-term business value.",
+      highlight: "Compounding Digital Value"
+    },
+    architecture: {
+      eyebrow: "System Topology",
+      title: "The DevSamp Structural Hierarchy",
+      description: "How data, services, products, and customer applications interact within our unified architectural model."
+    },
+    connections: {
+      eyebrow: "Ecosystem Flywheel",
+      title: "How Every Component Connects & Compounds Value",
+      description: "Customer feedback powers product innovation, custom engineering expands our shared technology base, and shared APIs accelerate every new client deployment."
+    },
+    flow: {
+      eyebrow: "Engagement Paths",
+      title: "Flexible Ways to Engage With the DevSamp Ecosystem",
+      description: "Whether you need an off-the-shelf vertical SaaS platform, a dedicated engineering pod, or a hybrid enterprise solution, our ecosystem adapts to your growth stage."
+    },
+    sharedFoundation: {
+      eyebrow: "Core Platform Engine",
+      title: "Shared Technical Foundation Underneath All Solutions",
+      description: "Instead of reinventing security, authentication, or billing for every product, DevSamp builds on standardized, high-performance infrastructure modules."
+    },
+    developerLayer: {
+      eyebrow: "Developer First",
+      title: "Open APIs, Event Webhooks & Type-Safe SDKs",
+      description: "Engineered from day one for extensibility. Developers can consume REST endpoints, subscribe to real-time events, and integrate with any external stack."
+    },
+    businessGrowth: {
+      eyebrow: "Long-Term Value",
+      title: "An Ecosystem That Compounds With Your Growth",
+      description: "From initial product deployment to multi-tenant scaling and custom feature development, DevSamp stays embedded as your long-term engineering partner."
+    },
+    futureExpansion: {
+      eyebrow: "Ecosystem Horizon",
+      title: "Upcoming Platform Expansion & Roadmap",
+      description: "Strategic future layers being actively engineered to further integrate and automate modern digital workloads."
+    },
+    finalCta: {
+      eyebrow: "Join the Ecosystem",
+      title: "Ready to Build, Scale, or License on the DevSamp Ecosystem?",
+      description: "Partner with software architects who design, operate, and maintain high-performance digital products and custom engineering pods.",
+      primaryText: "Initialize Discovery Pod",
+      primaryLink: "/#contact",
+      secondaryText: "Explore SaaS Products",
+      secondaryLink: "/products"
+    }
+  };
+
+  await EcosystemPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultEcosystemData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Ecosystem page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
