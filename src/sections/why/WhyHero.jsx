@@ -32,7 +32,7 @@ const WhyHero = ({ data = null }) => {
   };
 
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center bg-transparent overflow-hidden pt-24 pb-12 md:pt-28 md:pb-16 border-b border-slate-200/60">
+    <section className="relative w-full min-h-[100dvh] flex items-center justify-center bg-transparent overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 border-b border-slate-200/60">
       
       {/* Blueprint grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />

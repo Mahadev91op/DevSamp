@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import * as LucideIcons from "lucide-react";
 import { 
@@ -37,10 +36,8 @@ export default async function ServicesPage() {
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50/50 text-slate-900">
-      <Navbar />
-
       {/* Hero Header */}
-      <section className="pt-32 pb-14 md:pt-40 md:pb-20 border-b border-slate-200/70 bg-white relative overflow-hidden">
+      <section className="pt-28 pb-16 md:pt-36 md:pb-24 border-b border-slate-200/70 bg-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
         
         <div className="ecosystem-container relative z-10">
