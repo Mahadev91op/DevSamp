@@ -578,3 +578,51 @@ export async function getServicesPageData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Industries page rendering with in-memory caching
+ */
+export async function getIndustriesPageData() {
+  const cached = getCachedData("industries_page_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const IndustriesPage = (await import("@/models/IndustriesPage")).default;
+    const Industry = (await import("@/models/Industry")).default;
+    const Product = (await import("@/models/Product")).default;
+    const Service = (await import("@/models/Service")).default;
+    const CaseStudy = (await import("@/models/CaseStudy")).default;
+
+    const [pageDoc, industries, products, services, caseStudies, settings] = await Promise.all([
+      IndustriesPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: -1 }).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    const result = {
+      industriesPage: pageDoc ? JSON.parse(JSON.stringify(pageDoc)) : null,
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+    };
+
+    setCachedData("industries_page_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating Industries page data:", error);
+    return {
+      industriesPage: null,
+      industries: [],
+      products: [],
+      services: [],
+      caseStudies: [],
+      settings: null,
+    };
+  }
+}

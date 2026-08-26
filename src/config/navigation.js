@@ -84,8 +84,8 @@ export const navigationConfig = {
     {
       id: "services",
       label: "Services",
-      href: "/#services",
-      match: "/services",
+      href: "/services",
+      match: ["/services", "/#services"],
       enabled: true,
       hasDropdown: true,
       description: "Dedicated engineering pods building custom high-scale platforms.",
@@ -93,10 +93,10 @@ export const navigationConfig = {
         {
           title: "CORE CAPABILITIES",
           items: [
-            { label: "Services Overview", href: "/#services", description: "Explore our engineering capabilities", icon: "Layers", enabled: true },
-            { label: "Fullstack Web & SaaS", href: "/#services", description: "Next.js 15, Node.js, and MongoDB architectures", icon: "Code2", enabled: true },
-            { label: "UI/UX & Design Systems", href: "/#services", description: "60fps interactions and accessible interfaces", icon: "Sparkles", enabled: true },
-            { label: "API & Cloud Architecture", href: "/#services", description: "Multi-tenant event mesh and micro-gateways", icon: "Workflow", enabled: true },
+            { label: "Services Overview", href: "/services", description: "Explore our engineering capabilities", icon: "Layers", enabled: true, badge: "SERVICES" },
+            { label: "Fullstack Web & SaaS", href: "/services#catalog", description: "Next.js 16, Node.js, and MongoDB architectures", icon: "Code2", enabled: true },
+            { label: "UI/UX & Design Systems", href: "/services#catalog", description: "60fps interactions and accessible interfaces", icon: "Sparkles", enabled: true },
+            { label: "API & Cloud Architecture", href: "/services#catalog", description: "Multi-tenant event mesh and micro-gateways", icon: "Workflow", enabled: true },
           ]
         }
       ]
@@ -104,8 +104,8 @@ export const navigationConfig = {
     {
       id: "industries",
       label: "Industries",
-      href: "/#industries",
-      match: "/#industries",
+      href: "/industries",
+      match: ["/industries", "/#industries"],
       enabled: true,
       hasDropdown: true,
       description: "Tailored software orchestration across specialized sectors.",
@@ -113,10 +113,11 @@ export const navigationConfig = {
         {
           title: "SPECIALIZED DOMAINS",
           items: [
-            { label: "Healthcare & Diagnostics", href: "/#industries", description: "HIPAA-ready clinical hospital systems", icon: "Activity", enabled: true },
-            { label: "Retail & Multi-Branch", href: "/#industries", description: "High-speed offline-first POS & inventory", icon: "Boxes", enabled: true },
-            { label: "Fintech & Enterprise", href: "/#industries", description: "Audited ledgers and multi-tenant billing", icon: "ShieldCheck", enabled: true },
-            { label: "High-Growth Startups", href: "/#industries", description: "Rapid MVP to production-scale SaaS", icon: "Zap", enabled: true },
+            { label: "Industries Overview", href: "/industries", description: "Explore our domain solutions", icon: "Building2", enabled: true, badge: "SOLUTIONS" },
+            { label: "Healthcare & Diagnostics", href: "/industries#catalog", description: "HIPAA-ready clinical hospital systems", icon: "Activity", enabled: true },
+            { label: "Retail & Multi-Branch", href: "/industries#catalog", description: "High-speed offline-first POS & inventory", icon: "Boxes", enabled: true },
+            { label: "Fintech & Enterprise", href: "/industries#catalog", description: "Audited ledgers and multi-tenant billing", icon: "ShieldCheck", enabled: true },
+            { label: "High-Growth Startups", href: "/industries#catalog", description: "Rapid MVP to production-scale SaaS", icon: "Zap", enabled: true },
           ]
         }
       ]

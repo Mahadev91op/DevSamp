@@ -1692,6 +1692,96 @@ async function seed() {
   );
   console.log("✓ Services page content verified/seeded.");
 
+  // 13. Seed Industries Page Default Content
+  const IndustriesPageSchema = new mongoose.Schema({}, { strict: false });
+  const IndustriesPage = mongoose.models.IndustriesPage || mongoose.model("IndustriesPage", IndustriesPageSchema);
+
+  const defaultIndustriesPageData = {
+    key: "main",
+    status: "published",
+    isDemo: false,
+    hero: {
+      eyebrow: "DEVSAMP INDUSTRY SOLUTIONS",
+      title: "Technology Solutions Shaped Around Real Industry Needs",
+      description: "Adapting proprietary software products, bespoke engineering pods, and high-concurrency cloud architectures to the operational demands of specialized industries.",
+      badge: "Domain Engineering",
+      primaryCta: {
+        text: "Explore Industries",
+        link: "#catalog"
+      },
+      secondaryCta: {
+        text: "Discuss Your Sector",
+        link: "/#contact"
+      }
+    },
+    ecosystemIntro: {
+      eyebrow: "DOMAIN ARCHITECTURE",
+      title: "Industry Context + Technical Rigor = Compounding Business Value",
+      description: "We do not believe in one-size-fits-all generic platforms. Every industry solution is tailored to specific data schemas, workflow handoffs, and compliance boundaries."
+    },
+    solutionFramework: {
+      eyebrow: "ENGINEERING FRAMEWORK",
+      title: "Our 7-Stage Domain Adaptation Lifecycle",
+      description: "How our senior architects transform complex industry friction points into resilient, automated software ecosystems."
+    },
+    deliveryApproach: {
+      eyebrow: "DOMAIN DELIVERY",
+      title: "Enterprise Delivery Grounded in Industry Reality",
+      description: "From legacy database refactoring to real-time telemetry streaming and dedicated 24/7 SLA governance."
+    },
+    customSolutionCta: {
+      eyebrow: "CUSTOM SECTOR SCOPING",
+      title: "Don't See Your Industry Listed?",
+      description: "DevSamp specializes in architecting custom database models, API integrations, and intuitive interfaces for novel, emerging, and niche commercial sectors.",
+      primaryText: "Discuss Custom Requirement",
+      primaryLink: "/#contact",
+      secondaryText: "Explore Engineering Services",
+      secondaryLink: "/services"
+    },
+    faqs: [
+      {
+        question: "Which industries does DevSamp currently support?",
+        answer: "DevSamp actively supports Healthcare (Hospital ERP, EHR, OPD telemetry), Financial Tech (Audited ledgers, payment gateways), Retail & POS (Offline-first billing, multi-location stock sync), and Startups / High-Growth SaaS platforms.",
+        category: "Industries",
+        order: 1
+      },
+      {
+        question: "Can DevSamp work with our legacy industry database or software?",
+        answer: "Yes. Our engineering pods routinely integrate with legacy on-premise relational databases, older SOAP/REST endpoints, hardware terminals (scanners, lab analyzers), and third-party accounting systems.",
+        category: "Integration",
+        order: 2
+      },
+      {
+        question: "How do you handle industry regulatory compliance (e.g. HIPAA, PCI DSS)?",
+        answer: "We design every application with zero-trust architectural boundaries: encrypted data-at-rest (AES-256), encrypted in-transit (TLS 1.3), immutable action logs, strict role-based access control (RBAC), and automated penetration test suites.",
+        category: "Compliance",
+        order: 3
+      },
+      {
+        question: "Can we combine a DevSamp SaaS product with custom industry development?",
+        answer: "Yes. We frequently deploy a core platform like MedERP Pro or DevScale Core and dispatch a dedicated engineering pod to build custom localized modules, proprietary insurance connectors, or bespoke management dashboards.",
+        category: "Hybrid",
+        order: 4
+      }
+    ],
+    finalCta: {
+      eyebrow: "PARTNER WITH DEVSAMP",
+      title: "Let's Build Around Your Business Context",
+      description: "Partner with an engineering team that understands real-world operational friction, data security, and long-term maintainability.",
+      primaryText: "Start an Industry Project",
+      primaryLink: "/#contact",
+      secondaryText: "Explore Software Products",
+      secondaryLink: "/products"
+    }
+  };
+
+  await IndustriesPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultIndustriesPageData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Industries page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
