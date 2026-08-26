@@ -17,7 +17,7 @@ export const navigationConfig = {
       id: "about",
       label: "About",
       href: "/about",
-      match: ["/about", "/vision", "/mission"],
+      match: ["/about", "/vision", "/mission", "/why-devsamp"],
       enabled: true,
       hasDropdown: true,
       description: "Company history, foundational engineering, and long-term vision.",
@@ -28,7 +28,7 @@ export const navigationConfig = {
             { label: "About DevSamp", href: "/about", description: "Who we are and our engineering foundations", icon: "Info", enabled: true },
             { label: "Our Mission", href: "/mission", description: "What we build today and operational purpose", icon: "Target", enabled: true, badge: "CORE" },
             { label: "Vision 2035", href: "/vision", description: "Where we are going over the next 10–15 years", icon: "Compass", enabled: true, badge: "2035" },
-            { label: "Why DevSamp", href: "/#why-devsamp", description: "Architectural advantages and 100% in-house craft", icon: "ShieldCheck", enabled: true },
+            { label: "Why DevSamp", href: "/why-devsamp", description: "Architectural advantages and 100% in-house craft", icon: "ShieldCheck", enabled: true, badge: "ADVANTAGE" },
           ]
         },
         {
@@ -169,7 +169,7 @@ export const navigationConfig = {
           { label: "Vision 2035", href: "/vision", enabled: true },
           { label: "Connected Ecosystem", href: "/ecosystem", enabled: true },
           { label: "Engineering Pods", href: "/about#leadership", enabled: true },
-          { label: "Why DevSamp", href: "/#why-devsamp", enabled: true },
+          { label: "Why DevSamp", href: "/why-devsamp", enabled: true },
         ]
       },
       {

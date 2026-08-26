@@ -5,6 +5,7 @@ import { AboutRepository } from "@/server/repositories/about.repository";
 import { VisionRepository } from "@/server/repositories/vision.repository";
 import { MissionRepository } from "@/server/repositories/mission.repository";
 import { EcosystemPageRepository } from "@/server/repositories/ecosystem-page.repository";
+import { WhyDevSampRepository } from "@/server/repositories/why-devsamp.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import Industry from "@/models/Industry";
@@ -152,6 +153,37 @@ export class CmsService {
       ecosystem: ecosystemDoc || null,
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
       ecosystemNodes: JSON.parse(JSON.stringify(ecosystemNodes || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+    };
+  }
+
+  /**
+   * Aggregate complete Why DevSamp page payload
+   */
+  static async getWhyDevSampPayload() {
+    await connectDB();
+    const [
+      whyDoc,
+      settings,
+      products,
+      services,
+      industries,
+      caseStudies
+    ] = await Promise.all([
+      WhyDevSampRepository.getPublishedWhyContent(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      ProductRepository.findAll({ limit: 6 }),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean(),
+    ]);
+
+    return {
+      whyData: whyDoc || null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
       products: JSON.parse(JSON.stringify(products || [])),
       services: JSON.parse(JSON.stringify(services || [])),
       industries: JSON.parse(JSON.stringify(industries || [])),

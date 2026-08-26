@@ -1501,6 +1501,47 @@ async function seed() {
   );
   console.log("✓ Ecosystem page content verified/seeded.");
 
+  // 10. Seed Why DevSamp Page Default Content
+  const WhyDevSampPageSchema = new mongoose.Schema({}, { strict: false });
+  const WhyDevSampPage = mongoose.models.WhyDevSampPage || mongoose.model("WhyDevSampPage", WhyDevSampPageSchema);
+
+  const defaultWhyData = {
+    key: "main",
+    status: "published",
+    isDemo: false,
+    hero: {
+      eyebrow: "Why DevSamp",
+      title: "Technology Built Around How Your Business Needs to Grow.",
+      description: "DevSamp is not a traditional agency building throwaway websites. We combine proprietary SaaS products, dedicated engineering pods, and unified cloud operations into a compounding software ecosystem.",
+      badge: "Architectural Advantage",
+      statusPill: "Product-First DNA • In-House Engineering • 24/7 SLA",
+      primaryCta: {
+        text: "Explore the Ecosystem",
+        link: "/ecosystem"
+      },
+      secondaryCta: {
+        text: "Talk to DevSamp",
+        link: "/#contact"
+      }
+    },
+    finalCta: {
+      eyebrow: "Start Building",
+      title: "Ready to Build Something That Grows With You?",
+      description: "Partner with a software engineering team that designs, builds, and operates high-performance digital products and dedicated engineering pods with zero architectural debt.",
+      primaryText: "Start a Conversation",
+      primaryLink: "/#contact",
+      secondaryText: "Explore Ecosystem",
+      secondaryLink: "/ecosystem"
+    }
+  };
+
+  await WhyDevSampPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultWhyData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Why DevSamp page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);

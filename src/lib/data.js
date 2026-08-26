@@ -451,3 +451,47 @@ export async function getEcosystemData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Why DevSamp page rendering with in-memory caching
+ */
+export async function getWhyDevSampData() {
+  const cached = getCachedData("why_devsamp_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const WhyDevSampPage = (await import("@/models/WhyDevSampPage")).default;
+
+    const [whyDoc, settings, industries, products, services, caseStudies] = await Promise.all([
+      WhyDevSampPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+      CaseStudy.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(4).lean(),
+    ]);
+
+    const result = {
+      whyData: whyDoc ? JSON.parse(JSON.stringify(whyDoc)) : null,
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+    };
+
+    setCachedData("why_devsamp_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating Why DevSamp page data:", error);
+    return {
+      whyData: null,
+      settings: null,
+      industries: [],
+      products: [],
+      services: [],
+      caseStudies: [],
+    };
+  }
+}
