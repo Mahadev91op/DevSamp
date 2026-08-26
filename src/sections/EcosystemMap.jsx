@@ -161,12 +161,12 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
             {/* Top Toolbar */}
             <div className="flex justify-between items-center border-b border-slate-200/70 pb-3 mb-5">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-mono text-xs font-bold text-slate-700 uppercase tracking-wider">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="font-mono text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">
                   Live Topology Mesh
                 </span>
               </div>
-              <span className="text-[11px] font-mono text-slate-400 font-bold">
+              <span className="text-xs font-mono text-slate-500 font-bold">
                 Nodes active: {nodes.length}
               </span>
             </div>
@@ -183,21 +183,21 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedNodeId(node.nodeId)}
-                    className={`p-3.5 rounded-2xl border cursor-pointer transition-all duration-300 flex flex-col justify-between h-[115px] select-none min-w-0 ${
+                    className={`p-3.5 rounded-2xl border cursor-pointer transition-all duration-300 flex flex-col justify-between h-[125px] select-none min-w-0 ${
                       isSelected
                         ? "!bg-slate-950 !border-slate-800 shadow-md ring-2 ring-indigo-500/50"
                         : "bg-slate-50/80 border-slate-200 hover:bg-white text-slate-800 hover:border-slate-300 shadow-xs"
                     }`}
                   >
                     <div className="flex justify-between items-start">
-                      <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         isSelected 
                           ? "!bg-indigo-600 !text-white shadow-xs" 
                           : "bg-white text-indigo-600 shadow-xs border border-slate-200"
                       }`}>
-                        <NodeIcon size={15} />
+                        <NodeIcon size={16} />
                       </div>
-                      <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded truncate max-w-[65px] uppercase ${
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded truncate max-w-[80px] uppercase ${
                         isSelected ? "!bg-white/20 !text-white font-extrabold" : "!bg-slate-200/80 !text-slate-700 font-bold"
                       }`}>
                         {node.category}
@@ -205,12 +205,12 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
                     </div>
 
                     <div className="min-w-0">
-                      <h4 className={`text-xs font-black truncate ${
+                      <h4 className={`text-xs sm:text-sm font-black truncate ${
                         isSelected ? "!text-white font-extrabold" : "!text-slate-900"
                       }`}>
                         {node.title}
                       </h4>
-                      <p className={`text-[9px] font-mono font-bold truncate mt-0.5 ${
+                      <p className={`text-[11px] font-mono font-bold truncate mt-0.5 ${
                         isSelected ? "!text-indigo-300 font-extrabold" : "!text-slate-500"
                       }`}>
                         {node.statusBadge || "Active"}
@@ -222,9 +222,9 @@ const EcosystemMap = ({ initialEcosystem = [], sectionData = null }) => {
             </div>
 
             {/* Bottom Telemetry Bar */}
-            <div className="border-t border-slate-200/70 pt-3.5 mt-5 flex flex-col sm:flex-row justify-between items-center text-[11px] font-mono text-slate-400 font-bold gap-2">
-              <span className="flex items-center gap-1.5 text-slate-600">
-                <Workflow size={12} className="text-indigo-600" />
+            <div className="border-t border-slate-200/70 pt-3.5 mt-5 flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-slate-500 font-bold gap-2">
+              <span className="flex items-center gap-1.5 text-slate-700">
+                <Workflow size={13} className="text-indigo-600" />
                 Inter-node latency: &lt;12ms
               </span>
               <span className="text-center sm:text-right">Click nodes above to inspect module specifications</span>

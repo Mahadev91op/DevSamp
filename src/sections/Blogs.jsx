@@ -17,18 +17,18 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
 
   return (
     <section id="blog" className="py-16 md:py-24 bg-white border-b border-slate-200/60 text-slate-900 relative">
-      <div className="ecosystem-container max-w-4xl">
+      <div className="ecosystem-container max-w-5xl">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-14 gap-5 min-w-0">
           <div className="min-w-0">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
-              <Sparkles size={12} /> {badge}
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3">
+              <Sparkles size={13} /> {badge}
             </div>
-            <h2 className="text-fluid-h2 font-black text-slate-950 mb-2 tracking-tight">
+            <h2 className="text-fluid-h2 font-black text-slate-950 mb-2.5 tracking-tight">
               {title}
             </h2>
-            <p className="text-slate-600 text-fluid-body font-normal">
+            <p className="text-slate-600 text-fluid-lead font-normal">
               {description}
             </p>
           </div>
@@ -71,16 +71,16 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
 
                 {/* Git Node tag */}
                 <div className="flex flex-wrap items-center gap-2 mb-2.5 select-none">
-                  <span className="text-[11px] font-mono font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded">
+                  <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded">
                     {commitHash}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400 font-bold flex items-center gap-1">
-                    <GitBranch size={11} /> main
+                  <span className="text-xs font-mono text-slate-500 font-bold flex items-center gap-1">
+                    <GitBranch size={12} /> main
                   </span>
-                  <span className="text-slate-300 text-[10px]">|</span>
-                  <div className="flex items-center gap-1 text-[10px] text-slate-400 font-bold">
-                    <Calendar size={11} />
-                    <span>{new Date(blog.createdAt || Date.now()).toLocaleDateString()}</span>
+                  <span className="text-slate-300 text-xs">|</span>
+                  <div className="flex items-center gap-1 text-xs text-slate-500 font-bold">
+                    <Calendar size={13} />
+                    <span>{blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : "Latest"}</span>
                   </div>
                 </div>
 
@@ -94,7 +94,7 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
                 >
                   <div className="flex flex-col md:flex-row gap-5 min-w-0">
                     {blog.image && (
-                      <div className="w-full md:w-40 h-28 shrink-0 rounded-xl overflow-hidden relative bg-slate-100 border border-slate-200">
+                      <div className="w-full md:w-48 h-32 shrink-0 rounded-xl overflow-hidden relative bg-slate-100 border border-slate-200">
                         <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400" loading="lazy" />
                         <div className="absolute inset-0 bg-slate-950/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           {isYoutube ? <Youtube size={30} className="text-red-500 fill-current" /> : <Instagram size={30} className="text-pink-500" />}
@@ -105,23 +105,23 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
                     <div className="flex flex-col justify-between flex-grow min-w-0">
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-pink-600'}`}>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-pink-600'}`}>
                             {blog.platform === 'youtube' ? 'Video' : 'Social'}
                           </span>
-                          <span className="text-slate-400 text-[10px] font-bold truncate">in &quot;{blog.category || "Updates"}&quot;</span>
+                          <span className="text-slate-500 text-xs font-bold truncate">in &quot;{blog.category || "Updates"}&quot;</span>
                         </div>
                         
-                        <h3 className="text-base md:text-lg font-black text-slate-900 mb-1 group-hover:text-indigo-650 transition-colors line-clamp-1 leading-tight truncate">
+                        <h3 className="text-lg md:text-xl font-black text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1 leading-tight truncate">
                           {blog.title}
                         </h3>
-                        <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed font-normal mb-3">
+                        <p className="text-slate-600 text-xs sm:text-sm line-clamp-2 leading-relaxed font-normal mb-3">
                           {blog.desc}
                         </p>
                       </div>
 
-                      <div className="text-xs font-bold text-slate-700 flex items-center gap-1 group-hover:gap-1.5 group-hover:text-indigo-600 transition-all select-none">
+                      <div className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1 group-hover:gap-1.5 group-hover:text-indigo-600 transition-all select-none">
                         <span>{isYoutube ? 'Run Media Player' : 'Inspect Source Post'}</span>
-                        <ExternalLink size={12} className="text-indigo-600 shrink-0"/>
+                        <ExternalLink size={13} className="text-indigo-600 shrink-0"/>
                       </div>
                     </div>
                   </div>

@@ -81,17 +81,17 @@ const Pricing = ({ initialPlans = [] }) => {
       <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="ecosystem-container relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-55 border border-indigo-100 text-[10px] font-bold text-indigo-650 uppercase tracking-widest mb-3">
-            Budget Control
+        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3">
+            <Sparkles size={13} /> Budget Control
           </div>
-          <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">
-            Simple, Transparent <span className="text-indigo-650 font-extrabold">Pricing</span>
+          <h2 className="text-fluid-h2 font-black mb-3.5 tracking-tight leading-tight text-slate-950">
+            Simple, Transparent <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Pricing</span>
           </h2>
-          <p className="text-slate-500 text-xs md:text-sm mb-8 font-semibold">
+          <p className="text-slate-600 text-fluid-lead font-normal max-w-2xl mx-auto mb-8 leading-relaxed">
             Select an active service blueprint or configure a customized scope using our quote tool.
           </p>
 
@@ -116,7 +116,7 @@ const Pricing = ({ initialPlans = [] }) => {
               }`}
             >
               Yearly billing
-              <span className="text-[9px] bg-green-150 text-green-700 px-1.5 py-0.5 rounded-full font-extrabold">
+              <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-extrabold">
                 -20%
               </span>
             </button>
@@ -126,10 +126,10 @@ const Pricing = ({ initialPlans = [] }) => {
           <div className="mt-6 select-none">
             <button
               onClick={() => setShowCompare(true)}
-              className="text-xs font-bold text-indigo-650 hover:text-indigo-850 flex items-center gap-1.5 mx-auto transition-colors cursor-pointer"
+              className="text-xs sm:text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 mx-auto transition-colors cursor-pointer"
               data-cursor="Compare"
             >
-              <HelpCircle size={14} /> Compare Blueprint Specifications
+              <HelpCircle size={15} /> Compare Blueprint Specifications
             </button>
           </div>
         </div>
@@ -156,19 +156,19 @@ const Pricing = ({ initialPlans = [] }) => {
                   data-cursor="Plan"
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-[9px] font-bold tracking-widest uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
-                      <Sparkles size={10} /> Popular Choice
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-xs font-bold tracking-wider uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
+                      <Sparkles size={12} /> Popular Choice
                     </div>
                   )}
 
                   {/* Receipt Header Mockup */}
                   <div className="border-b border-slate-200/80 pb-4 mb-4 select-none">
-                    <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 font-bold mb-1">
-                      <span className="flex items-center gap-1"><Receipt size={10} /> DEVSAMP_BILL</span>
+                    <div className="flex items-center justify-between text-xs font-mono text-slate-400 font-bold mb-1">
+                      <span className="flex items-center gap-1"><Receipt size={12} /> DEVSAMP_BILL</span>
                       <span>#00{index+1}</span>
                     </div>
-                    <h3 className="text-lg font-black text-slate-800">{plan.name}</h3>
-                    <p className="text-[10px] text-slate-450 font-semibold line-clamp-2 mt-1 min-h-[30px] leading-relaxed">
+                    <h3 className="text-xl md:text-2xl font-black text-slate-900">{plan.name}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 font-medium line-clamp-2 mt-1 min-h-[36px] leading-relaxed">
                       {plan.desc}
                     </p>
                   </div>
@@ -201,21 +201,21 @@ const Pricing = ({ initialPlans = [] }) => {
                     {plan.features.map((feature, i) => (
                       <div key={i} className="flex items-start gap-2.5">
                         <div className={`p-0.5 rounded-full shrink-0 mt-0.5 ${
-                          plan.popular ? "bg-indigo-55 text-indigo-600" : "bg-slate-100 text-slate-600"
+                          plan.popular ? "bg-indigo-50 text-indigo-600" : "bg-slate-100 text-slate-600"
                         }`}>
                           <CheckmarkIcon className="w-3.5 h-3.5" />
                         </div>
-                        <span className="text-[11px] md:text-xs text-slate-650 font-bold leading-normal">
+                        <span className="text-xs sm:text-sm text-slate-700 font-semibold leading-normal">
                           {feature}
                         </span>
                       </div>
                     ))}
                     {plan.missing && plan.missing.map((feature, i) => (
-                      <div key={`miss-${i}`} className="flex items-start gap-2.5 opacity-35">
+                      <div key={`miss-${i}`} className="flex items-start gap-2.5 opacity-40">
                         <div className="p-0.5 rounded-full bg-slate-50 text-slate-400 shrink-0 mt-0.5">
                           <X size={12} strokeWidth={3} />
                         </div>
-                        <span className="text-[11px] md:text-xs text-slate-400 line-through">
+                        <span className="text-xs sm:text-sm text-slate-400 line-through">
                           {feature}
                         </span>
                       </div>

@@ -83,6 +83,13 @@ const Navbar = () => {
     router.push("/login");
   };
 
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setActiveDropdown(null);
+    setIsMobileOpen(false);
+  }
+
   // Scroll detection
   useEffect(() => {
     let active = false;
@@ -96,12 +103,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Close menus on route change
-  useEffect(() => {
-    setActiveDropdown(null);
-    setIsMobileOpen(false);
-  }, [pathname]);
 
   // Click outside & Escape key listeners
   useEffect(() => {

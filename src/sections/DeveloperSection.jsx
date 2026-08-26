@@ -81,9 +81,9 @@ const DeveloperSection = ({ sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-xs font-bold text-purple-700 uppercase tracking-widest"
             >
-              <Terminal size={12} /> {badge}
+              <Terminal size={13} /> {badge}
             </motion.div>
 
             <motion.h2 
@@ -101,13 +101,13 @@ const DeveloperSection = ({ sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-              className="text-slate-600 text-fluid-body font-normal leading-relaxed"
+              className="text-slate-600 text-fluid-lead font-normal leading-relaxed"
             >
               {description}
             </motion.p>
 
             {/* Developer feature points */}
-            <div className="space-y-3 pt-1">
+            <div className="space-y-3.5 pt-1">
               {[
                 { icon: Key, title: "Standardized Auth & RBAC", desc: "JWT + API tokens with granular permission scopes." },
                 { icon: Webhook, title: "Universal Event Webhooks", desc: "Real-time dispatch on product, billing, and system events." },
@@ -115,13 +115,13 @@ const DeveloperSection = ({ sectionData = null }) => {
               ].map((item, idx) => {
                 const ItemIcon = item.icon;
                 return (
-                  <div key={idx} className="flex items-start gap-3 bg-white border border-slate-200/90 p-3.5 rounded-2xl shadow-xs min-w-0">
-                    <div className="p-2 rounded-xl bg-purple-50 text-purple-600 shrink-0">
-                      <ItemIcon size={16} />
+                  <div key={idx} className="flex items-start gap-3.5 bg-white border border-slate-200/90 p-4 rounded-2xl shadow-xs min-w-0">
+                    <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 shrink-0">
+                      <ItemIcon size={18} />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-xs font-black text-slate-900 truncate">{item.title}</h4>
-                      <p className="text-slate-500 text-[11px] font-normal leading-normal mt-0.5">{item.desc}</p>
+                      <h4 className="text-sm sm:text-base font-black text-slate-900 truncate">{item.title}</h4>
+                      <p className="text-slate-600 text-xs sm:text-sm font-normal leading-relaxed mt-0.5">{item.desc}</p>
                     </div>
                   </div>
                 );

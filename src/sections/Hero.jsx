@@ -244,32 +244,32 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-            className="lg:col-span-5 bg-slate-950 text-slate-200 rounded-3xl border border-white/15 shadow-2xl p-5 font-mono text-xs flex flex-col justify-between h-[430px] min-h-[430px] max-h-[430px] relative overflow-hidden shrink-0"
+            className="lg:col-span-5 bg-slate-950 text-slate-200 rounded-3xl border border-white/15 shadow-2xl p-5 sm:p-6 font-mono text-xs flex flex-col justify-between h-[460px] min-h-[460px] max-h-[460px] relative overflow-hidden shrink-0"
           >
             {/* Ambient inner glow */}
-            <div className="absolute top-0 right-0 w-44 h-44 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
 
             {/* Top Bar */}
             <div className="shrink-0">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3.5">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-3.5">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
                     <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
                     <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
                   </div>
-                  <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider pl-1.5">
+                  <span className="text-xs text-slate-400 font-bold uppercase tracking-wider pl-1.5">
                     devsamp://telemetry-hud
                   </span>
                 </div>
 
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+                <span className="text-xs px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
                   LIVE MESH
                 </span>
               </div>
 
               {/* 4 Interactive Telemetry Nodes Grid */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
+              <div className="grid grid-cols-2 gap-2.5 mb-3">
                 {telemetryNodes.map((node) => {
                   const NodeIcon = node.icon;
                   const isSelected = activeNode === node.id;
@@ -278,17 +278,17 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                     <button
                       key={node.id}
                       onClick={() => setActiveNode(node.id)}
-                      className={`p-2.5 rounded-2xl border text-left transition-all duration-200 relative overflow-hidden cursor-pointer ${
+                      className={`p-3 rounded-2xl border text-left transition-all duration-200 relative overflow-hidden cursor-pointer ${
                         isSelected
                           ? "bg-white/15 border-indigo-400 shadow-md shadow-indigo-500/20"
                           : "bg-white/5 border-white/10 hover:border-white/20 text-slate-300"
                       }`}
                     >
-                      <div className="flex justify-between items-start mb-1">
-                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white bg-gradient-to-tr ${node.color} shadow-xs`}>
-                          <NodeIcon size={13} />
+                      <div className="flex justify-between items-start mb-1.5">
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-white bg-gradient-to-tr ${node.color} shadow-xs`}>
+                          <NodeIcon size={14} />
                         </div>
-                        <span className="text-[9px] font-bold text-slate-400">
+                        <span className="text-[10px] font-bold text-slate-400">
                           {node.status}
                         </span>
                       </div>
@@ -302,8 +302,8 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             </div>
 
             {/* Fixed-Height Console Output Screen */}
-            <div className="bg-black/75 rounded-2xl border border-white/10 p-3 h-[135px] min-h-[135px] max-h-[135px] text-[11px] space-y-1 leading-relaxed text-slate-300 font-mono overflow-y-auto scrollbar-none shrink-0">
-              <div className="flex justify-between text-[10px] text-slate-500 font-bold border-b border-white/10 pb-1 mb-1">
+            <div className="bg-black/75 rounded-2xl border border-white/10 p-3.5 h-[145px] min-h-[145px] max-h-[145px] text-xs space-y-1.5 leading-relaxed text-slate-300 font-mono overflow-y-auto scrollbar-none shrink-0">
+              <div className="flex justify-between text-[11px] text-slate-500 font-bold border-b border-white/10 pb-1 mb-1">
                 <span>ACTIVE NODE: {activeNode.toUpperCase()}</span>
                 <span>LATENCY: &lt;15ms</span>
               </div>
@@ -315,10 +315,10 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             </div>
 
             {/* Fixed-Height Bottom Pipeline Trigger */}
-            <div className="h-9 border-t border-white/10 pt-2 flex items-center justify-between gap-3 shrink-0">
+            <div className="h-10 border-t border-white/10 pt-2 flex items-center justify-between gap-3 shrink-0">
               {compiling ? (
                 <div className="flex-1 space-y-1">
-                  <div className="flex justify-between text-[10px] text-slate-300 font-bold">
+                  <div className="flex justify-between text-xs text-slate-300 font-bold">
                     <span>Syncing Ecosystem Mesh...</span>
                     <span>{compileProgress}%</span>
                   </div>
@@ -331,12 +331,12 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                 </div>
               ) : (
                 <>
-                  <span className="text-[11px] text-slate-400 font-medium">Sync all 4 nodes in real-time</span>
+                  <span className="text-xs text-slate-400 font-medium">Sync all 4 nodes in real-time</span>
                   <button
                     onClick={triggerFullBuild}
-                    className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-indigo-600/30 cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-indigo-600/30 cursor-pointer"
                   >
-                    <Play size={11} className="fill-current" />
+                    <Play size={12} className="fill-current" />
                     <span>Run Sync Pipeline</span>
                   </button>
                 </>

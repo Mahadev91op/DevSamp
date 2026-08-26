@@ -78,9 +78,9 @@ const Testimonials = ({ initialReviews = [], sectionData = null }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: smoothEase }}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
         >
-          <Sparkles size={12} /> {badge}
+          <Sparkles size={13} /> {badge}
         </motion.div>
         
         <motion.h2 
@@ -92,7 +92,7 @@ const Testimonials = ({ initialReviews = [], sectionData = null }) => {
         >
           {title}
         </motion.h2>
-        <p className="text-slate-600 text-fluid-body font-normal mb-6 max-w-lg mx-auto">
+        <p className="text-slate-600 text-fluid-lead font-normal mb-6 max-w-2xl mx-auto">
           {description}
         </p>
         
@@ -116,27 +116,27 @@ const Testimonials = ({ initialReviews = [], sectionData = null }) => {
         {loopedReviews.map((item, index) => (
           <div
             key={`${item._id}-${index}`}
-            className="flex-shrink-0 w-[85vw] sm:w-[360px] md:w-[400px] p-6 md:p-8 rounded-3xl bg-white border border-slate-200/90 flex flex-col justify-between hover:border-indigo-300 shadow-xs hover:shadow-lg transition-all duration-300 select-none min-w-0"
+            className="flex-shrink-0 w-[85vw] sm:w-[380px] md:w-[420px] p-6 md:p-8 rounded-3xl bg-white border border-slate-200/90 flex flex-col justify-between hover:border-indigo-300 shadow-xs hover:shadow-lg transition-all duration-300 select-none min-w-0"
           >
             <div className="min-w-0">
-              <Quote className="text-indigo-600 mb-3 opacity-50 shrink-0" size={24} />
-              <p className="text-xs sm:text-sm md:text-base text-slate-700 font-normal leading-relaxed mb-5 line-clamp-4">
+              <Quote className="text-indigo-600 mb-3 opacity-50 shrink-0" size={26} />
+              <p className="text-sm sm:text-base text-slate-700 font-normal leading-relaxed mb-5 line-clamp-4">
                 &quot;{item.text}&quot;
               </p>
             </div>
             
-            <div className="flex items-center gap-3 pt-4 border-t border-slate-100 min-w-0">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 bg-slate-100">
+            <div className="flex items-center gap-3.5 pt-4 border-t border-slate-100 min-w-0">
+              <div className="relative w-11 h-11 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 bg-slate-100">
                 <Image 
                   src={item.image || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80"} 
                   alt={item.name} 
                   fill 
-                  sizes="40px"
+                  sizes="44px"
                   className="object-cover" 
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <h4 className="font-bold text-slate-900 text-sm truncate">{item.name}</h4>
+                <h4 className="font-bold text-slate-900 text-sm sm:text-base truncate">{item.name}</h4>
                 <p className="text-xs text-slate-400 font-semibold truncate">{item.role}</p>
               </div>
               <div className="ml-auto flex gap-0.5 shrink-0">

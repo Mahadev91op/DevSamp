@@ -46,17 +46,17 @@ const FinalCTA = ({ sectionData = null, siteSettings = null }) => {
           {/* Background grid */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:2.5rem_2.5rem] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
 
-          <div className="relative z-10 max-w-2xl mx-auto text-center space-y-5 min-w-0">
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-5 min-w-0">
             
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-bold !text-indigo-300 uppercase tracking-widest backdrop-blur-sm">
-              <Sparkles size={12} /> {badge}
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold !text-indigo-300 uppercase tracking-widest backdrop-blur-sm">
+              <Sparkles size={13} /> {badge}
             </div>
 
             <h2 className="text-fluid-h1 font-black tracking-tight leading-[1.14] !text-white">
               {title}
             </h2>
 
-            <p className="!text-slate-200 text-fluid-body font-normal max-w-lg mx-auto leading-relaxed">
+            <p className="!text-slate-200 text-fluid-lead font-normal max-w-2xl mx-auto leading-relaxed">
               {description}
             </p>
 
@@ -67,12 +67,12 @@ const FinalCTA = ({ sectionData = null, siteSettings = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-500 !text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 group cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-500 !text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 group cursor-pointer"
                   data-cursor="Products"
                 >
-                  <Boxes size={16} />
+                  <Boxes size={18} />
                   <span className="!text-white">{primaryCta.text}</span>
-                  <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform shrink-0 !text-white" />
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform shrink-0 !text-white" />
                 </motion.button>
               </Link>
 
@@ -81,10 +81,10 @@ const FinalCTA = ({ sectionData = null, siteSettings = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 !text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 backdrop-blur-sm cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 !text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 backdrop-blur-sm cursor-pointer"
                   data-cursor="Connect"
                 >
-                  <Mail size={16} className="!text-indigo-400" />
+                  <Mail size={18} className="!text-indigo-400" />
                   <span className="!text-white">{secondaryCta.text}</span>
                 </motion.button>
               </Link>

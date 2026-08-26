@@ -152,7 +152,7 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest"
             >
               Get in Touch
             </motion.div>
@@ -174,7 +174,7 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-              className="text-slate-600 text-fluid-body font-normal max-w-md leading-relaxed"
+              className="text-slate-600 text-fluid-lead font-normal max-w-lg leading-relaxed"
             >
               Have a digital idea or design specification? Initiate a connection parameter, and our core developers will compile it.
             </motion.p>
@@ -182,11 +182,11 @@ const Contact = () => {
             <div className="space-y-3.5 pt-1">
                 <div className="flex items-center gap-3 text-slate-705 group">
                     <div className="p-2.5 bg-white rounded-2xl border border-slate-200 text-indigo-600 group-hover:border-indigo-500/50 transition-colors shadow-xs">
-                        <Mail size={16} />
+                        <Mail size={18} />
                     </div>
                     <div>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">SMTP Host Link</p>
-                        <a href={`mailto:devsamp1st@gmail.com?subject=${emailSubject}&body=${emailBody}`} className="text-sm font-bold text-slate-800 hover:text-indigo-600 transition-colors cursor-pointer" data-cursor="Email">
+                        <p className="text-xs text-slate-400 uppercase tracking-wider font-bold">SMTP Host Link</p>
+                        <a href={`mailto:devsamp1st@gmail.com?subject=${emailSubject}&body=${emailBody}`} className="text-sm sm:text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors cursor-pointer" data-cursor="Email">
                             devsamp1st@gmail.com
                         </a>
                     </div>
@@ -194,11 +194,11 @@ const Contact = () => {
 
                 <div onClick={handlePhoneClick} className="flex items-center gap-3 text-slate-705 group cursor-pointer">
                     <div className="p-2.5 bg-white rounded-2xl border border-slate-200 text-purple-600 group-hover:border-purple-500/50 transition-colors shadow-xs">
-                        <Phone size={16} />
+                        <Phone size={18} />
                     </div>
                     <div>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Cellular Hotspot</p>
-                        <p className="text-sm font-bold text-slate-800 hover:text-purple-600 transition-colors" data-cursor="Call">
+                        <p className="text-xs text-slate-400 uppercase tracking-wider font-bold">Cellular Hotspot</p>
+                        <p className="text-sm sm:text-base font-bold text-slate-800 hover:text-purple-600 transition-colors" data-cursor="Call">
                             +91 9330680642
                         </p>
                     </div>
@@ -221,8 +221,8 @@ const Contact = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
                 <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
               </div>
-              <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider">
-                <Code2 size={12} className="text-indigo-600" />
+              <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500 font-bold uppercase tracking-wider">
+                <Code2 size={13} className="text-indigo-600" />
                 <span>project-specs.config.js</span>
               </div>
               <div className="w-8"></div>

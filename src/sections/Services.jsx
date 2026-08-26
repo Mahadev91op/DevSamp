@@ -34,8 +34,8 @@ const WebDevWidget = () => {
             <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
             <span className="w-2 h-2 rounded-full bg-green-500"></span>
           </div>
-          <div className="text-[10px] text-slate-400 mb-1.5">{"// config parameters"}</div>
-          <div className="space-y-1 text-xs">
+          <div className="text-xs text-slate-400 mb-1.5">{"// config parameters"}</div>
+          <div className="space-y-1.5 text-xs">
             <div className="flex justify-between items-center hover:bg-white/10 px-1 py-0.5 rounded cursor-pointer transition-colors" onClick={() => setBtnColor(btnColor === "#4f46e5" ? "#ec4899" : "#4f46e5")}>
               <span>--primary:</span>
               <span className="font-bold text-indigo-400 truncate">{btnColor}</span>
@@ -46,17 +46,17 @@ const WebDevWidget = () => {
             </div>
           </div>
         </div>
-        <div className="text-[9px] text-slate-500 font-bold border-t border-slate-800 pt-1.5 mt-2">
+        <div className="text-[11px] text-slate-400 font-bold border-t border-slate-800 pt-1.5 mt-2">
           Click lines to reload theme
         </div>
       </div>
 
-      <div className="w-[100px] md:w-[130px] bg-white rounded-2xl border border-slate-200 p-3 md:p-4 flex flex-col justify-center items-center gap-2.5 shrink-0 shadow-xs">
-        <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Preview</span>
+      <div className="w-[110px] md:w-[140px] bg-white rounded-2xl border border-slate-200 p-3.5 md:p-4 flex flex-col justify-center items-center gap-2.5 shrink-0 shadow-xs">
+        <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Preview</span>
         <motion.button 
           animate={{ backgroundColor: btnColor, borderRadius: isRounded ? "999px" : "8px" }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="px-3 md:px-4 py-1.5 md:py-2 text-white font-bold text-xs shadow-md shadow-indigo-500/20 truncate"
+          className="px-3.5 md:px-4 py-2 text-white font-bold text-xs sm:text-sm shadow-md shadow-indigo-500/20 truncate"
         >
           DevSamp
         </motion.button>
@@ -71,11 +71,11 @@ const UIUXWidget = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-3 relative justify-between select-none min-w-0">
-      <div className="h-[130px] md:h-[220px] lg:h-auto lg:flex-1 bg-slate-950 rounded-2xl relative overflow-hidden border border-white/10">
+      <div className="h-[140px] md:h-[230px] lg:h-auto lg:flex-1 bg-slate-950 rounded-2xl relative overflow-hidden border border-white/10">
         
         {/* Underlay: Wireframe */}
-        <div className="absolute inset-0 p-4 flex flex-col justify-between font-mono text-[9px] text-indigo-400/50">
-          <div className="border border-dashed border-indigo-500/25 p-1.5 rounded-lg flex justify-between">
+        <div className="absolute inset-0 p-4 flex flex-col justify-between font-mono text-[11px] text-indigo-400/60">
+          <div className="border border-dashed border-indigo-500/30 p-1.5 rounded-lg flex justify-between">
             <span>[HEADER_NAV]</span>
             <div className="flex gap-1.5"><span>[NAV_LINK]</span></div>
           </div>
@@ -83,7 +83,7 @@ const UIUXWidget = () => {
             [HERO_ENGINE_NODE]
           </div>
           <div className="flex gap-1.5">
-            <div className="flex-1 border border-dashed border-indigo-500/25 h-8 rounded-lg"></div>
+            <div className="flex-1 border border-dashed border-indigo-500/30 h-8 rounded-lg"></div>
           </div>
         </div>
 
@@ -92,23 +92,23 @@ const UIUXWidget = () => {
           className="absolute inset-0 p-4 bg-[#0f172a] flex flex-col justify-between transition-all duration-300"
           style={{ opacity: sliderVal / 100 }}
         >
-          <div className="flex justify-between items-center text-white font-bold text-xs">
+          <div className="flex justify-between items-center text-white font-bold text-xs sm:text-sm">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-extrabold">DevSamp</span>
-            <span className="text-slate-400 text-[9px] font-bold uppercase">UI Engine</span>
+            <span className="text-slate-400 text-xs font-bold uppercase">UI Engine</span>
           </div>
           <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 h-20 rounded-xl shadow-lg flex flex-col justify-end p-3 text-white">
-            <h4 className="font-extrabold text-xs leading-tight">Ecosystem Architecture</h4>
-            <p className="text-[9px] text-slate-200">High-fidelity responsive UI</p>
+            <h4 className="font-extrabold text-xs sm:text-sm leading-tight">Ecosystem Architecture</h4>
+            <p className="text-xs text-slate-200">High-fidelity responsive UI</p>
           </div>
           <div className="flex gap-2">
-            <button className="flex-1 bg-white text-slate-900 font-bold text-[9px] py-1.5 rounded-lg shadow-sm">Deploy</button>
+            <button className="flex-1 bg-white text-slate-900 font-bold text-xs py-1.5 rounded-lg shadow-sm">Deploy</button>
           </div>
         </div>
 
       </div>
 
       <div className="space-y-1.5 px-1">
-        <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase">
+        <div className="flex justify-between text-xs font-bold text-slate-500 uppercase">
           <span>Wireframe vs Rendered</span>
           <span className="font-mono text-indigo-600">{sliderVal}%</span>
         </div>
@@ -150,11 +150,11 @@ const PerformanceWidget = () => {
             transition={{ type: "spring", stiffness: 60 }}
           />
         </svg>
-        <span className="absolute font-black text-xl text-slate-900 font-mono">{gauge}</span>
+        <span className="absolute font-black text-2xl text-slate-900 font-mono">{gauge}</span>
       </div>
       <div className="text-center">
-        <span className="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider block">PageSpeed Score</span>
-        <p className="text-xs text-emerald-600 font-bold mt-0.5">✓ Core Web Vitals Passed</p>
+        <span className="text-xs font-extrabold uppercase text-slate-400 tracking-wider block">PageSpeed Score</span>
+        <p className="text-xs sm:text-sm text-emerald-600 font-bold mt-0.5">✓ Core Web Vitals Passed</p>
       </div>
     </div>
   );
@@ -195,9 +195,9 @@ const Services = ({ initialServices = [], sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
             >
-              <Layers size={12} /> {badge}
+              <Layers size={13} /> {badge}
             </motion.div>
             <motion.h2 
               initial={{ opacity: 0, y: 16 }}
@@ -251,17 +251,17 @@ const Services = ({ initialServices = [], sectionData = null }) => {
                   <div className="space-y-3.5 min-w-0">
                     <div className="flex justify-between items-start">
                       <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-indigo-600 shadow-xs shrink-0">
-                        <IconComponent size={20} />
+                        <IconComponent size={22} />
                       </div>
-                      <span className="font-mono text-[11px] font-bold text-slate-400 group-hover:text-indigo-600 transition-colors">
+                      <span className="font-mono text-xs font-bold text-slate-400 group-hover:text-indigo-600 transition-colors">
                         [0{idx + 1} / SERVICE]
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-lg md:text-xl font-black text-slate-900 tracking-tight mb-1.5 group-hover:text-indigo-600 transition-colors truncate">
+                      <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-1.5 group-hover:text-indigo-600 transition-colors truncate">
                         {service.title}
                       </h3>
-                      <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed line-clamp-2 md:line-clamp-3">
+                      <p className="text-slate-600 text-sm sm:text-base font-normal leading-relaxed line-clamp-2 md:line-clamp-3">
                         {service.desc}
                       </p>
                     </div>

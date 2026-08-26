@@ -6,13 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const TopProgressBar = () => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [isNavigating, setIsNavigating] = useState(false);
+  const [prevPath, setPrevPath] = useState(pathname);
 
-  useEffect(() => {
-    // Complete navigation on route change
-    setIsNavigating(false);
-  }, [pathname, searchParams]);
+  if (prevPath !== pathname) {
+    setPrevPath(pathname);
+    if (isNavigating) {
+      setIsNavigating(false);
+    }
+  }
 
   useEffect(() => {
     // Intercept internal link clicks to trigger instant visual feedback

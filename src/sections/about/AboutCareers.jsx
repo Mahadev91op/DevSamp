@@ -15,7 +15,7 @@ const AboutCareers = ({ data = null }) => {
 
   return (
     <section className="py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/70 text-slate-900 relative">
-      <div className="ecosystem-container max-w-4xl">
+      <div className="ecosystem-container max-w-5xl">
         
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -24,15 +24,15 @@ const AboutCareers = ({ data = null }) => {
           transition={{ duration: 0.6, ease: smoothEase }}
           className="bg-white border border-slate-200/90 rounded-3xl p-8 sm:p-10 md:p-12 shadow-xs text-center space-y-5 min-w-0"
         >
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[11px] font-bold text-emerald-700 uppercase tracking-widest">
-            <Briefcase size={12} /> Join Our Engineering Pod
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-bold text-emerald-700 uppercase tracking-widest">
+            <Briefcase size={13} /> Join Our Engineering Pod
           </div>
 
           <h2 className="text-fluid-h2 font-black tracking-tight text-slate-950 leading-tight">
             {title}
           </h2>
 
-          <p className="text-slate-600 text-fluid-body font-normal max-w-xl mx-auto leading-relaxed">
+          <p className="text-slate-600 text-fluid-lead font-normal max-w-2xl mx-auto leading-relaxed">
             {description}
           </p>
 

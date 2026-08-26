@@ -10,17 +10,17 @@ const Preloader = () => {
   useEffect(() => {
     // Only run on the very first page load of the browser session
     try {
-      const hasLoaded = sessionStorage.getItem("devsamp_preloaded");
-      if (hasLoaded) {
-        setIsLoading(false);
+      if (sessionStorage.getItem("devsamp_preloaded")) {
         return;
       }
       sessionStorage.setItem("devsamp_preloaded", "true");
-      setIsLoading(true);
     } catch (e) {
-      setIsLoading(false);
       return;
     }
+
+    const startTimer = setTimeout(() => {
+      setIsLoading(true);
+    }, 0);
 
     // Ultra-fast entrance animation (max 300ms)
     const interval = setInterval(() => {
@@ -37,7 +37,10 @@ const Preloader = () => {
       });
     }, 20);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(startTimer);
+      clearInterval(interval);
+    };
   }, []);
 
   if (!isLoading) return null;

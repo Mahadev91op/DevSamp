@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Users, Sparkles, Code2 } from "lucide-react";
 import { getDirectImageUrl } from "@/lib/image-helper";
 
@@ -47,14 +46,21 @@ const AboutTeam = ({ data = [] }) => {
                   <div className="flex items-center gap-3.5 min-w-0">
                     {imageUrl ? (
                       <div className="w-14 h-14 rounded-2xl overflow-hidden relative border border-slate-200 shadow-xs shrink-0 bg-slate-100">
-                        <Image 
+                        <img 
                           src={imageUrl} 
                           alt={member.name} 
-                          fill 
-                          sizes="56px" 
-                          className="object-cover" 
-                          unoptimized 
+                          className="w-full h-full object-cover" 
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            if (e.currentTarget.nextElementSibling) {
+                              e.currentTarget.nextElementSibling.style.display = 'flex';
+                            }
+                          }}
                         />
+                        <div className="w-full h-full bg-indigo-50 border border-indigo-100 text-indigo-600 hidden items-center justify-center font-bold text-base">
+                          {member.name ? member.name.charAt(0).toUpperCase() : "T"}
+                        </div>
                       </div>
                     ) : (
                       <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-base shrink-0">

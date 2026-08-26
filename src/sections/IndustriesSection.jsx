@@ -69,9 +69,9 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
           >
-            <Sparkles size={12} /> {badge}
+            <Sparkles size={13} /> {badge}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 16 }}
@@ -109,26 +109,26 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
               >
                 <div className="min-w-0">
                   <div className="flex justify-between items-start mb-5">
-                    <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
-                      <Icon size={20} />
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                      <Icon size={22} />
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 uppercase">
+                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 uppercase">
                       {ind.badge || "Industry"}
                     </span>
                   </div>
 
-                  <h3 className="text-base md:text-lg font-black text-slate-900 mb-1.5 group-hover:text-indigo-600 transition-colors truncate">
+                  <h3 className="text-lg md:text-xl font-black text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors truncate">
                     {ind.name}
                   </h3>
                   
-                  <p className="text-slate-500 text-xs leading-relaxed mb-5 font-normal">
+                  <p className="text-slate-600 text-sm leading-relaxed mb-5 font-normal">
                     {ind.summary}
                   </p>
 
                   {/* Use Cases */}
                   {ind.useCases && ind.useCases.length > 0 && (
                     <div className="space-y-1.5 mb-5 pt-3.5 border-t border-slate-100">
-                      <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                      <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">
                         Deployment Scope
                       </span>
                       {ind.useCases.map((useCase, uIdx) => (

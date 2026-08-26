@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { User, Quote, Github, Linkedin, Twitter, Mail, Sparkles, Code2, ArrowUpRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import { getDirectImageUrl } from "@/lib/image-helper";
 
@@ -11,7 +10,7 @@ const defaultFounders = [
   {
     name: "Mahadev Mondal",
     role: "Founder & Lead Architect",
-    image: "https://lh3.googleusercontent.com/d/1CElg2x75dACo8yxN7fL1Ss3nand2W64V",
+    image: "https://drive.google.com/thumbnail?id=1CElg2x75dACo8yxN7fL1Ss3nand2W64V&sz=w1000",
     bio: "Full-stack engineer, systems architect, and product designer passionate about Next.js, multi-tenant cloud ecosystems, and high-performance developer tools. Leading the architectural vision and engineering standards across the DevSamp product ecosystem.",
     quote: "Software should be engineered as an appreciating asset with zero architectural debt, not disposable agency code.",
     expertise: ["Next.js 15 & React 19", "Multi-Tenant Cloud Systems", "API Gateways & Security", "Product Design", "Distributed State"],
@@ -48,7 +47,7 @@ const AboutFounders = ({ data = [] }) => {
 
         {/* Magazine-Style Founder Spotlight Card */}
         {founders.map((founder, idx) => {
-          const imageUrl = getDirectImageUrl(founder.image) || "https://lh3.googleusercontent.com/d/1CElg2x75dACo8yxN7fL1Ss3nand2W64V";
+          const imageUrl = getDirectImageUrl(founder.image) || "https://drive.google.com/thumbnail?id=1CElg2x75dACo8yxN7fL1Ss3nand2W64V&sz=w1000";
 
           return (
             <motion.div
@@ -66,14 +65,21 @@ const AboutFounders = ({ data = [] }) => {
                   <div className="relative">
                     {imageUrl ? (
                       <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden shadow-lg shadow-indigo-600/20 border-4 border-white bg-slate-100 shrink-0">
-                        <Image 
+                        <img 
                           src={imageUrl} 
                           alt={founder.name} 
-                          fill 
-                          sizes="(max-width: 640px) 112px, 128px" 
-                          className="object-cover" 
-                          unoptimized
+                          className="w-full h-full object-cover" 
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            if (e.currentTarget.nextElementSibling) {
+                              e.currentTarget.nextElementSibling.style.display = 'flex';
+                            }
+                          }}
                         />
+                        <div className="w-full h-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 hidden items-center justify-center text-white text-3xl font-black">
+                          {founder.name ? founder.name.charAt(0).toUpperCase() : "M"}
+                        </div>
                       </div>
                     ) : (
                       <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-indigo-600/20 border-4 border-white">

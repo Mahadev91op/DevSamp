@@ -66,7 +66,7 @@ const FAQ = ({ sectionData = null }) => {
       {/* Background Ambience */}
       <div className="absolute right-0 top-0 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="ecosystem-container max-w-3xl relative z-10">
+      <div className="ecosystem-container max-w-5xl relative z-10">
         
         {/* Header */}
         <div className="mb-10 md:mb-14 text-center select-none min-w-0">
@@ -75,16 +75,16 @@ const FAQ = ({ sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
           >
-            <Sparkles size={12} /> {badge}
+            <Sparkles size={13} /> {badge}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
-            className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950"
+            className="text-fluid-h2 font-black mb-3 tracking-tight text-slate-950"
           >
             {title}
           </motion.h2>
@@ -93,7 +93,7 @@ const FAQ = ({ sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-            className="text-slate-600 text-fluid-body font-normal max-w-lg mx-auto"
+            className="text-slate-600 text-fluid-lead font-normal max-w-2xl mx-auto"
           >
             {description}
           </motion.p>
@@ -109,15 +109,15 @@ const FAQ = ({ sectionData = null }) => {
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider truncate">
-              <Terminal size={12} className="text-indigo-600 shrink-0" />
+            <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500 font-bold uppercase tracking-wider truncate">
+              <Terminal size={13} className="text-indigo-600 shrink-0" />
               <span className="truncate">guest@devsamp:~ $ help --ecosystem-faq</span>
             </div>
             <div className="w-6 shrink-0"></div>
           </div>
 
           {/* Terminal Console Panel */}
-          <div className="p-3.5 md:p-5 space-y-2.5 font-mono min-w-0">
+          <div className="p-4 md:p-6 space-y-3 font-mono min-w-0">
             {faqs.map((faq, index) => {
               const isOpen = activeIndex === index;
               return (
@@ -132,25 +132,25 @@ const FAQ = ({ sectionData = null }) => {
                   {/* Command Row */}
                   <div
                     onClick={() => setActiveIndex(isOpen ? null : index)}
-                    className="p-3.5 md:p-4 flex items-center justify-between cursor-pointer select-none min-w-0 gap-3"
+                    className="p-4 md:p-4.5 flex items-center justify-between cursor-pointer select-none min-w-0 gap-3"
                     data-cursor="Query"
                   >
-                    <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2.5 text-sm md:text-base min-w-0 flex-1">
                       <span className="text-indigo-600 font-black shrink-0">$</span>
-                      <span className="text-slate-400 font-bold text-[11px] shrink-0">get faq-{faq.id}</span>
-                      <h3 className={`font-sans font-bold text-xs sm:text-sm transition-colors pl-1 min-w-0 flex-1 truncate ${
+                      <span className="text-slate-400 font-bold text-xs shrink-0">get faq-{faq.id}</span>
+                      <h3 className={`font-sans font-bold text-sm sm:text-base transition-colors pl-1 min-w-0 flex-1 ${
                         isOpen ? "text-indigo-700 font-black" : "text-slate-800 hover:text-slate-950"
                       }`}>
                         {faq.question}
                       </h3>
                     </div>
 
-                    <div className={`p-1 rounded-full border transition-all duration-300 shrink-0 ${
+                    <div className={`p-1.5 rounded-full border transition-all duration-300 shrink-0 ${
                       isOpen 
                         ? "rotate-90 text-indigo-600 border-indigo-200 bg-indigo-50" 
                         : "text-slate-400 border-slate-200 bg-white"
                     }`}>
-                      <ChevronRight size={13} />
+                      <ChevronRight size={14} />
                     </div>
                   </div>
 
@@ -163,11 +163,11 @@ const FAQ = ({ sectionData = null }) => {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 320, damping: 28 }}
                       >
-                        <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-700 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/60 pt-3 bg-slate-50/60 rounded-b-2xl min-w-0">
-                          <CornerDownRight size={13} className="text-indigo-600 shrink-0 mt-0.5" />
-                          <div className="space-y-0.5 min-w-0 flex-1">
-                            <span className="text-indigo-600 text-[10px] font-bold select-none">[STDOUT] &gt; </span>
-                            <span className="font-sans font-normal text-slate-600 text-xs sm:text-sm pl-0.5 leading-relaxed block">{faq.answer}</span>
+                        <div className="px-5 pb-5 pl-5 md:pl-8 text-sm text-slate-700 leading-relaxed font-mono flex items-start gap-2.5 border-t border-slate-200/60 pt-3.5 bg-slate-50/60 rounded-b-2xl min-w-0">
+                          <CornerDownRight size={14} className="text-indigo-600 shrink-0 mt-0.5" />
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <span className="text-indigo-600 text-xs font-bold select-none">[STDOUT] &gt; </span>
+                            <span className="font-sans font-normal text-slate-600 text-sm sm:text-base pl-0.5 leading-relaxed block">{faq.answer}</span>
                           </div>
                         </div>
                       </motion.div>

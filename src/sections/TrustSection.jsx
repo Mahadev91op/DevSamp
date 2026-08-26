@@ -57,9 +57,9 @@ const TrustSection = ({ sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[11px] font-bold text-emerald-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-bold text-emerald-700 uppercase tracking-widest mb-3"
           >
-            <ShieldCheck size={12} /> {badge}
+            <ShieldCheck size={13} /> {badge}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 16 }}
@@ -82,7 +82,7 @@ const TrustSection = ({ sectionData = null }) => {
         </div>
 
         {/* 4 Trust Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 max-w-5xl mx-auto min-w-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 min-w-0">
           {trustPillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
@@ -96,19 +96,19 @@ const TrustSection = ({ sectionData = null }) => {
               >
                 <div className="min-w-0">
                   <div className="flex justify-between items-start mb-5">
-                    <div className="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
-                      <Icon size={20} />
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                      <Icon size={22} />
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 uppercase">
+                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-700 uppercase">
                       {pillar.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-base md:text-lg font-black text-slate-900 mb-1.5 group-hover:text-emerald-700 transition-colors truncate">
+                  <h3 className="text-lg md:text-xl font-black text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors truncate">
                     {pillar.title}
                   </h3>
                   
-                  <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed">
+                  <p className="text-slate-600 text-sm font-normal leading-relaxed">
                     {pillar.description}
                   </p>
                 </div>
