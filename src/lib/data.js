@@ -495,3 +495,42 @@ export async function getWhyDevSampData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Products page rendering with in-memory caching
+ */
+export async function getProductsPageData() {
+  const cached = getCachedData("products_page_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const ProductPage = (await import("@/models/ProductPage")).default;
+    const Product = (await import("@/models/Product")).default;
+
+    const [pageDoc, products, settings, services] = await Promise.all([
+      ProductPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: -1 }).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+    ]);
+
+    const result = {
+      productPage: pageDoc ? JSON.parse(JSON.stringify(pageDoc)) : null,
+      products: JSON.parse(JSON.stringify(products || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      services: JSON.parse(JSON.stringify(services || [])),
+    };
+
+    setCachedData("products_page_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating Products page data:", error);
+    return {
+      productPage: null,
+      products: [],
+      settings: null,
+      services: [],
+    };
+  }
+}

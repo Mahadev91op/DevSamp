@@ -6,6 +6,7 @@ import { VisionRepository } from "@/server/repositories/vision.repository";
 import { MissionRepository } from "@/server/repositories/mission.repository";
 import { EcosystemPageRepository } from "@/server/repositories/ecosystem-page.repository";
 import { WhyDevSampRepository } from "@/server/repositories/why-devsamp.repository";
+import { ProductPageRepository } from "@/server/repositories/product-page.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import Industry from "@/models/Industry";
@@ -188,6 +189,31 @@ export class CmsService {
       services: JSON.parse(JSON.stringify(services || [])),
       industries: JSON.parse(JSON.stringify(industries || [])),
       caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+    };
+  }
+
+  /**
+   * Aggregate complete Products page payload
+   */
+  static async getProductsPayload() {
+    await connectDB();
+    const [
+      pageDoc,
+      products,
+      settings,
+      services
+    ] = await Promise.all([
+      ProductPageRepository.getPublishedProductPageContent(),
+      ProductRepository.findAll(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+      Service.find().sort({ order: 1 }).limit(6).lean(),
+    ]);
+
+    return {
+      productPage: pageDoc || null,
+      products: JSON.parse(JSON.stringify(products || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+      services: JSON.parse(JSON.stringify(services || [])),
     };
   }
 

@@ -1542,6 +1542,60 @@ async function seed() {
   );
   console.log("✓ Why DevSamp page content verified/seeded.");
 
+  // 11. Seed Products Page Default Content
+  const ProductPageSchema = new mongoose.Schema({}, { strict: false });
+  const ProductPage = mongoose.models.ProductPage || mongoose.model("ProductPage", ProductPageSchema);
+
+  const defaultProductPageData = {
+    key: "main",
+    status: "published",
+    isDemo: false,
+    hero: {
+      eyebrow: "DevSamp Software Suite",
+      title: "Proprietary SaaS Platforms & Enterprise Software Products",
+      description: "Battle-tested vertical software applications engineered with multi-tenant database isolation, automated billing relays, and production-grade SLAs.",
+      badge: "Software Suite",
+      primaryCta: {
+        text: "Explore Products",
+        link: "#catalog"
+      },
+      secondaryCta: {
+        text: "Ecosystem Architecture",
+        link: "/ecosystem"
+      }
+    },
+    ecosystemIntro: {
+      eyebrow: "Ecosystem Integration",
+      title: "How DevSamp Products Connect to the Larger Platform",
+      description: "Our products are not isolated silos. They build on our shared authentication engine, OpenAPI gateways, and event-driven webhook relays—enabling effortless customization by dedicated pods."
+    },
+    customSolutionCta: {
+      eyebrow: "Bespoke Engineering",
+      title: "Need Something Built Specifically for Your Operations?",
+      description: "When off-the-shelf software doesn't fit 100% of your workflow, our dedicated engineering pods can customize our SaaS core or build a bespoke platform from scratch.",
+      primaryText: "Request Custom Pod Scope",
+      primaryLink: "/services",
+      secondaryText: "Schedule Discovery Call",
+      secondaryLink: "/#contact"
+    },
+    finalCta: {
+      eyebrow: "Deploy Today",
+      title: "Ready to Deploy or Customize DevSamp Software?",
+      description: "Explore our live platforms, request custom pod integration, or talk directly with our lead software architects.",
+      primaryText: "Initialize Discovery Pod",
+      primaryLink: "/#contact",
+      secondaryText: "Explore Engineering Services",
+      secondaryLink: "/services"
+    }
+  };
+
+  await ProductPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultProductPageData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Products page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
