@@ -534,3 +534,47 @@ export async function getProductsPageData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Services page rendering with in-memory caching
+ */
+export async function getServicesPageData() {
+  const cached = getCachedData("services_page_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const ServicesPage = (await import("@/models/ServicesPage")).default;
+    const Service = (await import("@/models/Service")).default;
+    const Product = (await import("@/models/Product")).default;
+    const Industry = (await import("@/models/Industry")).default;
+
+    const [pageDoc, services, products, industries, settings] = await Promise.all([
+      ServicesPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      Service.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: -1 }).lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    const result = {
+      servicesPage: pageDoc ? JSON.parse(JSON.stringify(pageDoc)) : null,
+      services: JSON.parse(JSON.stringify(services || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+    };
+
+    setCachedData("services_page_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating Services page data:", error);
+    return {
+      servicesPage: null,
+      services: [],
+      products: [],
+      industries: [],
+      settings: null,
+    };
+  }
+}

@@ -7,6 +7,8 @@ import { MissionRepository } from "@/server/repositories/mission.repository";
 import { EcosystemPageRepository } from "@/server/repositories/ecosystem-page.repository";
 import { WhyDevSampRepository } from "@/server/repositories/why-devsamp.repository";
 import { ProductPageRepository } from "@/server/repositories/product-page.repository";
+import { ServicesPageRepository } from "@/server/repositories/services-page.repository";
+import { ServiceRepository } from "@/server/repositories/service.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import Industry from "@/models/Industry";
@@ -214,6 +216,34 @@ export class CmsService {
       products: JSON.parse(JSON.stringify(products || [])),
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
       services: JSON.parse(JSON.stringify(services || [])),
+    };
+  }
+
+  /**
+   * Aggregate complete Services page payload
+   */
+  static async getServicesPagePayload() {
+    await connectDB();
+    const [
+      servicesPageDoc,
+      services,
+      products,
+      industries,
+      settings
+    ] = await Promise.all([
+      ServicesPageRepository.getPublishedServicesPageContent(),
+      ServiceRepository.findAll(),
+      ProductRepository.findAll({}, { order: 1 }, 6),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    return {
+      servicesPage: servicesPageDoc || null,
+      services: JSON.parse(JSON.stringify(services || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
     };
   }
 

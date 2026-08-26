@@ -1,131 +1,173 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import Footer from "@/components/Footer";
-import * as LucideIcons from "lucide-react";
-import { 
-  Layers, 
-  ArrowLeft, 
-  ArrowRight, 
-  ArrowUpRight, 
-  Cpu, 
-  Code2, 
-  Sparkles, 
-  CheckCircle2, 
-  ShieldCheck 
-} from "lucide-react";
-import { getServices, getProducts, getSiteSettings } from "@/lib/data";
+import { getServicesPageData } from "@/lib/data";
+
+// Modular Section Components
+import ServicesHero from "@/sections/services/ServicesHero";
+import ServicesPhilosophy from "@/sections/services/ServicesPhilosophy";
+import ServicesFeatured from "@/sections/services/ServicesFeatured";
+import ServicesCatalog from "@/sections/services/ServicesCatalog";
+import ServicesCapabilities from "@/sections/services/ServicesCapabilities";
+import ServicesDeliveryApproach from "@/sections/services/ServicesDeliveryApproach";
+import ServicesEcosystemBridge from "@/sections/services/ServicesEcosystemBridge";
+import ServicesTechLayer from "@/sections/services/ServicesTechLayer";
+import ServicesIndustries from "@/sections/services/ServicesIndustries";
+import ServicesEngagementModels from "@/sections/services/ServicesEngagementModels";
+import ServicesCustomCTA from "@/sections/services/ServicesCustomCTA";
+import ServicesFAQ from "@/sections/services/ServicesFAQ";
+import ServicesFinalCTA from "@/sections/services/ServicesFinalCTA";
 
 export const revalidate = 60;
 
 export async function generateMetadata() {
+  const { servicesPage } = await getServicesPageData();
+  const title = servicesPage?.hero?.title
+    ? `${servicesPage.hero.title} | DevSamp Engineering Services`
+    : "Bespoke Full-Stack Engineering & Digital Product Solutions | DevSamp";
+  const description =
+    servicesPage?.hero?.description ||
+    "Dedicated engineering pods building custom Next.js platforms, cloud edge architectures, and high-concurrency database systems with zero architectural debt.";
+
   return {
-    title: "Engineering Services & Capabilities | DevSamp",
-    description: "Bespoke full-stack web development, custom Next.js platforms, cloud edge architectures, and high-concurrency systems engineered by DevSamp.",
+    title,
+    description,
     alternates: {
       canonical: "https://devsamp.online/services",
+    },
+    openGraph: {
+      title,
+      description,
+      url: "https://devsamp.online/services",
+      siteName: "DevSamp Digital Ecosystem",
+      type: "website",
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: "DevSamp Engineering Services",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-image.png"],
     },
   };
 }
 
 export default async function ServicesPage() {
-  const [services, products, settings] = await Promise.all([
-    getServices(),
-    getProducts({}, 6),
-    getSiteSettings()
-  ]);
+  const { servicesPage, services, products, industries, settings } = await getServicesPageData();
+
+  // JSON-LD structured schema
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "DevSamp Engineering & Software Development Services",
+    "provider": {
+      "@type": "Organization",
+      "name": "DevSamp",
+      "url": "https://devsamp.online"
+    },
+    "description": servicesPage?.hero?.description || "Bespoke full-stack engineering, custom SaaS development, database optimization, and cloud architecture.",
+    "serviceType": "Software Engineering",
+    "areaServed": "Global",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "DevSamp Services Catalogue",
+      "itemListElement": (services || []).map((service, index) => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": service.title || service.name,
+          "description": service.desc || service.description,
+          "category": service.category || "Engineering"
+        },
+        "position": index + 1
+      }))
+    }
+  };
 
   return (
-    <main className="min-h-screen flex flex-col bg-slate-50/50 text-slate-900">
-      {/* Hero Header */}
-      <section className="pt-28 pb-16 md:pt-36 md:pb-24 border-b border-slate-200/70 bg-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
-        
-        <div className="ecosystem-container relative z-10">
-          <div className="flex items-center gap-2 mb-4">
-            <Link href="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-950 transition-colors">
-              <ArrowLeft size={14} /> Back to Ecosystem
-            </Link>
-          </div>
+    <main className="min-h-screen flex flex-col bg-transparent text-slate-900 selection:bg-indigo-500/20">
+      
+      {/* Schema Injection */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3.5">
-            <Layers size={12} /> Technology Services
-          </div>
+      {/* 01. Hero Section */}
+      <ServicesHero
+        data={servicesPage?.hero}
+        serviceCount={services?.length || 0}
+      />
 
-          <h1 className="text-fluid-h1 font-black text-slate-900 tracking-tight mb-3">
-            Bespoke Engineering & Digital Solutions
-          </h1>
-          
-          <p className="text-slate-600 text-fluid-body font-semibold max-w-2xl">
-            We architect and deploy custom enterprise web applications, high-throughput microservices, mobile applications, and resilient cloud architectures.
-          </p>
-        </div>
-      </section>
+      {/* 02. Services Philosophy */}
+      <ServicesPhilosophy
+        data={servicesPage?.philosophy}
+      />
 
-      {/* Services Grid */}
-      <section className="py-14 md:py-20 flex-1">
-        <div className="ecosystem-container">
-          
-          {services.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {services.map((service, idx) => {
-                const IconComponent = LucideIcons[service.icon] || Layers;
-                
-                return (
-                  <div
-                    key={service._id || idx}
-                    className="group bg-white border border-slate-200/80 hover:border-indigo-500/40 p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-5">
-                        <div className="p-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 shadow-xs group-hover:scale-105 transition-transform">
-                          <IconComponent size={22} />
-                        </div>
-                        <span className="font-mono text-[9px] font-bold text-slate-400">
-                          [0{idx + 1} / SERVICE]
-                        </span>
-                      </div>
+      {/* 03. Featured Flagship Services (if any featured) */}
+      <ServicesFeatured
+        services={services}
+      />
 
-                      <h3 className="text-xl font-black text-slate-900 tracking-tight mb-2 group-hover:text-indigo-600 transition-colors">
-                        {service.title}
-                      </h3>
-                      
-                      <p className="text-slate-500 text-xs md:text-sm font-semibold leading-relaxed mb-6">
-                        {service.desc}
-                      </p>
-                    </div>
+      {/* 04. Complete Filterable / Searchable Service Catalog */}
+      <ServicesCatalog
+        initialServices={services}
+      />
 
-                    <div className="pt-5 border-t border-slate-100 flex items-center justify-between">
-                      <Link 
-                        href="/#contact"
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 hover:text-indigo-600 transition-colors group/link"
-                      >
-                        <span>Request Custom Scope</span>
-                        <ArrowUpRight size={13} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                      </Link>
-                    </div>
+      {/* 05. Technical Capabilities Overview */}
+      <ServicesCapabilities />
 
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="bg-white border border-slate-200/80 rounded-3xl p-12 text-center max-w-xl mx-auto">
-              <h3 className="text-lg font-black text-slate-800 mb-2">Services in Configuration</h3>
-              <p className="text-slate-500 text-xs font-semibold mb-6">
-                Bespoke services are currently being cataloged. Contact our engineering team for custom architectural quotes.
-              </p>
-              <Link href="/#contact">
-                <button className="px-6 py-2.5 rounded-full bg-slate-950 text-white font-bold text-xs hover:bg-indigo-600 transition-all">
-                  Contact Engineering Pod
-                </button>
-              </Link>
-            </div>
-          )}
+      {/* 06. 7-Step Delivery Process */}
+      <ServicesDeliveryApproach
+        data={servicesPage?.deliveryApproach}
+      />
 
-        </div>
-      </section>
+      {/* 07. Service → Product → Ecosystem Bridge */}
+      <ServicesEcosystemBridge
+        products={products}
+      />
 
-      <Footer products={products} services={services} siteSettings={settings} />
+      {/* 08. Applied Tech Stack & Frameworks */}
+      <ServicesTechLayer />
+
+      {/* 09. Industry Specializations */}
+      <ServicesIndustries
+        industries={industries}
+      />
+
+      {/* 10. Commercial Engagement Models */}
+      <ServicesEngagementModels
+        data={servicesPage?.engagementModels}
+      />
+
+      {/* 11. Custom Architectural Scoping CTA */}
+      <ServicesCustomCTA
+        data={servicesPage?.customSolutionCta}
+      />
+
+      {/* 12. Frequently Asked Questions */}
+      <ServicesFAQ
+        faqs={servicesPage?.faqs}
+      />
+
+      {/* 13. Final Conversion CTA */}
+      <ServicesFinalCTA
+        data={servicesPage?.finalCta}
+      />
+
+      {/* Global Unified Footer */}
+      <Footer
+        products={products}
+        services={services}
+        siteSettings={settings}
+      />
+
     </main>
   );
 }

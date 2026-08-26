@@ -1596,6 +1596,102 @@ async function seed() {
   );
   console.log("✓ Products page content verified/seeded.");
 
+  // 12. Seed Services Page Default Content
+  const ServicesPageSchema = new mongoose.Schema({}, { strict: false });
+  const ServicesPage = mongoose.models.ServicesPage || mongoose.model("ServicesPage", ServicesPageSchema);
+
+  const defaultServicesPageData = {
+    key: "main",
+    status: "published",
+    isDemo: false,
+    hero: {
+      eyebrow: "DEVSAMP ENGINEERING SERVICES",
+      title: "Bespoke Full-Stack Engineering & Digital Product Solutions",
+      description: "Dedicated engineering pods building custom Next.js platforms, cloud edge architectures, and high-concurrency database systems with zero architectural debt.",
+      badge: "Engineering Pods",
+      primaryCta: {
+        text: "Explore Services",
+        link: "#catalog"
+      },
+      secondaryCta: {
+        text: "Schedule Discovery Call",
+        link: "/#contact"
+      }
+    },
+    philosophy: {
+      eyebrow: "ENGINEERING MINDSET",
+      title: "Solving Real Business Friction Through Technical Rigor",
+      description: "We treat custom client codebases with the same engineering discipline as our own SaaS platforms—guaranteeing 100% in-house craft and full IP ownership."
+    },
+    deliveryApproach: {
+      eyebrow: "EXECUTION METHODOLOGY",
+      title: "A Disciplined, 7-Step Delivery Process",
+      description: "From architectural discovery to live production deployment and 24/7 SLA guardianship."
+    },
+    engagementModels: {
+      eyebrow: "COMMERCIAL STRUCTURE",
+      title: "Flexible Engagement Models Tailored to Your Growth",
+      description: "Whether you need a dedicated engineering pod or a milestone-based bespoke platform build."
+    },
+    customSolutionCta: {
+      eyebrow: "TAILORED ARCHITECTURE",
+      title: "Don't See Exactly What You Need?",
+      description: "DevSamp can combine frontend engineering, database partitioning, and API gateways to build custom software around your unique business requirement.",
+      primaryText: "Discuss Your Requirement",
+      primaryLink: "/#contact",
+      secondaryText: "Explore Products",
+      secondaryLink: "/products"
+    },
+    faqs: [
+      {
+        question: "What engineering services does DevSamp specialize in?",
+        answer: "DevSamp specializes in high-throughput fullstack web application development (Next.js & React 19), custom SaaS architecture, complex backend API gateways, database performance tuning (MongoDB / Redis), and healthcare / enterprise ERP engineering.",
+        category: "Services",
+        order: 1
+      },
+      {
+        question: "Can DevSamp work with our existing codebase or legacy systems?",
+        answer: "Yes. Our engineering pods frequently audit, refactor, and modernize legacy monolithic applications into decoupled microservices, optimize slow database queries, or build standalone API middleware to integrate existing infrastructure with modern web frontends.",
+        category: "Architecture",
+        order: 2
+      },
+      {
+        question: "Do we own the full intellectual property (IP) and source code?",
+        answer: "Absolutely 100%. Upon completion and payment of milestones, full intellectual property, source code, database schemas, Figma design systems, and deployment configurations are transferred entirely to your organization with zero vendor lock-in.",
+        category: "Commercial",
+        order: 3
+      },
+      {
+        question: "How do your engineering pods operate on a day-to-day basis?",
+        answer: "Our pods operate in 2-week sprint cycles with daily asynchronous updates, direct private Slack/Discord channel access, sprint backlog prioritization, and weekly live demo sessions with your team.",
+        category: "Delivery",
+        order: 4
+      },
+      {
+        question: "Does DevSamp provide ongoing maintenance and SLA support after launch?",
+        answer: "Yes. We offer continuous SLA retainers covering 24/7 uptime monitoring, critical security patching, library upgrades, quarterly performance audits, and dedicated monthly hours for new feature iterations.",
+        category: "SLA",
+        order: 5
+      }
+    ],
+    finalCta: {
+      eyebrow: "START BUILDING",
+      title: "Have a Technology Requirement?",
+      description: "Partner with an engineering team that builds with high performance, clean documentation, and zero technical debt.",
+      primaryText: "Start a Project",
+      primaryLink: "/#contact",
+      secondaryText: "Explore SaaS Products",
+      secondaryLink: "/products"
+    }
+  };
+
+  await ServicesPage.findOneAndUpdate(
+    { key: "main" },
+    { $setOnInsert: defaultServicesPageData },
+    { upsert: true, new: true }
+  );
+  console.log("✓ Services page content verified/seeded.");
+
   console.log("\n🎉 DevSamp Ecosystem Baseline Seed Completed Successfully!\n");
   await mongoose.disconnect();
   process.exit(0);
