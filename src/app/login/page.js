@@ -104,7 +104,7 @@ export default function LoginPage() {
       
       <div className="flex-1 flex items-center justify-center p-6 pt-32 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -185,7 +185,7 @@ export default function LoginPage() {
                     )}
                 </AnimatePresence>
 
-                <button disabled={loading} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed group" data-cursor="Submit">
+                <button disabled={loading} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed group" data-cursor="Submit">
                     {loading ? <Loader2 className="animate-spin" /> : (
                         authMode === 'login' ? "Sign In" : 
                         authMode === 'signup' ? "Create Account" : "Send Reset Link"

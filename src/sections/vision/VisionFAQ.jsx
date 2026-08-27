@@ -39,7 +39,7 @@ const VisionFAQ = ({ data = [] }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Terminal size={12} /> Diagnostics
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -61,7 +61,7 @@ const VisionFAQ = ({ data = [] }) => {
               <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
             </div>
             <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider truncate">
-              <Terminal size={12} className="text-purple-600 shrink-0" />
+              <Terminal size={12} className="text-indigo-600 shrink-0" />
               <span className="truncate">guest@devsamp:~ $ help --vision-2035</span>
             </div>
             <div className="w-6 shrink-0"></div>
@@ -87,10 +87,10 @@ const VisionFAQ = ({ data = [] }) => {
                     data-cursor="Query"
                   >
                     <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm min-w-0 flex-1">
-                      <span className="text-purple-600 font-black shrink-0">$</span>
+                      <span className="text-indigo-600 font-black shrink-0">$</span>
                       <span className="text-slate-400 font-bold text-[11px] shrink-0">query v-0{index + 1}</span>
                       <h3 className={`font-sans font-bold text-xs sm:text-sm transition-colors pl-1 min-w-0 flex-1 truncate ${
-                        isOpen ? "text-purple-700 font-black" : "text-slate-800 hover:text-slate-950"
+                        isOpen ? "text-indigo-700 font-black" : "text-slate-800 hover:text-slate-950"
                       }`}>
                         {faq.question}
                       </h3>
@@ -98,7 +98,7 @@ const VisionFAQ = ({ data = [] }) => {
 
                     <div className={`p-1 rounded-full border transition-all duration-300 shrink-0 ${
                       isOpen 
-                        ? "rotate-90 text-purple-600 border-purple-200 bg-purple-50" 
+                        ? "rotate-90 text-indigo-600 border-indigo-200 bg-indigo-50" 
                         : "text-slate-400 border-slate-200 bg-white"
                     }`}>
                       <ChevronRight size={13} />
@@ -115,9 +115,9 @@ const VisionFAQ = ({ data = [] }) => {
                         transition={{ type: "spring", stiffness: 320, damping: 28 }}
                       >
                         <div className="px-4 pb-4 pl-4 md:pl-7 text-xs text-slate-700 leading-relaxed font-mono flex items-start gap-2 border-t border-slate-200/60 pt-3 bg-slate-50/60 rounded-b-2xl min-w-0">
-                          <CornerDownRight size={13} className="text-purple-600 shrink-0 mt-0.5" />
+                          <CornerDownRight size={13} className="text-indigo-600 shrink-0 mt-0.5" />
                           <div className="space-y-0.5 min-w-0 flex-1">
-                            <span className="text-purple-600 text-[10px] font-bold select-none">[STDOUT] &gt; </span>
+                            <span className="text-indigo-600 text-[10px] font-bold select-none">[STDOUT] &gt; </span>
                             <span className="font-sans font-normal text-slate-600 text-xs sm:text-sm pl-0.5 leading-relaxed block">{faq.answer}</span>
                           </div>
                         </div>

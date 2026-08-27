@@ -80,7 +80,7 @@ export default async function VisionPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent text-slate-900 font-sans selection:bg-purple-500/20 selection:text-slate-900 overflow-x-hidden">
+    <div className="relative min-h-screen bg-transparent text-slate-900 font-sans selection:bg-indigo-500/20 selection:text-slate-900 overflow-x-hidden">
       
       {/* JSON-LD Schema */}
       <script

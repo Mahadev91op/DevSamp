@@ -28,7 +28,7 @@ const VisionFutureState = ({ data = null }) => {
           transition={{ duration: 0.6, ease: smoothEase }}
           className="bg-white border border-slate-200/90 rounded-3xl p-8 sm:p-10 md:p-12 shadow-xs text-center space-y-6 min-w-0"
         >
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest">
             <Sparkles size={12} /> Strategic Destination
           </div>
 
@@ -44,7 +44,7 @@ const VisionFutureState = ({ data = null }) => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-100 text-center min-w-0">
             {outcomes.map((out, idx) => (
               <div key={idx} className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-1">
-                <div className="text-2xl sm:text-3xl font-black font-mono text-purple-700">
+                <div className="text-2xl sm:text-3xl font-black font-mono text-indigo-700">
                   {out.metric}
                 </div>
                 <div className="text-[11px] font-mono font-bold text-slate-950 uppercase tracking-wider">

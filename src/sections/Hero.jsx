@@ -37,7 +37,7 @@ const telemetryNodes = [
     id: "services", 
     label: "Tech Services", 
     icon: Layers, 
-    color: "from-indigo-600 to-purple-600",
+    color: "from-blue-600 to-indigo-600",
     status: "60fps HMR",
     logs: [
       "> building custom engineering pod...",
@@ -50,7 +50,7 @@ const telemetryNodes = [
     id: "developers", 
     label: "Dev Platform", 
     icon: Terminal, 
-    color: "from-purple-600 to-pink-500",
+    color: "from-indigo-600 to-blue-500",
     status: "REST/Hooks",
     logs: [
       "> validating developer auth gateways...",
@@ -170,7 +170,7 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
               className="text-fluid-display font-black tracking-tight text-slate-950 leading-[1.12]"
             >
               Building, Operating & Scaling{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
                 Digital Ecosystems
               </span>
             </motion.h1>

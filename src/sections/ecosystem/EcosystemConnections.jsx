@@ -30,21 +30,21 @@ const flywheelSteps = [
     label: "Product / Service Match",
     detail: "We evaluate whether a pre-built SaaS product fits or if a dedicated engineering pod is required.",
     icon: Boxes,
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     step: "03",
     label: "Shared Technology Stack",
     detail: "Implementation builds on our battle-tested Next.js 15, Auth, and Multi-tenant database foundation.",
     icon: Cpu,
-    color: "from-purple-600 to-pink-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     step: "04",
     label: "Live Production Operation",
     detail: "Workload runs with automated CI/CD, telemetry monitors, and guaranteed SLA support.",
     icon: GitBranch,
-    color: "from-pink-600 to-rose-600"
+    color: "from-indigo-600 to-blue-500"
   },
   {
     step: "05",

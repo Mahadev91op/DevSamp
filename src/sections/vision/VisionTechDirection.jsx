@@ -24,7 +24,7 @@ const VisionTechDirection = ({ data = null }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Cpu size={12} /> Technical Rigor
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -47,11 +47,11 @@ const VisionTechDirection = ({ data = null }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-purple-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
+                className="bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-indigo-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
               >
                 <div>
                   <div className="flex justify-between items-start mb-4">
-                    <div className="w-11 h-11 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs">
+                    <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs">
                       <Icon size={20} />
                     </div>
                     <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 uppercase">
@@ -70,7 +70,7 @@ const VisionTechDirection = ({ data = null }) => {
 
                 <div className="mt-5 pt-3 border-t border-slate-200/70 flex items-center justify-between text-[10px] font-mono font-bold text-slate-400">
                   <span>STANDARD</span>
-                  <span className="text-purple-700">✓ ENFORCED</span>
+                  <span className="text-indigo-700">✓ ENFORCED</span>
                 </div>
               </motion.div>
             );

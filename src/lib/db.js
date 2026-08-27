@@ -1,11 +1,21 @@
 import mongoose from "mongoose";
-import dns from "node:dns";
 
-// Force Node.js to use Google DNS to resolve MongoDB Atlas SRV records correctly (fixes ECONNREFUSED querySrv bugs)
-try {
-  dns.setServers(["8.8.8.8", "8.8.4.4"]);
-} catch (err) {
-  console.warn("Failed to set custom DNS servers:", err);
+async function setupDNS() {
+  if (typeof window === "undefined") {
+    try {
+      const dns = await import("dns");
+      if (dns.setDefaultResultOrder) {
+        dns.setDefaultResultOrder("ipv4first");
+      }
+      try {
+        dns.setServers(["8.8.8.8", "1.1.1.1", "8.8.4.4"]);
+      } catch (err) {
+        // ignore
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -25,16 +35,33 @@ async function connectDB() {
     return cached.conn;
   }
 
+  await setupDNS();
+
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 10000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then((mongooseInstance) => {
+        return mongooseInstance;
+      })
+      .catch(async (err) => {
+        if (err.code === "ECONNREFUSED" || err.syscall === "querySrv") {
+          try {
+            const dns = await import("dns");
+            dns.setServers(["1.1.1.1", "8.8.8.8", "8.8.4.4"]);
+            return await mongoose.connect(MONGODB_URI, opts);
+          } catch (retryErr) {
+            throw retryErr;
+          }
+        }
+        throw err;
+      });
   }
-  
+
   try {
     cached.conn = await cached.promise;
   } catch (e) {

@@ -53,7 +53,7 @@ const VisionRoadmap = ({ data = [] }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Flag size={12} /> Milestone Timeline
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -73,11 +73,11 @@ const VisionRoadmap = ({ data = [] }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-              className="bg-white border border-slate-200/90 hover:border-purple-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
+              className="bg-white border border-slate-200/90 hover:border-indigo-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
             >
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-xs font-mono font-black px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100 uppercase">
+                  <span className="text-xs font-mono font-black px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 uppercase">
                     {item.timeframe}
                   </span>
                   <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full uppercase border ${
@@ -104,7 +104,7 @@ const VisionRoadmap = ({ data = [] }) => {
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-purple-700 font-bold">
+              <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-indigo-700 font-bold">
                 ✓ SCHEDULED RELEASE
               </div>
             </motion.div>

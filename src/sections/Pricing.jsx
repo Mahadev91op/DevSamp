@@ -79,7 +79,7 @@ const Pricing = ({ initialPlans = [] }) => {
     <section id="pricing" className="py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="ecosystem-container relative z-10">
         
@@ -89,7 +89,7 @@ const Pricing = ({ initialPlans = [] }) => {
             <Sparkles size={13} /> Budget Control
           </div>
           <h2 className="text-fluid-h2 font-black mb-3.5 tracking-tight leading-tight text-slate-950">
-            Simple, Transparent <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Pricing</span>
+            Simple, Transparent <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">Pricing</span>
           </h2>
           <p className="text-slate-600 text-fluid-lead font-normal max-w-2xl mx-auto mb-8 leading-relaxed">
             Select an active service blueprint or configure a customized scope using our quote tool.
@@ -156,7 +156,7 @@ const Pricing = ({ initialPlans = [] }) => {
                   data-cursor="Plan"
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-xs font-bold tracking-wider uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-xs font-bold tracking-wider uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
                       <Sparkles size={12} /> Popular Choice
                     </div>
                   )}
@@ -347,7 +347,7 @@ const Pricing = ({ initialPlans = [] }) => {
 
             <Link 
               href={`/?customQuote=${calculatedQuote}&pages=${pagesCount}&addons=${encodeURIComponent(selectedAddons.join(','))}#contact`}
-              className="w-full mt-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 transition-all text-xs md:text-sm shadow-md"
+              className="w-full mt-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 transition-all text-xs md:text-sm shadow-md"
             >
               Ship Custom Specifications
             </Link>
@@ -446,13 +446,13 @@ const Pricing = ({ initialPlans = [] }) => {
                     </tr>
                     <tr>
                       <td className="p-3 font-bold">Database Integration</td>
-                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-red-500">✗ No</td>
                       <td className="p-3 text-center text-emerald-500">✓ Yes (MongoDB)</td>
                       <td className="p-3 text-center text-emerald-500">✓ Yes (Fully Managed)</td>
                     </tr>
                     <tr>
                       <td className="p-3 font-bold">CMS Panel (Admin dashboard)</td>
-                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-red-500">✗ No</td>
                       <td className="p-3 text-center text-emerald-500">✓ Yes</td>
                       <td className="p-3 text-center text-emerald-500">✓ Yes</td>
                     </tr>
@@ -464,14 +464,14 @@ const Pricing = ({ initialPlans = [] }) => {
                     </tr>
                     <tr>
                       <td className="p-3 font-bold">White Labeling</td>
-                      <td className="p-3 text-center text-rose-500">✗ No</td>
-                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-red-500">✗ No</td>
+                      <td className="p-3 text-center text-red-500">✗ No</td>
                       <td className="p-3 text-center text-emerald-500">✓ Yes</td>
                     </tr>
                     <tr>
                       <td className="p-3 font-bold">Dedicated Manager</td>
-                      <td className="p-3 text-center text-rose-500">✗ No</td>
-                      <td className="p-3 text-center text-rose-500">✗ No</td>
+                      <td className="p-3 text-center text-red-500">✗ No</td>
+                      <td className="p-3 text-center text-red-500">✗ No</td>
                       <td className="p-3 text-center text-emerald-500">✓ Yes</td>
                     </tr>
                   </tbody>

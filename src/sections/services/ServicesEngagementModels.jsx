@@ -54,9 +54,9 @@ const engagementModels = [
     tagline: "Long-Term Health & Scalability",
     desc: "Ongoing maintenance, database optimization, security patches, library upgrades, and priority incident response for live production applications.",
     icon: ShieldCheck,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
-    border: "border-purple-200",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
+    border: "border-indigo-200",
     features: [
       "24/7 uptime & latency monitoring",
       "Database indexing audits",

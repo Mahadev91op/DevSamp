@@ -15,11 +15,11 @@
   /* Border Tokens */
   --border-subtle: rgba(226, 232, 240, 0.95);
   --border-strong: rgba(203, 213, 225, 1);
-  --border-accent: rgba(99, 102, 241, 0.4);
+  --border-accent: rgba(37, 99, 235, 0.4);
 
   /* Semantic Accents */
-  --accent-primary: #4f46e5;
-  --accent-secondary: #06b6d4;
+  --accent-primary: #2563eb;
+  --accent-secondary: #0284c7;
   --accent-success: #10b981;
   --accent-warning: #f59e0b;
 
@@ -33,10 +33,10 @@
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 
-  --color-indigo-650: #493ee1;
-  --color-indigo-655: #463be0;
-  --color-indigo-55: #d4dafe;
-  --color-indigo-150: #b6c3fd;
+  --color-indigo-650: #2563eb;
+  --color-indigo-655: #1d4ed8;
+  --color-indigo-55: #dbeafe;
+  --color-indigo-150: #bfdbfe;
   --color-slate-650: #334155;
   --color-slate-805: #172032;
   --color-slate-850: #141d2e;
@@ -180,12 +180,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+  background: #2563eb;
 }
 
 /* Text Selection Color */
 ::selection {
-  background: rgba(99, 102, 241, 0.25); 
+  background: rgba(37, 99, 235, 0.2); 
   color: #0f172a;
 }
 
@@ -259,8 +259,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-outline:hover {
-  -webkit-text-stroke: 1.5px rgba(99, 102, 241, 0.8);
-  color: rgba(99, 102, 241, 0.05);
+  -webkit-text-stroke: 1.5px rgba(37, 99, 235, 0.8);
+  color: rgba(37, 99, 235, 0.05);
 }
 
 /* Native browser text caret inside input fields and textareas */

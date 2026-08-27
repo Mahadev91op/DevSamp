@@ -103,7 +103,7 @@ const EcosystemDefinition = ({ data = null }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: smoothEase, delay: 0.2 }}
-          className="bg-gradient-to-r from-blue-50/80 via-indigo-50/80 to-purple-50/80 border border-indigo-100 rounded-3xl p-6 sm:p-8 md:p-10 mb-12 shadow-xs"
+          className="bg-gradient-to-r from-blue-50/80 via-indigo-50/80 to-blue-50/80 border border-indigo-100 rounded-3xl p-6 sm:p-8 md:p-10 mb-12 shadow-xs"
         >
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">

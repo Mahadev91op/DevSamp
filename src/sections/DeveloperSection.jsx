@@ -68,7 +68,7 @@ const DeveloperSection = ({ sectionData = null }) => {
     <section id="developers" className="py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/70 text-slate-900 relative overflow-hidden">
       
       {/* Background glow */}
-      <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="ecosystem-container relative z-10">
         
@@ -81,7 +81,7 @@ const DeveloperSection = ({ sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-xs font-bold text-purple-700 uppercase tracking-widest"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest"
             >
               <Terminal size={13} /> {badge}
             </motion.div>
@@ -116,7 +116,7 @@ const DeveloperSection = ({ sectionData = null }) => {
                 const ItemIcon = item.icon;
                 return (
                   <div key={idx} className="flex items-start gap-3.5 bg-white border border-slate-200/90 p-4 rounded-2xl shadow-xs min-w-0">
-                    <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 shrink-0">
+                    <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600 shrink-0">
                       <ItemIcon size={18} />
                     </div>
                     <div className="min-w-0">
@@ -135,7 +135,7 @@ const DeveloperSection = ({ sectionData = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm transition-all shadow-xs flex items-center gap-2 group cursor-pointer"
+                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition-all shadow-xs flex items-center gap-2 group cursor-pointer"
                   data-cursor="Docs"
                 >
                   <span>Build with DevSamp</span>
@@ -173,7 +173,7 @@ const DeveloperSection = ({ sectionData = null }) => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
                       activeTab === tab.id
-                        ? "bg-purple-600 text-white shadow-xs"
+                        ? "bg-indigo-600 text-white shadow-xs"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -194,7 +194,7 @@ const DeveloperSection = ({ sectionData = null }) => {
 
             {/* Code Body */}
             <div className="p-5 md:p-6 overflow-x-auto scrollbar-none">
-              <pre className="text-xs leading-relaxed text-purple-200 font-mono">
+              <pre className="text-xs leading-relaxed text-indigo-200 font-mono">
                 <code>{codeSnippets[activeTab]}</code>
               </pre>
             </div>
@@ -202,7 +202,7 @@ const DeveloperSection = ({ sectionData = null }) => {
             {/* Terminal Footer */}
             <div className="border-t border-white/10 bg-slate-900/50 px-5 py-3 flex justify-between items-center text-[10px] text-slate-400 font-bold select-none">
               <span className="flex items-center gap-1.5 truncate">
-                <Code2 size={12} className="text-purple-400 shrink-0" />
+                <Code2 size={12} className="text-indigo-400 shrink-0" />
                 SDK Version: v2.4.0 (Stable)
               </span>
               <span className="text-emerald-400 shrink-0 font-extrabold">✓ API Gateway: 100% Online</span>

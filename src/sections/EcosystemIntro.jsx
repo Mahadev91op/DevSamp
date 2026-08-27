@@ -27,7 +27,7 @@ const ecosystemPillars = [
     title: "Engineering & Solutions",
     desc: "Bespoke technology architecture, Next.js web systems, custom mobile apps, and high-concurrency database engineering.",
     icon: Layers,
-    gradient: "from-indigo-600 to-purple-600",
+    gradient: "from-blue-600 to-indigo-600",
     badge: "Services Layer",
     points: ["Fullstack Next.js 15", "Cloud DevOps & Edge", "UI/UX System Design"]
   },
@@ -36,7 +36,7 @@ const ecosystemPillars = [
     title: "Developer Platform",
     desc: "Open APIs, webhooks, modular SDKs, and developer tooling empowering teams to build and extend within our platform.",
     icon: Terminal,
-    gradient: "from-purple-600 to-pink-600",
+    gradient: "from-indigo-600 to-blue-500",
     badge: "Platform Layer",
     points: ["REST & GraphQL Gateways", "Event Webhooks", "Zero-config Boilerplates"]
   },

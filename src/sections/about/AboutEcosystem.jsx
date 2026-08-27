@@ -92,7 +92,7 @@ const AboutEcosystem = ({ products = [], services = [] }) => {
           >
             <div className="space-y-4 min-w-0">
               <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs">
                   <Layers size={22} />
                 </div>
                 <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 uppercase">
@@ -127,7 +127,7 @@ const AboutEcosystem = ({ products = [], services = [] }) => {
             <div className="pt-6 mt-6 border-t border-slate-200/80">
               <Link href="/services">
                 <button 
-                  className="w-full py-3 rounded-xl bg-slate-950 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 rounded-xl bg-slate-950 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
                   data-cursor="Services"
                 >
                   <span>Explore Engineering Services</span>

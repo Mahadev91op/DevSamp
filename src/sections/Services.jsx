@@ -22,7 +22,7 @@ const getBentoClasses = (idx) => {
 
 // --- WIDGET 1: Web Dev Live Code Compiler Simulator ---
 const WebDevWidget = () => {
-  const [btnColor, setBtnColor] = useState("#4f46e5");
+  const [btnColor, setBtnColor] = useState("#2563eb");
   const [isRounded, setIsRounded] = useState(true);
 
   return (
@@ -36,13 +36,13 @@ const WebDevWidget = () => {
           </div>
           <div className="text-xs text-slate-400 mb-1.5">{"// config parameters"}</div>
           <div className="space-y-1.5 text-xs">
-            <div className="flex justify-between items-center hover:bg-white/10 px-1 py-0.5 rounded cursor-pointer transition-colors" onClick={() => setBtnColor(btnColor === "#4f46e5" ? "#ec4899" : "#4f46e5")}>
+            <div className="flex justify-between items-center hover:bg-white/10 px-1 py-0.5 rounded cursor-pointer transition-colors" onClick={() => setBtnColor(btnColor === "#2563eb" ? "#0ea5e9" : "#2563eb")}>
               <span>--primary:</span>
-              <span className="font-bold text-indigo-400 truncate">{btnColor}</span>
+              <span className="font-bold text-blue-400 truncate">{btnColor}</span>
             </div>
             <div className="flex justify-between items-center hover:bg-white/10 px-1 py-0.5 rounded cursor-pointer transition-colors" onClick={() => setIsRounded(!isRounded)}>
               <span>--rounded:</span>
-              <span className="font-bold text-pink-400">{isRounded ? "999px" : "8px"}</span>
+              <span className="font-bold text-sky-400">{isRounded ? "999px" : "8px"}</span>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ const UIUXWidget = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-extrabold">DevSamp</span>
             <span className="text-slate-400 text-xs font-bold uppercase">UI Engine</span>
           </div>
-          <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 h-20 rounded-xl shadow-lg flex flex-col justify-end p-3 text-white">
+          <div className="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 h-20 rounded-xl shadow-lg flex flex-col justify-end p-3 text-white">
             <h4 className="font-extrabold text-xs sm:text-sm leading-tight">Ecosystem Architecture</h4>
             <p className="text-xs text-slate-200">High-fidelity responsive UI</p>
           </div>

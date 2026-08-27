@@ -132,7 +132,7 @@ export default function BlogPage() {
         ) : (
           <div className="relative border-l border-slate-200/80 ml-4 md:ml-8 pl-8 md:pl-10 space-y-12">
           
-          <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent pointer-events-none"></div>
+          <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent pointer-events-none"></div>
 
           <AnimatePresence mode="popLayout">
             {filteredBlogs.length > 0 ? (
@@ -183,7 +183,7 @@ export default function BlogPage() {
                               <div className="w-full md:w-44 h-28 shrink-0 rounded-xl overflow-hidden relative bg-slate-100 border border-slate-200/50">
                                 <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                                 <div className="absolute inset-0 bg-slate-950/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                  {isYoutube ? <Youtube size={32} className="text-red-500 fill-current" /> : <Instagram size={32} className="text-pink-500" />}
+                                  {isYoutube ? <Youtube size={32} className="text-red-500 fill-current" /> : <Instagram size={32} className="text-blue-500" />}
                                 </div>
                               </div>
                             )}
@@ -192,7 +192,7 @@ export default function BlogPage() {
                             <div className="flex flex-col justify-between flex-grow">
                               <div>
                                 <div className="flex items-center gap-1.5 mb-1.5">
-                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-pink-600'}`}>
+                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-blue-600'}`}>
                                     {blog.platform === 'youtube' ? 'Video' : 'Social'}
                                   </span>
                                   <span className="text-slate-400 text-[9px] font-bold">in category &quot;{blog.category || "Updates"}&quot;</span>

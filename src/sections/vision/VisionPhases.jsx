@@ -88,7 +88,7 @@ const VisionPhases = ({ data = [] }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Clock size={12} /> 10–15 Year Horizon
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -110,14 +110,14 @@ const VisionPhases = ({ data = [] }) => {
                 onClick={() => setSelectedPhase(idx)}
                 className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between min-w-0 ${
                   isSelected 
-                    ? "bg-slate-950 text-white border-slate-900 shadow-md ring-2 ring-purple-500/20" 
-                    : "bg-slate-50/80 border-slate-200/90 text-slate-700 hover:bg-white hover:border-purple-300 shadow-xs"
+                    ? "bg-slate-950 text-white border-slate-900 shadow-md ring-2 ring-indigo-500/20" 
+                    : "bg-slate-50/80 border-slate-200/90 text-slate-700 hover:bg-white hover:border-indigo-300 shadow-xs"
                 }`}
               >
                 <div>
                   <div className="flex justify-between items-center mb-1.5">
                     <span className={`text-[10px] font-mono font-bold uppercase ${
-                      isSelected ? "text-purple-400" : "text-purple-700"
+                      isSelected ? "text-indigo-400" : "text-indigo-700"
                     }`}>
                       PHASE 0{idx + 1}
                     </span>
@@ -136,7 +136,7 @@ const VisionPhases = ({ data = [] }) => {
                 </div>
 
                 <div className={`mt-3 pt-2 border-t text-[9px] font-mono font-bold flex items-center justify-between ${
-                  isSelected ? "border-white/15 text-purple-300" : "border-slate-200 text-slate-400"
+                  isSelected ? "border-white/15 text-indigo-300" : "border-slate-200 text-slate-400"
                 }`}>
                   <span>STATUS</span>
                   <span>{idx === 0 ? "FOUNDATION" : idx === 1 ? "ACTIVE" : "FUTURE"}</span>
@@ -161,7 +161,7 @@ const VisionPhases = ({ data = [] }) => {
               {/* Left Side: Summary & Description */}
               <div className="lg:col-span-5 space-y-4 min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-purple-100 text-purple-800 border border-purple-200 uppercase">
+                  <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200 uppercase">
                     {current.timeframe}
                   </span>
                   <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-600 uppercase">
@@ -196,9 +196,9 @@ const VisionPhases = ({ data = [] }) => {
               <div className="lg:col-span-7 bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs min-w-0">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <span className="text-xs font-black uppercase text-slate-950 flex items-center gap-1.5">
-                    <Target size={14} className="text-purple-600" /> Architectural Objectives
+                    <Target size={14} className="text-indigo-600" /> Architectural Objectives
                   </span>
-                  <span className="text-[10px] font-mono text-purple-700 font-bold">
+                  <span className="text-[10px] font-mono text-indigo-700 font-bold">
                     SPEC_CONTRACT: {current.phaseKey?.toUpperCase()}
                   </span>
                 </div>
@@ -206,7 +206,7 @@ const VisionPhases = ({ data = [] }) => {
                 <div className="space-y-3">
                   {current.objectives && current.objectives.map((obj, oIdx) => (
                     <div key={oIdx} className="p-3 bg-slate-50 border border-slate-200/70 rounded-xl flex items-start gap-3">
-                      <span className="w-5 h-5 rounded-md bg-purple-50 text-purple-700 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="w-5 h-5 rounded-md bg-indigo-50 text-indigo-700 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                         0{oIdx + 1}
                       </span>
                       <p className="text-slate-800 text-xs sm:text-sm font-semibold leading-relaxed">
@@ -218,7 +218,7 @@ const VisionPhases = ({ data = [] }) => {
 
                 <div className="pt-2 flex items-center justify-between text-[10px] font-mono font-bold text-slate-400">
                   <span>EXECUTION POSTURE: DISCIPLINED</span>
-                  <span className="text-purple-700 font-extrabold">✦ PHASE ALIGNED</span>
+                  <span className="text-indigo-700 font-extrabold">✦ PHASE ALIGNED</span>
                 </div>
               </div>
 

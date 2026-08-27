@@ -49,7 +49,7 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
         <div className="relative border-l border-slate-200/80 ml-3 md:ml-6 pl-6 md:pl-8 space-y-10 min-w-0">
           
           {/* Glowing Branch Line */}
-          <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent pointer-events-none" />
+          <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-blue-600 via-indigo-600 to-transparent pointer-events-none" />
 
           {blogs.slice(0, 3).map((blog, index) => {
             const commitHash = `commit ${blog._id ? blog._id.slice(-7) : "8f9a21"}`;
@@ -97,7 +97,7 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
                       <div className="w-full md:w-48 h-32 shrink-0 rounded-xl overflow-hidden relative bg-slate-100 border border-slate-200">
                         <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400" loading="lazy" />
                         <div className="absolute inset-0 bg-slate-950/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          {isYoutube ? <Youtube size={30} className="text-red-500 fill-current" /> : <Instagram size={30} className="text-pink-500" />}
+                          {isYoutube ? <Youtube size={30} className="text-red-500 fill-current" /> : <Instagram size={30} className="text-blue-500" />}
                         </div>
                       </div>
                     )}
@@ -105,7 +105,7 @@ const Blogs = ({ initialBlogs = [], sectionData = null }) => {
                     <div className="flex flex-col justify-between flex-grow min-w-0">
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-pink-600'}`}>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded text-white uppercase tracking-wider ${isYoutube ? 'bg-red-600' : 'bg-blue-600'}`}>
                             {blog.platform === 'youtube' ? 'Video' : 'Social'}
                           </span>
                           <span className="text-slate-500 text-xs font-bold truncate">in &quot;{blog.category || "Updates"}&quot;</span>

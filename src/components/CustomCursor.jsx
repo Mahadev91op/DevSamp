@@ -94,7 +94,7 @@ const CustomCursor = () => {
       {/* Inner Dot */}
       <div
         ref={dotRef}
-        className="hidden lg:block fixed top-0 left-0 w-2 h-2 bg-indigo-600 rounded-full pointer-events-none z-[9999]"
+        className="hidden lg:block fixed top-0 left-0 w-2 h-2 bg-blue-600 rounded-full pointer-events-none z-[9999]"
         style={{
           willChange: "transform, opacity",
           transform: "translate3d(-100px, -100px, 0)",
@@ -112,9 +112,9 @@ const CustomCursor = () => {
           transform: "translate3d(-100px, -100px, 0)",
           width: isHovering ? "56px" : "32px",
           height: isHovering ? "56px" : "32px",
-          backgroundColor: isHovering ? "rgba(79, 70, 229, 0.95)" : "rgba(79, 70, 229, 0.05)",
-          borderColor: isHovering ? "rgb(79, 70, 229)" : "rgba(79, 70, 229, 0.4)",
-          boxShadow: isHovering ? "0 4px 20px rgba(79, 70, 229, 0.3)" : "none",
+          backgroundColor: isHovering ? "rgba(37, 99, 235, 0.95)" : "rgba(37, 99, 235, 0.05)",
+          borderColor: isHovering ? "rgb(37, 99, 235)" : "rgba(37, 99, 235, 0.4)",
+          boxShadow: isHovering ? "0 4px 20px rgba(37, 99, 235, 0.3)" : "none",
           opacity: isOverInput ? 0 : 1,
         }}
       >

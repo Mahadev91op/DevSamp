@@ -30,8 +30,8 @@ const capabilityDomains = [
     tagline: "60fps Fluid Interfaces",
     desc: "Deterministic design tokens, accessibility auditing, fluid typography engines, and spring physics micro-interactions.",
     icon: Sparkles,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
     items: ["Tailwind CSS v4 tokens", "Framer Motion physics", "WCAG 2.1 AA compliant", "0.00 CLS guaranteed"]
   },
   {

@@ -21,8 +21,8 @@ const smoothEase = [0.16, 1, 0.3, 1];
 
 const liveTelemetry = [
   { id: "products", label: "SaaS Layer", status: "4 Live", metric: "<14ms SLA", color: "from-blue-600 to-cyan-500", icon: Boxes },
-  { id: "services", label: "Engineering Pods", status: "Active", metric: "60fps HMR", color: "from-indigo-600 to-purple-600", icon: Layers },
-  { id: "platform", label: "Shared Protocol", status: "REST / Hooks", metric: "Zero Auth Drop", color: "from-purple-600 to-pink-500", icon: Terminal },
+  { id: "services", label: "Engineering Pods", status: "Active", metric: "60fps HMR", color: "from-blue-600 to-indigo-600", icon: Layers },
+  { id: "platform", label: "Shared Protocol", status: "REST / Hooks", metric: "Zero Auth Drop", color: "from-blue-600 to-indigo-500", icon: Terminal },
   { id: "mesh", label: "Global Edge", status: "99.9% Uptime", metric: "Vercel + AWS", color: "from-emerald-500 to-teal-500", icon: GitBranch },
 ];
 
@@ -81,7 +81,7 @@ const EcosystemHero = ({ data = null }) => {
               className="text-fluid-display font-black tracking-tight text-slate-950 leading-[1.12]"
             >
               One Connected Ecosystem.{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
                 Multiple Capabilities.
               </span>
             </motion.h1>

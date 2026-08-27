@@ -31,7 +31,7 @@ const futureInitiatives = [
     description: "Allowing external software engineers to publish custom workflow modules, UI components, and domain plugins for DevSamp products.",
     badge: "MARKETPLACE",
     icon: Layers,
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     title: "Global Partner Integration Mesh",
@@ -40,7 +40,7 @@ const futureInitiatives = [
     description: "Decentralized data relays and universal settlement protocols across regional logistics, banking, and hospital nodes.",
     badge: "GLOBAL MESH",
     icon: Globe2,
-    color: "from-purple-600 to-pink-600"
+    color: "from-blue-600 to-indigo-600"
   }
 ];
 
@@ -60,9 +60,9 @@ const EcosystemFutureExpansion = ({ data = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-xs font-bold text-purple-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
           >
-            <Compass size={13} className="animate-spin-slow text-purple-600" /> {eyebrow}
+            <Compass size={13} className="animate-spin-slow text-indigo-600" /> {eyebrow}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 16 }}
@@ -95,14 +95,14 @@ const EcosystemFutureExpansion = ({ data = null }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="bg-white border border-slate-200/90 hover:border-purple-400 p-6 sm:p-8 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                className="bg-white border border-slate-200/90 hover:border-indigo-400 p-6 sm:p-8 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-5">
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white bg-gradient-to-tr ${item.color} shadow-xs shrink-0`}>
                       <Icon size={22} />
                     </div>
-                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 uppercase shadow-2xs">
+                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase shadow-2xs">
                       {item.timeframe}
                     </span>
                   </div>
@@ -117,7 +117,7 @@ const EcosystemFutureExpansion = ({ data = null }) => {
 
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500 font-bold">
                   <span>STATUS: {item.status}</span>
-                  <span className="text-purple-600 font-bold">PLANNED</span>
+                  <span className="text-indigo-600 font-bold">PLANNED</span>
                 </div>
               </motion.div>
             );

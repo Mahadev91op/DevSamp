@@ -77,12 +77,12 @@ const AboutFounders = ({ data = [] }) => {
                             }
                           }}
                         />
-                        <div className="w-full h-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 hidden items-center justify-center text-white text-3xl font-black">
+                        <div className="w-full h-full bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 hidden items-center justify-center text-white text-3xl font-black">
                           {founder.name ? founder.name.charAt(0).toUpperCase() : "M"}
                         </div>
                       </div>
                     ) : (
-                      <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-indigo-600/20 border-4 border-white">
+                      <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-indigo-600/20 border-4 border-white">
                         {founder.name ? founder.name.charAt(0).toUpperCase() : "M"}
                       </div>
                     )}

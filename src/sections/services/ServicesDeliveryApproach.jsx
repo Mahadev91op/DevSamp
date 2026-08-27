@@ -147,7 +147,7 @@ const ServicesDeliveryApproach = ({ data = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: smoothEase, delay: 0.48 }}
-            className="bg-gradient-to-br from-indigo-900/60 to-purple-900/60 border border-indigo-500/40 rounded-3xl p-6 flex flex-col justify-between text-white"
+            className="bg-gradient-to-br from-slate-900/80 to-blue-950/80 border border-indigo-500/40 rounded-3xl p-6 flex flex-col justify-between text-white"
           >
             <div>
               <div className="p-3 rounded-2xl bg-white/10 border border-white/20 text-indigo-300 w-fit mb-4">

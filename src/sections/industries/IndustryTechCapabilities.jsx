@@ -40,8 +40,8 @@ const capabilities = [
     title: "4. Compliance & Audit Telemetry",
     desc: "Immutable timestamped event ledgers, automated schema validations, and continuous uptime monitoring probes.",
     icon: ShieldCheck,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
   },
 ];
 

@@ -38,8 +38,8 @@ const formulaNodes = [
     subtitle: "Proven Platform Foundations",
     desc: "Deploying our high-concurrency database models, sub-10ms query indexes, and multi-tenant authentication.",
     icon: Layers,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
   },
   {
     step: "04",

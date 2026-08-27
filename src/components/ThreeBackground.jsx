@@ -40,17 +40,18 @@ const ThreeBackground = () => {
     // --- CREATE CUSTOM ROUND DOT TEXTURE ---
     const createCircleTexture = () => {
       const canvas = document.createElement("canvas");
-      canvas.width = 16;
-      canvas.height = 16;
+      canvas.width = 32;
+      canvas.height = 32;
       const ctx = canvas.getContext("2d");
       
-      const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+      const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
       gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-      gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.8)");
-      gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+      gradient.addColorStop(0.3, "rgba(235, 245, 255, 0.95)");
+      gradient.addColorStop(0.65, "rgba(59, 130, 246, 0.5)");
+      gradient.addColorStop(1, "rgba(37, 99, 235, 0)");
       
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 16, 16);
+      ctx.fillRect(0, 0, 32, 32);
       return new THREE.CanvasTexture(canvas);
     };
 
@@ -64,11 +65,13 @@ const ThreeBackground = () => {
     // Store original grid layout for calculations
     const gridData = [];
 
-    // Pastel colors: Soft Blue, Soft Violet, Soft Pink
+    // Modern Tech Blue Palette: Deep Blue, Electric Blue, Bright Blue, Sky Blue, Soft Blue
     const palette = [
-      new THREE.Color("#60a5fa"), // Blue
-      new THREE.Color("#a78bfa"), // Violet
-      new THREE.Color("#f472b6"), // Pink
+      new THREE.Color("#0f4cff"), // Deep Blue
+      new THREE.Color("#2563eb"), // Electric Blue
+      new THREE.Color("#3b82f6"), // Bright Blue
+      new THREE.Color("#0ea5e9"), // Sky Blue
+      new THREE.Color("#60a5fa"), // Soft Blue
     ];
 
     let index = 0;
@@ -107,11 +110,11 @@ const ThreeBackground = () => {
 
     // Points Material using vertex colors
     const material = new THREE.PointsMaterial({
-      size: isMobile ? 1.5 : 2.5,
+      size: isMobile ? 1.8 : 3.0,
       map: particleTexture,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.75,
       depthWrite: false,
       blending: THREE.NormalBlending
     });

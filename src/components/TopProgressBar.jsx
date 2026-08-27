@@ -45,7 +45,7 @@ const TopProgressBar = () => {
           exit={{ scaleX: 1, opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
           style={{ transformOrigin: "0% 50%" }}
-          className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 z-[999999] pointer-events-none shadow-sm shadow-indigo-500/50"
+          className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 z-[999999] pointer-events-none shadow-sm shadow-indigo-500/50"
         />
       )}
     </AnimatePresence>

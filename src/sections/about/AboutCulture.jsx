@@ -93,7 +93,7 @@ const AboutCulture = ({ cultureData = null, communityData = null }) => {
         <div className="bg-slate-50/80 border border-slate-200/90 rounded-3xl p-6 sm:p-8 md:p-10 min-w-0">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-w-0">
             <div className="max-w-xl min-w-0">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
                 <Sparkles size={12} /> Open Knowledge
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight mb-2">

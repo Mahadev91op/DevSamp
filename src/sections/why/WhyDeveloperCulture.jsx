@@ -48,7 +48,7 @@ const WhyDeveloperCulture = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-xs font-bold text-purple-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
           >
             <Terminal size={13} /> Codebase Craft
           </motion.div>
@@ -83,11 +83,11 @@ const WhyDeveloperCulture = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="bg-white border border-slate-200/90 hover:border-purple-400 p-6 sm:p-8 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                className="bg-white border border-slate-200/90 hover:border-indigo-400 p-6 sm:p-8 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs shrink-0">
                       <Icon size={22} />
                     </div>
                     <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700 uppercase shadow-2xs">
@@ -105,7 +105,7 @@ const WhyDeveloperCulture = () => {
 
                 <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500 font-bold">
                   <span>READABILITY: VERIFIED</span>
-                  <span className="text-purple-600 font-bold">✓ ZERO DEBT</span>
+                  <span className="text-indigo-600 font-bold">✓ ZERO DEBT</span>
                 </div>
               </motion.div>
             );

@@ -68,7 +68,7 @@ const WhyHero = ({ data = null }) => {
               className="text-fluid-display font-black tracking-tight text-slate-950 leading-[1.12]"
             >
               Engineering Software That{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
                 Compounds Over Time.
               </span>
             </motion.h1>
@@ -154,7 +154,7 @@ const WhyHero = ({ data = null }) => {
                 {[
                   { title: "Product-First DNA", desc: "We run live SaaS products. Our engineering standards are tested in real daily production.", icon: Boxes, color: "text-blue-600 bg-blue-50" },
                   { title: "Dedicated Engineering Pods", desc: "Direct access to senior fullstack architects. No junior hand-offs or outsourced agency layers.", icon: Layers, color: "text-indigo-600 bg-indigo-50" },
-                  { title: "Unified Platform Engine", desc: "Shared authentication, database indexes, and edge SLA that compound value across systems.", icon: Cpu, color: "text-purple-600 bg-purple-50" },
+                  { title: "Unified Platform Engine", desc: "Shared authentication, database indexes, and edge SLA that compound value across systems.", icon: Cpu, color: "text-sky-600 bg-sky-50" },
                   { title: "100% Client Code Ownership", desc: "Clean, documented Git repositories with zero proprietary lock-in upon milestone completion.", icon: ShieldCheck, color: "text-emerald-600 bg-emerald-50" }
                 ].map((item, idx) => {
                   const Icon = item.icon;

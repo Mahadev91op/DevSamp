@@ -14,10 +14,10 @@ export default function TermsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
         >
-            <div className="inline-block p-4 rounded-full bg-purple-600/10 mb-6">
-                <FileText size={48} className="text-purple-500" />
+            <div className="inline-block p-4 rounded-full bg-indigo-600/10 mb-6">
+                <FileText size={48} className="text-indigo-500" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">Terms of <span className="text-purple-500">Service</span></h1>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">Terms of <span className="text-indigo-500">Service</span></h1>
             <p className="text-gray-400">Please read these terms carefully before using our services.</p>
         </motion.div>
 

@@ -11,8 +11,11 @@ import { ServicesPageRepository } from "@/server/repositories/services-page.repo
 import { ServiceRepository } from "@/server/repositories/service.repository";
 import { IndustriesPageRepository } from "@/server/repositories/industries-page.repository";
 import { IndustryRepository } from "@/server/repositories/industry.repository";
+import { PricingPageRepository } from "@/server/repositories/pricing-page.repository";
+import { PricingRepository } from "@/server/repositories/pricing.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
+import PricingSettings from "@/models/PricingSettings";
 import Industry from "@/models/Industry";
 import CaseStudy from "@/models/CaseStudy";
 import Review from "@/models/Review";
@@ -276,6 +279,37 @@ export class CmsService {
       products: JSON.parse(JSON.stringify(products || [])),
       services: JSON.parse(JSON.stringify(services || [])),
       caseStudies: JSON.parse(JSON.stringify(caseStudies || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+    };
+  }
+
+  /**
+   * Aggregate complete Pricing page payload
+   */
+  static async getPricingPagePayload() {
+    await connectDB();
+    const [
+      pricingPageDoc,
+      plans,
+      calcSettings,
+      products,
+      services,
+      settings
+    ] = await Promise.all([
+      PricingPageRepository.getPublishedPricingPageContent(),
+      PricingRepository.findAll(),
+      PricingSettings.findOne().lean(),
+      ProductRepository.findAll({}, { order: 1 }, 6),
+      ServiceRepository.findAll({}, { order: 1 }, 6),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    return {
+      pricingPage: pricingPageDoc || null,
+      plans: JSON.parse(JSON.stringify(plans || [])),
+      calcSettings: calcSettings ? JSON.parse(JSON.stringify(calcSettings)) : null,
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
     };
   }

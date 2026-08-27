@@ -55,7 +55,7 @@ const AboutOverview = ({ data = null }) => {
 
             <h2 className="text-fluid-h2 font-black tracking-tight text-slate-950 leading-tight">
               A company built on the intersection of <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
                 software products & elite engineering.
               </span>
             </h2>

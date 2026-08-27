@@ -34,7 +34,7 @@ const engagementPaths = [
     badge: "CUSTOM SPECIFICATION",
     description: "Pair directly with a dedicated fullstack engineering pod to build custom web applications, internal dashboards, and scalable APIs.",
     icon: Layers,
-    color: "from-indigo-600 to-purple-600",
+    color: "from-blue-600 to-indigo-600",
     features: ["Direct Architect Pairing", "100% Custom Scope", "Source Code Ownership", "Milestone-Based Delivery"],
     ctaText: "Request Pod Scope",
     ctaLink: "/services"
@@ -45,7 +45,7 @@ const engagementPaths = [
     badge: "MOST POPULAR",
     description: "Start from a battle-tested DevSamp SaaS core and retain our pod to build specialized custom modules, private APIs, and bespoke integrations.",
     icon: Zap,
-    color: "from-purple-600 to-pink-500",
+    color: "from-blue-600 to-indigo-500",
     features: ["60% Faster Time-to-Market", "Custom Industry Extensions", "Dedicated Support Retainer", "Enterprise SLA Agreement"],
     ctaText: "Configure Enterprise Solution",
     ctaLink: "/#contact"

@@ -77,7 +77,7 @@ const EcosystemDeveloperLayer = ({ data = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-xs font-bold text-purple-700 uppercase tracking-widest"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest"
             >
               <Terminal size={13} /> {eyebrow}
             </motion.div>
@@ -112,7 +112,7 @@ const EcosystemDeveloperLayer = ({ data = null }) => {
                 const ItemIcon = item.icon;
                 return (
                   <div key={idx} className="flex items-start gap-3.5 bg-white border border-slate-200/90 p-4 rounded-2xl shadow-xs">
-                    <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 shrink-0">
+                    <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600 shrink-0">
                       <ItemIcon size={18} />
                     </div>
                     <div>
@@ -153,7 +153,7 @@ const EcosystemDeveloperLayer = ({ data = null }) => {
                     onClick={() => setActiveLang(tab.id)}
                     className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
                       activeLang === tab.id
-                        ? "bg-purple-600 text-white shadow-xs"
+                        ? "bg-indigo-600 text-white shadow-xs"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -174,7 +174,7 @@ const EcosystemDeveloperLayer = ({ data = null }) => {
 
             {/* Code Body */}
             <div className="p-5 md:p-6 overflow-x-auto scrollbar-none">
-              <pre className="text-xs sm:text-[13px] leading-relaxed text-purple-200 font-mono">
+              <pre className="text-xs sm:text-[13px] leading-relaxed text-indigo-200 font-mono">
                 <code>{developerSnippets[activeLang]}</code>
               </pre>
             </div>
@@ -182,7 +182,7 @@ const EcosystemDeveloperLayer = ({ data = null }) => {
             {/* Terminal Footer */}
             <div className="border-t border-white/10 bg-slate-900/50 px-5 py-3 flex justify-between items-center text-xs text-slate-400 font-bold select-none">
               <span className="flex items-center gap-1.5 truncate">
-                <Code2 size={13} className="text-purple-400 shrink-0" />
+                <Code2 size={13} className="text-indigo-400 shrink-0" />
                 OpenAPI 3.1 Specification: Active
               </span>
               <span className="text-emerald-400 shrink-0 font-extrabold">✓ 100% Online Gateway</span>

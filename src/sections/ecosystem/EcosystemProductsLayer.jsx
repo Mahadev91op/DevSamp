@@ -32,7 +32,7 @@ const defaultProductsFallback = [
     tagline: "High-Speed Retail Billing & Inventory Engine",
     category: "Retail Tech",
     status: "Live",
-    gradient: "from-indigo-600 to-purple-600",
+    gradient: "from-blue-600 to-indigo-600",
     logoIcon: "Boxes",
     capabilities: ["Offline First", "Barcode Scanner Relay", "Inventory Sync", "Instant Thermal Print"],
     description: "High-throughput point of sale and distributed warehouse inventory sync built for retail chains and modern storefronts."
@@ -42,7 +42,7 @@ const defaultProductsFallback = [
     tagline: "Multi-Tenant SaaS Foundation & Auth Gateway",
     category: "Developer Tool",
     status: "Live",
-    gradient: "from-purple-600 to-pink-500",
+    gradient: "from-blue-600 to-indigo-500",
     logoIcon: "Cpu",
     capabilities: ["JWT & RBAC Auth", "Tenant Schema Routing", "Stripe Metering", "Next.js 15 Starter"],
     description: "Production SaaS foundation boilerplate with tenant isolation, automated subscription webhooks, and clean microservice architecture."

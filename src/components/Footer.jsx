@@ -148,7 +148,7 @@ const Footer = ({ products = [], services = [], siteSettings = null }) => {
           {/* Column 1: Brand & Status */}
           <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 lg:col-span-1 space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xs shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xs shadow-xs">
                 DS
               </div>
               <span className="text-base font-black text-slate-950 tracking-tight">

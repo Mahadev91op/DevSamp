@@ -37,7 +37,7 @@ const VisionHero = ({ data = null }) => {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />
       
       {/* Ambient background glows */}
-      <div className="absolute top-[10%] left-[10%] w-[500px] h-[380px] bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-[10%] left-[10%] w-[500px] h-[380px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-[10%] right-[10%] w-[500px] h-[380px] bg-indigo-500/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="ecosystem-container relative z-10">
@@ -53,8 +53,8 @@ const VisionHero = ({ data = null }) => {
               transition={{ duration: 0.6, ease: smoothEase }}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-xs"
             >
-              <Compass size={13} className="text-purple-600 animate-spin-slow" />
-              <span className="tracking-wide uppercase text-[11px] font-mono text-purple-700">{eyebrow}</span>
+              <Compass size={13} className="text-indigo-600 animate-spin-slow" />
+              <span className="tracking-wide uppercase text-[11px] font-mono text-indigo-700">{eyebrow}</span>
               <span className="text-slate-300">|</span>
               <span className="text-slate-600 font-bold text-[11px]">{badge}</span>
             </motion.div>
@@ -67,7 +67,7 @@ const VisionHero = ({ data = null }) => {
               className="text-fluid-display font-black tracking-tight text-slate-950 leading-[1.12]"
             >
               Engineering the Global{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
                 Operating Layer
               </span>{" "}
               for Connected Software
@@ -94,7 +94,7 @@ const VisionHero = ({ data = null }) => {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-purple-600 text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 group cursor-pointer"
+                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 group cursor-pointer"
                   data-cursor="Phases"
                 >
                   <span>10–15 Year Roadmap</span>
@@ -109,7 +109,7 @@ const VisionHero = ({ data = null }) => {
                   className="px-6 py-3 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-xs cursor-pointer"
                   data-cursor="Topology"
                 >
-                  <Workflow size={15} className="text-purple-600" />
+                  <Workflow size={15} className="text-indigo-600" />
                   <span>Future Architecture</span>
                 </motion.button>
               </Link>
@@ -122,7 +122,7 @@ const VisionHero = ({ data = null }) => {
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.32 }}
               className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono font-bold text-slate-500"
             >
-              <span className="flex items-center gap-1 text-purple-700 font-extrabold">
+              <span className="flex items-center gap-1 text-indigo-700 font-extrabold">
                 <CheckCircle2 size={13} /> 15-Year Horizon
               </span>
               <span>•</span>
@@ -141,18 +141,18 @@ const VisionHero = ({ data = null }) => {
             className="lg:col-span-5 bg-slate-950 text-slate-200 rounded-3xl border border-white/15 shadow-2xl p-5 md:p-6 font-mono text-xs flex flex-col justify-between h-[430px] min-h-[430px] max-h-[430px] relative overflow-hidden shrink-0"
           >
             {/* Inner background glow */}
-            <div className="absolute top-0 right-0 w-44 h-44 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-44 h-44 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
 
             {/* Ledger Header */}
             <div className="shrink-0 border-b border-white/10 pb-3 mb-3">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse" />
                   <span className="text-[11px] font-black uppercase text-white tracking-wider">
                     DEVSAMP 2035 HORIZON LEDGER
                   </span>
                 </div>
-                <span className="text-[9px] px-2 py-0.5 rounded-md bg-white/10 text-purple-300 font-bold border border-white/10">
+                <span className="text-[9px] px-2 py-0.5 rounded-md bg-white/10 text-indigo-300 font-bold border border-white/10">
                   STRATEGIC CORE
                 </span>
               </div>
@@ -166,10 +166,10 @@ const VisionHero = ({ data = null }) => {
               {horizonNodes.map((item, idx) => (
                 <div 
                   key={idx} 
-                  className="bg-white/5 border border-white/10 hover:border-purple-500/50 p-2.5 rounded-xl transition-all"
+                  className="bg-white/5 border border-white/10 hover:border-indigo-500/50 p-2.5 rounded-xl transition-all"
                 >
                   <div className="flex justify-between items-center mb-0.5">
-                    <span className="text-[9px] font-bold text-purple-400 uppercase tracking-wider">{item.label}</span>
+                    <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-wider">{item.label}</span>
                     <span className="text-[10px] font-bold text-white font-mono">{item.value}</span>
                   </div>
                   <p className="text-[11px] text-slate-400 font-sans font-normal leading-tight">
@@ -182,10 +182,10 @@ const VisionHero = ({ data = null }) => {
             {/* Ledger Footer */}
             <div className="shrink-0 border-t border-white/10 pt-2.5 mt-2.5 flex items-center justify-between text-[10px] text-slate-400 font-bold">
               <span className="flex items-center gap-1 text-slate-300">
-                <Activity size={12} className="text-purple-400" />
+                <Activity size={12} className="text-indigo-400" />
                 LONG-TERM SYSTEM HORIZON
               </span>
-              <span className="text-purple-400">HORIZON: 2035</span>
+              <span className="text-indigo-400">HORIZON: 2035</span>
             </div>
 
           </motion.div>

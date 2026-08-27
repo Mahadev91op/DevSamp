@@ -211,7 +211,7 @@ export async function GET() {
           pricingSnippet: "Developer License",
           productUrl: "https://devsamp.online/products/devscale",
           docsUrl: "#contact",
-          gradient: "from-indigo-600 to-purple-600",
+          gradient: "from-blue-600 to-indigo-600",
           order: 2,
           isActive: true
         },
@@ -245,7 +245,7 @@ export async function GET() {
           pricingSnippet: "Beta Access",
           productUrl: "https://devsamp.online/products/omnidesk",
           docsUrl: "#contact",
-          gradient: "from-purple-600 to-pink-600",
+          gradient: "from-blue-600 to-indigo-600",
           order: 4,
           isActive: true
         }
@@ -281,7 +281,7 @@ export async function GET() {
           connections: ["core", "customers", "integrations"],
           linkUrl: "/#products",
           metrics: "Production Ready",
-          color: "from-indigo-500 to-purple-500",
+          color: "from-blue-600 to-indigo-600",
           order: 2,
           isActive: true
         },
@@ -309,7 +309,7 @@ export async function GET() {
           connections: ["core", "products", "integrations"],
           linkUrl: "/#developers",
           metrics: "Open SDKs",
-          color: "from-purple-500 to-pink-500",
+          color: "from-blue-600 to-indigo-500",
           order: 4,
           isActive: true
         },
@@ -454,7 +454,7 @@ export async function GET() {
           ],
           missing: ["Dedicated Engineering Pod"],
           popular: true,
-          gradient: "from-indigo-600 to-purple-600"
+          gradient: "from-blue-600 to-indigo-600"
         },
         {
           name: "Enterprise Ecosystem",

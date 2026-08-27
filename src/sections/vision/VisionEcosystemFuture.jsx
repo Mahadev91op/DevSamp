@@ -50,7 +50,7 @@ const VisionEcosystemFuture = ({ data = [] }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Workflow size={12} /> Target Architecture
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -73,16 +73,16 @@ const VisionEcosystemFuture = ({ data = [] }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, ease: smoothEase, delay: idx * 0.08 }}
-                  className="bg-white border border-slate-200/90 hover:border-purple-400 p-6 sm:p-7 rounded-3xl shadow-xs hover:shadow-md transition-all min-w-0"
+                  className="bg-white border border-slate-200/90 hover:border-indigo-400 p-6 sm:p-7 rounded-3xl shadow-xs hover:shadow-md transition-all min-w-0"
                 >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="w-11 h-11 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs shrink-0">
+                      <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs shrink-0">
                         <Icon size={20} />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-purple-700 uppercase">
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-indigo-700 uppercase">
                             LAYER 0{idx + 1}
                           </span>
                           <span className="text-xs font-bold text-slate-500 font-mono">
@@ -114,7 +114,7 @@ const VisionEcosystemFuture = ({ data = [] }) => {
 
                 {/* Connection Arrow Down between layers */}
                 {idx < layers.length - 1 && (
-                  <div className="flex justify-center items-center py-1 text-purple-400">
+                  <div className="flex justify-center items-center py-1 text-indigo-400">
                     <div className="p-1.5 rounded-full bg-white border border-slate-200 shadow-xs">
                       <ArrowDown size={14} className="animate-bounce" />
                     </div>

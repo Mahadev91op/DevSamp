@@ -102,10 +102,10 @@ const ServicesEcosystemBridge = ({ products = [] }) => {
             className="bg-slate-50 border border-slate-200 rounded-3xl p-6 md:p-8 flex flex-col justify-between hover:bg-white hover:border-indigo-500/40 hover:shadow-xl transition-all"
           >
             <div>
-              <div className="p-3 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 w-fit mb-5">
+              <div className="p-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 w-fit mb-5">
                 <Cpu size={22} />
               </div>
-              <div className="text-[11px] font-mono font-bold text-purple-600 uppercase tracking-wider mb-1">
+              <div className="text-[11px] font-mono font-bold text-indigo-600 uppercase tracking-wider mb-1">
                 PATHWAY C
               </div>
               <h3 className="text-lg font-black text-slate-900 mb-2">

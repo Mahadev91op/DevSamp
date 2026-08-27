@@ -29,11 +29,11 @@ export default function PrivacyPage() {
             transition={{ delay: 0.2 }}
             className="space-y-12 text-gray-300 leading-relaxed"
         >
-            <Section title="1. Information We Collect" icon={<Eye className="text-purple-500" />}>
+            <Section title="1. Information We Collect" icon={<Eye className="text-indigo-500" />}>
                 We collect information you provide directly to us, such as when you fill out our contact form, request a quote, or communicate with us. This may include your name, email address, phone number, and project details.
             </Section>
 
-            <Section title="2. How We Use Your Information" icon={<Lock className="text-pink-500" />}>
+            <Section title="2. How We Use Your Information" icon={<Lock className="text-blue-500" />}>
                 We use the information we collect to:
                 <ul className="list-disc pl-6 mt-2 space-y-2 text-gray-400">
                     <li>Provide, maintain, and improve our services.</li>

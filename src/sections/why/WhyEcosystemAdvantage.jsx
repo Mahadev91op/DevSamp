@@ -29,21 +29,21 @@ const lifecycleSteps = [
     title: "Product / Pod Match",
     desc: "Deploy existing SaaS or commission a dedicated pod.",
     icon: Boxes,
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     step: "03",
     title: "Platform Engineering",
     desc: "Built on Next.js 15, sub-10ms DB indexes, and RBAC.",
     icon: Cpu,
-    color: "from-purple-600 to-pink-600"
+    color: "from-indigo-600 to-blue-500"
   },
   {
     step: "04",
     title: "Production SLA",
     desc: "24/7 telemetry monitoring and automated security patches.",
     icon: Workflow,
-    color: "from-pink-600 to-rose-600"
+    color: "from-blue-600 to-cyan-500"
   },
   {
     step: "05",

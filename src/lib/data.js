@@ -626,3 +626,56 @@ export async function getIndustriesPageData() {
     };
   }
 }
+
+/**
+ * Unified parallel aggregate for Pricing page rendering with in-memory caching
+ */
+export async function getPricingPageData() {
+  const cached = getCachedData("pricing_page_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const PricingPage = (await import("@/models/PricingPage")).default;
+    const Pricing = (await import("@/models/Pricing")).default;
+    const PricingSettings = (await import("@/models/PricingSettings")).default;
+    const Product = (await import("@/models/Product")).default;
+    const Service = (await import("@/models/Service")).default;
+    const SiteSetting = (await import("@/models/SiteSetting")).default;
+
+    const [pageDoc, plans, calcSettings, products, services, settings] = await Promise.all([
+      PricingPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      Pricing.find({ isActive: { $ne: false }, status: { $ne: "draft" } })
+        .populate("product", "name slug category status logoIcon gradient")
+        .populate("service", "title name slug category icon gradient")
+        .sort({ order: 1, priceMonthly: 1 })
+        .lean(),
+      PricingSettings.findOne().lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    const result = {
+      pricingPage: pageDoc ? JSON.parse(JSON.stringify(pageDoc)) : null,
+      plans: JSON.parse(JSON.stringify(plans || [])),
+      calcSettings: calcSettings ? JSON.parse(JSON.stringify(calcSettings)) : null,
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+    };
+
+    setCachedData("pricing_page_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating Pricing page data:", error);
+    return {
+      pricingPage: null,
+      plans: [],
+      calcSettings: null,
+      products: [],
+      services: [],
+      settings: null,
+    };
+  }
+}

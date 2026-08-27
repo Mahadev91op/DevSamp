@@ -67,7 +67,7 @@ const WhyProof = ({ caseStudies = [], products = [] }) => {
               desc: "High-throughput retail POS and distributed multi-branch warehouse inventory synchronization built for modern retail chains.",
               link: "/products",
               icon: Boxes,
-              color: "from-indigo-600 to-purple-600"
+              color: "from-blue-600 to-indigo-600"
             },
             {
               title: "Bespoke Engineering Pods",
@@ -75,7 +75,7 @@ const WhyProof = ({ caseStudies = [], products = [] }) => {
               desc: "Custom platforms engineered with Next.js 15, sub-10ms query indexes, and strict 100% in-house code ownership.",
               link: "/services",
               icon: Layers,
-              color: "from-purple-600 to-pink-600"
+              color: "from-indigo-600 to-cyan-500"
             }
           ].map((item, idx) => {
             const Icon = item.icon;

@@ -29,7 +29,7 @@ const improvementStages = [
     title: "Edge Telemetry",
     desc: "Observe real user latencies, error traces, and operational peak load.",
     icon: Activity,
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     step: "03",
@@ -37,7 +37,7 @@ const improvementStages = [
     title: "Workflow Feedback",
     desc: "Gather direct operational insights and identify workflow friction.",
     icon: Lightbulb,
-    color: "from-purple-600 to-pink-600"
+    color: "from-indigo-600 to-blue-500"
   },
   {
     step: "04",
@@ -45,7 +45,7 @@ const improvementStages = [
     title: "Core Refinements",
     desc: "Roll optimizations back into shared platform modules.",
     icon: Zap,
-    color: "from-pink-600 to-rose-600"
+    color: "from-blue-600 to-cyan-500"
   },
   {
     step: "05",

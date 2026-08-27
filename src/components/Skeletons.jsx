@@ -187,7 +187,7 @@ export const PricingSkeleton = () => (
 
 export const BlogsSkeleton = ({ count = 3 }) => (
   <div className="relative border-l border-slate-200/80 ml-4 md:ml-8 pl-8 md:pl-10 space-y-12 select-none">
-    <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-indigo-500/20 via-purple-500/10 to-transparent pointer-events-none" />
+    <div className="absolute left-[-1px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-blue-500/20 via-indigo-500/10 to-transparent pointer-events-none" />
     {[...Array(count)].map((_, idx) => (
       <div key={idx} className="relative group">
         <div className="absolute left-[-42px] md:left-[-50px] top-1.5 w-7 h-7 md:w-8 md:h-8 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center shadow-sm z-10">

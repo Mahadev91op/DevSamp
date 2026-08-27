@@ -44,7 +44,7 @@ const VisionProductEvolution = ({ data = null }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Boxes size={12} /> Product Horizon
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -64,13 +64,13 @@ const VisionProductEvolution = ({ data = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, ease: smoothEase, delay: idx * 0.08 }}
-              className="bg-white border border-slate-200/90 hover:border-purple-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 min-w-0"
+              className="bg-white border border-slate-200/90 hover:border-indigo-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 min-w-0"
             >
               <div className="space-y-2 min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-bold">
                   <span className="text-slate-400 line-through">{st.from}</span>
-                  <ArrowRight size={13} className="text-purple-600 shrink-0" />
-                  <span className="text-purple-700 font-black">{st.to}</span>
+                  <ArrowRight size={13} className="text-indigo-600 shrink-0" />
+                  <span className="text-indigo-700 font-black">{st.to}</span>
                 </div>
 
                 <p className="text-slate-600 text-xs sm:text-sm font-normal leading-relaxed">
@@ -85,7 +85,7 @@ const VisionProductEvolution = ({ data = null }) => {
                     : st.status === "ACTIVE"
                     ? "bg-indigo-50 text-indigo-700 border-indigo-200"
                     : st.status === "IN PROGRESS"
-                    ? "bg-purple-50 text-purple-700 border-purple-200"
+                    ? "bg-indigo-50 text-indigo-700 border-indigo-200"
                     : "bg-slate-100 text-slate-700 border-slate-200"
                 }`}>
                   {st.status}

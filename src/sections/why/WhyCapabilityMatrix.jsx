@@ -32,7 +32,7 @@ const matrixData = [
   {
     category: "02. Custom Pod Development",
     icon: Layers,
-    color: "from-indigo-600 to-purple-600",
+    color: "from-blue-600 to-indigo-600",
     description: "Dedicated engineering pods building bespoke fullstack platforms from scratch.",
     capabilities: [
       "Next.js 15 & React 19 App Router Platforms",
@@ -44,7 +44,7 @@ const matrixData = [
   {
     category: "03. UI/UX & Design Systems",
     icon: Sparkles,
-    color: "from-purple-600 to-pink-500",
+    color: "from-indigo-600 to-blue-500",
     description: "Production design systems with zero layout shifts and hardware-accelerated animations.",
     capabilities: [
       "60fps Fluid Responsive Interfaces",
@@ -56,7 +56,7 @@ const matrixData = [
   {
     category: "04. Platform Infrastructure",
     icon: Cpu,
-    color: "from-pink-600 to-rose-500",
+    color: "from-blue-600 to-cyan-500",
     description: "Standardized authentication, database indexing, and event webhook gateways.",
     capabilities: [
       "OpenAPI 3.1 REST API Gateways",

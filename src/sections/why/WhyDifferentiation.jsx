@@ -30,7 +30,7 @@ const defaultPillars = [
     eyebrow: "ARCHITECTURAL RIGOR",
     shortDescription: "Solutions are designed from day one around clean database schemas, sub-10ms query indexes, strict RBAC, and zero architectural debt.",
     icon: "Cpu",
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     pillarId: "03",
@@ -38,7 +38,7 @@ const defaultPillars = [
     eyebrow: "LONG-TERM VALUE",
     shortDescription: "Technology is treated as an appreciating business asset that must generate measurable operational ROI, not merely check a launch box.",
     icon: "Boxes",
-    color: "from-purple-600 to-pink-600"
+    color: "from-indigo-600 to-blue-500"
   },
   {
     pillarId: "04",
@@ -46,7 +46,7 @@ const defaultPillars = [
     eyebrow: "OUTCOME-DRIVEN",
     shortDescription: "We evaluate every line of code against actual business goals—reducing operational friction, preventing outages, and enabling scale.",
     icon: "TrendingUp",
-    color: "from-pink-600 to-rose-600"
+    color: "from-blue-600 to-cyan-500"
   },
   {
     pillarId: "05",

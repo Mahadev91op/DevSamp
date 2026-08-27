@@ -29,14 +29,14 @@ const solutionSteps = [
     title: "Architectural Blueprint",
     desc: "We map your workflow to either our existing SaaS products (e.g. MedERP Pro, FlowPulse) or design a dedicated custom pod solution.",
     icon: Code2,
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     step: "03",
     title: "Ecosystem Deployment",
     desc: "We provision private database schemas, configure multi-tenant auth, set up webhooks, and integrate with payment or cloud providers.",
     icon: Boxes,
-    color: "from-purple-600 to-pink-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     step: "04",
@@ -59,7 +59,7 @@ const EcosystemSolutionsLayer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-100 text-xs font-bold text-pink-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-xs font-bold text-blue-700 uppercase tracking-widest mb-3"
           >
             <Workflow size={13} /> Layer 04 • Solutions
           </motion.div>
@@ -94,7 +94,7 @@ const EcosystemSolutionsLayer = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-pink-400 p-6 sm:p-7 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                className="bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-sky-400 p-6 sm:p-7 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-4">

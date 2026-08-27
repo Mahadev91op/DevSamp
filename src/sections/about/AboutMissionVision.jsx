@@ -92,10 +92,10 @@ const AboutMissionVision = ({ missionData = null, visionData = null }) => {
           >
             <div className="space-y-4 min-w-0">
               <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs">
                   <Compass size={22} />
                 </div>
-                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100 uppercase">
+                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 uppercase">
                   3-PHASE ROADMAP
                 </span>
               </div>
@@ -130,13 +130,13 @@ const AboutMissionVision = ({ missionData = null, visionData = null }) => {
                 </div>
 
                 {/* Phase 3: Future */}
-                <div className="p-3.5 rounded-2xl bg-purple-50/50 border border-purple-200/80 flex items-start gap-3">
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800 uppercase shrink-0 mt-0.5">
+                <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-200/80 flex items-start gap-3">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 uppercase shrink-0 mt-0.5">
                     PHASE 03
                   </span>
                   <div className="min-w-0">
-                    <h4 className="text-xs font-black text-purple-950">Global Autonomous Business Operating Layer</h4>
-                    <p className="text-purple-900/80 text-[11px] font-normal leading-normal mt-0.5">{futureState}</p>
+                    <h4 className="text-xs font-black text-indigo-950">Global Autonomous Business Operating Layer</h4>
+                    <p className="text-indigo-900/80 text-[11px] font-normal leading-normal mt-0.5">{futureState}</p>
                   </div>
                 </div>
 
@@ -145,7 +145,7 @@ const AboutMissionVision = ({ missionData = null, visionData = null }) => {
 
             <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-bold text-slate-400">
               <span>TARGET TRAJECTORY</span>
-              <span className="text-purple-600">✦ EXPONENTIAL SCALE</span>
+              <span className="text-indigo-600">✦ EXPONENTIAL SCALE</span>
             </div>
           </motion.div>
 

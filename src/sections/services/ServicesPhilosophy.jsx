@@ -41,9 +41,9 @@ const philosophyPillars = [
     subtitle: "60fps Fluid UI/UX Physics",
     desc: "Responsive design token systems with fluid typography, zero layout shift, and intuitive user navigation workflows.",
     icon: Layers,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
-    border: "border-purple-100",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
+    border: "border-indigo-100",
   },
   {
     step: "04",

@@ -48,8 +48,8 @@ const problemAreas = [
     techReq: "Multi-Tenant Edge Mesh & Cloud Native",
     capability: "Zero-config branch tenant provisioning with instant database isolation and localized pricing.",
     icon: Layers,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
   },
 ];
 

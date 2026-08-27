@@ -25,7 +25,7 @@ const VisionDeveloperEcosystem = ({ data = null }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Terminal size={12} /> Developer Platform
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -48,10 +48,10 @@ const VisionDeveloperEcosystem = ({ data = null }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="bg-white border border-slate-200/90 hover:border-purple-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
+                className="bg-white border border-slate-200/90 hover:border-indigo-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
               >
                 <div>
-                  <div className="w-11 h-11 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs mb-4">
+                  <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs mb-4">
                     <Icon size={20} />
                   </div>
                   <h3 className="text-base font-black text-slate-950 mb-1.5 truncate">
@@ -62,7 +62,7 @@ const VisionDeveloperEcosystem = ({ data = null }) => {
                   </p>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-purple-700 font-bold">
+                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-indigo-700 font-bold">
                   OPEN PROTOCOL
                 </div>
               </motion.div>
@@ -73,7 +73,7 @@ const VisionDeveloperEcosystem = ({ data = null }) => {
         {/* Developer Action CTA */}
         <div className="mt-8 text-center">
           <Link href="/#developers">
-            <button className="px-6 py-3 rounded-full bg-slate-950 hover:bg-purple-600 text-white font-bold text-xs sm:text-sm transition-all inline-flex items-center gap-2 shadow-xs cursor-pointer">
+            <button className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition-all inline-flex items-center gap-2 shadow-xs cursor-pointer">
               <Terminal size={14} />
               <span>Explore Developer Architecture Hub</span>
               <ArrowRight size={14} />

@@ -27,10 +27,10 @@ const VisionFinalCTA = ({ data = null }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: smoothEase }}
-          className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-purple-950 !text-white rounded-3xl md:rounded-[2.25rem] p-8 sm:p-10 md:p-14 lg:p-16 overflow-hidden shadow-xl border border-slate-800"
+          className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 !text-white rounded-3xl md:rounded-[2.25rem] p-8 sm:p-10 md:p-14 lg:p-16 overflow-hidden shadow-xl border border-slate-800"
         >
           {/* Ambient inner lights */}
-          <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-purple-500/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-indigo-500/20 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-indigo-500/15 rounded-full blur-[100px] pointer-events-none" />
           
           {/* Background grid */}
@@ -38,7 +38,7 @@ const VisionFinalCTA = ({ data = null }) => {
 
           <div className="relative z-10 max-w-2xl mx-auto text-center space-y-5 min-w-0">
             
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-bold !text-purple-300 uppercase tracking-widest backdrop-blur-sm">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-bold !text-indigo-300 uppercase tracking-widest backdrop-blur-sm">
               <Sparkles size={12} /> Strategic Horizon
             </div>
 
@@ -57,7 +57,7 @@ const VisionFinalCTA = ({ data = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-purple-600 hover:bg-purple-500 !text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 group cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-500 !text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 group cursor-pointer"
                   data-cursor="Products"
                 >
                   <Boxes size={16} />
@@ -74,7 +74,7 @@ const VisionFinalCTA = ({ data = null }) => {
                   className="w-full sm:w-auto px-7 py-3.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 !text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 backdrop-blur-sm cursor-pointer"
                   data-cursor="Connect"
                 >
-                  <Mail size={16} className="!text-purple-400" />
+                  <Mail size={16} className="!text-indigo-400" />
                   <span className="!text-white">{secondaryCta.text}</span>
                 </motion.button>
               </Link>

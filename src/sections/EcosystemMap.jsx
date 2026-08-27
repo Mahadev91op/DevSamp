@@ -42,7 +42,7 @@ const defaultNodes = [
     icon: "Boxes",
     statusBadge: "4 Live Apps",
     metrics: "Enterprise SLA",
-    color: "from-indigo-500 to-purple-500",
+    color: "from-blue-600 to-indigo-600",
     linkUrl: "/#products"
   },
   {
@@ -64,7 +64,7 @@ const defaultNodes = [
     icon: "Terminal",
     statusBadge: "Open SDKs",
     metrics: "REST & Webhooks",
-    color: "from-purple-500 to-pink-500",
+    color: "from-indigo-600 to-blue-500",
     linkUrl: "/#developers"
   },
   {

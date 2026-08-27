@@ -140,7 +140,7 @@ const Contact = () => {
     <section id="contact" className="relative py-16 md:py-24 bg-transparent text-slate-900 overflow-hidden">
       
       <div className="absolute top-0 left-0 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="ecosystem-container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 items-center min-w-0">
@@ -164,7 +164,7 @@ const Contact = () => {
               className="text-fluid-h2 font-black tracking-tight leading-tight text-slate-950"
             >
               Let&apos;s build something <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-650 font-extrabold">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 font-extrabold">
                 extraordinary.
               </span>
             </motion.h2>
@@ -193,12 +193,12 @@ const Contact = () => {
                 </div>
 
                 <div onClick={handlePhoneClick} className="flex items-center gap-3 text-slate-705 group cursor-pointer">
-                    <div className="p-2.5 bg-white rounded-2xl border border-slate-200 text-purple-600 group-hover:border-purple-500/50 transition-colors shadow-xs">
+                    <div className="p-2.5 bg-white rounded-2xl border border-slate-200 text-indigo-600 group-hover:border-indigo-500/50 transition-colors shadow-xs">
                         <Phone size={18} />
                     </div>
                     <div>
                         <p className="text-xs text-slate-400 uppercase tracking-wider font-bold">Cellular Hotspot</p>
-                        <p className="text-sm sm:text-base font-bold text-slate-800 hover:text-purple-600 transition-colors" data-cursor="Call">
+                        <p className="text-sm sm:text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors" data-cursor="Call">
                             +91 9330680642
                         </p>
                     </div>
@@ -280,7 +280,7 @@ const Contact = () => {
               <div className="space-y-3.5">
                 {/* Field 1: Name */}
                 <div className="flex flex-col md:flex-row md:items-center gap-2 border-b border-slate-100 pb-2.5">
-                  <span className="text-indigo-700 font-bold text-xs shrink-0 select-none">const <span className="text-purple-700">name</span> =</span>
+                  <span className="text-indigo-700 font-bold text-xs shrink-0 select-none">const <span className="text-sky-600">name</span> =</span>
                   <input 
                     name="name" 
                     value={formData.name} 
@@ -294,7 +294,7 @@ const Contact = () => {
 
                 {/* Field 2: Email */}
                 <div className="flex flex-col md:flex-row md:items-center gap-2 border-b border-slate-100 pb-2.5">
-                  <span className="text-indigo-700 font-bold text-xs shrink-0 select-none">const <span className="text-purple-700">email</span> =</span>
+                  <span className="text-indigo-700 font-bold text-xs shrink-0 select-none">const <span className="text-sky-600">email</span> =</span>
                   <input 
                     name="email" 
                     value={formData.email} 
@@ -309,7 +309,7 @@ const Contact = () => {
                 {/* Field 3: Service Selector */}
                 <div className="relative border-b border-slate-100 pb-2.5 select-none">
                   <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <span className="text-indigo-700 font-bold text-xs shrink-0">const <span className="text-purple-700">service</span> =</span>
+                    <span className="text-indigo-700 font-bold text-xs shrink-0">const <span className="text-sky-600">service</span> =</span>
                     <div 
                       onClick={toggleDropdown} 
                       className="flex-1 flex justify-between items-center bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 cursor-pointer text-xs sm:text-sm font-medium text-slate-900 focus:bg-white hover:border-slate-300 transition-all"
@@ -347,7 +347,7 @@ const Contact = () => {
 
                 {/* Field 4: Message */}
                 <div className="flex flex-col gap-2 border-b border-slate-100 pb-2.5">
-                  <span className="text-indigo-700 font-bold text-xs select-none">const <span className="text-purple-700">message</span> = `</span>
+                  <span className="text-indigo-700 font-bold text-xs select-none">const <span className="text-sky-600">message</span> = `</span>
                   <textarea 
                     name="message" 
                     value={formData.message} 

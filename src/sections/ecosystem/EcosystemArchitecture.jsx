@@ -40,10 +40,10 @@ const defaultTiers = [
     subTiers: [
       { name: "SaaS Products", desc: "MedERP Pro, FlowPulse POS, DevScale Core", icon: Boxes, color: "text-blue-600 bg-blue-50" },
       { name: "Engineering Pods", desc: "Fullstack web platforms, AI systems, custom UI", icon: Layers, color: "text-indigo-600 bg-indigo-50" },
-      { name: "Developer Layer", desc: "Open REST APIs, event webhooks, modular SDKs", icon: Terminal, color: "text-purple-600 bg-purple-50" }
+      { name: "Developer Layer", desc: "Open REST APIs, event webhooks, modular SDKs", icon: Terminal, color: "text-indigo-600 bg-indigo-50" }
     ],
     components: ["Reusable SaaS Apps", "Custom Development Pods", "Public API Gateways"],
-    color: "from-indigo-600 to-purple-600",
+    color: "from-blue-600 to-indigo-600",
     icon: Layers
   },
   {
@@ -53,7 +53,7 @@ const defaultTiers = [
     badge: "SOLUTIONS",
     description: "Configurable business solutions tailored for specific industries—combining pre-built products with custom workflow logic.",
     components: ["Clinical & Healthcare", "Retail & POS Chains", "Fintech & Ledgers", "Startup SaaS Engines"],
-    color: "from-purple-600 to-pink-600",
+    color: "from-blue-600 to-indigo-600",
     icon: Workflow
   },
   {

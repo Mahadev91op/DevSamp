@@ -123,6 +123,14 @@ export const navigationConfig = {
       ]
     },
     {
+      id: "pricing",
+      label: "Pricing",
+      href: "/pricing",
+      match: ["/pricing", "/#pricing"],
+      enabled: true,
+      hasDropdown: false,
+    },
+    {
       id: "more",
       label: "More",
       match: ["/blog", "/privacy", "/terms"],
@@ -200,6 +208,7 @@ export const navigationConfig = {
         id: "resources",
         title: "Resources",
         items: [
+          { label: "Commercial Pricing", href: "/pricing", enabled: true },
           { label: "Engineering Devlogs", href: "/blog", enabled: true },
           { label: "Case Studies", href: "/#case-studies", enabled: true },
           { label: "Developer APIs & SDKs", href: "/#developers", enabled: true },

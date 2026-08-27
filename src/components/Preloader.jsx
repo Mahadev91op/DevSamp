@@ -60,14 +60,14 @@ const Preloader = () => {
             <motion.h1 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-[15vw] md:text-[10vw] font-bold font-mono leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"
+              className="text-[15vw] md:text-[10vw] font-bold font-mono leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600"
             >
               {count}%
             </motion.h1>
             
             <div className="w-64 h-1.5 bg-slate-200 mt-4 rounded-full overflow-hidden mx-auto">
               <motion.div 
-                className="h-full bg-gradient-to-r from-blue-600 to-purple-600"
+                className="h-full bg-gradient-to-r from-blue-600 to-indigo-600"
                 style={{ width: `${count}%` }}
                 transition={{ type: "spring", stiffness: 120 }}
               />

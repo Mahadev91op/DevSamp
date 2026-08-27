@@ -42,7 +42,7 @@ const VisionPrinciples = ({ data = [] }) => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-[11px] font-bold text-purple-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3">
             <Compass size={12} /> Guiding Philosophy
           </div>
           <h2 className="text-fluid-h2 font-black mb-2.5 tracking-tight text-slate-950">
@@ -65,10 +65,10 @@ const VisionPrinciples = ({ data = [] }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-purple-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
+                className="bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-indigo-400 p-6 rounded-3xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-0"
               >
                 <div>
-                  <div className="w-11 h-11 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shadow-xs mb-4">
+                  <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs mb-4">
                     <Icon size={20} />
                   </div>
                   <h3 className="text-base font-black text-slate-950 mb-1.5 truncate">
@@ -79,7 +79,7 @@ const VisionPrinciples = ({ data = [] }) => {
                   </p>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-200/70 text-[10px] font-mono text-purple-700 font-bold">
+                <div className="mt-5 pt-3 border-t border-slate-200/70 text-[10px] font-mono text-indigo-700 font-bold">
                   FUTURE COMPASS
                 </div>
               </motion.div>

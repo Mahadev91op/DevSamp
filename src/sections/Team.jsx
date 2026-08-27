@@ -149,7 +149,7 @@ const Team = () => {
               <div className="lg:col-span-5 w-full flex flex-col items-center text-center">
                 <div className="relative group mb-5">
                   {/* Glowing Animated Outer Ring */}
-                  <div className="absolute inset-[-6px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-blue-500 rounded-2xl blur-md opacity-40 group-hover:opacity-75 group-hover:scale-105 transition-all duration-500 animate-pulse"></div>
+                  <div className="absolute inset-[-6px] bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 rounded-2xl blur-md opacity-40 group-hover:opacity-75 group-hover:scale-105 transition-all duration-500 animate-pulse"></div>
                   
                   {/* Photo Container */}
                   <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden border-2 border-white bg-slate-100 shadow-md">
@@ -206,19 +206,19 @@ const Team = () => {
                       exit={{ opacity: 0, x: -10 }}
                       transition={{ duration: 0.3 }}
                     >
-                       <span className="text-pink-400 font-bold">const</span> <span className="text-blue-300">developer</span> = &#123;<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">name</span>: <span className="text-green-300">&quot;{activeMember.name}&quot;</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">role</span>: <span className="text-green-300">&quot;{activeMember.role}&quot;</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">focus</span>: [
+                       <span className="text-blue-400 font-bold">const</span> <span className="text-sky-300">developer</span> = &#123;<br />
+                      &nbsp;&nbsp;<span className="text-indigo-300">name</span>: <span className="text-green-300">&quot;{activeMember.name}&quot;</span>,<br />
+                      &nbsp;&nbsp;<span className="text-indigo-300">role</span>: <span className="text-green-300">&quot;{activeMember.role}&quot;</span>,<br />
+                      &nbsp;&nbsp;<span className="text-indigo-300">focus</span>: [
                       {activeSkills.map((s, idx) => (
                         <span key={idx} className="text-yellow-200">
                           {idx > 0 && ", "}&quot;{s.name.split(" ")[0]}&quot;
                         </span>
                       ))}
                       ],<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">integrity</span>: <span className="text-orange-400">99.8</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">diagnostics</span>: <span className="text-teal-400">&quot;Online&quot;</span>,<br />
-                      &nbsp;&nbsp;<span className="text-purple-400">manifest</span>: <span className="text-gray-400">&quot;{activeMember.desc}&quot;</span><br />
+                      &nbsp;&nbsp;<span className="text-indigo-300">integrity</span>: <span className="text-orange-400">99.8</span>,<br />
+                      &nbsp;&nbsp;<span className="text-indigo-300">diagnostics</span>: <span className="text-teal-400">&quot;Online&quot;</span>,<br />
+                      &nbsp;&nbsp;<span className="text-indigo-300">manifest</span>: <span className="text-gray-400">&quot;{activeMember.desc}&quot;</span><br />
                       &#125;;
                     </motion.div>
                   </AnimatePresence>
@@ -245,7 +245,7 @@ const Team = () => {
                             initial={{ width: 0 }}
                             animate={{ width: `${skill.level}%` }}
                             transition={{ delay: 0.2 + idx * 0.1, duration: 1, type: "spring" }}
-                            className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full"
+                            className="h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 rounded-full"
                           />
                         </div>
                       </div>

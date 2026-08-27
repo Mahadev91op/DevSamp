@@ -99,7 +99,7 @@ const getGoogleDriveImage = (url) => {
 
 const gradientOptions = [
     { name: "Blue", class: "from-blue-500 to-cyan-500" },
-    { name: "Purple", class: "from-purple-500 to-pink-500" },
+    { name: "Indigo", class: "from-blue-600 to-indigo-500" },
     { name: "Orange", class: "from-orange-500 to-red-500" },
     { name: "Green", class: "from-emerald-500 to-green-500" },
     { name: "Dark", class: "from-gray-700 to-black" },
@@ -113,74 +113,75 @@ const LineChart = ({ data, labels, expanded, onToggleExpand, timeRange, setTimeR
   const max = Math.max(...data) || 1;
   const points = data.map((val, i) => {
     const x = (i / (data.length - 1)) * w;
-    const y = h - (val / max) * (h * 0.7) - 20; 
-    return [x, y];
-  });
-  const pathD = points.reduce((acc, [x, y], i, arr) => {
-    if (i === 0) return `M ${x},${y}`;
-    const [px, py] = arr[i - 1];
-    const cp1x = px + (x - px) / 2;
-    const cp1y = py;
-    const cp2x = px + (x - px) / 2;
-    const cp2y = y;
-    return `${acc} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${x},${y}`;
-  }, "");
+    const y = h - (val / max) * (h - 40) - 20; 
+    return `${x},${y}`;
+  }).join(" ");
+
   return (
-    <div className={`relative bg-white border border-slate-200/80 p-6 rounded-3xl transition-all duration-500 ease-in-out ${expanded ? "col-span-full row-span-2 z-50 scale-[1.01] shadow-2xl" : "col-span-1 shadow-sm"}`}>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className={`bg-white border border-slate-200/80 p-6 rounded-3xl transition-all duration-500 ease-in-out relative overflow-hidden ${expanded ? "col-span-full row-span-2 z-50 scale-[1.01] shadow-2xl" : "col-span-1 shadow-sm"}`}>
+      <div className="flex justify-between items-center mb-6">
         <div>
-            <h3 className={`font-bold text-slate-800 flex items-center gap-2 ${expanded ? "text-2xl" : "text-lg"}`}>
-                <Activity size={expanded ? 24 : 18} className={`text-${color}-600`}/> Leads Overview
-            </h3>
-            <p className="text-slate-450 text-xs mt-1">Inquiries received over time.</p>
+          <h3 className={`font-bold text-slate-800 flex items-center gap-2 ${expanded ? "text-2xl" : "text-lg"}`}><TrendingUp size={expanded ? 24 : 18} className="text-indigo-600"/> Traffic & Leads</h3>
+          <p className="text-slate-450 text-xs mt-1">Real-time visitor interactions and analytics.</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-            <div className="flex bg-slate-100 border border-slate-200 rounded-lg p-1 overflow-x-auto max-w-full">
-                {['1D', '7D', '1M', '3M', '1Y'].map(r => (
-                    <button key={r} onClick={() => setTimeRange(r)} className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all whitespace-nowrap ${timeRange === r ? `bg-indigo-600 text-white shadow-sm` : "text-slate-500 hover:text-slate-900"}`}>{r}</button>
-                ))}
-            </div>
-            <button onClick={onToggleExpand} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-800 transition-colors">{expanded ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}</button>
+        <div className="flex items-center gap-3">
+          <div className="flex bg-slate-50 border border-slate-200/60 p-1 rounded-xl">
+            {["7d", "30d", "90d"].map((t) => (
+              <button key={t} onClick={() => setTimeRange(t)} className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${timeRange === t ? "bg-white text-indigo-650 shadow-sm" : "text-slate-400 hover:text-slate-700"}`}>{t.toUpperCase()}</button>
+            ))}
+          </div>
+          <button onClick={onToggleExpand} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-800 transition-colors">
+            {expanded ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}
+          </button>
         </div>
       </div>
-      <div className={`w-full relative group select-none ${expanded ? "h-[400px]" : "h-[200px]"}`}>
-        <AnimatePresence>
-            {hoveredVal !== null && (
-                <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className={`absolute bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-xl pointer-events-none transform -translate-x-1/2 z-20`} style={{ left: `${(hoveredIndex / (data.length - 1)) * 100}%`, top: points[hoveredIndex][1] - 40 }}>{hoveredVal} Leads<div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-indigo-600 rotate-45"></div></motion.div>
-            )}
-        </AnimatePresence>
-        <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-full overflow-visible preserve-3d">
-            <defs>
-                <linearGradient id={`grad-${color}`} x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.3" /><stop offset="100%" stopColor="#4f46e5" stopOpacity="0" />
-                </linearGradient>
-            </defs>
-            <line x1="0" y1={h} x2={w} y2={h} stroke="#e2e8f0" strokeWidth="1" />
-            <line x1="0" y1={0} x2={w} y2={0} stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
-            <line x1="0" y1={h/2} x2={w} y2={h/2} stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
-            <path d={`${pathD} L ${w},${h} L 0,${h} Z`} fill={`url(#grad-${color})`} />
-            <path d={pathD} fill="none" stroke="#4f46e5" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_4px_10px_rgba(79,70,229,0.15)]" />
-            {points.map(([x, y], i) => (<circle key={i} cx={x} cy={y} r="5" fill="white" stroke="#4f46e5" strokeWidth="3" className="cursor-pointer transition-all duration-200 hover:r-7 hover:fill-indigo-650 hover:stroke-indigo-650 z-10" onMouseEnter={() => { setHoveredVal(data[i]); setHoveredIndex(i); }} onMouseLeave={() => { setHoveredVal(null); setHoveredIndex(null); }}/>))}
+      <div className={`w-full relative ${expanded ? "h-[350px]" : "h-[180px]"}`}>
+        <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.2"/>
+              <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.0"/>
+            </linearGradient>
+          </defs>
+          <path d={`M 0,${h} ${points} L ${w},${h} Z`} fill="url(#chartGrad)" />
+          <motion.polyline fill="none" stroke="#4f46e5" strokeWidth={expanded ? "3.5" : "2.5"} strokeLinecap="round" strokeLinejoin="round" points={points} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2, ease: "easeOut" }} />
+          {data.map((val, i) => {
+            const x = (i / (data.length - 1)) * w;
+            const y = h - (val / max) * (h - 40) - 20;
+            return (
+              <g key={i} className="cursor-pointer">
+                <circle cx={x} cy={y} r={expanded ? 6 : 4} className="fill-white stroke-indigo-600 stroke-[3px] hover:scale-150 transition-all" onMouseEnter={() => { setHoveredVal(val); setHoveredIndex(i); }} onMouseLeave={() => { setHoveredVal(null); setHoveredIndex(null); }} />
+                {hoveredIndex === i && (
+                  <g>
+                    <rect x={x - 25} y={y - 35} width="50" height="24" rx="6" className="fill-slate-900 shadow-md" />
+                    <text x={x} y={y - 19} textAnchor="middle" className="fill-white text-[11px] font-bold font-mono">{val}</text>
+                  </g>
+                )}
+              </g>
+            );
+          })}
         </svg>
-        <div className="flex justify-between mt-4 text-[10px] text-slate-400 font-mono font-bold uppercase tracking-widest">{labels.map((l, i) => (<span key={i} className={`${i % 2 !== 0 && !expanded ? "hidden" : "block"}`}>{l}</span>))}</div>
+      </div>
+      <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono mt-4 border-t border-slate-100 pt-3">
+        {labels.map((l, i) => <span key={i}>{l}</span>)}
       </div>
     </div>
   );
 };
 
-const BarChart = ({ data, labels, expanded, onToggleExpand, color = "purple" }) => {
+const BarChart = ({ data, labels, expanded, onToggleExpand, color = "indigo" }) => {
     const max = Math.max(...data) || 1;
     return (
         <div className={`bg-white border border-slate-200/80 p-6 rounded-3xl transition-all duration-500 ease-in-out relative overflow-hidden ${expanded ? "col-span-full row-span-2 z-50 scale-[1.01] shadow-2xl" : "col-span-1 shadow-sm"}`}>
             <div className="flex justify-between items-center mb-8">
-                <div><h3 className={`font-bold text-slate-800 flex items-center gap-2 ${expanded ? "text-2xl" : "text-lg"}`}><BarChart3 size={expanded ? 24 : 18} className="text-purple-600"/> Popular Services</h3><p className="text-slate-450 text-xs mt-1">Most requested services by clients.</p></div>
+                <div><h3 className={`font-bold text-slate-800 flex items-center gap-2 ${expanded ? "text-2xl" : "text-lg"}`}><BarChart3 size={expanded ? 24 : 18} className="text-indigo-600"/> Popular Services</h3><p className="text-slate-450 text-xs mt-1">Most requested services by clients.</p></div>
                 <button onClick={onToggleExpand} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-800 transition-colors">{expanded ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}</button>
             </div>
             <div className={`w-full flex items-end justify-between gap-2 md:gap-4 ${expanded ? "h-[400px]" : "h-[200px]"}`}>
                 {data.map((val, i) => (
                     <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group relative">
                         <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-xs font-bold px-2 py-1 rounded mb-2 z-10 pointer-events-none">{val}</div>
-                        <motion.div initial={{ height: 0 }} animate={{ height: `${(val / max) * 100}%` }} transition={{ duration: 1, delay: i * 0.1, type: "spring" }} className="w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-purple-100 to-purple-600 border-t border-x border-purple-200 hover:to-purple-500 transition-all cursor-pointer relative overflow-hidden" />
+                        <motion.div initial={{ height: 0 }} animate={{ height: `${(val / max) * 100}%` }} transition={{ duration: 1, delay: i * 0.1, type: "spring" }} className="w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-indigo-100 to-indigo-600 border-t border-x border-indigo-200 hover:to-indigo-500 transition-all cursor-pointer relative overflow-hidden" />
                         <span className="text-[9px] md:text-[10px] text-slate-450 mt-3 font-mono uppercase tracking-wider truncate w-full text-center">{labels[i]}</span>
                     </div>
                 ))}
@@ -525,7 +526,7 @@ export default function AdminPanel() {
             <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
                 <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full animate-ping"></div>
                 <div className="absolute inset-0 border-t-4 border-indigo-600 rounded-full animate-spin"></div>
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-lg font-bold text-white shadow-lg shadow-indigo-500/30">DS</div>
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-lg font-bold text-white shadow-lg shadow-indigo-500/30">DS</div>
             </div>
             <div>
                 <h2 className="text-xl font-bold tracking-wide">Securing mainframe...</h2>
@@ -540,7 +541,7 @@ export default function AdminPanel() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-100/40 via-slate-50 to-slate-50 pointer-events-none"></div>
         <div className="w-full max-w-sm p-8 z-10 bg-white border border-slate-200/80 rounded-3xl backdrop-blur-xl shadow-2xl relative m-4">
             <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-indigo-650/30">DS</div>
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-indigo-650/30">DS</div>
                 <h1 className="text-3xl font-black mb-2 text-slate-900">Welcome Back</h1>
                 <p className="text-slate-500 text-sm font-semibold">Enter your master key to access the dashboard.</p>
             </div>
@@ -583,7 +584,7 @@ export default function AdminPanel() {
         <main className="flex-1 flex flex-col h-full overflow-hidden relative">
             <header className="h-16 border-b border-slate-200/60 flex items-center justify-between px-4 md:px-6 bg-white/80 backdrop-blur-xl z-20">
                 <div className="flex items-center gap-3 md:gap-4"><button onClick={() => setSidebarOpen(true)} className="md:hidden text-slate-550 p-1"><Menu size={24}/></button><h2 className="text-base md:text-lg font-black text-slate-900 capitalize flex items-center gap-2 truncate">{activeTab.replace('-', ' ')} <span className="text-slate-400 font-semibold text-sm hidden sm:inline">/ Management</span></h2></div>
-                <div className="flex items-center gap-3 md:gap-4"><button onClick={fetchAllData} className={`p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-all ${loading && "animate-spin text-indigo-600"}`} title="Refresh Data"><Loader2 size={18}/></button><div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">A</div></div>
+                <div className="flex items-center gap-3 md:gap-4"><button onClick={fetchAllData} className={`p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-all ${loading && "animate-spin text-indigo-600"}`} title="Refresh Data"><Loader2 size={18}/></button><div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">A</div></div>
             </header>
 
             <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar relative">
@@ -593,12 +594,12 @@ export default function AdminPanel() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             <StatCard title="Total Leads" value={data.leads.length} icon={Users} color="blue" trend="+12%" onClick={() => setActiveTab('leads')} />
                             <StatCard title="Active Clients" value={data.clientProjects.length} icon={FolderKanban} color="green" onClick={() => setActiveTab('client-projects')} />
-                            <StatCard title="Services" value={data.services.length} icon={Layers} color="pink" onClick={() => setActiveTab('services')} />
+                            <StatCard title="Services" value={data.services.length} icon={Layers} color="indigo" onClick={() => setActiveTab('services')} />
                             <StatCard title="Blogs Posted" value={data.blogs.length} icon={Rss} color="orange" onClick={() => setActiveTab('blogs')} />
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <LineChart data={lineChartData.data} labels={lineChartData.labels} expanded={expandedChart === 'line'} onToggleExpand={() => setExpandedChart(expandedChart === 'line' ? null : 'line')} timeRange={leadsTimeRange} setTimeRange={setLeadsTimeRange} color="blue" />
-                            <BarChart data={barChartData.data} labels={barChartData.labels} expanded={expandedChart === 'bar'} onToggleExpand={() => setExpandedChart(expandedChart === 'bar' ? null : 'bar')} color="purple" />
+                            <BarChart data={barChartData.data} labels={barChartData.labels} expanded={expandedChart === 'bar'} onToggleExpand={() => setExpandedChart(expandedChart === 'bar' ? null : 'bar')} color="indigo" />
                         </div>
                     </div>
                 )}
@@ -877,7 +878,7 @@ export default function AdminPanel() {
                                     <div className="p-5 flex-1 flex flex-col">
                                         <div className="flex gap-2 mb-3">
                                             {item.category && <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.category}</span>}
-                                            {item.role && <span className="text-[9px] font-bold text-purple-700 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.role}</span>}
+                                            {item.role && <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.role}</span>}
                                             {item.popular && <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">Popular</span>}
                                         </div>
                                         <h4 className="font-extrabold text-base text-slate-800 mb-1 line-clamp-1">{item.title || item.name}</h4>
@@ -1008,7 +1009,7 @@ export default function AdminPanel() {
                                     <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
                                         <div className="flex justify-between items-center">
                                             <h4 className="text-xs font-bold text-slate-700 flex items-center gap-2"><File size={12}/> Project Documents</h4>
-                                            <label className="text-[9px] bg-purple-650 px-2 py-1 rounded text-white hover:bg-purple-700 cursor-pointer flex items-center gap-1 font-bold uppercase">
+                                            <label className="text-[9px] bg-indigo-600 px-2 py-1 rounded text-white hover:bg-indigo-700 cursor-pointer flex items-center gap-1 font-bold uppercase">
                                                 {uploading ? <Loader2 className="animate-spin" size={10}/> : <UploadCloud size={10}/>} Upload
                                                 <input type="file" className="hidden" onChange={handleAdminFileUpload} disabled={uploading} />
                                             </label>
@@ -1410,7 +1411,7 @@ const PricingPreviewCard = ({ plan }) => {
       plan.popular ? "border-indigo-500 shadow-md ring-2 ring-indigo-500/10" : "border-slate-200 shadow-sm"
     }`}>
       {plan.popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-[8px] font-bold tracking-widest uppercase text-white shadow-sm whitespace-nowrap">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[8px] font-bold tracking-widest uppercase text-white shadow-sm whitespace-nowrap">
           Popular Choice
         </div>
       )}

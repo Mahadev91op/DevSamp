@@ -32,8 +32,8 @@ const techStacks = [
   {
     category: "Data Layer & Storage",
     icon: Database,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    color: "text-indigo-600",
+    bg: "bg-indigo-50",
     techs: ["MongoDB Atlas", "Mongoose ORM", "Redis Memory Store", "Compound B-Tree Indexes", "Document Partitioning", "Automated Backups"]
   },
   {

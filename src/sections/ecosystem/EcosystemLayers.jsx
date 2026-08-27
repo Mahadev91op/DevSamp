@@ -35,7 +35,7 @@ const coreLayers = [
     subtitle: "Custom Fullstack Engineering Pods",
     description: "Dedicated software engineering pods pairing directly with business leaders to build, integrate, and support custom high-scale platforms.",
     icon: Layers,
-    color: "from-indigo-600 to-purple-600",
+    color: "from-blue-600 to-indigo-600",
     badge: "CUSTOM PODS",
     linkUrl: "#services-layer",
     capabilities: ["Next.js 15 & React 19", "High-Concurrency Node APIs", "60fps Responsive UI/UX", "Database Optimization"]
@@ -46,7 +46,7 @@ const coreLayers = [
     subtitle: "Public Platform Infrastructure",
     description: "Shared infrastructure foundation providing unified authentication, event-driven webhooks, low-latency database indexes, and edge SLA.",
     icon: Cpu,
-    color: "from-purple-600 to-pink-500",
+    color: "from-blue-600 to-indigo-500",
     badge: "PLATFORM CORE",
     linkUrl: "#tech-layer",
     capabilities: ["Standardized REST Gateways", "Event Webhook Dispatch", "Edge Node Telemetry", "Automated Security Patches"]
@@ -57,7 +57,7 @@ const coreLayers = [
     subtitle: "Vertical Industry Frameworks",
     description: "Bridging business requirements with software execution through tailored workflows, regulatory compliance, and ERP customization.",
     icon: Workflow,
-    color: "from-pink-600 to-rose-500",
+    color: "from-indigo-600 to-cyan-500",
     badge: "BUSINESS IMPACT",
     linkUrl: "#solutions-layer",
     capabilities: ["Clinical Healthcare (HIPAA)", "Multi-Branch Retail & POS", "Fintech Ledger Protocols", "Custom SaaS Integrations"]

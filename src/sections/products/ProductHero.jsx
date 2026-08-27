@@ -66,7 +66,7 @@ const ProductHero = ({ data = null, productCount = 0 }) => {
               className="text-fluid-display font-black tracking-tight text-slate-950 leading-[1.12]"
             >
               Software Products Built to{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
                 Solve Real Problems.
               </span>
             </motion.h1>

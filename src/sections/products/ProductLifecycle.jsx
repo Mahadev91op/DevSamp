@@ -28,7 +28,7 @@ const defaultStages = [
     title: "Modular Schema Design",
     desc: "We engineer strict multi-tenant database models, sub-10ms query indexes, and clean OpenAPI contracts.",
     icon: Search,
-    color: "from-indigo-600 to-purple-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     stage: "03",
@@ -36,7 +36,7 @@ const defaultStages = [
     title: "Disciplined Engineering",
     desc: "Built with Next.js 15, React 19, PBKDF2 hashing, and isolated tenant routing by senior architects.",
     icon: Code2,
-    color: "from-purple-600 to-pink-600"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     stage: "04",
@@ -44,7 +44,7 @@ const defaultStages = [
     title: "Production Deployment",
     desc: "Rigorous load testing, security auditing, and automated regression suites prior to live release.",
     icon: CheckCircle2,
-    color: "from-pink-600 to-rose-600"
+    color: "from-indigo-600 to-blue-500"
   },
   {
     stage: "05",

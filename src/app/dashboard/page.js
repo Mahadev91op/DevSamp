@@ -233,7 +233,7 @@ export default function Dashboard() {
         </div>
         <div className="p-6 border-t border-white/10">
           <div className="flex items-center gap-3 mb-6 px-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-sm font-bold shadow-lg">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-sm font-bold shadow-lg">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden">
@@ -360,7 +360,7 @@ export default function Dashboard() {
                     <StatCard
                       label="Next Milestone"
                       value={projectData.nextMilestone}
-                      icon={<Code2 className="text-purple-500" size={24} />}
+                      icon={<Code2 className="text-indigo-500" size={24} />}
                       sub={`${projectData.progress}% Done`}
                     />
                     <StatCard
@@ -402,7 +402,7 @@ export default function Dashboard() {
                           </div>
                           <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                              className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
                               style={{ width: `${projectData.progress}%` }}
                             ></div>
                           </div>
@@ -577,7 +577,7 @@ export default function Dashboard() {
                                 <div
                                   className={`p-3 rounded-xl ${
                                     doc.uploadedBy === "Admin"
-                                      ? "bg-purple-500/20 text-purple-400"
+                                      ? "bg-indigo-500/20 text-indigo-400"
                                       : "bg-blue-500/20 text-blue-400"
                                   }`}
                                 >
@@ -885,7 +885,7 @@ export default function Dashboard() {
                       </a>
                     </div>
 
-                    <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/20 p-8 rounded-3xl">
+                    <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border border-blue-500/20 p-8 rounded-3xl">
                       <h3 className="text-xl font-bold mb-2 text-white">
                         DevSamp PRO
                       </h3>

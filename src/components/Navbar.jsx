@@ -198,12 +198,12 @@ const Navbar = () => {
           }`}
         >
           {/* Ambient gradient border glow */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 opacity-50 pointer-events-none -z-10" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-indigo-500/10 opacity-50 pointer-events-none -z-10" />
 
           {/* Logo */}
           <Link href="/" prefetch={true} className="relative group flex items-center gap-2.5 shrink-0" data-cursor="DevSamp">
             <div className="relative">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xs shadow-sm shadow-indigo-600/30 group-hover:scale-105 transition-transform duration-300">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xs shadow-sm shadow-indigo-600/30 group-hover:scale-105 transition-transform duration-300">
                 DS
               </div>
               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
@@ -211,7 +211,7 @@ const Navbar = () => {
 
             <div className="text-lg font-black tracking-tight text-slate-950 flex items-center">
               <span>DEV</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 ml-0.5">SAMP</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 ml-0.5">SAMP</span>
             </div>
           </Link>
 
@@ -449,7 +449,7 @@ const Navbar = () => {
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xs">
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xs">
                       DS
                     </div>
                     <span className="text-base font-black text-slate-950 tracking-tight">
