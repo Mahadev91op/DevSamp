@@ -107,7 +107,9 @@ const WhyDifferentiation = ({ data = [] }) => {
         {/* 6 Pillars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pillars.map((pillar, idx) => {
-            const Icon = LucideIcons[pillar.icon] || ShieldCheck;
+            const Icon = (pillar?.icon && typeof LucideIcons[pillar.icon] === "function") 
+              ? LucideIcons[pillar.icon] 
+              : ShieldCheck;
 
             return (
               <motion.div

@@ -4,8 +4,23 @@ import Product from "@/models/Product";
 export class ProductRepository {
   static async findAll(filter = {}, sort = { order: 1, createdAt: -1 }, limit = null) {
     await connectDB();
-    let query = Product.find({ isActive: { $ne: false }, ...filter }).sort(sort);
-    if (limit) query = query.limit(limit);
+    let queryFilter = { isActive: { $ne: false } };
+    let querySort = sort;
+    let queryLimit = limit;
+
+    if (filter && typeof filter === "object") {
+      if ("limit" in filter && typeof filter.limit === "number") {
+        queryLimit = filter.limit;
+        const { limit: _, sort: optSort, ...rest } = filter;
+        if (optSort) querySort = optSort;
+        Object.assign(queryFilter, rest);
+      } else {
+        Object.assign(queryFilter, filter);
+      }
+    }
+
+    let query = Product.find(queryFilter).sort(querySort);
+    if (queryLimit) query = query.limit(queryLimit);
     return await query.lean();
   }
 
