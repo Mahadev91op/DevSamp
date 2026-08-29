@@ -274,14 +274,16 @@ export default function Navbar() {
               aria-label="DevSamp Home"
               data-cursor="Home"
             >
-              <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-slate-950 flex items-center justify-center text-white font-black text-sm tracking-tighter shadow-md group-hover:scale-105 group-hover:bg-blue-600 transition-all">
-                DS
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[1.5px] shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 group-hover:scale-105 transition-all">
+                <div className="w-full h-full rounded-[10px] bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-600 flex items-center justify-center text-white font-black text-xs md:text-sm tracking-tighter">
+                  DS
+                </div>
               </div>
               <div className="flex flex-col leading-tight">
                 <span className="font-extrabold text-sm md:text-base tracking-tight text-slate-950 group-hover:text-blue-600 transition-colors">
                   DevSamp
                 </span>
-                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold -mt-0.5">
+                <span className="text-[9px] uppercase tracking-widest text-blue-600 font-bold -mt-0.5">
                   Ecosystem
                 </span>
               </div>
@@ -309,8 +311,8 @@ export default function Navbar() {
                       onClick={() => setActiveDropdown(isOpen ? null : item.id)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none ${
                         active || isOpen
-                          ? "bg-slate-950 text-white shadow-xs"
-                          : "text-slate-700 hover:text-slate-950 hover:bg-slate-100/80"
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/25"
+                          : "text-slate-700 hover:text-blue-600 hover:bg-blue-50/80"
                       }`}
                     >
                       <span>{item.label}</span>
@@ -325,8 +327,8 @@ export default function Navbar() {
                       aria-current={active ? "page" : undefined}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none ${
                         active
-                          ? "bg-slate-950 text-white shadow-xs"
-                          : "text-slate-700 hover:text-slate-950 hover:bg-slate-100/80"
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/25"
+                          : "text-slate-700 hover:text-blue-600 hover:bg-blue-50/80"
                       }`}
                     >
                       {item.label}
@@ -451,7 +453,7 @@ export default function Navbar() {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-slate-950 hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+                className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white text-xs font-bold transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
                 data-cursor={navigationConfig.cta.dataCursor}
               >
                 <span>{navigationConfig.cta.label}</span>
@@ -497,7 +499,7 @@ export default function Navbar() {
               {/* Top Drawer Header */}
               <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center text-white font-black text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 flex items-center justify-center text-white font-black text-xs shadow-md shadow-blue-500/25">
                     DS
                   </div>
                   <span className="font-bold text-sm text-slate-950">DevSamp Navigation</span>
@@ -635,7 +637,7 @@ export default function Navbar() {
                 <Link
                   href={navigationConfig.cta.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className="w-full py-3 rounded-xl bg-slate-950 hover:bg-blue-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-colors"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all"
                 >
                   <span>{navigationConfig.cta.label}</span>
                   <ArrowRight size={14} />

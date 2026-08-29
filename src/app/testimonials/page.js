@@ -1,13 +1,16 @@
 import EcosystemPageShell from "@/components/EcosystemPageShell";
 import Link from "next/link";
 import { Sparkles, Star, Quote, CheckCircle2 } from "lucide-react";
+import { getReviews } from "@/lib/data";
+
+export const revalidate = 60; // ISR revalidate 60s
 
 export const metadata = {
   title: "Testimonials & Reviews | DevSamp Ecosystem",
   description: "Verified reviews and client feedback on DevSamp software platforms and engineering pods.",
 };
 
-const REVIEWS = [
+const DEFAULT_REVIEWS = [
   {
     name: "Dr. Arvind Mehta",
     role: "Managing Director",
@@ -34,7 +37,10 @@ const REVIEWS = [
   }
 ];
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const dbReviews = await getReviews(12);
+  const reviews = dbReviews && dbReviews.length > 0 ? dbReviews : DEFAULT_REVIEWS;
+
   return (
     <EcosystemPageShell
       breadcrumbs={[{ label: "Testimonials", href: "/testimonials" }]}
@@ -45,7 +51,7 @@ export default function TestimonialsPage() {
       secondaryAction={{ label: "Explore Customers", href: "/customers" }}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {REVIEWS.map((rev, idx) => (
+        {reviews.map((rev, idx) => (
           <div
             key={idx}
             className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm flex flex-col justify-between space-y-6"
@@ -53,26 +59,24 @@ export default function TestimonialsPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex text-amber-400 gap-0.5">
-                  {[...Array(rev.rating)].map((_, i) => (
+                  {[...Array(rev.rating || 5)].map((_, i) => (
                     <Star key={i} size={14} fill="currentColor" />
                   ))}
                 </div>
-                {rev.verified && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                    <CheckCircle2 size={11} />
-                    <span>Verified Client</span>
-                  </span>
-                )}
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                  <CheckCircle2 size={11} />
+                  <span>Verified Client</span>
+                </span>
               </div>
 
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
-                &ldquo;{rev.feedback}&rdquo;
+                &ldquo;{rev.feedback || rev.content || rev.review}&rdquo;
               </p>
             </div>
 
             <div className="pt-4 border-t border-slate-100">
-              <p className="font-bold text-sm text-slate-950">{rev.name}</p>
-              <p className="text-xs text-slate-500">{rev.role} • {rev.org}</p>
+              <p className="font-bold text-sm text-slate-950">{rev.name || rev.author}</p>
+              <p className="text-xs text-slate-500">{rev.role || rev.designation || "Executive"} {rev.org || rev.company ? `• ${rev.org || rev.company}` : ""}</p>
             </div>
           </div>
         ))}

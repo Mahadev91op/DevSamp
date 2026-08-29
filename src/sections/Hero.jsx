@@ -197,7 +197,7 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-slate-950/15 flex items-center gap-2 group cursor-pointer"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2 group cursor-pointer"
                   data-cursor="Products"
                 >
                   <Boxes size={16} />
@@ -244,10 +244,10 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-            className="lg:col-span-5 bg-slate-950 text-slate-200 rounded-3xl border border-white/15 shadow-2xl p-5 sm:p-6 font-mono text-xs flex flex-col justify-between h-[460px] min-h-[460px] max-h-[460px] relative overflow-hidden shrink-0"
+            className="lg:col-span-5 bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-blue-950/90 backdrop-blur-2xl text-slate-200 rounded-3xl border border-indigo-500/30 shadow-2xl shadow-indigo-950/40 p-5 sm:p-6 font-mono text-xs flex flex-col justify-between h-[460px] min-h-[460px] max-h-[460px] relative overflow-hidden shrink-0"
           >
             {/* Ambient inner glow */}
-            <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-cyan-500/20 to-indigo-500/30 rounded-full blur-3xl pointer-events-none" />
 
             {/* Top Bar */}
             <div className="shrink-0">
@@ -334,7 +334,7 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                   <span className="text-xs text-slate-400 font-medium">Sync all 4 nodes in real-time</span>
                   <button
                     onClick={triggerFullBuild}
-                    className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-indigo-600/30 cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-blue-500/30 cursor-pointer"
                   >
                     <Play size={12} className="fill-current" />
                     <span>Run Sync Pipeline</span>

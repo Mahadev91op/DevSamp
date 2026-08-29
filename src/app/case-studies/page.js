@@ -1,13 +1,16 @@
 import EcosystemPageShell from "@/components/EcosystemPageShell";
 import Link from "next/link";
-import { Briefcase, ArrowUpRight, CheckCircle2, TrendingUp, Sparkles } from "lucide-react";
+import { Briefcase, ArrowUpRight, TrendingUp, Sparkles } from "lucide-react";
+import { getCaseStudies } from "@/lib/data";
+
+export const revalidate = 60; // ISR revalidate 60s
 
 export const metadata = {
   title: "Case Studies & Impact | DevSamp Ecosystem",
   description: "Real-world engineering case studies: problem, architectural solution, and measurable business outcomes.",
 };
 
-const CASE_STUDIES = [
+const DEFAULT_CASE_STUDIES = [
   {
     title: "Digitizing 120-Bed Multi-Specialty Hospital with MedERP Pro",
     client: "Apex Care Healthcare Network",
@@ -37,7 +40,10 @@ const CASE_STUDIES = [
   }
 ];
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
+  const dbCaseStudies = await getCaseStudies(12);
+  const caseStudies = dbCaseStudies && dbCaseStudies.length > 0 ? dbCaseStudies : DEFAULT_CASE_STUDIES;
+
   return (
     <EcosystemPageShell
       breadcrumbs={[{ label: "Case Studies", href: "/case-studies" }]}
@@ -49,43 +55,52 @@ export default function CaseStudiesPage() {
     >
       <div className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {CASE_STUDIES.map((study, idx) => (
+          {caseStudies.map((study, idx) => (
             <div
               key={idx}
               className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-100">
-                    {study.tag}
+                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
+                    {study.tag || study.industry || "ENGINEERING"}
                   </span>
-                  <span className="text-xs text-slate-400 font-medium">{study.category}</span>
+                  <span className="text-xs text-slate-400 font-medium">{study.category || "Case Study"}</span>
                 </div>
 
                 <h3 className="text-lg font-bold text-slate-900 leading-snug">
                   {study.title}
                 </h3>
 
-                <div className="p-3 rounded-2xl bg-indigo-50/70 border border-indigo-100 text-xs font-bold text-indigo-950 flex items-center gap-2">
-                  <TrendingUp size={15} className="text-indigo-600 shrink-0" />
-                  <span>{study.metrics}</span>
-                </div>
+                {(study.metrics || study.impact) && (
+                  <div className="p-3 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs font-bold text-blue-950 flex items-center gap-2">
+                    <TrendingUp size={15} className="text-blue-600 shrink-0" />
+                    <span>{study.metrics || study.impact}</span>
+                  </div>
+                )}
 
                 <div className="space-y-2 text-xs text-slate-600">
-                  <p>
-                    <strong className="text-slate-900">Challenge:</strong> {study.problem}
-                  </p>
-                  <p>
-                    <strong className="text-slate-900">Architecture:</strong> {study.solution}
-                  </p>
+                  {study.problem && (
+                    <p>
+                      <strong className="text-slate-900">Challenge:</strong> {study.problem}
+                    </p>
+                  )}
+                  {study.solution && (
+                    <p>
+                      <strong className="text-slate-900">Architecture:</strong> {study.solution}
+                    </p>
+                  )}
+                  {!study.problem && !study.solution && study.summary && (
+                    <p className="leading-relaxed">{study.summary}</p>
+                  )}
                 </div>
               </div>
 
               <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-700">{study.client}</span>
+                <span className="text-xs font-bold text-slate-700">{study.client || study.clientName || "Enterprise Client"}</span>
                 <Link
                   href="/contact"
-                  className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                  className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1"
                 >
                   <span>Discuss Similar</span>
                   <ArrowUpRight size={13} />

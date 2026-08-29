@@ -16,13 +16,17 @@ import {
   TrendingUp,
   Cpu
 } from "lucide-react";
+import { ProductRepository } from "@/server/repositories/product.repository";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const productName = slug === "mederp-pro" ? "MedERP Pro Clinical Suite" : `${slug.replace(/-/g, " ").toUpperCase()} Platform`;
+  const dbProduct = await ProductRepository.findBySlug(slug);
+  const productName = dbProduct?.name || (slug === "mederp-pro" ? "MedERP Pro Clinical Suite" : `${slug.replace(/-/g, " ").toUpperCase()} Platform`);
+  const description = dbProduct?.description || `Complete overview, features, use cases, pricing, and documentation for ${productName}.`;
+
   return {
     title: `${productName} | DevSamp Ecosystem`,
-    description: `Complete overview, features, use cases, pricing, and documentation for ${productName}.`,
+    description,
   };
 }
 
@@ -31,8 +35,20 @@ export default async function ProductDetailPage({ params, searchParams }) {
   const sParams = await searchParams;
   const activeView = sParams?.view || "overview";
 
+  const dbProduct = await ProductRepository.findBySlug(slug);
+
   const isMedERP = slug === "mederp-pro" || slug === "mederp";
-  const productName = isMedERP ? "MedERP Pro Clinical Suite" : `${slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}`;
+  const productName = dbProduct?.name || (isMedERP ? "MedERP Pro Clinical Suite" : `${slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}`);
+  const productTagline = dbProduct?.tagline || (isMedERP ? "Next-generation hospital, clinical diagnostics, laboratory, and pharmacy management ERP engineered for zero-latency operations." : "High-performance modular enterprise software platform engineered by DevSamp.");
+  const productDesc = dbProduct?.description || productTagline;
+  const capabilities = dbProduct?.capabilities && dbProduct.capabilities.length > 0
+    ? dbProduct.capabilities
+    : [
+        "Sub-second execution with zero lag across clinical operations",
+        "HIPAA & DPDP compliant encrypted records & audit trails",
+        "Offline-first local caching with automated cloud sync",
+        "Direct hardware integration with laboratory analyzers and POS thermal printers"
+      ];
 
   const tabs = [
     { id: "overview", label: "Overview", href: `/products/${slug}` },
@@ -48,13 +64,9 @@ export default async function ProductDetailPage({ params, searchParams }) {
         { label: "Products", href: "/products" },
         { label: productName, href: `/products/${slug}` }
       ]}
-      badge="FLAGSHIP VERTICAL SaaS"
+      badge={dbProduct?.category ? `${dbProduct.category.toUpperCase()} • ${dbProduct.status || "LIVE"}` : "FLAGSHIP VERTICAL SaaS"}
       title={productName}
-      subtitle={
-        isMedERP
-          ? "Next-generation hospital, clinical diagnostics, laboratory, and pharmacy management ERP engineered for zero-latency operations."
-          : `High-performance modular enterprise software platform engineered by DevSamp for high-concurrency workflows.`
-      }
+      subtitle={productDesc}
       primaryAction={{ label: "Book a Live Demo", href: "/book-demo" }}
       secondaryAction={{ label: "Compare Plans", href: "/products/compare" }}
       relatedSection={{
@@ -77,7 +89,7 @@ export default async function ProductDetailPage({ params, searchParams }) {
                 href={tab.href}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
                   isActive
-                    ? "bg-indigo-600 text-white shadow-xs"
+                    ? "bg-blue-600 text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                 }`}
               >
@@ -91,17 +103,17 @@ export default async function ProductDetailPage({ params, searchParams }) {
         {activeView === "features" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-3">
-              <span className="text-[10px] font-black uppercase text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">OPD & IPD</span>
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded">OPD & IPD</span>
               <h3 className="text-base font-bold text-slate-900">Bed Allocation & Triage</h3>
               <p className="text-xs text-slate-600">Real-time floor map, discharge checklist automation, and nurse station monitors.</p>
             </div>
             <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-3">
-              <span className="text-[10px] font-black uppercase text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">LAB & PATHOLOGY</span>
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded">LAB & PATHOLOGY</span>
               <h3 className="text-base font-bold text-slate-900">Bidirectional Machine Sync</h3>
               <p className="text-xs text-slate-600">Direct integration with Roche, Beckman, and Mindray laboratory analyzers.</p>
             </div>
             <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-3">
-              <span className="text-[10px] font-black uppercase text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">PHARMACY POS</span>
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded">PHARMACY POS</span>
               <h3 className="text-base font-bold text-slate-900">Batch & Expiry Controls</h3>
               <p className="text-xs text-slate-600">Sub-second barcode sales, automatic reordering alerts, and GST tax invoice generation.</p>
             </div>
@@ -136,20 +148,20 @@ export default async function ProductDetailPage({ params, searchParams }) {
               </Link>
             </div>
 
-            <div className="p-6 rounded-3xl bg-indigo-50 border-2 border-indigo-600 shadow-md space-y-4 relative">
-              <span className="text-[9px] font-black uppercase tracking-widest text-white bg-indigo-600 px-2 py-0.5 rounded-full absolute top-4 right-4">
+            <div className="p-6 rounded-3xl bg-blue-50 border-2 border-blue-600 shadow-md space-y-4 relative">
+              <span className="text-[9px] font-black uppercase tracking-widest text-white bg-blue-600 px-2 py-0.5 rounded-full absolute top-4 right-4">
                 POPULAR
               </span>
-              <span className="text-xs font-bold text-indigo-700 uppercase">Hospital Cloud Pro</span>
+              <span className="text-xs font-bold text-blue-700 uppercase">Hospital Cloud Pro</span>
               <h3 className="text-2xl font-black text-slate-950">₹7,999 <span className="text-xs text-slate-400 font-normal">/ month</span></h3>
               <p className="text-xs text-slate-600">Up to 100 beds, full OT, IPD, lab sync, and pharmacy modules.</p>
-              <Link href="/book-demo" className="block w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-xs">
+              <Link href="/book-demo" className="block w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-center font-bold text-xs">
                 Deploy Cloud Pro
               </Link>
             </div>
 
             <div className="p-6 rounded-3xl bg-slate-900 text-white shadow-md space-y-4">
-              <span className="text-xs font-bold text-indigo-300 uppercase">Enterprise Dedicated</span>
+              <span className="text-xs font-bold text-blue-300 uppercase">Enterprise Dedicated</span>
               <h3 className="text-2xl font-black text-white">Custom</h3>
               <p className="text-xs text-slate-300">Multi-branch hospital chains, private cloud, and on-premise deployments.</p>
               <Link href="/contact" className="block w-full py-2.5 rounded-xl bg-white text-slate-950 hover:bg-slate-100 text-center font-bold text-xs">
@@ -164,30 +176,23 @@ export default async function ProductDetailPage({ params, searchParams }) {
             <div className="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
               <h2 className="text-xl font-bold text-slate-900">Why Modern Organizations Choose {productName}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                  <div className="flex items-center gap-2">
-                    <Zap size={16} className="text-indigo-600" />
-                    <h4 className="text-xs font-bold text-slate-900">Sub-Second Execution</h4>
+                {capabilities.map((cap, idx) => (
+                  <div key={idx} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 size={16} className="text-blue-600 shrink-0" />
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{cap}</h4>
+                    </div>
                   </div>
-                  <p className="text-xs text-slate-600">Zero lag even with hundreds of concurrent staff and heavy laboratory data loads.</p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck size={16} className="text-indigo-600" />
-                    <h4 className="text-xs font-bold text-slate-900">HIPAA & DPDP Compliant</h4>
-                  </div>
-                  <p className="text-xs text-slate-600">Encrypted records, biometric login support, and automated immutable audit trails.</p>
-                </div>
+                ))}
               </div>
 
               {/* Demo Simulation Box */}
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-950 to-indigo-950 text-white space-y-3">
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-950 to-blue-950 text-white space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
                     Live Sandbox Instance
                   </span>
-                  <span className="text-xs font-mono text-slate-400">Node: us-east-1a</span>
+                  <span className="text-xs font-mono text-slate-400">Node: ap-south-1</span>
                 </div>
                 <h3 className="text-base font-bold">Interactive Sandbox Environment</h3>
                 <p className="text-xs text-slate-300">
@@ -195,7 +200,7 @@ export default async function ProductDetailPage({ params, searchParams }) {
                 </p>
                 <div className="pt-2">
                   <Link href="/book-demo">
-                    <button className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all shadow-md">
+                    <button className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-md">
                       Launch Interactive Sandbox
                     </button>
                   </Link>

@@ -140,7 +140,7 @@ export default function Footer({ siteSettings = null }) {
             <Link href={navigationConfig.cta.href}>
               <button
                 type="button"
-                className="px-5 py-2.5 rounded-full bg-slate-950 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold transition-all shadow-md flex items-center gap-2 group cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2 group cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
               >
                 <span>{navigationConfig.cta.label}</span>
                 <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -226,8 +226,10 @@ export default function Footer({ siteSettings = null }) {
           {/* Brand Info & Live Time */}
           <div className="lg:col-span-4 space-y-2">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-slate-950 flex items-center justify-center text-white font-black text-xs">
-                DS
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[1.5px] shadow-md shadow-blue-500/25">
+                <div className="w-full h-full rounded-[10px] bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-600 flex items-center justify-center text-white font-black text-xs tracking-tighter">
+                  DS
+                </div>
               </div>
               <span className="font-bold text-base text-slate-950">DevSamp Ecosystem</span>
             </div>
@@ -295,7 +297,7 @@ export default function Footer({ siteSettings = null }) {
               href="https://x.com/devsamp1st"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-950 hover:text-white text-slate-600 transition-all shadow-2xs"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-gradient-to-tr hover:from-blue-600 hover:to-indigo-600 hover:text-white text-slate-600 transition-all shadow-2xs"
               aria-label="X Twitter"
             >
               <XIcon size={15} />

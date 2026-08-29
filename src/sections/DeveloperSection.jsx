@@ -135,7 +135,7 @@ const DeveloperSection = ({ sectionData = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="px-6 py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition-all shadow-xs flex items-center gap-2 group cursor-pointer"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2 group cursor-pointer"
                   data-cursor="Docs"
                 >
                   <span>Build with DevSamp</span>
@@ -151,10 +151,10 @@ const DeveloperSection = ({ sectionData = null }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-            className="lg:col-span-7 bg-slate-950 text-slate-200 rounded-3xl border border-white/15 shadow-2xl overflow-hidden font-mono text-xs min-w-0"
+            className="lg:col-span-7 bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-slate-200 rounded-3xl border border-indigo-500/30 shadow-2xl shadow-indigo-950/40 overflow-hidden font-mono text-xs min-w-0"
           >
             {/* Terminal Top Window Bar */}
-            <div className="h-12 bg-slate-900/90 border-b border-white/10 px-4 md:px-6 flex items-center justify-between select-none min-w-0">
+            <div className="h-12 bg-slate-900/90 border-b border-indigo-500/20 px-4 md:px-6 flex items-center justify-between select-none min-w-0">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
@@ -162,7 +162,7 @@ const DeveloperSection = ({ sectionData = null }) => {
               </div>
 
               {/* Language Tabs */}
-              <div className="flex bg-slate-950 p-1 rounded-xl border border-white/10">
+              <div className="flex bg-slate-950/80 p-1 rounded-xl border border-indigo-500/20">
                 {[
                   { id: "node", label: "Node.js" },
                   { id: "curl", label: "cURL" },

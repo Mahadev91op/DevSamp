@@ -15,8 +15,9 @@ import {
   CheckCircle2,
   ArrowRight
 } from "lucide-react";
+import { ServiceRepository } from "@/server/repositories/service.repository";
 
-const SERVICE_META = {
+const DEFAULT_SERVICE_META = {
   "web-development": {
     name: "Fullstack Web Development",
     tagline: "Next.js 15, React, Node.js & Ultra-Fast Edge Runtimes",
@@ -91,16 +92,19 @@ const SERVICE_META = {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const meta = SERVICE_META[slug] || { name: "Engineering Service", desc: "DevSamp dedicated engineering capabilities." };
+  const dbService = await ServiceRepository.findBySlug(slug);
+  const meta = dbService || DEFAULT_SERVICE_META[slug] || { name: "Engineering Service", desc: "DevSamp dedicated engineering capabilities." };
   return {
-    title: `${meta.name} | DevSamp Services`,
-    description: meta.desc,
+    title: `${meta.name || meta.title} | DevSamp Services`,
+    description: meta.desc || meta.description || meta.tagline,
   };
 }
 
 export default async function ServicePillarPage({ params }) {
   const { slug } = await params;
-  const meta = SERVICE_META[slug] || {
+  const dbService = await ServiceRepository.findBySlug(slug);
+
+  const fallback = DEFAULT_SERVICE_META[slug] || {
     name: slug.replace(/-/g, " ").toUpperCase(),
     tagline: "Dedicated Engineering Pod Capability",
     desc: "High-scale engineering service delivered by DevSamp senior architects.",
@@ -108,15 +112,20 @@ export default async function ServicePillarPage({ params }) {
     deliverables: ["Architecture design document", "Senior pod sprint delivery", "Automated testing & CI/CD", "SLA maintenance"]
   };
 
+  const name = dbService?.name || dbService?.title || fallback.name;
+  const desc = dbService?.description || fallback.desc;
+  const badge = fallback.badge || "SERVICES";
+  const deliverables = dbService?.deliverables && dbService.deliverables.length > 0 ? dbService.deliverables : fallback.deliverables;
+
   return (
     <EcosystemPageShell
       breadcrumbs={[
         { label: "Services", href: "/services" },
-        { label: meta.name, href: `/services/${slug}` }
+        { label: name, href: `/services/${slug}` }
       ]}
-      badge={meta.badge}
-      title={meta.name}
-      subtitle={meta.desc}
+      badge={badge}
+      title={name}
+      subtitle={desc}
       primaryAction={{ label: "Commission Pod Sprint", href: "/contact" }}
       secondaryAction={{ label: "View Process", href: "/services/process" }}
       relatedSection={{
@@ -129,25 +138,25 @@ export default async function ServicePillarPage({ params }) {
     >
       <div className="space-y-10 max-w-4xl">
         <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-          <h2 className="text-xl font-bold text-slate-900">What We Deliver for {meta.name}</h2>
+          <h2 className="text-xl font-bold text-slate-900">What We Deliver for {name}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {meta.deliverables.map((deliv, idx) => (
+            {deliverables.map((deliv, idx) => (
               <div key={idx} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-                <CheckCircle2 size={18} className="text-indigo-600 shrink-0 mt-0.5" />
-                <span className="text-xs font-semibold text-slate-800">{deliv}</span>
+                <CheckCircle2 size={18} className="text-blue-600 shrink-0 mt-0.5" />
+                <span className="text-xs font-semibold text-slate-800 leading-snug">{deliv}</span>
               </div>
             ))}
           </div>
         </div>
 
         <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 text-white space-y-4">
-          <h3 className="text-base font-bold">Why Partner with DevSamp for {meta.name}?</h3>
+          <h3 className="text-base font-bold">Why Partner with DevSamp for {name}?</h3>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
             We operate as true engineering partners—not a generic outsourcing shop. You interface directly with senior architects who write clean, modular, zero-debt code designed to power your business for the next 10–15 years.
           </p>
           <div className="pt-2">
             <Link href="/contact">
-              <button className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md flex items-center gap-2">
+              <button className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md flex items-center gap-2">
                 <span>Talk with Lead Architect</span>
                 <ArrowRight size={13} />
               </button>

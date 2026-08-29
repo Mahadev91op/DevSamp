@@ -76,7 +76,7 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link href="/products">
               <button 
-                className="px-5 py-2.5 rounded-full bg-white border border-slate-300 hover:border-slate-950 text-slate-900 hover:bg-slate-950 hover:text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                className="px-5 py-2.5 rounded-full bg-white border border-slate-300 hover:border-blue-600 text-slate-900 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
                 data-cursor="All"
               >
                 <span>View All Products</span>
@@ -95,8 +95,8 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-xs font-bold transition-all border whitespace-nowrap cursor-pointer ${
                   selectedCategory === cat
-                    ? "bg-slate-950 text-white border-slate-950 shadow-xs"
-                    : "bg-white text-slate-700 border-slate-200 hover:border-slate-350 hover:bg-slate-50"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-sm shadow-blue-500/25"
+                    : "bg-white text-slate-700 border-slate-200 hover:border-blue-400 hover:bg-blue-50/50"
                 }`}
               >
                 {cat}
@@ -193,7 +193,7 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
                         href={product.productUrl || "#contact"}
                         target={product.productUrl?.startsWith("http") ? "_blank" : "_self"}
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-950 text-white hover:bg-indigo-600 text-xs sm:text-sm font-bold transition-all shadow-xs group/btn shrink-0 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold transition-all shadow-sm shadow-blue-500/25 group/btn shrink-0 cursor-pointer"
                         data-cursor="Open"
                       >
                         <span>Access Product</span>
@@ -216,7 +216,7 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
               New flagship products are currently in compilation and testing. Check back soon or request early developer beta access.
             </p>
             <Link href="/#contact">
-              <button className="px-6 py-2.5 rounded-full bg-slate-950 text-white font-bold text-xs hover:bg-indigo-600 transition-all cursor-pointer">
+              <button className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs hover:from-blue-500 hover:to-indigo-500 shadow-sm shadow-blue-500/25 transition-all cursor-pointer">
                 Request Early Access
               </button>
             </Link>

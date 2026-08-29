@@ -9,10 +9,10 @@ import {
   Video,
   Users,
   PhoneCall,
-  Search,
   ArrowRight,
   Sparkles
 } from "lucide-react";
+import SupportKnowledgeSearch from "@/components/SupportKnowledgeSearch";
 
 export const metadata = {
   title: "Support & Help Center | DevSamp Ecosystem",
@@ -45,7 +45,11 @@ export default function SupportPage() {
         actionLabel: "Join Discussions"
       }}
     >
-      <div className="space-y-10">
+      <div className="space-y-12">
+        
+        {/* Interactive Search & FAQ Accordion Engine */}
+        <SupportKnowledgeSearch />
+
         {/* Support Hubs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SUPPORT_CATEGORIES.map((cat) => {
@@ -54,19 +58,19 @@ export default function SupportPage() {
               <Link
                 key={cat.id}
                 href={`/support/${cat.id}`}
-                className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between group"
+                className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-2xl bg-slate-100 group-hover:bg-indigo-600 group-hover:text-white text-slate-700 transition-colors">
+                    <div className="p-2.5 rounded-2xl bg-slate-100 group-hover:bg-blue-600 group-hover:text-white text-slate-700 transition-colors">
                       <Icon size={18} />
                     </div>
-                    <span className="text-[9px] font-black uppercase text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                    <span className="text-[9px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
                       {cat.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                     {cat.name}
                   </h3>
 
@@ -75,7 +79,7 @@ export default function SupportPage() {
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-600">
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
                   <span>Explore {cat.name.split(" ")[0]}</span>
                   <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -83,6 +87,7 @@ export default function SupportPage() {
             );
           })}
         </div>
+
       </div>
     </EcosystemPageShell>
   );

@@ -1,13 +1,16 @@
 import EcosystemPageShell from "@/components/EcosystemPageShell";
 import Link from "next/link";
 import { Bell, ArrowRight, Calendar, Sparkles } from "lucide-react";
+import { getBlogs } from "@/lib/data";
+
+export const revalidate = 60; // ISR revalidate 60s
 
 export const metadata = {
   title: "News & Company Announcements | DevSamp Ecosystem",
   description: "Official DevSamp press releases, product updates, and ecosystem milestones.",
 };
 
-const NEWS_ITEMS = [
+const DEFAULT_NEWS = [
   {
     date: "Aug 2026",
     tag: "PRODUCT LAUNCH",
@@ -28,7 +31,17 @@ const NEWS_ITEMS = [
   }
 ];
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const dbBlogs = await getBlogs(10);
+  const newsItems = dbBlogs && dbBlogs.length > 0
+    ? dbBlogs.map(b => ({
+        date: new Date(b.createdAt || Date.now()).toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+        tag: b.category || "ANNOUNCEMENT",
+        title: b.title,
+        desc: b.summary || b.description || b.content?.slice(0, 160) + "..."
+      }))
+    : DEFAULT_NEWS;
+
   return (
     <EcosystemPageShell
       breadcrumbs={[{ label: "News & Announcements", href: "/news" }]}
@@ -39,13 +52,13 @@ export default function NewsPage() {
       secondaryAction={{ label: "Engineering Blog", href: "/blog" }}
     >
       <div className="space-y-6 max-w-4xl">
-        {NEWS_ITEMS.map((item, idx) => (
+        {newsItems.map((item, idx) => (
           <div
             key={idx}
             className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all space-y-3"
           >
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-100">
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
                 {item.tag}
               </span>
               <span className="text-xs text-slate-400 font-mono flex items-center gap-1">

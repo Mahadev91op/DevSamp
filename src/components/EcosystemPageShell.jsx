@@ -111,7 +111,7 @@ export default function EcosystemPageShell({
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="px-6 py-2.5 rounded-full bg-slate-950 hover:bg-indigo-600 text-white text-xs sm:text-sm font-bold transition-all shadow-md flex items-center gap-2 group cursor-pointer"
+                    className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2 group cursor-pointer"
                   >
                     <span>{primaryAction.label}</span>
                     <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
@@ -129,10 +129,10 @@ export default function EcosystemPageShell({
 
         {/* Related Section Hub Callout */}
         {relatedSection && (
-          <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl mb-16 relative overflow-hidden">
+          <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-900 text-white shadow-xl mb-16 relative overflow-hidden border border-indigo-500/20">
             <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="max-w-xl">
-                <span className="text-[10px] uppercase font-black tracking-widest text-indigo-400 bg-indigo-900/50 px-2.5 py-1 rounded-full border border-indigo-700/50">
+                <span className="text-[10px] uppercase font-black tracking-widest text-cyan-300 bg-cyan-900/50 px-2.5 py-1 rounded-full border border-cyan-500/40">
                   {relatedSection.badge || "Ecosystem Hub"}
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold mt-2.5">
@@ -143,7 +143,7 @@ export default function EcosystemPageShell({
                 </p>
               </div>
               <Link href={relatedSection.href}>
-                <button className="px-5 py-2.5 rounded-full bg-white hover:bg-indigo-50 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 shrink-0 cursor-pointer">
+                <button className="px-5 py-2.5 rounded-full bg-white hover:bg-cyan-50 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 shrink-0 cursor-pointer">
                   <span>{relatedSection.actionLabel || "Explore Hub"}</span>
                   <ArrowUpRight size={14} />
                 </button>

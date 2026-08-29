@@ -27,7 +27,7 @@ const WebDevWidget = () => {
 
   return (
     <div className="w-full h-full flex flex-row gap-3 items-stretch select-none font-sans text-xs min-w-0">
-      <div className="flex-1 bg-slate-950 text-slate-200 rounded-2xl p-3.5 font-mono border border-white/10 flex flex-col justify-between min-w-0">
+      <div className="flex-1 bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-slate-200 rounded-2xl p-3.5 font-mono border border-indigo-500/30 flex flex-col justify-between min-w-0 shadow-md">
         <div>
           <div className="flex gap-1.5 mb-2">
             <span className="w-2 h-2 rounded-full bg-red-500"></span>
@@ -71,7 +71,7 @@ const UIUXWidget = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-3 relative justify-between select-none min-w-0">
-      <div className="h-[140px] md:h-[230px] lg:h-auto lg:flex-1 bg-slate-950 rounded-2xl relative overflow-hidden border border-white/10">
+      <div className="h-[140px] md:h-[230px] lg:h-auto lg:flex-1 bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 rounded-2xl relative overflow-hidden border border-indigo-500/30 shadow-md">
         
         {/* Underlay: Wireframe */}
         <div className="absolute inset-0 p-4 flex flex-col justify-between font-mono text-[11px] text-indigo-400/60">
@@ -222,7 +222,7 @@ const Services = ({ initialServices = [], sectionData = null }) => {
           <div className="shrink-0">
             <Link href="/services">
               <button 
-                className="px-5 py-2.5 rounded-full bg-slate-50 border border-slate-300 hover:border-slate-950 text-slate-900 hover:bg-slate-950 hover:text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                className="px-5 py-2.5 rounded-full bg-slate-50 border border-slate-300 hover:border-blue-600 text-slate-900 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
                 data-cursor="Services"
               >
                 <span>View All Services</span>
