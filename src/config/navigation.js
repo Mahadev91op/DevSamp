@@ -36,6 +36,7 @@ export const navigationConfig = {
         {
           title: "EXPLORE & ROADMAP",
           items: [
+            { label: "Source Code Store", href: "/marketplace", description: "Free templates & commercial SaaS repositories", icon: "Code2", badge: "STORE", enabled: true },
             { label: "Product Comparison Matrix", href: "/products/compare", description: "Side-by-side tier and capability matrix", icon: "Scale", enabled: true },
             { label: "Public Product Roadmap", href: "/products/roadmap", description: "Scheduled milestones and upcoming features", icon: "Flag", badge: "ROADMAP", enabled: true },
             { label: "Release Changelog", href: "/products/changelog", description: "Version notes and continuous improvements", icon: "History", enabled: true },
@@ -273,6 +274,7 @@ export const navigationConfig = {
         items: [
           { label: "Products Overview", href: "/products", enabled: true },
           { label: "MedERP Pro Clinical Suite", href: "/products/mederp-pro", badge: "FLAGSHIP", enabled: true },
+          { label: "Source Code Store", href: "/marketplace", badge: "CODE", enabled: true },
           { label: "Product Categories", href: "/products/categories", enabled: true },
           { label: "Comparison Matrix", href: "/products/compare", enabled: true },
           { label: "Public Roadmap", href: "/products/roadmap", enabled: true },

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
-import { Cpu, ArrowRight, Layers, Sparkles } from "lucide-react";
+import { Cpu, ArrowRight, Layers, Sparkles, ChevronRight } from "lucide-react";
 
 const smoothEase = [0.16, 1, 0.3, 1];
 
@@ -38,73 +39,97 @@ const WebDevWidget = () => {
           <div className="space-y-1.5 text-xs">
             <div className="flex justify-between items-center hover:bg-white/10 px-1 py-0.5 rounded cursor-pointer transition-colors" onClick={() => setBtnColor(btnColor === "#2563eb" ? "#0ea5e9" : "#2563eb")}>
               <span>--primary:</span>
-              <span className="font-bold text-blue-400 truncate">{btnColor}</span>
+              <span className="font-bold underline text-cyan-400">{btnColor}</span>
             </div>
             <div className="flex justify-between items-center hover:bg-white/10 px-1 py-0.5 rounded cursor-pointer transition-colors" onClick={() => setIsRounded(!isRounded)}>
               <span>--rounded:</span>
-              <span className="font-bold text-sky-400">{isRounded ? "999px" : "8px"}</span>
+              <span className="font-bold underline text-cyan-400">{isRounded ? "1rem" : "0.25rem"}</span>
+            </div>
+            <div className="flex justify-between items-center text-slate-500">
+              <span>--framework:</span>
+              <span className="text-slate-400">Next.js 15</span>
             </div>
           </div>
         </div>
-        <div className="text-[11px] text-slate-400 font-bold border-t border-slate-800 pt-1.5 mt-2">
-          Click lines to reload theme
+        <div className="text-[10px] text-slate-400 mt-2 font-mono flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>Click parameter to test live hot-reload</span>
         </div>
       </div>
-
-      <div className="w-[110px] md:w-[140px] bg-white rounded-2xl border border-slate-200 p-3.5 md:p-4 flex flex-col justify-center items-center gap-2.5 shrink-0 shadow-xs">
-        <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Preview</span>
-        <motion.button 
-          animate={{ backgroundColor: btnColor, borderRadius: isRounded ? "999px" : "8px" }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="px-3.5 md:px-4 py-2 text-white font-bold text-xs sm:text-sm shadow-md shadow-indigo-500/20 truncate"
+      
+      {/* Visual Live Preview Box */}
+      <div className="w-28 bg-white border border-slate-200/90 rounded-2xl p-2 flex flex-col items-center justify-center gap-2 shadow-xs shrink-0">
+        <div 
+          className="w-10 h-10 flex items-center justify-center shadow-xs text-white transition-all duration-300 transform active:scale-95"
+          style={{ 
+            backgroundColor: btnColor, 
+            borderRadius: isRounded ? "1rem" : "0.25rem" 
+          }}
         >
-          DevSamp
-        </motion.button>
+          <Cpu size={18} />
+        </div>
+        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider text-center font-mono">
+          Component
+        </span>
       </div>
     </div>
   );
 };
 
-// --- WIDGET 2: UI/UX Prototype Wireframe/Mock Slider ---
+// --- WIDGET 2: UI/UX Interactive Split Canvas Simulator ---
 const UIUXWidget = () => {
   const [sliderVal, setSliderVal] = useState(50);
 
   return (
-    <div className="w-full h-full flex flex-col gap-3 relative justify-between select-none min-w-0">
-      <div className="h-[140px] md:h-[230px] lg:h-auto lg:flex-1 bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 rounded-2xl relative overflow-hidden border border-indigo-500/30 shadow-md">
-        
-        {/* Underlay: Wireframe */}
-        <div className="absolute inset-0 p-4 flex flex-col justify-between font-mono text-[11px] text-indigo-400/60">
-          <div className="border border-dashed border-indigo-500/30 p-1.5 rounded-lg flex justify-between">
-            <span>[HEADER_NAV]</span>
-            <div className="flex gap-1.5"><span>[NAV_LINK]</span></div>
+    <div className="w-full h-full flex flex-col justify-between select-none py-1">
+      <div className="relative w-full h-[180px] lg:h-[360px] bg-slate-900 rounded-2xl overflow-hidden border border-slate-200/80 shadow-inner">
+        {/* Under layer: Wireframe Blueprint */}
+        <div className="absolute inset-0 bg-slate-900 p-4 flex flex-col justify-between font-mono text-[10px] text-indigo-400">
+          <div className="flex justify-between border-b border-indigo-900/60 pb-1">
+            <span>[WIREFRAME.SCHEMA]</span>
+            <span>GRID: 8PT</span>
           </div>
-          <div className="border-2 border-dashed border-indigo-500/35 h-20 rounded-xl flex items-center justify-center font-bold">
-            [HERO_ENGINE_NODE]
+          <div className="grid grid-cols-2 gap-2 my-auto">
+            <div className="h-10 border border-dashed border-indigo-500/40 rounded flex items-center justify-center bg-indigo-950/30">
+              <span>Figma Spec</span>
+            </div>
+            <div className="h-10 border border-dashed border-indigo-500/40 rounded flex items-center justify-center bg-indigo-950/30">
+              <span>Tokens</span>
+            </div>
           </div>
-          <div className="flex gap-1.5">
-            <div className="flex-1 border border-dashed border-indigo-500/30 h-8 rounded-lg"></div>
-          </div>
+          <div className="h-4 bg-indigo-950/50 border border-indigo-900/50 rounded w-2/3"></div>
         </div>
 
-        {/* Overlay: Rendered Visual UI */}
+        {/* Top Layer: Rendered High-Fidelity UI */}
         <div 
-          className="absolute inset-0 p-4 bg-[#0f172a] flex flex-col justify-between transition-all duration-300"
-          style={{ opacity: sliderVal / 100 }}
+          className="absolute inset-y-0 left-0 bg-gradient-to-br from-indigo-600 to-blue-600 p-4 flex flex-col justify-between text-white overflow-hidden shadow-2xl transition-all duration-75"
+          style={{ width: `${sliderVal}%` }}
         >
-          <div className="flex justify-between items-center text-white font-bold text-xs sm:text-sm">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-extrabold">DevSamp</span>
-            <span className="text-slate-400 text-xs font-bold uppercase">UI Engine</span>
-          </div>
-          <div className="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 h-20 rounded-xl shadow-lg flex flex-col justify-end p-3 text-white">
-            <h4 className="font-extrabold text-xs sm:text-sm leading-tight">Ecosystem Architecture</h4>
-            <p className="text-xs text-slate-200">High-fidelity responsive UI</p>
-          </div>
-          <div className="flex gap-2">
-            <button className="flex-1 bg-white text-slate-900 font-bold text-xs py-1.5 rounded-lg shadow-sm">Deploy</button>
+          <div className="w-64">
+            <div className="flex justify-between border-b border-white/20 pb-1 text-[10px] font-bold">
+              <span>LIVE UI VIEW</span>
+              <Sparkles size={12} className="text-cyan-300" />
+            </div>
+            <div className="grid grid-cols-2 gap-2 my-auto pt-4">
+              <div className="h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center font-bold text-xs shadow-xs">
+                <span>Production</span>
+              </div>
+              <div className="h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center font-bold text-xs shadow-xs">
+                <span>Delivered</span>
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Handle visual indicator */}
+        <div 
+          className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg pointer-events-none"
+          style={{ left: `${sliderVal}%` }}
+        >
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-white rounded-full shadow-md flex items-center justify-center">
+            <span className="text-[8px] text-indigo-600 font-bold">⟷</span>
+          </div>
+        </div>
       </div>
 
       <div className="space-y-1.5 px-1">
@@ -161,6 +186,7 @@ const PerformanceWidget = () => {
 };
 
 const Services = ({ initialServices = [], sectionData = null }) => {
+  const router = useRouter();
   const servicesData = initialServices;
 
   const badge = sectionData?.badge || "Capabilities";
@@ -246,20 +272,22 @@ const Services = ({ initialServices = [], sectionData = null }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, ease: smoothEase, delay: (idx % 3) * 0.08 }}
-                  className={`group bg-slate-50/80 border border-slate-200/90 p-6 md:p-8 rounded-3xl shadow-xs flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:bg-white hover:border-indigo-500/40 hover:shadow-md min-w-0 ${bentoClass}`}
+                  onClick={() => router.push(service.slug ? `/services/${service.slug}` : "/services")}
+                  className={`group bg-slate-50/80 border border-slate-200/90 p-6 md:p-8 rounded-3xl shadow-xs flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:bg-white hover:border-blue-400 hover:shadow-xl min-w-0 cursor-pointer ${bentoClass}`}
                 >
                   <div className="space-y-3.5 min-w-0">
                     <div className="flex justify-between items-start">
-                      <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-indigo-600 shadow-xs shrink-0">
+                      <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-blue-600 shadow-xs shrink-0">
                         <IconComponent size={22} />
                       </div>
-                      <span className="font-mono text-xs font-bold text-slate-400 group-hover:text-indigo-600 transition-colors">
+                      <span className="font-mono text-xs font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
                         [0{idx + 1} / SERVICE]
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-1.5 group-hover:text-indigo-600 transition-colors truncate">
-                        {service.title}
+                      <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-1.5 group-hover:text-blue-600 transition-colors truncate flex items-center justify-between">
+                        <span>{service.title}</span>
+                        <ChevronRight size={18} className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
                       </h3>
                       <p className="text-slate-600 text-sm sm:text-base font-normal leading-relaxed line-clamp-2 md:line-clamp-3">
                         {service.desc}
@@ -267,7 +295,7 @@ const Services = ({ initialServices = [], sectionData = null }) => {
                     </div>
                   </div>
 
-                  <div className="mt-6 flex-1 flex items-end min-w-0">
+                  <div className="mt-6 flex-1 flex items-end min-w-0" onClick={(e) => e.stopPropagation()}>
                     {renderWidget(idx)}
                   </div>
                 </motion.div>

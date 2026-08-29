@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
@@ -19,6 +20,7 @@ import {
 const smoothEase = [0.16, 1, 0.3, 1];
 
 const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const products = Array.isArray(initialProducts) ? initialProducts : [];
@@ -126,7 +128,8 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, ease: smoothEase, delay: (idx % 3) * 0.08 }}
-                    className="group bg-white border border-slate-200/90 hover:border-indigo-500/40 p-6 sm:p-7 md:p-8 rounded-3xl shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between relative overflow-hidden min-w-0"
+                    onClick={() => router.push(`/products/${product.slug || "mederp-pro"}`)}
+                    className="group bg-white border border-slate-200/90 hover:border-blue-400 p-6 sm:p-7 md:p-8 rounded-3xl shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden min-w-0 cursor-pointer"
                   >
                     {/* Top gradient stripe */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${product.gradient || "from-blue-600 to-indigo-600"}`} />
@@ -138,40 +141,35 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
                           <IconComponent size={22} />
                         </div>
                         
-                        <span className={`text-xs font-bold px-3 py-1 rounded-full border ${statusColor}`}>
-                          {product.status || "Active"}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-100 font-mono">
+                            {product.category || "SaaS Platform"}
+                          </span>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 font-mono ${statusColor}`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                            <span>{product.status || "Live"}</span>
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Product Name & Category */}
-                      <div className="mb-2.5 min-w-0">
-                        <span className="text-xs font-extrabold uppercase tracking-widest text-indigo-600 font-mono block truncate">
-                          {product.category || "SaaS Suite"}
-                        </span>
-                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mt-0.5 group-hover:text-indigo-600 transition-colors truncate">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm sm:text-base font-bold text-slate-800 mt-1 line-clamp-2 leading-snug">
-                          {product.tagline}
-                        </p>
-                      </div>
+                      {/* Product Name & Tagline */}
+                      <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors tracking-tight flex items-center justify-between">
+                        <span>{product.name}</span>
+                        <ChevronRight size={18} className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                      </h3>
 
-                      {/* Description */}
-                      <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal mb-5 line-clamp-3">
-                        {product.description}
+                      <p className="text-xs sm:text-sm text-slate-600 mb-4 line-clamp-2 leading-relaxed font-normal">
+                        {product.tagline || product.description}
                       </p>
 
-                      {/* Capabilities pills */}
+                      {/* Capabilities Badges */}
                       {product.capabilities && product.capabilities.length > 0 && (
-                        <div className="space-y-1.5 mb-5 pt-3.5 border-t border-slate-100">
-                          <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                            Key Capabilities
-                          </span>
+                        <div className="mb-6">
                           <div className="flex flex-wrap gap-1.5">
                             {product.capabilities.slice(0, 4).map((cap, cIdx) => (
                               <span
                                 key={cIdx}
-                                className="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold text-slate-700"
+                                className="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold text-slate-700 font-mono"
                               >
                                 {cap}
                               </span>
@@ -189,16 +187,15 @@ const FeaturedProducts = ({ initialProducts = [], sectionData = null }) => {
                         </span>
                       ) : <div />}
                       
-                      <a
-                        href={product.productUrl || "#contact"}
-                        target={product.productUrl?.startsWith("http") ? "_blank" : "_self"}
-                        rel="noopener noreferrer"
+                      <Link
+                        href={`/products/${product.slug || "mederp-pro"}`}
+                        onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold transition-all shadow-sm shadow-blue-500/25 group/btn shrink-0 cursor-pointer"
                         data-cursor="Open"
                       >
                         <span>Access Product</span>
                         <ArrowUpRight size={14} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                      </a>
+                      </Link>
                     </div>
 
                   </motion.div>

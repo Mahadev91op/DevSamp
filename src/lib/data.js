@@ -759,3 +759,392 @@ export async function getCustomersPageData() {
     };
   }
 }
+
+/**
+ * Baseline Initial Source Code Packages for Auto-Seeding
+ */
+const DEFAULT_SOURCE_CODES = [
+  {
+    title: "MedERP Pro - Clinical Hospital & Pharmacy ERP Suite",
+    slug: "mederp-pro-source",
+    tagline: "Enterprise HIPAA-ready Next.js 15 hospital management, clinic OPD queue, lab & pharmacy engine.",
+    description: "Complete production codebase for multi-specialty hospitals, pathology diagnostic labs, and retail pharmacies. Includes real-time OPD token queue, HL7 lab bridges, ESC/POS thermal printing, and automated GST billing.",
+    category: "Healthcare ERP",
+    priceINR: 4999,
+    priceUSD: 59,
+    originalPriceINR: 9999,
+    originalPriceUSD: 119,
+    isFree: false,
+    badge: "FLAGSHIP SAAS",
+    version: "v2.4.0",
+    techStack: ["Next.js 15", "React 19", "MongoDB", "Node.js", "Tailwind CSS", "ESC/POS", "DICOM Viewer"],
+    features: [
+      "OPD/IPD Patient Registration & Automated Token Queue",
+      "Smart Billing Ledger with GST 1/3B Automated Reports",
+      "Integrated Pharmacy Inventory with Batch Expiry Controls",
+      "Pathology Lab Diagnostic Reports & WhatsApp Dispatch Engine",
+      "Role-Based RBAC for Doctors, Pharmacists, Lab Techs & Admins"
+    ],
+    includes: [
+      "100% Full Source Code (Frontend, Backend & DB Schemas)",
+      "Production Database Indexes & Seed Scripts",
+      "Thermal Printer WebUSB/Bluetooth Desktop Daemon",
+      "Step-by-Step Deployment Guide & Architecture PDF",
+      "Lifetime Bug Fix Updates via GitHub"
+    ],
+    requirements: ["Node.js 18+", "MongoDB Atlas or Local", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/products/mederp-pro",
+    docsUrl: "/docs",
+    license: "Commercial Multi-Clinic License",
+    rating: 5.0,
+    reviewsCount: 48,
+    downloadsCount: 320,
+    starsCount: 142,
+    gradient: "from-blue-600 via-indigo-600 to-cyan-500",
+    featured: true,
+    order: 1,
+    isActive: true
+  },
+  {
+    title: "DevScale Core - Multi-Tenant SaaS Boilerplate",
+    slug: "devscale-core-source",
+    tagline: "Production-grade Next.js 15 App Router multi-tenant boilerplate with tenant isolation & Stripe/Razorpay billing.",
+    description: "Save 200+ hours building your next B2B SaaS. Pre-built with strict organization boundary isolation, granular RBAC permission guards, idempotent payment webhooks, and modern dark/light UI tokens.",
+    category: "Boilerplates & Starters",
+    priceINR: 0,
+    priceUSD: 0,
+    originalPriceINR: 2999,
+    originalPriceUSD: 39,
+    isFree: true,
+    badge: "FREE OPEN SOURCE",
+    version: "v2.1.0",
+    techStack: ["Next.js 15", "React 19", "Mongoose", "Tailwind CSS", "JWT Sessions", "Stripe", "Razorpay"],
+    features: [
+      "Automated Multi-Tenant Organization Boundary Isolation",
+      "Granular Server-Side RBAC Roles & Permissions Matrix",
+      "Pre-built Stripe & Razorpay Webhook Idempotency",
+      "Interactive Customer Dashboard & Admin Control Plane",
+      "Standardized API Envelopes & Error Handlers"
+    ],
+    includes: [
+      "Full Next.js App Router Source Code",
+      "Ready-to-Use Docker Container Configs",
+      "Authentication & Session Decryption Engine",
+      "OpenAPI 3.1 Documentation Playground"
+    ],
+    requirements: ["Node.js 18+", "MongoDB", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/dashboard",
+    docsUrl: "/developers",
+    license: "MIT Open Source License",
+    rating: 4.9,
+    reviewsCount: 124,
+    downloadsCount: 1420,
+    starsCount: 380,
+    gradient: "from-indigo-600 via-blue-600 to-cyan-400",
+    featured: true,
+    order: 2,
+    isActive: true
+  },
+  {
+    title: "FlowPulse POS - Offline-First Retail & Inventory Engine",
+    slug: "flowpulse-pos-source",
+    tagline: "Sub-second offline SQLite POS with multi-store mesh sync, barcode engine & thermal receipts.",
+    description: "High-speed retail billing platform that runs uninterrupted even during total internet outages. Features automatic background synchronization, barcode scanner integration, batch management, and multi-branch inventory manifests.",
+    category: "POS & Commerce",
+    priceINR: 2499,
+    priceUSD: 29,
+    originalPriceINR: 4999,
+    originalPriceUSD: 59,
+    isFree: false,
+    badge: "BESTSELLER",
+    version: "v2.2.0",
+    techStack: ["React 19", "Electron", "SQLite", "Node.js", "WebUSB", "Tailwind CSS"],
+    features: [
+      "Offline-First Local SQLite Transaction Caching",
+      "Sub-second Barcode Search Index for 100,000+ SKUs",
+      "Multi-Warehouse Inter-Branch Stock Transfers",
+      "Direct WebUSB/Bluetooth Thermal Receipt Printing",
+      "Daily Cash Balance & Reconciliation Ledgers"
+    ],
+    includes: [
+      "Full Source Code (React + Node + SQLite Engine)",
+      "Cross-Platform Electron Desktop Wrapper",
+      "Hardware ESC/POS Protocol Connectors",
+      "6 Months Priority Developer Updates"
+    ],
+    requirements: ["Node.js 18+", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/products",
+    docsUrl: "/docs",
+    license: "Single Commercial Business License",
+    rating: 5.0,
+    reviewsCount: 36,
+    downloadsCount: 210,
+    starsCount: 88,
+    gradient: "from-emerald-600 via-teal-600 to-cyan-500",
+    featured: true,
+    order: 3,
+    isActive: true
+  },
+  {
+    title: "DevSamp Modern Ecosystem & 3D CMS Monolith",
+    slug: "devsamp-cms-source",
+    tagline: "Full-scale Next.js 15 digital ecosystem portal with Three.js 3D background & dynamic Mongoose CMS.",
+    description: "The complete source code of the DevSamp software ecosystem website. Includes 90+ static/dynamic routes, 3D WebGL particle wave canvas, interactive telemetry HUD, dynamic seeder, and SEO schema markup.",
+    category: "Full-Stack SaaS",
+    priceINR: 0,
+    priceUSD: 0,
+    originalPriceINR: 3499,
+    originalPriceUSD: 45,
+    isFree: true,
+    badge: "FREE DOWNLOAD",
+    version: "v2.0.0",
+    techStack: ["Next.js 15", "Three.js 3D", "Tailwind CSS", "MongoDB", "Framer Motion", "PWA"],
+    features: [
+      "High-Performance 3D Particle Mesh with Dynamic Waves",
+      "Dynamic Mongoose CMS for Products, Blogs, Testimonials & FAQs",
+      "Client Account Portal with Project & Invoice Viewer",
+      "Full-Text Command Palette (⌘K) & Omni-Search",
+      "Built-in Service Worker (PWA) Offline Support"
+    ],
+    includes: [
+      "100% Full Clean Repository Source Code",
+      "Custom Micro-Interactions & UI Component Library",
+      "Production Next.js 16 Ready Configuration",
+      "Complete Architecture Blueprint (Markdown & Mermaid)"
+    ],
+    requirements: ["Node.js 18+", "MongoDB Atlas", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/",
+    docsUrl: "/docs",
+    license: "MIT Open Source License",
+    rating: 5.0,
+    reviewsCount: 89,
+    downloadsCount: 950,
+    starsCount: 290,
+    gradient: "from-blue-600 via-indigo-600 to-cyan-400",
+    featured: true,
+    order: 4,
+    isActive: true
+  },
+  {
+    title: "OmniDesk AI - Autonomous Support Agent & WhatsApp Bridge",
+    slug: "omnidesk-ai-source",
+    tagline: "AI customer support copilot with semantic vector search, WhatsApp Business API & automated ticket triage.",
+    description: "Plug-and-play AI customer service engine. Ingests documentation and FAQs to answer customer questions automatically across WhatsApp, email, and web chat with human-in-the-loop escalation.",
+    category: "AI & Automation",
+    priceINR: 3499,
+    priceUSD: 39,
+    originalPriceINR: 6999,
+    originalPriceUSD: 79,
+    isFree: false,
+    badge: "AI POWERED",
+    version: "v1.4.0",
+    techStack: ["Node.js", "OpenAI / Gemini API", "LangChain", "WhatsApp Business API", "Pinecone"],
+    features: [
+      "Semantic Vector Search for Custom Company Documentation",
+      "Automated WhatsApp & Email Support Responses",
+      "Ticket Triaging & Sentiment Severity Escalation",
+      "Human-in-the-Loop Agent Override Dashboard",
+      "Zero Data Leaks with Anonymized PII Filters"
+    ],
+    includes: [
+      "Full Backend Microservice Source Code",
+      "WhatsApp Webhook Handler Engine",
+      "Embedding Vector Pipeline Scripts",
+      "Step-by-Step API Setup Video & Guide"
+    ],
+    requirements: ["Node.js 18+", "OpenAI or Gemini API Key", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/services/ai-solutions",
+    docsUrl: "/docs",
+    license: "Commercial Developer License",
+    rating: 4.8,
+    reviewsCount: 29,
+    downloadsCount: 185,
+    starsCount: 74,
+    gradient: "from-purple-600 via-indigo-600 to-pink-500",
+    featured: false,
+    order: 5,
+    isActive: true
+  },
+  {
+    title: "ClinicFlow - Doctor Token Queue & Live Scoreboard",
+    slug: "clinicflow-queue-source",
+    tagline: "Real-time doctor room calling system with TV scoreboard display, voice audio chime & mobile status.",
+    description: "Lightweight queue management system for clinics and hospitals. Features live WebSocket synchronization, animated TV waiting room display, multi-room doctor callouts, and audio voice announcements.",
+    category: "Healthcare ERP",
+    priceINR: 0,
+    priceUSD: 0,
+    originalPriceINR: 1999,
+    originalPriceUSD: 25,
+    isFree: true,
+    badge: "FREE UTILITY",
+    version: "v1.2.0",
+    techStack: ["React", "WebSockets / Socket.io", "Express.js", "Tailwind CSS"],
+    features: [
+      "Real-Time Doctor Consultation Room Callout",
+      "Large-Screen TV Scoreboard with Audio Voice Announcer",
+      "Patient Mobile Status Link with Zero App Install",
+      "Ultra-Low Latency WebSocket State Sync"
+    ],
+    includes: [
+      "Frontend & Socket Server Codebase",
+      "Audio Chime & Speech Synthesis Engine",
+      "Single-Click Local Server Setup"
+    ],
+    requirements: ["Node.js 16+", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/products/mederp-pro",
+    docsUrl: "/docs",
+    license: "MIT Open Source License",
+    rating: 4.9,
+    reviewsCount: 42,
+    downloadsCount: 620,
+    starsCount: 110,
+    gradient: "from-cyan-600 via-blue-600 to-indigo-600",
+    featured: false,
+    order: 6,
+    isActive: true
+  },
+  {
+    title: "SaaS Invoicing & Government GST Ledger Generator",
+    slug: "saas-gst-invoice-source",
+    tagline: "Automated PDF tax invoice generator with QR code payment stamp & GSTR-1 Excel ledger exporter.",
+    description: "Robust microservice to generate beautiful PDF invoices, compute intra-state and inter-state GST (CGST/SGST/IGST), generate dynamic UPI payment QR codes, and export government-compliant Excel tax manifests.",
+    category: "DevOps & Tools",
+    priceINR: 0,
+    priceUSD: 0,
+    originalPriceINR: 1499,
+    originalPriceUSD: 19,
+    isFree: true,
+    badge: "FREE UTILITY",
+    version: "v1.1.0",
+    techStack: ["Node.js", "Puppeteer PDF", "ExcelJS", "Express"],
+    features: [
+      "Automated Dynamic PDF Tax Invoice Engine",
+      "GSTR-1 and GSTR-3B Compliant Excel Exports",
+      "UPI QR Code Generation & Digital Signature Stamp",
+      "Email Invoice Auto-Dispatch with SMTP Relay"
+    ],
+    includes: [
+      "Independent Microservice Source Code",
+      "Pre-designed Beautiful Invoice HTML Templates",
+      "Automated Test Suite & Mock Data"
+    ],
+    requirements: ["Node.js 18+", "Git"],
+    githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+    githubRepo: "Mahadev91op/DevSamp-Final",
+    downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+    liveDemoUrl: "/docs",
+    docsUrl: "/docs",
+    license: "MIT Open Source License",
+    rating: 4.8,
+    reviewsCount: 55,
+    downloadsCount: 890,
+    starsCount: 165,
+    gradient: "from-blue-600 via-teal-600 to-emerald-500",
+    featured: false,
+    order: 7,
+    isActive: true
+  }
+];
+
+/**
+ * Fetch all source code packages from MongoDB with auto-seed fallback
+ */
+export async function getSourceCodes(filters = {}) {
+  try {
+    await connectDB();
+    const SourceCode = (await import("@/models/SourceCode")).default;
+
+    // Auto-seed if collection is empty (safe against worker race conditions)
+    try {
+      const count = await SourceCode.countDocuments();
+      if (count === 0) {
+        await SourceCode.insertMany(DEFAULT_SOURCE_CODES, { ordered: false });
+      }
+    } catch (seedErr) {
+      // Ignore duplicate key errors if another parallel worker seeded concurrently
+    }
+
+    const query = { isActive: { $ne: false } };
+    if (filters.category && filters.category !== "All") {
+      query.category = filters.category;
+    }
+    if (filters.isFree === true) {
+      query.isFree = true;
+    } else if (filters.isFree === false) {
+      query.isFree = false;
+    }
+    if (filters.search) {
+      const searchRegex = new RegExp(filters.search, "i");
+      query.$or = [
+        { title: searchRegex },
+        { tagline: searchRegex },
+        { description: searchRegex },
+        { techStack: searchRegex }
+      ];
+    }
+
+    const items = await SourceCode.find(query)
+      .sort({ order: 1, createdAt: -1 })
+      .lean();
+
+    return JSON.parse(JSON.stringify(items || []));
+  } catch (error) {
+    console.error("Error fetching source codes:", error);
+    // Fallback to default in-memory list if DB query fails
+    return DEFAULT_SOURCE_CODES;
+  }
+}
+
+/**
+ * Fetch single source code package by slug
+ */
+export async function getSourceCodeBySlug(slug) {
+  try {
+    await connectDB();
+    const SourceCode = (await import("@/models/SourceCode")).default;
+
+    const item = await SourceCode.findOne({ slug, isActive: { $ne: false } }).lean();
+    if (item) {
+      return JSON.parse(JSON.stringify(item));
+    }
+    const defaultMatched = DEFAULT_SOURCE_CODES.find((s) => s.slug === slug);
+    return defaultMatched ? JSON.parse(JSON.stringify(defaultMatched)) : null;
+  } catch (error) {
+    console.error("Error fetching source code by slug:", error);
+    const defaultMatched = DEFAULT_SOURCE_CODES.find((s) => s.slug === slug);
+    return defaultMatched ? JSON.parse(JSON.stringify(defaultMatched)) : null;
+  }
+}
+
+/**
+ * Increment download counter on verified GitHub download
+ */
+export async function incrementSourceCodeDownload(slug) {
+  try {
+    await connectDB();
+    const SourceCode = (await import("@/models/SourceCode")).default;
+    await SourceCode.updateOne({ slug }, { $inc: { downloadsCount: 1 } });
+    return true;
+  } catch (error) {
+    console.error("Error incrementing source code download count:", error);
+    return false;
+  }
+}
