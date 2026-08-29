@@ -4,12 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import * as LucideIcons from "lucide-react";
-import { 
-  ChevronDown, 
-  Menu, 
-  X, 
-  ArrowRight, 
+import {
+  ChevronDown,
+  Menu,
+  X,
+  ArrowRight,
   ArrowUpRight,
   Sparkles,
   LayoutDashboard,
@@ -34,25 +33,75 @@ import {
   Code2,
   Workflow,
   Zap,
-  CheckCircle2
+  CheckCircle2,
+  Search,
+  Globe,
+  LifeBuoy,
+  HelpCircle,
+  BookOpen,
+  CreditCard,
+  Building2,
+  FileText,
+  History,
+  Scale,
+  Smartphone,
+  Brain,
+  Cloud
 } from "lucide-react";
 import { navigationConfig } from "@/config/navigation";
+import CommandPalette from "@/components/CommandPalette";
 
 const smoothEase = [0.16, 1, 0.3, 1];
 
-const Navbar = () => {
+// Clean icon map lookup
+const iconMap = {
+  Home: Globe,
+  Info: Info,
+  Compass: Compass,
+  Target: Target,
+  ShieldCheck: ShieldCheck,
+  Cpu: Cpu,
+  CreditCard: CreditCard,
+  Users: Users,
+  Briefcase: Briefcase,
+  Sparkles: Sparkles,
+  Rss: Rss,
+  Mail: Mail,
+  Lock: Lock,
+  FileText: FileText,
+  Activity: Activity,
+  Boxes: Boxes,
+  Layers: Layers,
+  Scale: Scale,
+  Flag: Flag,
+  History: History,
+  Workflow: Workflow,
+  Code2: Code2,
+  Globe: Globe,
+  Smartphone: Smartphone,
+  Brain: Brain,
+  Zap: Zap,
+  Terminal: Terminal,
+  Cloud: Cloud,
+  LayoutDashboard: LayoutDashboard,
+  LifeBuoy: LifeBuoy,
+  HelpCircle: HelpCircle,
+  BookOpen: BookOpen,
+  Building2: Building2
+};
+
+export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  
+
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
-  const [isProfileHovered, setIsProfileHovered] = useState(false);
-  
+
   // Navigation States
-  const [activeDropdown, setActiveDropdown] = useState(null); // id of active desktop dropdown
-  const [hoveredTab, setHoveredTab] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [openMobileAccordions, setOpenMobileAccordions] = useState({});
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const navRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
@@ -83,11 +132,13 @@ const Navbar = () => {
     router.push("/login");
   };
 
+  // Close dropdowns on route change
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setActiveDropdown(null);
     setIsMobileOpen(false);
+    setIsSearchOpen(false);
   }
 
   // Scroll detection
@@ -102,6 +153,15 @@ const Navbar = () => {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Listen for global custom event to toggle command palette
+  useEffect(() => {
+    const handleToggle = () => {
+      setIsSearchOpen((prev) => !prev);
+    };
+    window.addEventListener("devsamp:toggle-command-palette", handleToggle);
+    return () => window.removeEventListener("devsamp:toggle-command-palette", handleToggle);
   }, []);
 
   // Click outside & Escape key listeners
@@ -143,7 +203,7 @@ const Navbar = () => {
     return null;
   }
 
-  // Active route matching helper
+  // Robust active route matching helper (exact, nested, child)
   const isNavActive = (item) => {
     if (!item) return false;
     if (Array.isArray(item.match)) {
@@ -155,29 +215,27 @@ const Navbar = () => {
     return pathname === item.match || (item.match && item.match !== "/" && pathname?.startsWith(item.match));
   };
 
-  // Dropdown hover timers
+  // Dropdown hover timers with intentional delay to prevent accidental closing
   const handleMouseEnter = (itemId) => {
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
     }
-    const targetItem = navigationConfig.primary.find(i => i.id === itemId);
+    const targetItem = navigationConfig.primary.find((i) => i.id === itemId);
     if (targetItem?.hasDropdown) {
       setActiveDropdown(itemId);
     } else {
       setActiveDropdown(null);
     }
-    setHoveredTab(itemId);
   };
 
   const handleMouseLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-      setHoveredTab(null);
-    }, 150);
+    }, 180);
   };
 
   const toggleMobileAccordion = (id) => {
-    setOpenMobileAccordions(prev => ({
+    setOpenMobileAccordions((prev) => ({
       ...prev,
       [id]: !prev[id]
     }));
@@ -185,42 +243,56 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Omni-Search Command Palette (Ctrl+K or ⌘K) */}
+      <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
       {/* Floating Desktop & Tablet Header */}
-      <header ref={navRef} className="fixed top-0 left-0 right-0 z-[1000] flex justify-center p-3 md:p-5 select-none pointer-events-none">
+      <header
+        ref={navRef}
+        className="fixed top-0 left-0 right-0 z-[1000] flex justify-center p-2.5 sm:p-4 md:p-5 select-none pointer-events-none"
+      >
         <motion.nav
+          role="navigation"
+          aria-label="Main Navigation"
           initial={{ y: -35, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: smoothEase }}
-          className={`w-full max-w-5xl rounded-full border transition-all duration-400 pointer-events-auto flex items-center justify-between px-5 md:px-7 py-2.5 md:py-3 relative ${
-            scrolled 
-              ? "bg-white/90 backdrop-blur-2xl border-slate-200/90 shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/5"
-              : "bg-white/80 backdrop-blur-xl border-slate-200/70 shadow-sm"
+          className={`w-full max-w-6xl xl:max-w-7xl rounded-full border transition-all duration-300 pointer-events-auto flex items-center justify-between px-3.5 sm:px-5 md:px-6 py-2 relative ${
+            scrolled
+              ? "bg-white/95 backdrop-blur-2xl border-slate-200/90 shadow-xl shadow-slate-900/6 ring-1 ring-slate-900/5"
+              : "bg-white/90 backdrop-blur-xl border-slate-200/75 shadow-md shadow-slate-900/3"
           }`}
         >
-          {/* Ambient gradient border glow */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-indigo-500/10 opacity-50 pointer-events-none -z-10" />
+          {/* Subtle Ambient Glow */}
+          <div className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-blue-600/5 via-indigo-600/5 to-cyan-600/5 blur-sm opacity-60 pointer-events-none" />
 
-          {/* Logo */}
-          <Link href="/" prefetch={true} className="relative group flex items-center gap-2.5 shrink-0" data-cursor="DevSamp">
-            <div className="relative">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xs shadow-sm shadow-indigo-600/30 group-hover:scale-105 transition-transform duration-300">
+          {/* LEFT: DevSamp Logo */}
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 group cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none rounded-xl p-0.5"
+              aria-label="DevSamp Home"
+              data-cursor="Home"
+            >
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-slate-950 flex items-center justify-center text-white font-black text-sm tracking-tighter shadow-md group-hover:scale-105 group-hover:bg-blue-600 transition-all">
                 DS
               </div>
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
-            </div>
+              <div className="flex flex-col leading-tight">
+                <span className="font-extrabold text-sm md:text-base tracking-tight text-slate-950 group-hover:text-blue-600 transition-colors">
+                  DevSamp
+                </span>
+                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold -mt-0.5">
+                  Ecosystem
+                </span>
+              </div>
+            </Link>
+          </div>
 
-            <div className="text-lg font-black tracking-tight text-slate-950 flex items-center">
-              <span>DEV</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 ml-0.5">SAMP</span>
-            </div>
-          </Link>
-
-          {/* Desktop Nav Items */}
-          <div className="hidden lg:flex items-center space-x-1 relative bg-slate-100/70 p-1 rounded-full border border-slate-200/60 backdrop-blur-sm">
+          {/* CENTER: Primary Navigation Links (Desktop) */}
+          <div className="hidden lg:flex items-center gap-1 xl:gap-1.5 relative">
             {navigationConfig.primary.map((item) => {
-              if (item.enabled === false) return null;
-              const isActive = isNavActive(item);
-              const isMenuOpen = activeDropdown === item.id;
+              const active = isNavActive(item);
+              const isOpen = activeDropdown === item.id;
 
               return (
                 <div
@@ -229,116 +301,125 @@ const Navbar = () => {
                   onMouseEnter={() => handleMouseEnter(item.id)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  {item.href ? (
-                    <Link
-                      href={item.href}
-                      prefetch={true}
-                      onClick={() => setActiveDropdown(null)}
-                      className={`relative px-3.5 py-1.5 text-xs font-bold transition-colors rounded-full flex items-center gap-1 cursor-pointer ${
-                        isActive || isMenuOpen
-                          ? "text-indigo-700 font-extrabold"
-                          : "text-slate-700 hover:text-slate-950"
-                      }`}
-                    >
-                      <span className="relative z-10">{item.label}</span>
-                      {item.hasDropdown && (
-                        <ChevronDown 
-                          size={12} 
-                          className={`transition-transform duration-200 relative z-10 ${isMenuOpen ? "rotate-180 text-indigo-600" : "text-slate-400"}`} 
-                        />
-                      )}
-
-                      {/* Active / Hover Capsule Slider */}
-                      {isActive && (
-                        <motion.span 
-                          layoutId="navActiveCapsule" 
-                          className="absolute inset-0 bg-white rounded-full shadow-xs border border-slate-200/90 z-0" 
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }} 
-                        />
-                      )}
-                    </Link>
-                  ) : (
+                  {item.hasDropdown ? (
                     <button
-                      onClick={() => setActiveDropdown(isMenuOpen ? null : item.id)}
-                      className={`relative px-3.5 py-1.5 text-xs font-bold transition-colors rounded-full flex items-center gap-1 cursor-pointer ${
-                        isActive || isMenuOpen
-                          ? "text-indigo-700 font-extrabold"
-                          : "text-slate-700 hover:text-slate-950"
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-haspopup="true"
+                      onClick={() => setActiveDropdown(isOpen ? null : item.id)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none ${
+                        active || isOpen
+                          ? "bg-slate-950 text-white shadow-xs"
+                          : "text-slate-700 hover:text-slate-950 hover:bg-slate-100/80"
                       }`}
                     >
-                      <span className="relative z-10">{item.label}</span>
-                      <ChevronDown 
-                        size={12} 
-                        className={`transition-transform duration-200 relative z-10 ${isMenuOpen ? "rotate-180 text-indigo-600" : "text-slate-400"}`} 
+                      <span>{item.label}</span>
+                      <ChevronDown
+                        size={12}
+                        className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                       />
                     </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none ${
+                        active
+                          ? "bg-slate-950 text-white shadow-xs"
+                          : "text-slate-700 hover:text-slate-950 hover:bg-slate-100/80"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
                   )}
 
-                  {/* Dropdown Menu Panel */}
+                  {/* MEGA MENU FLYOUT */}
                   <AnimatePresence>
-                    {isMenuOpen && item.groups && (
+                    {isOpen && item.hasDropdown && (
                       <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        role="region"
+                        aria-label={`${item.label} Submenu`}
+                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                        transition={{ duration: 0.2, ease: smoothEase }}
-                        className={`absolute top-full mt-2.5 z-50 bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-xl p-5 text-left font-sans ${
-                          item.groups.length > 1 ? "w-[480px] -left-20" : "w-[340px] -left-10"
-                        }`}
+                        exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                        transition={{ duration: 0.18, ease: smoothEase }}
+                        className="absolute left-1/2 -translate-x-1/2 top-full mt-3.5 w-[560px] xl:w-[620px] bg-white/98 rounded-3xl border border-slate-200/90 shadow-2xl p-5 z-50 ring-1 ring-slate-900/5 backdrop-blur-2xl"
                       >
-                        {/* Header description */}
-                        {item.description && (
-                          <div className="pb-3 mb-3 border-b border-slate-100 flex items-center justify-between">
-                            <p className="text-[11px] text-slate-500 font-medium leading-tight">
-                              {item.description}
-                            </p>
-                          </div>
-                        )}
+                        {/* Mega Menu Header */}
+                        <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 text-xs">
+                          <span className="font-bold text-slate-900 uppercase tracking-wider text-[11px]">
+                            {item.label} Hub
+                          </span>
+                          <span className="text-[11px] text-slate-500 font-normal line-clamp-1 max-w-[340px]">
+                            {item.description}
+                          </span>
+                        </div>
 
-                        {/* Grouped Columns */}
-                        <div className={`grid gap-4 ${item.groups.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
-                          {item.groups.map((group, gIdx) => (
-                            <div key={gIdx} className="space-y-1.5">
-                              <span className="text-[10px] font-mono font-bold text-indigo-600 tracking-wider block px-2 uppercase">
+                        {/* Mega Menu Columns Grid */}
+                        <div className={`grid gap-4 ${item.groups?.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
+                          {item.groups?.map((group, gIdx) => (
+                            <div key={gIdx} className="space-y-1">
+                              <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2.5 mb-1.5">
                                 {group.title}
-                              </span>
-                              <div className="space-y-0.5">
-                                {group.items.map((sub, sIdx) => {
-                                  if (sub.enabled === false) return null;
-                                  const Icon = LucideIcons[sub.icon] || Info;
-
-                                  return (
-                                    <Link
-                                      key={sIdx}
-                                      href={sub.href}
-                                      prefetch={true}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="flex items-start gap-2.5 p-2 rounded-2xl hover:bg-indigo-50/70 group transition-all"
-                                    >
-                                      <div className="w-8 h-8 rounded-xl bg-slate-100 group-hover:bg-indigo-100/80 text-slate-600 group-hover:text-indigo-600 flex items-center justify-center shrink-0 transition-colors mt-0.5 shadow-2xs">
-                                        <Icon size={15} />
-                                      </div>
-                                      <div className="min-w-0 flex-1">
-                                        <div className="flex items-center gap-1.5">
-                                          <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-700 transition-colors truncate">
-                                            {sub.label}
+                              </p>
+                              {group.items.map((sub, sIdx) => {
+                                const IconC = iconMap[sub.icon] || Globe;
+                                return (
+                                  <Link
+                                    key={sIdx}
+                                    href={sub.href}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-50 group/item transition-all focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-slate-100 group-hover/item:bg-blue-600 group-hover/item:text-white text-slate-600 transition-colors shrink-0 mt-0.5">
+                                      <IconC size={14} />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="text-xs font-bold text-slate-900 group-hover/item:text-blue-600 transition-colors truncate">
+                                          {sub.label}
+                                        </span>
+                                        {sub.badge && (
+                                          <span className="text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-100 shrink-0">
+                                            {sub.badge}
                                           </span>
-                                          {sub.badge && (
-                                            <span className="text-[9px] font-mono font-black px-1.5 py-0.2 rounded-md bg-indigo-100 text-indigo-700 uppercase">
-                                              {sub.badge}
-                                            </span>
-                                          )}
-                                        </div>
-                                        <p className="text-[11px] text-slate-500 group-hover:text-slate-600 line-clamp-1 leading-tight font-normal">
-                                          {sub.description}
-                                        </p>
+                                        )}
                                       </div>
-                                    </Link>
-                                  );
-                                })}
-                              </div>
+                                      <p className="text-[10px] text-slate-500 line-clamp-1 mt-0.5 font-normal">
+                                        {sub.description}
+                                      </p>
+                                    </div>
+                                  </Link>
+                                );
+                              })}
                             </div>
                           ))}
+                        </div>
+
+                        {/* View All & Featured Card Footer (Solves Dropdown Cutoff!) */}
+                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                          {item.viewAll && (
+                            <Link
+                              href={item.viewAll.href}
+                              onClick={() => setActiveDropdown(null)}
+                              className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors inline-flex items-center gap-1 group/viewall"
+                            >
+                              <span>{item.viewAll.label}</span>
+                              <ArrowRight size={12} className="group-hover/viewall:translate-x-0.5 transition-transform" />
+                            </Link>
+                          )}
+
+                          {item.featuredCard && (
+                            <Link
+                              href={item.featuredCard.href}
+                              onClick={() => setActiveDropdown(null)}
+                              className="text-[11px] font-bold text-slate-700 hover:text-blue-600 flex items-center gap-1 transition-colors ml-auto"
+                            >
+                              <span className="text-slate-400 font-normal">Featured:</span>
+                              <span className="truncate max-w-[200px]">{item.featuredCard.title}</span>
+                              <ArrowUpRight size={11} className="text-blue-600" />
+                            </Link>
+                          )}
                         </div>
                       </motion.div>
                     )}
@@ -348,251 +429,242 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Right Action: CTA & Profile / Mobile Toggle */}
-          <div className="flex items-center gap-3 shrink-0">
-            {/* User Session Profile or CTA */}
-            {user ? (
-              <div 
-                className="relative"
-                onMouseEnter={() => setIsProfileHovered(true)}
-                onMouseLeave={() => setIsProfileHovered(false)}
-              >
-                <button
-                  className="flex items-center gap-2 p-1.5 pr-3 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-colors cursor-pointer"
-                  data-cursor="Profile"
-                >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center">
-                    {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-                  </div>
-                  <span className="text-xs font-bold text-slate-800 max-w-[80px] truncate hidden sm:inline">
-                    {user.name?.split(" ")[0]}
-                  </span>
-                  <ChevronDown size={12} className="text-slate-500" />
-                </button>
-
-                <AnimatePresence>
-                  {isProfileHovered && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-44 bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-xl p-1.5 z-50 text-xs font-medium"
-                    >
-                      <Link 
-                        href="/dashboard"
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors"
-                      >
-                        <LayoutDashboard size={14} />
-                        <span>Client Dashboard</span>
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors text-left cursor-pointer"
-                      >
-                        <LogOut size={14} />
-                        <span>Sign Out</span>
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <Link href={navigationConfig.cta.href} prefetch={true} className="hidden sm:block">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-4 py-2 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs transition-all shadow-sm flex items-center gap-1.5 group cursor-pointer"
-                  data-cursor={navigationConfig.cta.dataCursor}
-                >
-                  <Sparkles size={12} className="text-indigo-400 group-hover:text-white transition-colors" />
-                  <span>{navigationConfig.cta.label}</span>
-                  <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                </motion.button>
-              </Link>
-            )}
-
-            {/* Mobile Hamburger Toggle Button */}
+          {/* RIGHT: Search Trigger + Primary CTA */}
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            {/* Search Trigger Button (Ctrl+K or ⌘K) */}
             <button
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-800 border border-slate-200 transition-colors cursor-pointer focus:outline-none"
-              aria-label="Toggle navigation menu"
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-950 text-xs font-medium transition-all cursor-pointer border border-slate-200/80 shadow-2xs focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+              title="Search entire ecosystem (Ctrl+K or ⌘K)"
+              aria-label="Search Ecosystem"
             >
-              {isMobileOpen ? <X size={18} /> : <Menu size={18} />}
+              <Search size={13} className="text-blue-600" />
+              <span className="hidden sm:inline text-[11px] text-slate-500 font-normal">Search</span>
+              <kbd className="hidden sm:inline text-[9px] font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-400">
+                ⌘K
+              </kbd>
+            </button>
+
+            {/* Primary CTA (Start a Project) */}
+            <Link href={navigationConfig.cta.href}>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-slate-950 hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+                data-cursor={navigationConfig.cta.dataCursor}
+              >
+                <span>{navigationConfig.cta.label}</span>
+                <ArrowRight size={12} />
+              </motion.button>
+            </Link>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              className="lg:hidden p-2 rounded-full hover:bg-slate-100 text-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none cursor-pointer"
+              aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileOpen}
+            >
+              {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </motion.nav>
       </header>
 
-      {/* Mobile Drawer (Accessible Sliding Panel) */}
+      {/* MOBILE MEGA-DRAWER */}
       <AnimatePresence>
         {isMobileOpen && (
-          <>
-            {/* Backdrop overlay */}
+          <div className="fixed inset-0 z-[999] lg:hidden">
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileOpen(false)}
-              className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-[1050] lg:hidden"
+              className="fixed inset-0 bg-slate-950/60 backdrop-blur-md"
             />
 
-            {/* Mobile Navigation Drawer */}
+            {/* Drawer Panel */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white/98 backdrop-blur-2xl border-l border-slate-200 z-[1100] shadow-2xl flex flex-col justify-between p-6 overflow-y-auto lg:hidden"
+              transition={{ duration: 0.3, ease: smoothEase }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm sm:max-w-md bg-white shadow-2xl flex flex-col z-10 overflow-hidden"
             >
-              {/* Drawer Top Header */}
-              <div>
-                <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+              {/* Top Drawer Header */}
+              <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center text-white font-black text-xs">
+                    DS
+                  </div>
+                  <span className="font-bold text-sm text-slate-950">DevSamp Navigation</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-600"
+                  aria-label="Close menu"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Mobile Search Button */}
+              <div className="p-3 border-b border-slate-100 bg-slate-50/70">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    setIsSearchOpen(true);
+                  }}
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-500 text-xs font-medium shadow-2xs"
+                >
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xs">
-                      DS
-                    </div>
-                    <span className="text-base font-black text-slate-950 tracking-tight">
-                      DEVSAMP
-                    </span>
+                    <Search size={14} className="text-blue-600" />
+                    <span>Search ecosystem pages...</span>
                   </div>
-                  <button
-                    onClick={() => setIsMobileOpen(false)}
-                    className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
+                  <span className="text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded text-slate-400">
+                    ⌘K
+                  </span>
+                </button>
+              </div>
 
-                {/* Mobile Navigation List with Accordions */}
-                <div className="py-4 space-y-1">
-                  {navigationConfig.primary.map((item) => {
-                    if (item.enabled === false) return null;
-                    const isActive = isNavActive(item);
-                    const isOpen = openMobileAccordions[item.id];
+              {/* Collapsible Nav Accordions */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                {navigationConfig.primary.map((item) => {
+                  const isAccordionOpen = !!openMobileAccordions[item.id];
 
-                    return (
-                      <div key={item.id} className="border-b border-slate-100/80 last:border-none pb-1">
-                        {item.hasDropdown ? (
-                          <div>
-                            <button
-                              onClick={() => toggleMobileAccordion(item.id)}
-                              className={`w-full py-3 px-2 flex items-center justify-between text-sm font-bold transition-colors rounded-xl cursor-pointer ${
-                                isActive ? "text-indigo-700 font-extrabold bg-indigo-50/50" : "text-slate-800 hover:text-slate-950"
-                              }`}
-                            >
-                              <span>{item.label}</span>
-                              <ChevronDown 
-                                size={14} 
-                                className={`transition-transform duration-200 text-slate-400 ${isOpen ? "rotate-180 text-indigo-600" : ""}`}
-                              />
-                            </button>
-
-                            {/* Accordion Sub-items */}
-                            <AnimatePresence>
-                              {isOpen && item.groups && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="pl-3 pr-1 py-1 space-y-1 bg-slate-50/80 rounded-2xl mb-2"
-                                >
-                                  {item.groups.map((group, gIdx) => (
-                                    <div key={gIdx} className="space-y-0.5 pt-1">
-                                      <span className="text-[9px] font-mono font-bold text-indigo-600 tracking-wider block px-2 uppercase">
-                                        {group.title}
-                                      </span>
-                                      {group.items.map((sub, sIdx) => {
-                                        if (sub.enabled === false) return null;
-                                        const Icon = LucideIcons[sub.icon] || Info;
-
-                                        return (
-                                          <Link
-                                            key={sIdx}
-                                            href={sub.href}
-                                            prefetch={true}
-                                            onClick={() => setIsMobileOpen(false)}
-                                            className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-indigo-600 hover:bg-white transition-colors"
-                                          >
-                                            <Icon size={14} className="text-slate-400 shrink-0" />
-                                            <span className="truncate">{sub.label}</span>
-                                            {sub.badge && (
-                                              <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-700 ml-auto">
-                                                {sub.badge}
-                                              </span>
-                                            )}
-                                          </Link>
-                                        );
-                                      })}
-                                    </div>
-                                  ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        ) : (
-                          <Link
-                            href={item.href || "/"}
-                            prefetch={true}
-                            onClick={() => setIsMobileOpen(false)}
-                            className={`w-full py-3 px-2 flex items-center justify-between text-sm font-bold transition-colors rounded-xl ${
-                              isActive ? "text-indigo-700 font-extrabold bg-indigo-50/50" : "text-slate-800 hover:text-slate-950"
-                            }`}
+                  return (
+                    <div key={item.id} className="border border-slate-100 rounded-2xl overflow-hidden bg-slate-50/40">
+                      {item.hasDropdown ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => toggleMobileAccordion(item.id)}
+                            aria-expanded={isAccordionOpen}
+                            className="w-full flex items-center justify-between p-3.5 text-left text-sm font-bold text-slate-900 hover:bg-slate-100/60 transition-colors"
                           >
-                            <span>{item.label}</span>
-                          </Link>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                            <div className="flex items-center gap-2">
+                              <span>{item.label}</span>
+                              {item.badge && (
+                                <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-extrabold border border-blue-100">
+                                  {item.badge}
+                                </span>
+                              )}
+                            </div>
+                            <ChevronDown
+                              size={15}
+                              className={`text-slate-400 transition-transform duration-200 ${
+                                isAccordionOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+
+                          <AnimatePresence>
+                            {isAccordionOpen && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="px-3 pb-3 pt-1 border-t border-slate-100 bg-white space-y-3"
+                              >
+                                {item.groups?.map((group, gIdx) => (
+                                  <div key={gIdx} className="space-y-1">
+                                    <p className="text-[9px] font-black uppercase tracking-wider text-slate-400 px-2">
+                                      {group.title}
+                                    </p>
+                                    {group.items.map((sub, sIdx) => {
+                                      const SubIcon = iconMap[sub.icon] || Globe;
+                                      return (
+                                        <Link
+                                          key={sIdx}
+                                          href={sub.href}
+                                          onClick={() => setIsMobileOpen(false)}
+                                          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                                        >
+                                          <SubIcon size={14} className="text-blue-600 shrink-0" />
+                                          <span className="truncate">{sub.label}</span>
+                                          {sub.badge && (
+                                            <span className="text-[8px] font-black uppercase px-1 py-0.2 rounded bg-blue-50 text-blue-700 ml-auto">
+                                              {sub.badge}
+                                            </span>
+                                          )}
+                                        </Link>
+                                      );
+                                    })}
+                                  </div>
+                                ))}
+
+                                {item.viewAll && (
+                                  <div className="pt-2 border-t border-slate-100">
+                                    <Link
+                                      href={item.viewAll.href}
+                                      onClick={() => setIsMobileOpen(false)}
+                                      className="text-xs font-bold text-blue-600 flex items-center justify-between p-2 rounded-xl hover:bg-blue-50"
+                                    >
+                                      <span>{item.viewAll.label}</span>
+                                      <ArrowRight size={12} />
+                                    </Link>
+                                  </div>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMobileOpen(false)}
+                          className="flex items-center justify-between p-3.5 text-sm font-bold text-slate-900 hover:bg-slate-100/60"
+                        >
+                          <span>{item.label}</span>
+                          <ArrowRight size={14} className="text-slate-400" />
+                        </Link>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Drawer Bottom CTA & User Section */}
-              <div className="pt-4 border-t border-slate-200 space-y-3">
-                {user ? (
-                  <div className="space-y-2">
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setIsMobileOpen(false)}
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-2"
-                    >
-                      <LayoutDashboard size={14} />
-                      <span>Client Dashboard</span>
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full py-2.5 px-4 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <LogOut size={14} />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                ) : (
+              {/* Bottom Mobile Drawer Actions */}
+              <div className="p-4 border-t border-slate-100 bg-slate-50 space-y-2.5">
+                <Link
+                  href={navigationConfig.cta.href}
+                  onClick={() => setIsMobileOpen(false)}
+                  className="w-full py-3 rounded-xl bg-slate-950 hover:bg-blue-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-colors"
+                >
+                  <span>{navigationConfig.cta.label}</span>
+                  <ArrowRight size={14} />
+                </Link>
+
+                <div className="flex items-center gap-2">
                   <Link
-                    href={navigationConfig.cta.href}
-                    prefetch={true}
+                    href="/account"
                     onClick={() => setIsMobileOpen(false)}
-                    className="w-full py-3 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md"
+                    className="flex-1 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs hover:bg-slate-50"
                   >
-                    <Sparkles size={14} className="text-indigo-400" />
-                    <span>{navigationConfig.cta.label}</span>
-                    <ArrowRight size={14} />
+                    <LayoutDashboard size={13} />
+                    <span>Client Portal</span>
                   </Link>
-                )}
 
-                <div className="text-center text-[10px] font-mono text-slate-400">
-                  © {new Date().getFullYear()} DevSamp Ecosystem
+                  <Link
+                    href="/pricing"
+                    onClick={() => setIsMobileOpen(false)}
+                    className="flex-1 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs hover:bg-slate-50"
+                  >
+                    <CreditCard size={13} />
+                    <span>Pricing</span>
+                  </Link>
                 </div>
               </div>
-
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
     </>
   );
-};
-
-export default Navbar;
+}

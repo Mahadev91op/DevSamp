@@ -679,3 +679,83 @@ export async function getPricingPageData() {
     };
   }
 }
+
+/**
+ * Fetch all public active customers with safe projection
+ */
+export async function getCustomers(limit = null) {
+  try {
+    await connectDB();
+    const Customer = (await import("@/models/Customer")).default;
+    let query = Customer.find({ 
+      isActive: { $ne: false }, 
+      visibility: "public",
+      publicProfile: { $ne: false } 
+    })
+      .select("name slug logo website shortDescription description industry location relationshipType relatedProducts relatedServices featured order since")
+      .sort({ order: 1, createdAt: -1 });
+
+    if (limit) query = query.limit(limit);
+    const customers = await query.lean();
+    return JSON.parse(JSON.stringify(customers || []));
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+    return [];
+  }
+}
+
+/**
+ * Unified parallel aggregate for Customers page rendering with in-memory caching
+ */
+export async function getCustomersPageData() {
+  const cached = getCachedData("customers_page_data");
+  if (cached) return cached;
+
+  try {
+    await connectDB();
+    const CustomerPage = (await import("@/models/CustomerPage")).default;
+    const Customer = (await import("@/models/Customer")).default;
+    const Product = (await import("@/models/Product")).default;
+    const Service = (await import("@/models/Service")).default;
+    const Industry = (await import("@/models/Industry")).default;
+    const SiteSetting = (await import("@/models/SiteSetting")).default;
+
+    const [pageDoc, customers, products, services, industries, settings] = await Promise.all([
+      CustomerPage.findOne({ key: "main", status: { $ne: "draft" } }).lean(),
+      Customer.find({ 
+        isActive: { $ne: false }, 
+        visibility: "public",
+        publicProfile: { $ne: false } 
+      })
+        .select("name slug logo website shortDescription description industry location relationshipType relatedProducts relatedServices featured order since")
+        .sort({ order: 1, createdAt: -1 })
+        .lean(),
+      Product.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Service.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(6).lean(),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    const result = {
+      customerPage: pageDoc ? JSON.parse(JSON.stringify(pageDoc)) : null,
+      customers: JSON.parse(JSON.stringify(customers || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+    };
+
+    setCachedData("customers_page_data", result);
+    return result;
+  } catch (error) {
+    console.error("Error aggregating Customers page data:", error);
+    return {
+      customerPage: null,
+      customers: [],
+      products: [],
+      services: [],
+      industries: [],
+      settings: null,
+    };
+  }
+}

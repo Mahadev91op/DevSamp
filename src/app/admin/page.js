@@ -8,7 +8,7 @@ import {
   TrendingUp, Filter, Rss, Download, Wand2, Eye, Mail, 
   ChevronLeft, ChevronRight, Image as ImageIcon, Maximize2, Minimize2, 
   BarChart3, Activity, ArrowRight, Zap, FolderKanban, Clock, Save, Link as LinkIcon, DollarSign, FileText,
-  UploadCloud, File, Calendar as CalendarIcon
+  UploadCloud, File, Calendar as CalendarIcon, Building2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -216,7 +216,7 @@ export default function AdminPanel() {
   const [expandedChart, setExpandedChart] = useState(null); 
   const [calendarDate, setCalendarDate] = useState(new Date());
 
-  const [data, setData] = useState({ leads: [], services: [], team: [], projects: [], pricing: [], reviews: [], blogs: [], clientProjects: [] });
+  const [data, setData] = useState({ leads: [], services: [], team: [], projects: [], pricing: [], reviews: [], blogs: [], clientProjects: [], customers: [] });
   
   const [calcSettings, setCalcSettings] = useState({
     basePrice: 299,
@@ -236,6 +236,7 @@ export default function AdminPanel() {
     pricing: { id: null, name: "", desc: "", priceMonthly: "", priceYearly: "", features: "", missing: "", popular: false, gradient: "from-gray-500 to-gray-700" },
     blog: { id: null, link: "", title: "", desc: "", image: "", category: "", platform: "other" },
     review: { id: null, name: "", role: "", text: "", rating: 5, image: "" },
+    customer: { id: null, name: "", slug: "", logo: "", website: "", shortDescription: "", description: "", industry: "Enterprise", location: "", relationshipType: "Enterprise Platform", featured: false, order: 0, visibility: "public", status: "active", since: "" },
     clientProject: { 
         id: null, title: "", clientEmail: "", status: "Active", progress: 0, nextMilestone: "Discovery", dueDate: "TBD", 
         description: "", budget: "", paymentStatus: "Pending", links: [], 
@@ -267,6 +268,7 @@ export default function AdminPanel() {
     else if(activeTab === 'reviews') list = data.reviews;
     else if(activeTab === 'pricing') list = data.pricing;
     else if(activeTab === 'client-projects') list = data.clientProjects; 
+    else if(activeTab === 'customers') list = data.customers;
 
     if (!searchTerm) return list;
     return list.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm.toLowerCase())));
@@ -318,7 +320,7 @@ export default function AdminPanel() {
   const fetchAllData = useCallback(async () => {
     setLoading(true);
     try {
-      const endpoints = ["contact", "services", "team", "projects", "pricing", "reviews", "blogs", "client-projects"];
+      const endpoints = ["contact", "services", "team", "projects", "pricing", "reviews", "blogs", "client-projects", "customers?admin=true"];
       const responses = await Promise.all(endpoints.map(ep => fetch(`/api/${ep}`).then(res => res.json())));
       setData({
         leads: responses[0].contacts || [],
@@ -328,7 +330,8 @@ export default function AdminPanel() {
         pricing: responses[4].pricing || [],
         reviews: responses[5].reviews || [],
         blogs: responses[6].blogs || [],
-        clientProjects: responses[7].projects || []
+        clientProjects: responses[7].projects || [],
+        customers: responses[8]?.data?.customers || responses[8]?.customers || []
       });
 
       const settingsRes = await fetch("/api/pricing/settings");
@@ -410,7 +413,7 @@ export default function AdminPanel() {
   };
 
   const getTypeFromTab = (tab) => {
-    const map = { projects: 'project', services: 'service', blogs: 'blog', team: 'team', pricing: 'pricing', reviews: 'review', 'client-projects': 'clientProject' };
+    const map = { projects: 'project', services: 'service', blogs: 'blog', team: 'team', pricing: 'pricing', reviews: 'review', 'client-projects': 'clientProject', customers: 'customer' };
     return map[tab] || null;
   };
 
@@ -435,6 +438,7 @@ export default function AdminPanel() {
             } 
         }));
     } 
+    else if(type === 'customer') setForms(p => ({ ...p, customer: item ? { ...item, id: item._id } : { id: null, name: "", slug: "", logo: "", website: "", shortDescription: "", description: "", industry: "Enterprise", location: "", relationshipType: "Enterprise Platform", featured: false, order: 0, visibility: "public", status: "active", since: "" } }));
     else if(type === 'project') setForms(p => ({ ...p, project: item ? { ...item, id: item._id, tech: item.tech.join(', ') } : { id: null, title: "", category: "", image: "", tech: "", link: "" } }));
     else if(type === 'service') setForms(p => ({ ...p, service: item ? { ...item, id: item._id } : { title: "", desc: "", icon: "Monitor", color: "text-blue-500", gradient: "from-blue-500 to-cyan-500" } }));
     else if(type === 'team') setForms(p => ({ ...p, team: item ? { ...item, id: item._id, skills: item.skills || [] } : { id: null, name: "", role: "", image: "", desc: "", skills: [] } }));
@@ -451,7 +455,7 @@ export default function AdminPanel() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const apiMap = { project: 'projects', service: 'services', blog: 'blogs', team: 'team', pricing: 'pricing', review: 'reviews', clientProject: 'client-projects' };
+    const apiMap = { project: 'projects', service: 'services', blog: 'blogs', team: 'team', pricing: 'pricing', review: 'reviews', clientProject: 'client-projects', customer: 'customers' };
     let api = apiMap[modalType];
     let currentForm = forms[modalType];
     let body = { ...currentForm };
@@ -571,6 +575,7 @@ export default function AdminPanel() {
                 <NavItem icon={CalendarIcon} label="Project Calendar" id="calendar" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} /> 
                 <NavItem icon={MessageCircle} label="Testimonials" id="reviews" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
                 <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">CMS</p>
+                <NavItem icon={Building2} label="Customers (Clients)" id="customers" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
                 <NavItem icon={ExternalLink} label="Projects (Portfolio)" id="projects" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
                 <NavItem icon={Briefcase} label="Our Team" id="team" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
                 <NavItem icon={Layers} label="Services" id="services" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
@@ -728,7 +733,7 @@ export default function AdminPanel() {
                     </div>
                 )}
 
-                {['services', 'team', 'projects', 'pricing', 'reviews', 'blogs'].includes(activeTab) && (
+                {['services', 'team', 'projects', 'pricing', 'reviews', 'blogs', 'customers'].includes(activeTab) && (
                     <div className="space-y-6 animate-fade-in max-w-7xl mx-auto pb-20 md:pb-0">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <div className="relative w-full md:w-80">
@@ -748,65 +753,58 @@ export default function AdminPanel() {
                                     <CreditCard size={18} className="text-indigo-600"/>
                                     <span>Interactive Quote Calculator Configurator</span>
                                 </h3>
-                                <p className="text-[11px] text-slate-500 font-semibold mb-6">
-                                    Manage the coefficients and additional modules driving the homepage scope evaluator tool.
-                                </p>
+                                <p className="text-xs text-slate-500 font-semibold mb-6">Real-time parameters consumed by the public interactive pricing calculator.</p>
                                 
-                                <form onSubmit={handleSaveCalcSettings} className="space-y-4">
+                                <form onSubmit={handleSaveCalcSettings} className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] text-slate-400 font-bold uppercase ml-1">Base Price ($)</label>
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Base Price ($)</label>
                                             <input 
                                               type="number" 
-                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs font-bold outline-none focus:bg-white focus:border-indigo-500" 
                                               value={calcSettings.basePrice} 
-                                              onChange={e => setCalcSettings(p => ({ ...p, basePrice: Number(e.target.value) }))} 
-                                              required 
+                                              onChange={(e) => setCalcSettings(p => ({ ...p, basePrice: Number(e.target.value) }))} 
+                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold font-mono text-slate-800 focus:border-indigo-500 focus:bg-white outline-none" 
                                             />
                                         </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] text-slate-400 font-bold uppercase ml-1">Price Per Page ($)</label>
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Price Per Page ($)</label>
                                             <input 
                                               type="number" 
-                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs font-bold outline-none focus:bg-white focus:border-indigo-500" 
                                               value={calcSettings.pricePerPage} 
-                                              onChange={e => setCalcSettings(p => ({ ...p, pricePerPage: Number(e.target.value) }))} 
-                                              required 
+                                              onChange={(e) => setCalcSettings(p => ({ ...p, pricePerPage: Number(e.target.value) }))} 
+                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold font-mono text-slate-800 focus:border-indigo-500 focus:bg-white outline-none" 
                                             />
                                         </div>
                                     </div>
 
-                                    {/* Addons Manager */}
-                                    <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
-                                        <div className="flex justify-between items-center select-none">
-                                            <h4 className="text-xs font-bold text-slate-700">Calculator Addon Checkboxes</h4>
+                                    <div>
+                                        <div className="flex justify-between items-center mb-3">
+                                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Selectable Addon Services</label>
                                             <button 
                                               type="button" 
-                                              onClick={() => {
-                                                const newAddons = [...(calcSettings.addons || []), { name: "New Addon Module", price: 100, enabled: true }];
-                                                setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                              }} 
-                                              className="text-[9px] bg-indigo-600 px-2.5 py-1.5 rounded-lg text-white hover:bg-indigo-700 font-bold uppercase"
+                                              onClick={() => setCalcSettings(p => ({ ...p, addons: [...p.addons, { name: "New Addon Module", price: 100, enabled: true }] }))} 
+                                              className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 uppercase"
                                             >
-                                                Add Addon
+                                                <Plus size={12}/> Add Module
                                             </button>
                                         </div>
-                                        <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-                                            {(calcSettings.addons || []).map((addon, idx) => (
-                                                <div key={idx} className="bg-white p-3 rounded-xl border border-slate-200 space-y-2.5 shadow-sm">
-                                                    <div className="flex gap-2 items-center">
+                                        
+                                        <div className="space-y-2.5">
+                                            {calcSettings.addons.map((addon, idx) => (
+                                                <div key={idx} className="flex items-center gap-3 bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl">
+                                                    <div className="flex items-center gap-2 flex-1">
                                                         <input 
-                                                          className="bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs font-semibold text-slate-800 w-full outline-none focus:bg-white focus:border-indigo-500" 
+                                                          className="bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 text-xs font-semibold text-slate-800 w-full outline-none focus:bg-white focus:border-indigo-500" 
                                                           placeholder="Addon Module Name" 
                                                           value={addon.name} 
                                                           onChange={(e) => {
                                                             const newAddons = [...calcSettings.addons];
                                                             newAddons[idx].name = e.target.value;
                                                             setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }}
+                                                          }} 
                                                         />
                                                         <input 
-                                                          type="number"
+                                                          type="number" 
                                                           className="bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs font-mono text-slate-650 w-24 outline-none focus:bg-white focus:border-indigo-500" 
                                                           placeholder="Price ($)" 
                                                           value={addon.price} 
@@ -814,7 +812,7 @@ export default function AdminPanel() {
                                                             const newAddons = [...calcSettings.addons];
                                                             newAddons[idx].price = Number(e.target.value);
                                                             setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }}
+                                                          }} 
                                                         />
                                                         <button 
                                                           type="button" 
@@ -822,7 +820,7 @@ export default function AdminPanel() {
                                                             const newAddons = [...calcSettings.addons];
                                                             newAddons[idx].enabled = !newAddons[idx].enabled;
                                                             setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }}
+                                                          }} 
                                                           className={`px-2.5 py-1.5 text-[9px] font-bold rounded border uppercase transition-all shrink-0 ${
                                                             addon.enabled 
                                                               ? "bg-green-50 text-green-700 border-green-200" 
@@ -831,16 +829,7 @@ export default function AdminPanel() {
                                                         >
                                                             {addon.enabled ? "Enabled" : "Disabled"}
                                                         </button>
-                                                        <button 
-                                                          type="button" 
-                                                          onClick={() => {
-                                                            const newAddons = calcSettings.addons.filter((_, i) => i !== idx);
-                                                            setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }} 
-                                                          className="text-red-500 hover:text-red-650 shrink-0"
-                                                        >
-                                                            <X size={14}/>
-                                                        </button>
+                                                        <button type="button" onClick={() => setCalcSettings(p => ({ ...p, addons: p.addons.filter((_, i) => i !== idx) }))} className="text-red-500"><X size={14}/></button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -862,12 +851,14 @@ export default function AdminPanel() {
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                             {paginatedData.map((item) => (
                                 <div key={item._id} className="bg-white border border-slate-200 rounded-2xl overflow-hidden group hover:border-slate-350 transition-all flex flex-col relative shadow-sm hover:shadow-md">
-                                    {(item.image || activeTab === 'blogs' || activeTab === 'projects') && (
-                                        <div className="h-48 bg-slate-100 relative overflow-hidden border-b border-slate-200/60">
-                                            {item.image ? (
-                                                <img src={getGoogleDriveImage(item.image)} alt={item.title || item.name} className="w-full h-full object-cover group-hover:scale-103 transition-all duration-500" referrerPolicy="no-referrer" />
+                                    {(item.image || item.logo || activeTab === 'blogs' || activeTab === 'projects' || activeTab === 'customers') && (
+                                        <div className="h-44 bg-slate-100 relative overflow-hidden border-b border-slate-200/60 p-4 flex items-center justify-center">
+                                            {(item.image || item.logo) ? (
+                                                <img src={getGoogleDriveImage(item.image || item.logo)} alt={item.title || item.name} className="max-h-full max-w-full object-contain group-hover:scale-105 transition-all duration-500" referrerPolicy="no-referrer" />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-slate-400"><ImageIcon size={32}/></div>
+                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-lg flex items-center justify-center shadow-md">
+                                                    {(item.name || "DS").substring(0, 2).toUpperCase()}
+                                                </div>
                                             )}
                                             <div className="absolute top-3 right-3 flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all md:translate-y-2 md:group-hover:translate-y-0 z-10">
                                                 <button onClick={() => handleEditItem(item)} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:bg-indigo-600 hover:text-white transition-colors shadow-sm"><PenBox size={13}/></button>
@@ -876,13 +867,16 @@ export default function AdminPanel() {
                                         </div>
                                     )}
                                     <div className="p-5 flex-1 flex flex-col">
-                                        <div className="flex gap-2 mb-3">
+                                        <div className="flex gap-2 mb-3 flex-wrap">
+                                            {item.industry && <span className="text-[9px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.industry}</span>}
+                                            {item.relationshipType && <span className="text-[9px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">{item.relationshipType}</span>}
                                             {item.category && <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.category}</span>}
                                             {item.role && <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.role}</span>}
                                             {item.popular && <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">Popular</span>}
                                         </div>
                                         <h4 className="font-extrabold text-base text-slate-800 mb-1 line-clamp-1">{item.title || item.name}</h4>
-                                        <p className="text-xs text-slate-500 font-semibold line-clamp-2 flex-1 leading-relaxed">{item.desc || item.text || item.message}</p>
+                                        <p className="text-xs text-slate-500 font-semibold line-clamp-2 flex-1 leading-relaxed">{item.shortDescription || item.desc || item.text || item.message || item.description}</p>
+                                        {item.website && <div className="mt-2 text-xs font-bold text-blue-600 truncate">{item.website}</div>}
                                         {item.priceMonthly && <div className="mt-4 text-lg font-black text-slate-800 font-mono">${item.priceMonthly}<span className="text-xs font-normal text-slate-400">/mo</span></div>}
                                         {activeTab === 'services' && !item.image && (
                                             <div className="absolute top-4 right-4 p-2 bg-slate-50 rounded-lg text-slate-500 group-hover:text-slate-800 border border-slate-200"><Layers size={18}/></div>
@@ -890,7 +884,7 @@ export default function AdminPanel() {
                                         {activeTab === 'reviews' && (
                                             <div className="flex gap-0.5 mt-3 text-amber-400">{[...Array(item.rating || 5)].map((_,i)=><Star key={i} size={12} fill="currentColor"/>)}</div>
                                         )}
-                                        {!item.image && activeTab !== 'blogs' && activeTab !== 'projects' && (
+                                        {!item.image && !item.logo && activeTab !== 'blogs' && activeTab !== 'projects' && activeTab !== 'customers' && (
                                             <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100 justify-end">
                                                 <button onClick={() => handleEditItem(item)} className="text-[10px] font-bold text-indigo-600 hover:underline uppercase tracking-wider">Edit</button>
                                                 <button onClick={() => handleDelete(activeTab === 'reviews' ? 'reviews' : activeTab, item._id)} className="text-[10px] font-bold text-red-500 hover:underline uppercase tracking-wider">Delete</button>
@@ -1237,6 +1231,43 @@ export default function AdminPanel() {
                                          <FormInput label="Avatar URL" value={forms.review.image} onChange={e=>setForms(p=>({...p, review:{...p.review, image:e.target.value}}))} preview />
                                     </div>
                                     <FormTextarea label="Feedback" value={forms.review.text} onChange={e=>setForms(p=>({...p, review:{...p.review, text:e.target.value}}))} />
+                                </>
+                            )}
+
+                            {modalType === 'customer' && (
+                                <>
+                                    <div className="flex gap-4">
+                                        <FormInput label="Customer / Organization Name *" value={forms.customer.name} onChange={e=>setForms(p=>({...p, customer:{...p.customer, name:e.target.value}}))} />
+                                        <FormInput label="Slug (Optional)" value={forms.customer.slug} onChange={e=>setForms(p=>({...p, customer:{...p.customer, slug:e.target.value}}))} />
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <FormInput label="Logo URL (Image Link or Google Drive)" value={forms.customer.logo} onChange={e=>setForms(p=>({...p, customer:{...p.customer, logo:e.target.value}}))} preview />
+                                        <FormInput label="Official Website URL" value={forms.customer.website} onChange={e=>setForms(p=>({...p, customer:{...p.customer, website:e.target.value}}))} />
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <FormInput label="Industry (e.g. Healthcare, Retail, Fintech)" value={forms.customer.industry} onChange={e=>setForms(p=>({...p, customer:{...p.customer, industry:e.target.value}}))} />
+                                        <FormInput label="Location (e.g. San Francisco, CA / Global)" value={forms.customer.location} onChange={e=>setForms(p=>({...p, customer:{...p.customer, location:e.target.value}}))} />
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="flex-1">
+                                            <label className="block text-xs font-bold text-slate-700 mb-1">Relationship Type</label>
+                                            <select 
+                                                value={forms.customer.relationshipType} 
+                                                onChange={e=>setForms(p=>({...p, customer:{...p.customer, relationshipType:e.target.value}}))}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 focus:border-indigo-600 focus:bg-white transition-all outline-none"
+                                            >
+                                                <option value="Enterprise Platform">Enterprise Platform</option>
+                                                <option value="Dedicated Pod">Dedicated Pod</option>
+                                                <option value="Custom SaaS">Custom SaaS</option>
+                                                <option value="Commercial Software">Commercial Software</option>
+                                                <option value="Strategic Technology Partner">Strategic Technology Partner</option>
+                                                <option value="Active Client">Active Client</option>
+                                            </select>
+                                        </div>
+                                        <FormInput label="Active Since (e.g. 2024)" value={forms.customer.since} onChange={e=>setForms(p=>({...p, customer:{...p.customer, since:e.target.value}}))} />
+                                    </div>
+                                    <FormTextarea label="Short Overview / Tagline" value={forms.customer.shortDescription} onChange={e=>setForms(p=>({...p, customer:{...p.customer, shortDescription:e.target.value}}))} />
+                                    <FormTextarea label="Full Detailed Description" value={forms.customer.description} onChange={e=>setForms(p=>({...p, customer:{...p.customer, description:e.target.value}}))} />
                                 </>
                             )}
 

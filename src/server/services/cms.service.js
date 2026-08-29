@@ -13,6 +13,8 @@ import { IndustriesPageRepository } from "@/server/repositories/industries-page.
 import { IndustryRepository } from "@/server/repositories/industry.repository";
 import { PricingPageRepository } from "@/server/repositories/pricing-page.repository";
 import { PricingRepository } from "@/server/repositories/pricing.repository";
+import { CustomerPageRepository } from "@/server/repositories/customer-page.repository";
+import { CustomerRepository } from "@/server/repositories/customer.repository";
 import connectDB from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import PricingSettings from "@/models/PricingSettings";
@@ -314,6 +316,37 @@ export class CmsService {
     };
   }
 
+  /**
+   * Aggregate complete Customers page payload
+   */
+  static async getCustomersPagePayload() {
+    await connectDB();
+    const [
+      customersPageDoc,
+      customers,
+      products,
+      services,
+      industries,
+      settings
+    ] = await Promise.all([
+      CustomerPageRepository.getPublishedCustomerPageContent(),
+      CustomerRepository.findAll(),
+      ProductRepository.findAll({}, { order: 1 }, 6),
+      ServiceRepository.findAll({}, { order: 1 }, 6),
+      Industry.find({ isActive: { $ne: false } }).sort({ order: 1 }).limit(8).lean(),
+      SiteSetting.findOne({ key: "main" }).lean(),
+    ]);
+
+    return {
+      customerPage: customersPageDoc || null,
+      customers: JSON.parse(JSON.stringify(customers || [])),
+      products: JSON.parse(JSON.stringify(products || [])),
+      services: JSON.parse(JSON.stringify(services || [])),
+      industries: JSON.parse(JSON.stringify(industries || [])),
+      settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+    };
+  }
+
   static async getFeaturedProducts() {
     return await ProductRepository.findAll({ featured: true });
   }
@@ -322,3 +355,4 @@ export class CmsService {
     return await EcosystemRepository.findAll();
   }
 }
+
