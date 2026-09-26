@@ -104,7 +104,6 @@ const CustomerSchema = new mongoose.Schema(
 
 CustomerSchema.index({ isActive: 1, visibility: 1, order: 1 });
 CustomerSchema.index({ featured: 1, isActive: 1, visibility: 1 });
-CustomerSchema.index({ slug: 1 });
 CustomerSchema.index({ isDemo: 1 });
 
 export default mongoose.models.Customer || mongoose.model("Customer", CustomerSchema);

@@ -13,22 +13,22 @@ const WhatsAppBtn = () => {
 
   return (
     <motion.a
-      href="https://wa.me/919330680642" // Apna number yahan dalein
+      href="https://wa.me/919330680642"
       target="_blank"
       rel="noopener noreferrer"
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 2, duration: 0.5 }} // Preloader ke baad aayega
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      className="fixed bottom-8 left-8 z-[90] flex items-center gap-2 group cursor-pointer"
+      transition={{ delay: 1.5, duration: 0.5 }}
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.92 }}
+      className="fixed bottom-20 left-4 md:bottom-8 md:left-8 z-[45] flex items-center gap-2 group cursor-pointer"
+      aria-label="Chat on WhatsApp"
     >
         {/* Button */}
-        <div className="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] group-hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all">
+        <div className="w-12 h-12 md:w-14 md:h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] group-hover:shadow-[0_4px_30px_rgba(37,211,102,0.6)] transition-all">
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                width="32" 
-                height="32" 
+                className="w-6 h-6 md:w-7 md:h-7"
                 viewBox="0 0 24 24" 
                 fill="white"
             >
@@ -37,7 +37,7 @@ const WhatsAppBtn = () => {
         </div>
 
         {/* Tooltip text (Hover pe aayega) */}
-        <span className="bg-slate-950 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-10px] group-hover:translate-x-0 duration-300 shadow-lg border border-slate-800">
+        <span className="hidden md:block bg-slate-950 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-10px] group-hover:translate-x-0 duration-300 shadow-lg border border-slate-800">
             Chat with us
         </span>
     </motion.a>

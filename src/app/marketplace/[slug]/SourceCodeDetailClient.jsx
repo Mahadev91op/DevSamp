@@ -28,7 +28,8 @@ import {
   Send,
   Lock,
   QrCode,
-  Smartphone
+  Smartphone,
+  X
 } from "lucide-react";
 
 const smoothEase = [0.16, 1, 0.3, 1];

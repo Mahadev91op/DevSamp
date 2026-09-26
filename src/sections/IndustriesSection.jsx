@@ -58,18 +58,18 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
   const description = sectionData?.description || "Proven software architectures and products addressing the operational, compliance, and scalability demands of modern business sectors.";
 
   return (
-    <section id="industries" className="py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/70 text-slate-900 relative overflow-hidden">
+    <section id="industries" className="py-10 sm:py-16 md:py-24 bg-slate-50/60 border-b border-slate-200/70 text-slate-900 relative overflow-hidden">
       
       <div className="ecosystem-container relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 min-w-0">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-16 min-w-0">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
+            className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] sm:text-xs font-bold text-indigo-700 uppercase tracking-widest mb-2.5 sm:mb-3"
           >
             <Sparkles size={13} /> {badge}
           </motion.div>
@@ -78,7 +78,7 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
-            className="text-fluid-h2 font-black mb-2.5 tracking-tight leading-tight text-slate-950"
+            className="text-fluid-h2 font-black mb-2 sm:mb-2.5 tracking-tight leading-tight text-slate-950"
           >
             {title}
           </motion.h2>
@@ -87,14 +87,14 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-            className="text-slate-600 text-fluid-body font-normal"
+            className="text-slate-600 text-fluid-body font-normal text-xs sm:text-sm md:text-base"
           >
             {description}
           </motion.p>
         </div>
 
-        {/* 4 Industries Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 min-w-0">
+        {/* 4 Industries Grid - 2 Column App-Like on Phone, 4 Column on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5 md:gap-6 min-w-0">
           {industries.map((ind, idx) => {
             const Icon = LucideIcons[ind.icon] || Building2;
             
@@ -104,34 +104,34 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="group bg-white border border-slate-200/90 hover:border-indigo-500/40 p-6 md:p-7 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between min-w-0"
+                transition={{ duration: 0.5, ease: smoothEase, delay: idx * 0.06 }}
+                className="group bg-white border border-slate-200/90 hover:border-indigo-500/40 p-3.5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between min-w-0"
               >
                 <div className="min-w-0">
-                  <div className="flex justify-between items-start mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
-                      <Icon size={22} />
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1.5 mb-2.5 sm:mb-5">
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                      <Icon size={16} className="sm:w-[22px] sm:h-[22px]" />
                     </div>
-                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 uppercase">
-                      {ind.badge || "Industry"}
+                    <span className="text-[9px] sm:text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 uppercase truncate">
+                      {ind.badge || "Domain"}
                     </span>
                   </div>
 
-                  <h3 className="text-lg md:text-xl font-black text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors truncate">
+                  <h3 className="text-sm sm:text-lg md:text-xl font-black text-slate-900 mb-1 sm:mb-2 group-hover:text-indigo-600 transition-colors line-clamp-1">
                     {ind.name}
                   </h3>
                   
-                  <p className="text-slate-600 text-sm leading-relaxed mb-5 font-normal">
+                  <p className="text-[11px] sm:text-sm text-slate-600 leading-relaxed mb-3 sm:mb-5 font-normal line-clamp-2">
                     {ind.summary}
                   </p>
 
-                  {/* Use Cases */}
+                  {/* Use Cases (Visible on larger mobile/desktop) */}
                   {ind.useCases && ind.useCases.length > 0 && (
-                    <div className="space-y-1.5 mb-5 pt-3.5 border-t border-slate-100">
-                      <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                    <div className="space-y-1 mb-3 sm:mb-5 pt-2 sm:pt-3.5 border-t border-slate-100 hidden sm:block">
+                      <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">
                         Deployment Scope
                       </span>
-                      {ind.useCases.map((useCase, uIdx) => (
+                      {ind.useCases.slice(0, 3).map((useCase, uIdx) => (
                         <div key={uIdx} className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
                           <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 shrink-0" />
                           <span className="truncate">{useCase}</span>
@@ -141,14 +141,14 @@ const IndustriesSection = ({ initialIndustries = [], sectionData = null }) => {
                   )}
                 </div>
 
-                <div className="pt-4 border-t border-slate-100">
+                <div className="pt-2 sm:pt-4 border-t border-slate-100">
                   <Link href={ind.linkUrl || "/#contact"}>
                     <button 
-                      className="w-full py-2.5 rounded-xl bg-slate-50 hover:bg-slate-950 text-slate-800 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 group/btn cursor-pointer"
+                      className="w-full py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 hover:bg-slate-950 text-slate-800 hover:text-white text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 group/btn cursor-pointer"
                       data-cursor="Scope"
                     >
-                      <span>Explore Scope</span>
-                      <ArrowUpRight size={13} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform shrink-0" />
+                      <span>Scope</span>
+                      <ArrowUpRight size={12} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform shrink-0" />
                     </button>
                   </Link>
                 </div>

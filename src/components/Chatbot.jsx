@@ -207,15 +207,16 @@ const Chatbot = () => {
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
         onClick={() => setIsOpen(!isOpen)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="fixed bottom-24 right-6 md:right-8 z-[9999] p-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_4px_20px_rgba(79,70,229,0.3)] border border-indigo-500/20 transition-all flex items-center justify-center"
+        className="fixed bottom-20 right-4 md:bottom-8 md:right-24 z-[45] p-3 md:p-3.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-xl shadow-indigo-500/25 border border-indigo-400/30 transition-all flex items-center justify-center cursor-pointer"
         data-cursor="Chat"
+        aria-label="Toggle AI Chat"
       >
-        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        {isOpen ? <X size={20} className="md:w-5 md:h-5" /> : <MessageSquare size={20} className="md:w-5 md:h-5" />}
         
         {/* Tooltip */}
         <AnimatePresence>
@@ -224,7 +225,7 @@ const Chatbot = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    className="absolute right-full mr-4 bg-slate-950 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap hidden md:block border border-slate-800"
+                    className="absolute right-full mr-3 bg-slate-950 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap hidden md:block border border-slate-800"
                 >
                     Chat with AI
                 </motion.div>
@@ -232,7 +233,7 @@ const Chatbot = () => {
         </AnimatePresence>
       </motion.button>
 
-      {/* --- MAIN CHAT WINDOW (Z-Index Fixed: 9999) --- */}
+      {/* --- MAIN CHAT WINDOW --- */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -240,7 +241,7 @@ const Chatbot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-44 right-4 md:right-8 w-[92vw] md:w-96 h-[550px] max-h-[75vh] bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-2xl z-[9999] flex flex-col overflow-hidden text-slate-800"
+            className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 md:right-8 md:bottom-24 w-auto sm:w-96 h-[520px] max-h-[72vh] bg-white/98 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-2xl z-[999] flex flex-col overflow-hidden text-slate-800 ring-1 ring-slate-900/5"
           >
             {/* Header */}
             <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">

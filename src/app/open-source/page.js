@@ -29,11 +29,11 @@ export default async function OpenSourcePage() {
         actionLabel: "Visit Marketplace"
       }}
     >
-      <div className="space-y-4 max-w-5xl">
+      <div className="space-y-3 sm:space-y-4 max-w-5xl">
         {freeItems.map((repo, idx) => (
           <div
             key={repo._id || idx}
-            className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-5"
+            className="p-4 sm:p-7 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-xs hover:border-blue-300 hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-5"
           >
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-2 flex-wrap">
@@ -68,7 +68,7 @@ export default async function OpenSourcePage() {
               </div>
 
               <a
-                href={repo.downloadUrl || `${repo.githubUrl}/archive/refs/heads/main.zip`}
+                href={repo.downloadUrl || (repo.githubUrl ? `${repo.githubUrl}/archive/refs/heads/main.zip` : "https://github.com/Mahadev91op/DevSamp-Final")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
@@ -78,7 +78,7 @@ export default async function OpenSourcePage() {
               </a>
 
               <a
-                href={repo.githubUrl}
+                href={repo.githubUrl || "https://github.com/Mahadev91op/DevSamp-Final"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"

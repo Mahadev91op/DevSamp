@@ -121,15 +121,21 @@ export default function CommandPalette({ isOpen, onClose }) {
 
   // Focus input when opened
   useEffect(() => {
+    let timer;
     if (isOpen) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         inputRef.current?.focus();
+        setSelectedIndex(0);
       }, 50);
-      setSelectedIndex(0);
     } else {
-      setQuery("");
-      setSelectedSection("all");
+      timer = setTimeout(() => {
+        setQuery("");
+        setSelectedSection("all");
+      }, 0);
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isOpen]);
 
   // Global Keyboard shortcut listener (Ctrl+K or Cmd+K)

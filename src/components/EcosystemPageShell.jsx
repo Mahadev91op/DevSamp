@@ -37,14 +37,14 @@ export default function EcosystemPageShell({
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 pt-24 sm:pt-28 pb-16 relative overflow-hidden">
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 pt-20 sm:pt-28 pb-24 md:pb-16 relative overflow-hidden">
       {/* Ambient background blur elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-br from-indigo-500/10 via-cyan-500/5 to-purple-500/10 blur-3xl -z-10 pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 mb-6 overflow-x-auto no-scrollbar py-1">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 mb-4 sm:mb-6 overflow-x-auto no-scrollbar py-1">
           <Link href="/" className="hover:text-indigo-600 font-medium transition-colors">
             Home
           </Link>
@@ -70,19 +70,19 @@ export default function EcosystemPageShell({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: smoothEase }}
-          className="pb-10 md:pb-14 border-b border-slate-200/80 mb-10"
+          className="pb-6 sm:pb-10 md:pb-14 border-b border-slate-200/80 mb-6 sm:mb-10"
         >
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 sm:gap-6">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] sm:text-[11px] font-bold text-indigo-700 uppercase tracking-widest mb-3 sm:mb-4">
                 <Sparkles size={12} className="text-indigo-600" />
                 <span>{badge}</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight">
                 {title}
               </h1>
               {subtitle && (
-                <p className="text-base sm:text-lg text-slate-600 mt-4 leading-relaxed font-normal">
+                <p className="text-sm sm:text-lg text-slate-600 mt-2.5 sm:mt-4 leading-relaxed font-normal">
                   {subtitle}
                 </p>
               )}

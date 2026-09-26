@@ -106,29 +106,29 @@ export default function Footer({ siteSettings = null }) {
   };
 
   return (
-    <footer className="bg-white/80 backdrop-blur-md text-slate-900 pt-16 pb-12 md:pt-20 md:pb-10 overflow-hidden relative border-t border-slate-200/80">
+    <footer className="bg-white/80 backdrop-blur-md text-slate-900 pt-10 pb-28 md:pt-20 md:pb-10 overflow-hidden relative border-t border-slate-200/80">
       <div className="ecosystem-container relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* --- TOP CTA BANNER --- */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 pb-10 border-b border-slate-200/80 gap-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 sm:mb-12 pb-6 sm:pb-10 border-b border-slate-200/80 gap-4 sm:gap-6">
           <div className="max-w-2xl min-w-0">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-[11px] font-bold text-blue-700 uppercase tracking-widest mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-[10px] sm:text-[11px] font-bold text-blue-700 uppercase tracking-widest mb-2.5 sm:mb-3">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
               DevSamp Software Ecosystem
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight text-slate-950">
+            <h2 className="text-xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight text-slate-950">
               Ready to Architect Your Next Digital Platform?
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base mt-2 font-normal">
+            <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5 sm:mt-2 font-normal">
               Deploy our proprietary software platforms or partner with a dedicated senior engineering pod.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
             <button
               type="button"
               onClick={openSearch}
-              className="px-4 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200/80 shadow-2xs cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+              className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 border border-slate-200/80 shadow-2xs cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
             >
               <Search size={14} className="text-blue-600" />
               <span>Omni-Search</span>
@@ -140,7 +140,7 @@ export default function Footer({ siteSettings = null }) {
             <Link href={navigationConfig.cta.href}>
               <button
                 type="button"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2 group cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+                className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-1.5 sm:gap-2 group cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
               >
                 <span>{navigationConfig.cta.label}</span>
                 <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -150,7 +150,7 @@ export default function Footer({ siteSettings = null }) {
             <button
               type="button"
               onClick={handlePhoneClick}
-              className="px-4 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shadow-2xs cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
+              className="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 sm:gap-2 shadow-2xs cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none"
             >
               <span>{phoneNumber}</span>
             </button>
@@ -158,12 +158,12 @@ export default function Footer({ siteSettings = null }) {
         </div>
 
         {/* --- 5 STRUCTURED DIRECTORY COLUMNS --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 pb-8 sm:pb-12">
           {navigationConfig.footer.columns.map((col) => {
             const isColOpen = openMobileColumn === col.id;
 
             return (
-              <div key={col.id} className="space-y-3">
+              <div key={col.id} className={`space-y-2.5 sm:space-y-3 ${col.id === 'legal' ? 'col-span-2 md:col-span-1' : ''}`}>
                 {/* Desktop Column Header */}
                 <h3 className="hidden md:block text-xs font-black uppercase tracking-wider text-slate-950">
                   {col.title}
@@ -173,11 +173,11 @@ export default function Footer({ siteSettings = null }) {
                 <button
                   type="button"
                   onClick={() => toggleMobileCol(col.id)}
-                  className="md:hidden w-full flex items-center justify-between py-2.5 text-left border-b border-slate-200 text-sm font-bold text-slate-900"
+                  className="md:hidden w-full flex items-center justify-between py-1.5 text-left border-b border-slate-200 text-xs sm:text-sm font-bold text-slate-900"
                 >
                   <span>{col.title}</span>
                   <ChevronDown
-                    size={16}
+                    size={14}
                     className={`text-slate-400 transition-transform duration-200 ${
                       isColOpen ? "rotate-180" : ""
                     }`}
@@ -185,18 +185,18 @@ export default function Footer({ siteSettings = null }) {
                 </button>
 
                 {/* Items List */}
-                <div className={`space-y-2 text-xs md:block ${isColOpen ? "block pb-3" : "hidden md:block"}`}>
+                <div className={`space-y-1.5 sm:space-y-2 text-xs md:block ${isColOpen ? "block pb-2" : "hidden md:block"}`}>
                   {col.items.map((item, idx) => (
                     <div key={idx}>
                       <Link
                         href={item.href}
                         className="text-slate-600 hover:text-blue-600 transition-colors py-0.5 inline-flex items-center gap-1.5 group font-medium focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none rounded-md px-1 -mx-1"
                       >
-                        <span className="group-hover:translate-x-0.5 transition-transform">
+                        <span className="group-hover:translate-x-0.5 transition-transform text-[11px] sm:text-xs">
                           {item.label}
                         </span>
                         {item.badge && (
-                          <span className="text-[9px] uppercase tracking-wider font-extrabold px-1 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-100 shrink-0">
+                          <span className="text-[8px] sm:text-[9px] uppercase tracking-wider font-extrabold px-1 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-100 shrink-0">
                             {item.badge}
                           </span>
                         )}
@@ -205,10 +205,10 @@ export default function Footer({ siteSettings = null }) {
                   ))}
 
                   {col.viewAll && (
-                    <div className="pt-2 border-t border-slate-100">
+                    <div className="pt-1.5 sm:pt-2 border-t border-slate-100">
                       <Link
                         href={col.viewAll.href}
-                        className="text-blue-600 font-bold hover:text-blue-800 transition-colors inline-flex items-center gap-1 text-[11px]"
+                        className="text-blue-600 font-bold hover:text-blue-800 transition-colors inline-flex items-center gap-1 text-[10px] sm:text-[11px]"
                       >
                         <span>{col.viewAll.label}</span>
                       </Link>
@@ -221,7 +221,7 @@ export default function Footer({ siteSettings = null }) {
         </div>
 
         {/* --- NEWSLETTER + LIVE STATUS BAR --- */}
-        <div className="pt-8 pb-8 border-t border-slate-200/80 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="pt-6 sm:pt-8 pb-6 sm:pb-8 border-t border-slate-200/80 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           
           {/* Brand Info & Live Time */}
           <div className="lg:col-span-4 space-y-2">

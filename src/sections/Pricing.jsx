@@ -76,7 +76,7 @@ const Pricing = ({ initialPlans = [] }) => {
   }, [pagesCount, selectedAddons, calcSettings]);
 
   return (
-    <section id="pricing" className="py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
+    <section id="pricing" className="py-10 sm:py-12 md:py-24 bg-transparent text-slate-900 relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
@@ -84,22 +84,22 @@ const Pricing = ({ initialPlans = [] }) => {
       <div className="ecosystem-container relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] sm:text-xs font-bold text-indigo-700 uppercase tracking-widest mb-2.5 sm:mb-3">
             <Sparkles size={13} /> Budget Control
           </div>
-          <h2 className="text-fluid-h2 font-black mb-3.5 tracking-tight leading-tight text-slate-950">
+          <h2 className="text-fluid-h2 font-black mb-2 sm:mb-3.5 tracking-tight leading-tight text-slate-950">
             Simple, Transparent <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">Pricing</span>
           </h2>
-          <p className="text-slate-600 text-fluid-lead font-normal max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-slate-600 text-fluid-lead font-normal max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed text-xs sm:text-sm md:text-base">
             Select an active service blueprint or configure a customized scope using our quote tool.
           </p>
 
           {/* Billing Switcher */}
-          <div className="inline-flex items-center gap-3 bg-slate-100/80 border border-slate-200/60 p-1.5 rounded-full select-none">
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-slate-100/80 border border-slate-200/60 p-1 sm:p-1.5 rounded-full select-none">
             <button
               onClick={() => setBilling("monthly")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs font-bold transition-all ${
                 billing === "monthly" 
                   ? "bg-white text-slate-900 shadow-sm" 
                   : "text-slate-500 hover:text-slate-800"
@@ -109,7 +109,7 @@ const Pricing = ({ initialPlans = [] }) => {
             </button>
             <button
               onClick={() => setBilling("yearly")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
+              className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
                 billing === "yearly" 
                   ? "bg-white text-slate-900 shadow-sm" 
                   : "text-slate-500 hover:text-slate-800"
@@ -123,7 +123,7 @@ const Pricing = ({ initialPlans = [] }) => {
           </div>
 
           {/* Compare blueprints button */}
-          <div className="mt-6 select-none">
+          <div className="mt-4 sm:mt-6 select-none">
             <button
               onClick={() => setShowCompare(true)}
               className="text-xs sm:text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 mx-auto transition-colors cursor-pointer"
@@ -135,10 +135,10 @@ const Pricing = ({ initialPlans = [] }) => {
         </div>
 
         {/* Pricing Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start mb-12 sm:mb-16">
           
           {/* Left Columns: Invoice Manifest Cards */}
-          <div className="lg:col-span-8 flex flex-row md:grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible pb-6 md:pb-0 scrollbar-none snap-x snap-mandatory">
+          <div className="lg:col-span-8 flex flex-row md:grid md:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 scrollbar-none snap-x snap-mandatory">
             {plans.map((plan, index) => {
               const currentPrice = billing === "monthly" ? plan.priceMonthly : plan.priceYearly;
               return (
@@ -148,7 +148,7 @@ const Pricing = ({ initialPlans = [] }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.4 }}
-                  className={`relative shrink-0 w-[85vw] md:w-auto snap-center p-6 md:p-7 rounded-3xl border transition-all duration-300 flex flex-col justify-between ${
+                  className={`relative shrink-0 w-[80vw] max-w-[300px] md:w-auto snap-center p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col justify-between ${
                     plan.popular 
                       ? "bg-white border-indigo-500 shadow-[0_12px_40px_rgba(79,70,229,0.08)] z-10 md:scale-[1.03]" 
                       : "bg-white/85 border-slate-200/80 hover:border-slate-350 shadow-sm"
@@ -156,26 +156,26 @@ const Pricing = ({ initialPlans = [] }) => {
                   data-cursor="Plan"
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-xs font-bold tracking-wider uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:px-3.5 sm:py-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[10px] sm:text-xs font-bold tracking-wider uppercase text-white shadow-sm whitespace-nowrap flex items-center gap-1 select-none">
                       <Sparkles size={12} /> Popular Choice
                     </div>
                   )}
 
                   {/* Receipt Header Mockup */}
-                  <div className="border-b border-slate-200/80 pb-4 mb-4 select-none">
-                    <div className="flex items-center justify-between text-xs font-mono text-slate-400 font-bold mb-1">
+                  <div className="border-b border-slate-200/80 pb-3 mb-3 sm:pb-4 sm:mb-4 select-none">
+                    <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono text-slate-400 font-bold mb-1">
                       <span className="flex items-center gap-1"><Receipt size={12} /> DEVSAMP_BILL</span>
                       <span>#00{index+1}</span>
                     </div>
-                    <h3 className="text-xl md:text-2xl font-black text-slate-900">{plan.name}</h3>
-                    <p className="text-xs sm:text-sm text-slate-600 font-medium line-clamp-2 mt-1 min-h-[36px] leading-relaxed">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900">{plan.name}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 font-medium line-clamp-2 mt-1 min-h-[32px] sm:min-h-[36px] leading-relaxed">
                       {plan.desc}
                     </p>
                   </div>
 
                   {/* Pricing Details */}
-                  <div className="mb-5 flex items-baseline gap-1 select-none">
-                    <span className="text-3xl font-black text-slate-900 transition-all font-mono">
+                  <div className="mb-4 sm:mb-5 flex items-baseline gap-1 select-none">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 transition-all font-mono">
                       ${currentPrice}
                     </span>
                     <span className="text-xs text-slate-400 font-bold">
@@ -186,7 +186,7 @@ const Pricing = ({ initialPlans = [] }) => {
                   {/* Get Started Button */}
                   <Link 
                     href={`/?service=${encodeURIComponent(plan.name)}#contact`}
-                    className={`w-full py-3 rounded-2xl font-bold mb-6 transition-all flex items-center justify-center gap-2 text-xs md:text-sm ${
+                    className={`w-full py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-bold mb-4 sm:mb-6 transition-all flex items-center justify-center gap-2 text-xs md:text-sm ${
                       plan.popular 
                         ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/10" 
                         : "bg-slate-900 hover:bg-slate-800 text-white"
@@ -197,9 +197,9 @@ const Pricing = ({ initialPlans = [] }) => {
                   </Link>
 
                   {/* Bullet points manifest */}
-                  <div className="space-y-3 flex-grow">
+                  <div className="space-y-2.5 sm:space-y-3 flex-grow">
                     {plan.features.map((feature, i) => (
-                      <div key={i} className="flex items-start gap-2.5">
+                      <div key={i} className="flex items-start gap-2 sm:gap-2.5">
                         <div className={`p-0.5 rounded-full shrink-0 mt-0.5 ${
                           plan.popular ? "bg-indigo-50 text-indigo-600" : "bg-slate-100 text-slate-600"
                         }`}>
@@ -211,7 +211,7 @@ const Pricing = ({ initialPlans = [] }) => {
                       </div>
                     ))}
                     {plan.missing && plan.missing.map((feature, i) => (
-                      <div key={`miss-${i}`} className="flex items-start gap-2.5 opacity-40">
+                      <div key={`miss-${i}`} className="flex items-start gap-2 sm:gap-2.5 opacity-40">
                         <div className="p-0.5 rounded-full bg-slate-50 text-slate-400 shrink-0 mt-0.5">
                           <X size={12} strokeWidth={3} />
                         </div>
@@ -227,7 +227,7 @@ const Pricing = ({ initialPlans = [] }) => {
           </div>
 
           {/* Right Column: Custom Interactive Calculator */}
-          <div className="lg:col-span-4 bg-white/90 border border-indigo-100/60 p-6 md:p-7 rounded-3xl shadow-sm relative">
+          <div className="lg:col-span-4 bg-white/90 border border-indigo-100/60 p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl shadow-sm relative">
             <div className="absolute top-2 right-2">
               <span className="bg-indigo-50 text-indigo-600 text-[8px] font-bold px-2 py-0.5 rounded uppercase font-mono border border-indigo-100/50">
                 Live Calculator

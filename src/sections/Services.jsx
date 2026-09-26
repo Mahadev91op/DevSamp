@@ -12,13 +12,13 @@ const smoothEase = [0.16, 1, 0.3, 1];
 // Bento Layout mapping helper
 const getBentoClasses = (idx) => {
   const layouts = [
-    "lg:col-span-2 lg:row-span-1 min-h-[320px]", // Web Dev
-    "lg:col-span-1 lg:row-span-2 min-h-[320px] lg:min-h-[650px]", // UI/UX
-    "lg:col-span-1 lg:row-span-1 min-h-[320px]", // SEO / Performance
-    "lg:col-span-1 lg:row-span-1 min-h-[320px]", // Mobile App
-    "lg:col-span-1 lg:row-span-1 min-h-[320px]", // E-Commerce
+    "lg:col-span-2 lg:row-span-1 min-h-[220px] sm:min-h-[300px] lg:min-h-[320px]", // Web Dev
+    "lg:col-span-1 lg:row-span-2 min-h-[220px] sm:min-h-[300px] lg:min-h-[650px]", // UI/UX
+    "lg:col-span-1 lg:row-span-1 min-h-[220px] sm:min-h-[300px] lg:min-h-[320px]", // SEO / Performance
+    "lg:col-span-1 lg:row-span-1 min-h-[220px] sm:min-h-[300px] lg:min-h-[320px]", // Mobile App
+    "lg:col-span-1 lg:row-span-1 min-h-[220px] sm:min-h-[300px] lg:min-h-[320px]", // E-Commerce
   ];
-  return layouts[idx % layouts.length] || "lg:col-span-1 lg:row-span-1 min-h-[320px]";
+  return layouts[idx % layouts.length] || "lg:col-span-1 lg:row-span-1 min-h-[220px] sm:min-h-[300px] lg:min-h-[320px]";
 };
 
 // --- WIDGET 1: Web Dev Live Code Compiler Simulator ---
@@ -209,19 +209,19 @@ const Services = ({ initialServices = [], sectionData = null }) => {
   };
 
   return (
-    <section id="services" className="relative w-full py-16 md:py-24 bg-white border-b border-slate-200/60 text-slate-900 overflow-hidden">
+    <section id="services" className="relative w-full py-10 sm:py-16 md:py-24 bg-white border-b border-slate-200/60 text-slate-900 overflow-hidden">
       
       <div className="ecosystem-container relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-14 gap-5 min-w-0">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-10 md:mb-14 gap-4 sm:gap-5 min-w-0">
           <div className="max-w-2xl min-w-0">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3"
+              className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] sm:text-xs font-bold text-indigo-700 uppercase tracking-widest mb-2.5 sm:mb-3"
             >
               <Layers size={13} /> {badge}
             </motion.div>
@@ -230,7 +230,7 @@ const Services = ({ initialServices = [], sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.08 }}
-              className="text-fluid-h2 font-black tracking-tight leading-tight text-slate-950 mb-2.5"
+              className="text-fluid-h2 font-black tracking-tight leading-tight text-slate-950 mb-2"
             >
               {title}
             </motion.h2>
@@ -239,7 +239,7 @@ const Services = ({ initialServices = [], sectionData = null }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-              className="text-slate-600 text-fluid-body font-normal max-w-xl"
+              className="text-slate-600 text-fluid-body font-normal max-w-xl text-xs sm:text-sm md:text-base"
             >
               {description}
             </motion.p>
@@ -248,7 +248,7 @@ const Services = ({ initialServices = [], sectionData = null }) => {
           <div className="shrink-0">
             <Link href="/services">
               <button 
-                className="px-5 py-2.5 rounded-full bg-slate-50 border border-slate-300 hover:border-blue-600 text-slate-900 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-50 border border-slate-300 hover:border-blue-600 text-slate-900 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
                 data-cursor="Services"
               >
                 <span>View All Services</span>
@@ -260,7 +260,7 @@ const Services = ({ initialServices = [], sectionData = null }) => {
 
         {/* --- BENTO GRID SYSTEM --- */}
         {servicesData.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-w-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 min-w-0">
             {servicesData.map((service, idx) => {
               const IconComponent = LucideIcons[service.icon] || LucideIcons.HelpCircle;
               const bentoClass = getBentoClasses(idx);
@@ -273,29 +273,29 @@ const Services = ({ initialServices = [], sectionData = null }) => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, ease: smoothEase, delay: (idx % 3) * 0.08 }}
                   onClick={() => router.push(service.slug ? `/services/${service.slug}` : "/services")}
-                  className={`group bg-slate-50/80 border border-slate-200/90 p-6 md:p-8 rounded-3xl shadow-xs flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:bg-white hover:border-blue-400 hover:shadow-xl min-w-0 cursor-pointer ${bentoClass}`}
+                  className={`group bg-slate-50/80 border border-slate-200/90 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xs flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:bg-white hover:border-blue-400 hover:shadow-xl min-w-0 cursor-pointer ${bentoClass}`}
                 >
-                  <div className="space-y-3.5 min-w-0">
+                  <div className="space-y-2.5 sm:space-y-3.5 min-w-0">
                     <div className="flex justify-between items-start">
-                      <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-blue-600 shadow-xs shrink-0">
-                        <IconComponent size={22} />
+                      <div className="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-blue-600 shadow-xs shrink-0">
+                        <IconComponent size={20} />
                       </div>
-                      <span className="font-mono text-xs font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
+                      <span className="font-mono text-[11px] sm:text-xs font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
                         [0{idx + 1} / SERVICE]
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-1.5 group-hover:text-blue-600 transition-colors truncate flex items-center justify-between">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-1 group-hover:text-blue-600 transition-colors truncate flex items-center justify-between">
                         <span>{service.title}</span>
                         <ChevronRight size={18} className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
                       </h3>
-                      <p className="text-slate-600 text-sm sm:text-base font-normal leading-relaxed line-clamp-2 md:line-clamp-3">
+                      <p className="text-slate-600 text-xs sm:text-sm md:text-base font-normal leading-relaxed line-clamp-2 md:line-clamp-3">
                         {service.desc}
                       </p>
                     </div>
                   </div>
 
-                  <div className="mt-6 flex-1 flex items-end min-w-0" onClick={(e) => e.stopPropagation()}>
+                  <div className="mt-4 sm:mt-6 flex-1 flex items-end min-w-0" onClick={(e) => e.stopPropagation()}>
                     {renderWidget(idx)}
                   </div>
                 </motion.div>

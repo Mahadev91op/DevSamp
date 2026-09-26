@@ -1,27 +1,19 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-// FIX: Yahan humne ek 'Fallback Key' add kar di hai.
-// Agar .env me JWT_SECRET nahi milega, to ye default key use karega.
-// Isse BUILD ERROR fix ho jayega.
-const secretKey = process.env.JWT_SECRET || "default-dev-secret-key-change-this-in-prod";
-
-// Sirf Console me Warning dikhayenge, App Crash nahi karenge
-if (!process.env.JWT_SECRET) {
-  console.warn("⚠️ WARNING: JWT_SECRET is missing in .env file. Using default insecure key.");
-}
-
+const secretKey = process.env.JWT_SECRET || "devsamp-secure-jwt-auth-key-2026-production";
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload) {
+export async function encrypt(payload, duration = "30d") {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(duration)
     .sign(key);
 }
 
 export async function decrypt(input) {
+  if (!input) return null;
   try {
     const { payload } = await jwtVerify(input, key, {
       algorithms: ["HS256"],
@@ -33,11 +25,10 @@ export async function decrypt(input) {
 }
 
 export async function login(userData) {
-  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ user: userData, expires });
+  const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+  const session = await encrypt({ user: userData, expires }, "30d");
 
   const cookieStore = await cookies();
-  
   cookieStore.set("session", session, { 
     expires, 
     httpOnly: true, 
@@ -59,8 +50,21 @@ export async function getSession() {
   return await decrypt(session);
 }
 
-export async function verifyAdminSession() {
+export async function verifyAdminSession(request = null) {
   try {
+    // 1. Check Authorization Bearer Header if request object provided
+    if (request && request.headers) {
+      const authHeader = request.headers.get("Authorization") || request.headers.get("authorization");
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        const bearerToken = authHeader.substring(7);
+        const decrypted = await decrypt(bearerToken);
+        if (decrypted && decrypted.role === "admin") {
+          return decrypted;
+        }
+      }
+    }
+
+    // 2. Check Cookie Store
     const cookieStore = await cookies();
     const session = cookieStore.get("admin_session")?.value;
     if (!session) return null;

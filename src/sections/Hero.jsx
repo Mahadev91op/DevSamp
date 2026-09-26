@@ -133,27 +133,27 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
   };
 
   return (
-    <section className="relative w-full min-h-[100dvh] flex items-center justify-center bg-transparent overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
+    <section className="relative w-full min-h-[100dvh] flex items-center justify-center bg-transparent overflow-hidden pt-20 pb-8 sm:pt-28 sm:pb-16 md:pt-36 md:pb-24">
       
       {/* Blueprint grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e125_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e125_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_60%,transparent_100%)] pointer-events-none" />
       
       {/* Soft color highlights */}
-      <div className="absolute top-[10%] left-[15%] w-[400px] h-[300px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[15%] right-[10%] w-[450px] h-[350px] bg-indigo-500/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-[10%] left-[15%] w-[300px] sm:w-[400px] h-[250px] sm:h-[300px] bg-blue-500/10 rounded-full blur-[100px] sm:blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[15%] right-[10%] w-[300px] sm:w-[450px] h-[250px] sm:h-[350px] bg-indigo-500/10 rounded-full blur-[100px] sm:blur-[160px] pointer-events-none" />
 
       <div className="ecosystem-container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-center">
           
           {/* --- LEFT SIDE: HIGH-IMPACT ECOSYSTEM HERO --- */}
-          <div className="lg:col-span-7 space-y-5 text-left min-w-0">
+          <div className="lg:col-span-7 space-y-3.5 sm:space-y-5 text-left min-w-0">
             
             {/* Status Eyebrow Badge */}
             <motion.div
               initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white border border-slate-200 text-[11px] sm:text-xs font-bold text-slate-800 shadow-2xs"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -190,19 +190,19 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.24 }}
-              className="flex flex-wrap items-center gap-3.5 pt-1.5"
+              className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1"
             >
               <Link href={primaryCta.link}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2 group cursor-pointer"
+                  className="px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-1.5 sm:gap-2 group cursor-pointer"
                   data-cursor="Products"
                 >
-                  <Boxes size={16} />
+                  <Boxes size={15} />
                   <span>{primaryCta.text}</span>
-                  <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
 
@@ -211,10 +211,10 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="px-6 py-3 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+                  className="px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 sm:gap-2 shadow-2xs cursor-pointer"
                   data-cursor="Map"
                 >
-                  <Cpu size={16} className="text-indigo-600" />
+                  <Cpu size={15} className="text-indigo-600" />
                   <span>{secondaryCta.text}</span>
                 </motion.button>
               </Link>
@@ -225,16 +225,16 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.32 }}
-              className="pt-1.5 flex flex-wrap items-center gap-3 text-xs font-mono font-bold text-slate-500"
+              className="pt-1 flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] sm:text-xs font-mono font-bold text-slate-500"
             >
               <span className="flex items-center gap-1.5 text-emerald-600 font-extrabold">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse" />
                 4 Live Flagship SaaS
               </span>
               <span>•</span>
-              <span>Next.js 15 App Architecture</span>
+              <span>Next.js 15</span>
               <span>•</span>
-              <span>Global Edge SLA</span>
+              <span>Edge SLA</span>
             </motion.div>
 
           </div>
@@ -244,32 +244,32 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-            className="lg:col-span-5 bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-blue-950/90 backdrop-blur-2xl text-slate-200 rounded-3xl border border-indigo-500/30 shadow-2xl shadow-indigo-950/40 p-5 sm:p-6 font-mono text-xs flex flex-col justify-between h-[460px] min-h-[460px] max-h-[460px] relative overflow-hidden shrink-0"
+            className="lg:col-span-5 bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-blue-950/90 backdrop-blur-2xl text-slate-200 rounded-2xl sm:rounded-3xl border border-indigo-500/30 shadow-xl sm:shadow-2xl shadow-indigo-950/40 p-3.5 sm:p-6 font-mono text-xs flex flex-col justify-between h-[340px] min-h-[340px] sm:h-[460px] sm:min-h-[460px] sm:max-h-[460px] relative overflow-hidden shrink-0"
           >
             {/* Ambient inner glow */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-cyan-500/20 to-indigo-500/30 rounded-full blur-3xl pointer-events-none" />
 
             {/* Top Bar */}
             <div className="shrink-0">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-3.5">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2 sm:pb-3 mb-2.5 sm:mb-3.5">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                    <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-red-500" />
+                    <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-yellow-500" />
+                    <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-green-500" />
                   </div>
-                  <span className="text-xs text-slate-400 font-bold uppercase tracking-wider pl-1.5">
+                  <span className="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider pl-1">
                     devsamp://telemetry-hud
                   </span>
                 </div>
 
-                <span className="text-xs px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+                <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
                   LIVE MESH
                 </span>
               </div>
 
               {/* 4 Interactive Telemetry Nodes Grid */}
-              <div className="grid grid-cols-2 gap-2.5 mb-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-2 sm:mb-3">
                 {telemetryNodes.map((node) => {
                   const NodeIcon = node.icon;
                   const isSelected = activeNode === node.id;
@@ -278,21 +278,21 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                     <button
                       key={node.id}
                       onClick={() => setActiveNode(node.id)}
-                      className={`p-3 rounded-2xl border text-left transition-all duration-200 relative overflow-hidden cursor-pointer ${
+                      className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border text-left transition-all duration-200 relative overflow-hidden cursor-pointer ${
                         isSelected
                           ? "bg-white/15 border-indigo-400 shadow-md shadow-indigo-500/20"
                           : "bg-white/5 border-white/10 hover:border-white/20 text-slate-300"
                       }`}
                     >
-                      <div className="flex justify-between items-start mb-1.5">
-                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-white bg-gradient-to-tr ${node.color} shadow-xs`}>
-                          <NodeIcon size={14} />
+                      <div className="flex justify-between items-start mb-1">
+                        <div className={`w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center text-white bg-gradient-to-tr ${node.color} shadow-xs`}>
+                          <NodeIcon size={12} className="sm:w-3.5 sm:h-3.5" />
                         </div>
-                        <span className="text-[10px] font-bold text-slate-400">
+                        <span className="text-[9px] sm:text-[10px] font-bold text-slate-400">
                           {node.status}
                         </span>
                       </div>
-                      <span className="text-xs font-bold text-white block truncate">
+                      <span className="text-[11px] sm:text-xs font-bold text-white block truncate">
                         {node.label}
                       </span>
                     </button>
@@ -302,9 +302,9 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             </div>
 
             {/* Fixed-Height Console Output Screen */}
-            <div className="bg-black/75 rounded-2xl border border-white/10 p-3.5 h-[145px] min-h-[145px] max-h-[145px] text-xs space-y-1.5 leading-relaxed text-slate-300 font-mono overflow-y-auto scrollbar-none shrink-0">
-              <div className="flex justify-between text-[11px] text-slate-500 font-bold border-b border-white/10 pb-1 mb-1">
-                <span>ACTIVE NODE: {activeNode.toUpperCase()}</span>
+            <div className="bg-black/75 rounded-xl sm:rounded-2xl border border-white/10 p-2.5 sm:p-3.5 h-[95px] min-h-[95px] sm:h-[145px] sm:min-h-[145px] sm:max-h-[145px] text-[11px] sm:text-xs space-y-1 leading-relaxed text-slate-300 font-mono overflow-y-auto scrollbar-none shrink-0">
+              <div className="flex justify-between text-[10px] sm:text-[11px] text-slate-500 font-bold border-b border-white/10 pb-0.5 mb-0.5">
+                <span>NODE: {activeNode.toUpperCase()}</span>
                 <span>LATENCY: &lt;15ms</span>
               </div>
               {terminalLogs.map((log, idx) => (
@@ -315,11 +315,11 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
             </div>
 
             {/* Fixed-Height Bottom Pipeline Trigger */}
-            <div className="h-10 border-t border-white/10 pt-2 flex items-center justify-between gap-3 shrink-0">
+            <div className="h-9 sm:h-10 border-t border-white/10 pt-1.5 sm:pt-2 flex items-center justify-between gap-2 shrink-0">
               {compiling ? (
                 <div className="flex-1 space-y-1">
-                  <div className="flex justify-between text-xs text-slate-300 font-bold">
-                    <span>Syncing Ecosystem Mesh...</span>
+                  <div className="flex justify-between text-[10px] sm:text-xs text-slate-300 font-bold">
+                    <span>Syncing Mesh...</span>
                     <span>{compileProgress}%</span>
                   </div>
                   <div className="w-full bg-white/15 h-1.5 rounded-full overflow-hidden">
@@ -331,13 +331,13 @@ const Hero = ({ sectionData = null, siteSettings = null }) => {
                 </div>
               ) : (
                 <>
-                  <span className="text-xs text-slate-400 font-medium">Sync all 4 nodes in real-time</span>
+                  <span className="text-[10px] sm:text-xs text-slate-400 font-medium truncate">Sync nodes</span>
                   <button
                     onClick={triggerFullBuild}
-                    className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-blue-500/30 cursor-pointer"
+                    className="px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-[10px] sm:text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-blue-500/30 cursor-pointer"
                   >
-                    <Play size={12} className="fill-current" />
-                    <span>Run Sync Pipeline</span>
+                    <Play size={10} className="fill-current" />
+                    <span>Run Sync</span>
                   </button>
                 </>
               )}

@@ -35,10 +35,10 @@ export default async function NewsPage() {
   const dbBlogs = await getBlogs(10);
   const newsItems = dbBlogs && dbBlogs.length > 0
     ? dbBlogs.map(b => ({
-        date: new Date(b.createdAt || Date.now()).toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+        date: b.createdAt ? new Date(b.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "Recent",
         tag: b.category || "ANNOUNCEMENT",
         title: b.title,
-        desc: b.summary || b.description || b.content?.slice(0, 160) + "..."
+        desc: b.summary || b.description || (b.content ? b.content.slice(0, 160) + "..." : "")
       }))
     : DEFAULT_NEWS;
 

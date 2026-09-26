@@ -82,8 +82,8 @@ const WhyDevSamp = ({ sectionData = null }) => {
           </motion.p>
         </div>
 
-        {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto min-w-0">
+        {/* 4 Pillars Grid - 2 Column App-Like on Phone, 2 Column on Desktop */}
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-6 lg:gap-8 max-w-6xl mx-auto min-w-0">
           {valuePillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
@@ -92,31 +92,31 @@ const WhyDevSamp = ({ sectionData = null }) => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: smoothEase, delay: idx * 0.08 }}
-                className="group bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-indigo-500/40 p-6 sm:p-8 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between min-w-0"
+                transition={{ duration: 0.5, ease: smoothEase, delay: idx * 0.06 }}
+                className="group bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:border-indigo-500/40 p-3.5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between min-w-0"
               >
                 <div className="min-w-0">
-                  <div className="flex justify-between items-start mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100/60 text-indigo-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
-                      <Icon size={22} />
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 sm:mb-5">
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-indigo-50 border border-indigo-100/60 text-indigo-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                      <Icon size={16} className="sm:w-[22px] sm:h-[22px]" />
                     </div>
-                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-700 uppercase shadow-2xs">
+                    <span className="text-[9px] sm:text-xs font-mono font-bold px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white border border-slate-200 text-slate-700 uppercase shadow-2xs truncate">
                       {pillar.highlight}
                     </span>
                   </div>
 
-                  <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2.5 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-sm sm:text-2xl font-black text-slate-900 mb-1.5 sm:mb-2.5 group-hover:text-indigo-600 transition-colors line-clamp-1">
                     {pillar.title}
                   </h3>
                   
-                  <p className="text-slate-600 text-sm sm:text-base font-normal leading-relaxed">
+                  <p className="text-[11px] sm:text-base text-slate-600 font-normal leading-relaxed line-clamp-3 sm:line-clamp-none">
                     {pillar.description}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-200/70 flex items-center justify-between text-xs font-mono text-slate-500 font-bold">
-                  <span>SPECIFICATION: VERIFIED</span>
-                  <span className="text-indigo-600 font-bold">✓ ACTIVE STANDARD</span>
+                <div className="mt-3 sm:mt-6 pt-2.5 sm:pt-4 border-t border-slate-200/70 flex items-center justify-between text-[10px] sm:text-xs font-mono text-slate-500 font-bold">
+                  <span className="hidden sm:inline">SPEC: VERIFIED</span>
+                  <span className="text-indigo-600 font-bold">✓ VERIFIED</span>
                 </div>
               </motion.div>
             );

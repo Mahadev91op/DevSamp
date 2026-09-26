@@ -1,4 +1,5 @@
 import EcosystemPageShell from "@/components/EcosystemPageShell";
+import Link from "next/link";
 import { Mail, Phone, MapPin, Clock, MessageSquare, Send, CheckCircle2 } from "lucide-react";
 
 export const metadata = {
@@ -65,13 +66,13 @@ export default function ContactPage() {
               For urgent bug fixes or operational support, please use the Client Portal or Help Center to track tickets.
             </p>
             <div className="pt-2">
-              <a
+              <Link
                 href="/account/tickets"
                 className="inline-flex items-center gap-1.5 text-xs text-indigo-300 font-bold hover:text-white"
               >
                 <span>Go to Support Tickets</span>
                 <span className="text-sm">→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

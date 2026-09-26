@@ -1,5 +1,5 @@
 import EcosystemPageShell from "@/components/EcosystemPageShell";
-import { Download, Palette, FileText, CheckCircle2, Copy } from "lucide-react";
+import { Download, Palette, FileText, CheckCircle2, XCircle, Copy } from "lucide-react";
 
 export const metadata = {
   title: "Brand Assets & Media Kit | DevSamp Ecosystem",
@@ -104,7 +104,7 @@ export default function BrandAssetsPage() {
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
               <span className="font-bold text-rose-700 flex items-center gap-1.5">
-                <CheckCircle2 size={14} />
+                <XCircle size={14} />
                 <span>Don&apos;t:</span>
               </span>
               <p>Do not skew, stretch, rotate, or alter the proportions of the logo.</p>

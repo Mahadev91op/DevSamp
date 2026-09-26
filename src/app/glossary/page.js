@@ -79,16 +79,16 @@ export default function GlossaryPage() {
       primaryAction={{ label: "Developer Docs", href: "/docs" }}
       secondaryAction={{ label: "Guides & Playbooks", href: "/guides" }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-5xl">
         {GLOSSARY_TERMS.map((item, idx) => (
           <div
             key={idx}
-            className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-2 flex flex-col justify-between"
+            className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-2 flex flex-col justify-between"
           >
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-bold text-slate-900">{item.term}</h2>
-                <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase">
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="text-sm sm:text-base font-bold text-slate-900">{item.term}</h2>
+                <span className="text-[9px] sm:text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase shrink-0">
                   {item.category}
                 </span>
               </div>

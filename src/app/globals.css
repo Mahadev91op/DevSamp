@@ -66,7 +66,15 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  cursor: none; /* Custom interactive cursor */
+  cursor: default;
+}
+
+/* Ensure native pointer and interactive cursors across admin & inputs */
+button, a, [role="button"], .cursor-pointer {
+  cursor: pointer;
+}
+input, textarea, select, [contenteditable="true"] {
+  cursor: text;
 }
 
 /* GPU-Accelerated fixed background element to prevent scroll paint storm */
@@ -129,38 +137,38 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Balanced, Sleek & Highly Readable Fluid Typography */
 .text-fluid-display {
-  font-size: clamp(2.25rem, 3.8vw + 0.8rem, 4.25rem);
-  line-height: 1.1;
+  font-size: clamp(1.75rem, 5vw + 0.5rem, 4.25rem);
+  line-height: 1.12;
   font-weight: 900;
 }
 
 .text-fluid-h1 {
-  font-size: clamp(2rem, 3vw + 0.75rem, 3.35rem);
+  font-size: clamp(1.5rem, 4.2vw + 0.4rem, 3.35rem);
   line-height: 1.15;
   font-weight: 900;
 }
 
 .text-fluid-h2 {
-  font-size: clamp(1.65rem, 2.2vw + 0.6rem, 2.65rem);
+  font-size: clamp(1.3rem, 3.2vw + 0.3rem, 2.65rem);
   line-height: 1.2;
   font-weight: 900;
 }
 
 .text-fluid-h3 {
-  font-size: clamp(1.25rem, 1.4vw + 0.4rem, 1.75rem);
+  font-size: clamp(1.1rem, 2vw + 0.2rem, 1.75rem);
   line-height: 1.3;
   font-weight: 800;
 }
 
 .text-fluid-lead {
-  font-size: clamp(1.05rem, 0.45vw + 0.9rem, 1.25rem);
-  line-height: 1.65;
+  font-size: clamp(0.9rem, 1.2vw + 0.5rem, 1.25rem);
+  line-height: 1.6;
   font-weight: 500;
 }
 
 .text-fluid-body {
-  font-size: clamp(0.95rem, 0.3vw + 0.85rem, 1.075rem);
-  line-height: 1.6;
+  font-size: clamp(0.85rem, 0.8vw + 0.55rem, 1.075rem);
+  line-height: 1.55;
   font-weight: 500;
 }
 
@@ -222,26 +230,22 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-3px);
 }
 
-/* Optimize backdrop filter blurs globally to prevent GPU scrolling lag */
+/* Optimize backdrop filter blurs globally */
+.backdrop-blur-2xl {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
 .backdrop-blur-xl {
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .backdrop-blur-lg {
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .backdrop-blur-md {
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
-}
-
-/* Disable backdrop blurs on mobile/tablets to prevent rendering bottleneck */
-@media (max-width: 1024px) {
-  .backdrop-blur-xl, .backdrop-blur-lg, .backdrop-blur-md {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 /* Hardware GPU acceleration for custom cursor */

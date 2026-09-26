@@ -87,20 +87,20 @@ export default function PartnerPortalPage() {
             <h3 className="text-sm font-bold">Partner Enablement Kit</h3>
             <p className="text-xs text-slate-300">Download official pitch decks, comparison matrices, and ROI calculators.</p>
             <div className="pt-2 space-y-2">
-              <a
+              <Link
                 href="/brand-assets"
                 className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-indigo-300 font-bold flex items-center justify-between transition-colors"
               >
                 <span>Download Media Kit</span>
                 <span>↓</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/products/compare"
                 className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-indigo-300 font-bold flex items-center justify-between transition-colors"
               >
                 <span>Platform Comparison Sheet</span>
                 <span>→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

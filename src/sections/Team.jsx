@@ -78,16 +78,16 @@ const Team = () => {
     : getSkillsForRole(activeMember.role);
 
   return (
-    <section id="team" className="py-12 md:py-24 bg-transparent text-slate-900 overflow-hidden relative">
+    <section id="team" className="py-10 sm:py-12 md:py-24 bg-transparent text-slate-900 overflow-hidden relative">
       <div className="absolute top-[20%] right-[-10%] w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
-        <div className="mb-10 md:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-3">
+        <div className="mb-8 sm:mb-10 md:mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2.5 sm:mb-3">
             Core Engine
           </div>
-          <h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-black mb-1.5 sm:mb-2 tracking-tight">
             The <span className="text-indigo-650">Squad</span>
           </h2>
           <p className="text-xs md:text-sm text-slate-500 font-semibold max-w-lg">
@@ -96,10 +96,10 @@ const Team = () => {
         </div>
 
         {/* Coder Workspace Console */}
-        <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-lg flex flex-col md:grid md:grid-cols-12 min-h-[550px] transition-all duration-300">
+        <div className="bg-white border border-slate-200/80 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col md:grid md:grid-cols-12 min-h-0 md:min-h-[550px] transition-all duration-300">
           
           {/* Left Panel: File Explorer (Sidebar) */}
-          <div className="col-span-3 border-r border-slate-200/80 bg-slate-100/40 p-4 md:p-6 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto whitespace-nowrap md:whitespace-normal scrollbar-none select-none">
+          <div className="col-span-3 border-b md:border-b-0 md:border-r border-slate-200/80 bg-slate-100/40 p-2.5 sm:p-4 md:p-6 flex flex-row md:flex-col gap-1.5 sm:gap-2 overflow-x-auto md:overflow-y-auto whitespace-nowrap md:whitespace-normal scrollbar-none select-none">
             <div className="hidden md:flex items-center gap-2 mb-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
               <Folder size={14} className="text-indigo-500" />
               <span>Workspace / Squad</span>
@@ -112,14 +112,14 @@ const Team = () => {
                 <button
                   key={member._id}
                   onClick={() => setActiveId(member._id)}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-left font-bold text-xs md:text-sm transition-all w-fit md:w-full border ${
+                  className={`flex items-center gap-2 sm:gap-3 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl text-left font-bold text-xs md:text-sm transition-all w-fit md:w-full border ${
                     isActive 
-                      ? "bg-white text-indigo-650 border-slate-200 shadow-sm" 
+                      ? "bg-white text-indigo-650 border-slate-200 shadow-xs" 
                       : "bg-transparent text-slate-550 border-transparent hover:bg-slate-100/60 hover:text-slate-800"
                   }`}
                   data-cursor="Select"
                 >
-                  <FileCode size={14} className={isActive ? "text-indigo-600 animate-pulse" : "text-slate-400"} />
+                  <FileCode size={13} className={isActive ? "text-indigo-600 animate-pulse shrink-0" : "text-slate-400 shrink-0"} />
                   <span className="truncate">{member.name}{fileExtension}</span>
                 </button>
               );
@@ -129,30 +129,30 @@ const Team = () => {
           {/* Right Panel: Active File Editor Window */}
           <div className="col-span-9 flex flex-col h-full bg-transparent">
             {/* Editor Window Bar */}
-            <div className="h-11 border-b border-slate-200/80 bg-slate-50/50 px-4 md:px-6 flex items-center justify-between select-none">
+            <div className="h-9 sm:h-11 border-b border-slate-200/80 bg-slate-50/50 px-3 sm:px-4 md:px-6 flex items-center justify-between select-none">
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-full bg-red-400"></span>
-                <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
-                <span className="w-3 h-3 rounded-full bg-green-400"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
               </div>
-              <div className="flex items-center gap-1 text-[10px] md:text-xs text-slate-400 font-mono font-bold tracking-wider">
-                <Terminal size={12} className="text-slate-400" />
-                <span>root@devsamp:~/{activeMember.name.toLowerCase()}{activeMember.role.toLowerCase().includes("design") ? ".json" : ".js"}</span>
+              <div className="flex items-center gap-1 text-[9px] sm:text-[10px] md:text-xs text-slate-400 font-mono font-bold tracking-wider truncate max-w-[200px] sm:max-w-none">
+                <Terminal size={12} className="text-slate-400 shrink-0" />
+                <span className="truncate">root@devsamp:~/{activeMember.name.toLowerCase()}{activeMember.role.toLowerCase().includes("design") ? ".json" : ".js"}</span>
               </div>
-              <div className="w-12"></div> {/* Spacer to center */}
+              <div className="w-6 sm:w-12"></div> {/* Spacer to center */}
             </div>
 
             {/* Editor Content Area */}
-            <div className="p-5 md:p-8 flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-8 items-start">
+            <div className="p-4 sm:p-5 md:p-8 flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-5 md:gap-8 items-start">
               
               {/* Profile Card Overlay (Left inside Editor) */}
               <div className="lg:col-span-5 w-full flex flex-col items-center text-center">
-                <div className="relative group mb-5">
+                <div className="relative group mb-3.5 sm:mb-5">
                   {/* Glowing Animated Outer Ring */}
                   <div className="absolute inset-[-6px] bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 rounded-2xl blur-md opacity-40 group-hover:opacity-75 group-hover:scale-105 transition-all duration-500 animate-pulse"></div>
                   
                   {/* Photo Container */}
-                  <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden border-2 border-white bg-slate-100 shadow-md">
+                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden border-2 border-white bg-slate-100 shadow-md">
                     <img 
                       src={getGoogleDriveImage(activeMember.image)} 
                       alt={activeMember.name} 
@@ -163,11 +163,11 @@ const Team = () => {
                   </div>
                 </div>
 
-                <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-1">{activeMember.name}</h3>
-                <p className="text-indigo-650 text-xs md:text-sm font-bold uppercase tracking-wider mb-4">{activeMember.role}</p>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 mb-0.5">{activeMember.name}</h3>
+                <p className="text-indigo-650 text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-wider mb-3 sm:mb-4">{activeMember.role}</p>
 
                 {/* Social Actions inside Panel */}
-                <div className="flex justify-center gap-3">
+                <div className="flex justify-center gap-2.5 sm:gap-3">
                   {[
                     { href: "https://www.freelancer.in/u/DevSamp", icon: Bird, label: "Freelancer" },
                     { href: "https://www.youtube.com/@DevSamp1st", icon: Youtube, label: "YouTube" },

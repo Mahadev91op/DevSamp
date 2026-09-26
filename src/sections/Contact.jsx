@@ -112,9 +112,10 @@ const Contact = () => {
           setLogs(prev => [...prev, "[SEND] Shipping request data packet...", "[COMPILE] Build: SUCCESS!"]);
           setTimeout(() => {
             setStatus("success");
+            setFormData({ name: "", email: "", service: "", message: "" });
             setTimeout(() => {
-              router.push("/login");
-            }, 1200);
+              setStatus("idle");
+            }, 4000);
           }, 500);
         }, 1000);
       } else {
@@ -137,22 +138,22 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="relative py-16 md:py-24 bg-transparent text-slate-900 overflow-hidden">
+    <section id="contact" className="relative py-10 sm:py-16 md:py-24 bg-transparent text-slate-900 overflow-hidden">
       
       <div className="absolute top-0 left-0 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="ecosystem-container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 items-center min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-14 items-center min-w-0">
           
           {/* LEFT SIDE: Heading details */}
-          <div className="lg:col-span-5 min-w-0 space-y-5">
+          <div className="lg:col-span-5 min-w-0 space-y-4 sm:space-y-5">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 uppercase tracking-widest"
+              className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-[10px] sm:text-xs font-bold text-indigo-700 uppercase tracking-widest"
             >
               Get in Touch
             </motion.div>
@@ -174,31 +175,31 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: smoothEase, delay: 0.16 }}
-              className="text-slate-600 text-fluid-lead font-normal max-w-lg leading-relaxed"
+              className="text-slate-600 text-fluid-lead font-normal max-w-lg leading-relaxed text-xs sm:text-sm md:text-base"
             >
               Have a digital idea or design specification? Initiate a connection parameter, and our core developers will compile it.
             </motion.p>
 
-            <div className="space-y-3.5 pt-1">
+            <div className="space-y-3 sm:space-y-3.5 pt-1">
                 <div className="flex items-center gap-3 text-slate-705 group">
-                    <div className="p-2.5 bg-white rounded-2xl border border-slate-200 text-indigo-600 group-hover:border-indigo-500/50 transition-colors shadow-xs">
-                        <Mail size={18} />
+                    <div className="p-2 sm:p-2.5 bg-white rounded-xl sm:rounded-2xl border border-slate-200 text-indigo-600 group-hover:border-indigo-500/50 transition-colors shadow-xs">
+                        <Mail size={16} />
                     </div>
                     <div>
-                        <p className="text-xs text-slate-400 uppercase tracking-wider font-bold">SMTP Host Link</p>
-                        <a href={`mailto:devsamp1st@gmail.com?subject=${emailSubject}&body=${emailBody}`} className="text-sm sm:text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors cursor-pointer" data-cursor="Email">
+                        <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider font-bold">SMTP Host Link</p>
+                        <a href={`mailto:devsamp1st@gmail.com?subject=${emailSubject}&body=${emailBody}`} className="text-xs sm:text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors cursor-pointer" data-cursor="Email">
                             devsamp1st@gmail.com
                         </a>
                     </div>
                 </div>
 
                 <div onClick={handlePhoneClick} className="flex items-center gap-3 text-slate-705 group cursor-pointer">
-                    <div className="p-2.5 bg-white rounded-2xl border border-slate-200 text-indigo-600 group-hover:border-indigo-500/50 transition-colors shadow-xs">
-                        <Phone size={18} />
+                    <div className="p-2 sm:p-2.5 bg-white rounded-xl sm:rounded-2xl border border-slate-200 text-indigo-600 group-hover:border-indigo-500/50 transition-colors shadow-xs">
+                        <Phone size={16} />
                     </div>
                     <div>
-                        <p className="text-xs text-slate-400 uppercase tracking-wider font-bold">Cellular Hotspot</p>
-                        <p className="text-sm sm:text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors" data-cursor="Call">
+                        <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider font-bold">Cellular Hotspot</p>
+                        <p className="text-xs sm:text-base font-bold text-slate-800 hover:text-indigo-600 transition-colors" data-cursor="Call">
                             +91 9330680642
                         </p>
                     </div>
@@ -212,20 +213,20 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: smoothEase }}
-            className="lg:col-span-7 bg-white border border-slate-200/90 p-5 md:p-8 rounded-3xl shadow-md relative overflow-hidden min-w-0"
+            className="lg:col-span-7 bg-white border border-slate-200/90 p-4 sm:p-5 md:p-8 rounded-2xl sm:rounded-3xl shadow-md relative overflow-hidden min-w-0"
           >
             {/* Terminal Header Bar */}
-            <div className="absolute top-0 left-0 right-0 h-11 bg-slate-100/90 border-b border-slate-200/70 px-4 flex items-center justify-between select-none z-10">
+            <div className="absolute top-0 left-0 right-0 h-9 sm:h-11 bg-slate-100/90 border-b border-slate-200/70 px-3 sm:px-4 flex items-center justify-between select-none z-10">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
                 <span className="w-2.5 h-2.5 rounded-full bg-green-400"></span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500 font-bold uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-slate-500 font-bold uppercase tracking-wider truncate">
                 <Code2 size={13} className="text-indigo-600" />
                 <span>project-specs.config.js</span>
               </div>
-              <div className="w-8"></div>
+              <div className="w-6 sm:w-8"></div>
             </div>
 
             {/* Success Overlay Screen */}
@@ -240,8 +241,8 @@ const Contact = () => {
                         <div className="w-14 h-14 bg-green-600 rounded-2xl flex items-center justify-center mb-4 shadow-md text-white">
                             <Check size={28} strokeWidth={3} />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-1">Payload Compiled!</h3>
-                        <p className="text-slate-500 text-xs sm:text-sm font-semibold">Deploying redirection parameters to terminal host...</p>
+                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-1">Inquiry Sent Successfully!</h3>
+                        <p className="text-slate-600 text-xs sm:text-sm font-medium">Thank you! Our engineering lead will review your requirements and respond within 2 hours.</p>
                     </motion.div>
                 )}
             </AnimatePresence>

@@ -49,15 +49,17 @@ const ScrollToTop = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.button
-          initial={{ y: 50, opacity: 0, scale: 0.8 }}
+          initial={{ y: 30, opacity: 0, scale: 0.8 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: 50, opacity: 0, scale: 0.8 }}
-          whileHover={{ scale: 1.1, backgroundColor: "#2563eb" }}
-          whileTap={{ scale: 0.9 }}
+          exit={{ y: 30, opacity: 0, scale: 0.8 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.92 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-[100] p-4 rounded-full bg-white/10 border border-white/20 backdrop-blur-lg text-white shadow-2xl transition-colors duration-300 group"
+          className="fixed bottom-32 right-4 md:bottom-8 md:right-8 z-40 p-2.5 md:p-3 rounded-full bg-slate-950/90 hover:bg-blue-600 border border-slate-700/80 text-white shadow-xl backdrop-blur-md transition-all duration-300 group cursor-pointer"
+          title="Scroll to Top"
+          aria-label="Scroll to top"
         >
-          <ArrowUp size={24} className="group-hover:-translate-y-1 transition-transform duration-500 ease-out" />
+          <ArrowUp size={20} className="md:w-5 md:h-5 group-hover:-translate-y-0.5 transition-transform duration-300 ease-out" />
         </motion.button>
       )}
     </AnimatePresence>

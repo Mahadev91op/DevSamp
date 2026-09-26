@@ -3,1495 +3,1873 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
   LayoutDashboard, Users, Layers, Plus, Loader2, LogOut, Menu, X, 
-  CheckCircle, AlertCircle, Briefcase, PenBox, 
-  Trash2, Search, ExternalLink, CreditCard, Star, MessageCircle, 
-  TrendingUp, Filter, Rss, Download, Wand2, Eye, Mail, 
-  ChevronLeft, ChevronRight, Image as ImageIcon, Maximize2, Minimize2, 
-  BarChart3, Activity, ArrowRight, Zap, FolderKanban, Clock, Save, Link as LinkIcon, DollarSign, FileText,
-  UploadCloud, File, Calendar as CalendarIcon, Building2
+  CheckCircle2, AlertCircle, Briefcase, PenBox, Trash2, Search, ExternalLink, 
+  CreditCard, Star, MessageCircle, TrendingUp, Filter, Rss, Download, Wand2, 
+  Eye, Mail, ChevronLeft, ChevronRight, Image as ImageIcon, Maximize2, Minimize2, 
+  BarChart3, Activity, ArrowRight, Zap, FolderKanban, Clock, Save, Link as LinkIcon, 
+  DollarSign, FileText, UploadCloud, File, Calendar as CalendarIcon, Building2,
+  Code2, Github, Sparkles, ShieldCheck, Globe, Compass, Target, HelpCircle,
+  Settings, RefreshCw, Smartphone, ChevronDown, Check, ToggleLeft, ToggleRight,
+  Boxes, Cpu, Server, CheckSquare, Edit3, Monitor, Tablet, Database, KeyRound
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
-// --- HELPERS (SAME AS BEFORE) ---
-const getTimeRangeConfig = (range) => {
-    const now = new Date();
-    switch(range) {
-        case '1D': return { days: 1, labelFormat: 'hour' };
-        case '7D': return { days: 7, labelFormat: 'day' };
-        case '1M': return { days: 30, labelFormat: 'date' };
-        case '3M': return { days: 90, labelFormat: 'month' };
-        case '6M': return { days: 180, labelFormat: 'month' };
-        case '1Y': return { days: 365, labelFormat: 'month' };
-        case '3Y': return { days: 1095, labelFormat: 'year' };
-        default: return { days: 7, labelFormat: 'day' };
-    }
+const smoothEase = [0.16, 1, 0.3, 1];
+
+// Helper: Format Relative Time
+const formatTimeAgo = (dateStr) => {
+  if (!dateStr) return "Recently";
+  const d = new Date(dateStr);
+  const diffSec = Math.floor((new Date() - d) / 1000);
+  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
-
-const filterAndGroupData = (items, range) => {
-    const { days, labelFormat } = getTimeRangeConfig(range);
-    const now = new Date();
-    const startDate = new Date();
-    startDate.setDate(now.getDate() - days);
-
-    const filtered = items.filter(item => new Date(item.createdAt) >= startDate);
-    const groups = {};
-    const labels = [];
-    
-    if (labelFormat === 'hour') {
-        for(let i=0; i<24; i++) {
-            const d = new Date(startDate);
-            d.setHours(d.getHours() + i);
-            const key = d.toLocaleTimeString([], { hour: '2-digit' });
-            groups[key] = 0;
-            labels.push(key);
-        }
-    } else if (labelFormat === 'month' || labelFormat === 'year') {
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        for (let i = (labelFormat === 'year' ? 3 : 6); i >= 0; i--) {
-             const d = new Date();
-             if(labelFormat === 'year') d.setFullYear(d.getFullYear() - i);
-             else d.setMonth(d.getMonth() - i);
-             const key = labelFormat === 'year' ? d.getFullYear() : `${monthNames[d.getMonth()]}`;
-             groups[key] = 0;
-             if(!labels.includes(String(key))) labels.push(String(key));
-        }
-    } else {
-        for(let i=0; i<days; i++) {
-            const d = new Date(startDate);
-            d.setDate(d.getDate() + i + 1);
-            const key = d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' });
-            groups[key] = 0;
-            labels.push(key);
-        }
-    }
-
-    filtered.forEach(item => {
-        const d = new Date(item.createdAt);
-        let key;
-        if (labelFormat === 'hour') key = d.toLocaleTimeString([], { hour: '2-digit' });
-        else if (labelFormat === 'month') key = d.toLocaleString('default', { month: 'short' });
-        else if (labelFormat === 'year') key = d.getFullYear();
-        else key = d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' });
-
-        if (groups[key] !== undefined) groups[key]++;
-    });
-
-    const finalData = labels.map(l => groups[l] || 0);
-    return { labels, data: finalData };
-};
-
-const getGoogleDriveImage = (url) => {
-  if (!url) return "";
-  try {
-    const fileDMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if (fileDMatch && fileDMatch[1]) {
-      return `https://drive.google.com/thumbnail?id=${fileDMatch[1]}&sz=w1000`;
-    }
-    const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-    if (idMatch && idMatch[1]) {
-      return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
-    }
-  } catch (e) {
-    console.error("Link Error:", e);
-  }
-  return url;
-};
-
-const gradientOptions = [
-    { name: "Blue", class: "from-blue-500 to-cyan-500" },
-    { name: "Indigo", class: "from-blue-600 to-indigo-500" },
-    { name: "Orange", class: "from-orange-500 to-red-500" },
-    { name: "Green", class: "from-emerald-500 to-green-500" },
-    { name: "Dark", class: "from-gray-700 to-black" },
-];
-
-const LineChart = ({ data, labels, expanded, onToggleExpand, timeRange, setTimeRange, color = "blue" }) => {
-  const [hoveredVal, setHoveredVal] = useState(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const h = expanded ? 400 : 200; 
-  const w = expanded ? 1000 : 600;
-  const max = Math.max(...data) || 1;
-  const points = data.map((val, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - (val / max) * (h - 40) - 20; 
-    return `${x},${y}`;
-  }).join(" ");
-
-  return (
-    <div className={`bg-white border border-slate-200/80 p-6 rounded-3xl transition-all duration-500 ease-in-out relative overflow-hidden ${expanded ? "col-span-full row-span-2 z-50 scale-[1.01] shadow-2xl" : "col-span-1 shadow-sm"}`}>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h3 className={`font-bold text-slate-800 flex items-center gap-2 ${expanded ? "text-2xl" : "text-lg"}`}><TrendingUp size={expanded ? 24 : 18} className="text-indigo-600"/> Traffic & Leads</h3>
-          <p className="text-slate-450 text-xs mt-1">Real-time visitor interactions and analytics.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex bg-slate-50 border border-slate-200/60 p-1 rounded-xl">
-            {["7d", "30d", "90d"].map((t) => (
-              <button key={t} onClick={() => setTimeRange(t)} className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${timeRange === t ? "bg-white text-indigo-650 shadow-sm" : "text-slate-400 hover:text-slate-700"}`}>{t.toUpperCase()}</button>
-            ))}
-          </div>
-          <button onClick={onToggleExpand} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-800 transition-colors">
-            {expanded ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}
-          </button>
-        </div>
-      </div>
-      <div className={`w-full relative ${expanded ? "h-[350px]" : "h-[180px]"}`}>
-        <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.2"/>
-              <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.0"/>
-            </linearGradient>
-          </defs>
-          <path d={`M 0,${h} ${points} L ${w},${h} Z`} fill="url(#chartGrad)" />
-          <motion.polyline fill="none" stroke="#4f46e5" strokeWidth={expanded ? "3.5" : "2.5"} strokeLinecap="round" strokeLinejoin="round" points={points} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2, ease: "easeOut" }} />
-          {data.map((val, i) => {
-            const x = (i / (data.length - 1)) * w;
-            const y = h - (val / max) * (h - 40) - 20;
-            return (
-              <g key={i} className="cursor-pointer">
-                <circle cx={x} cy={y} r={expanded ? 6 : 4} className="fill-white stroke-indigo-600 stroke-[3px] hover:scale-150 transition-all" onMouseEnter={() => { setHoveredVal(val); setHoveredIndex(i); }} onMouseLeave={() => { setHoveredVal(null); setHoveredIndex(null); }} />
-                {hoveredIndex === i && (
-                  <g>
-                    <rect x={x - 25} y={y - 35} width="50" height="24" rx="6" className="fill-slate-900 shadow-md" />
-                    <text x={x} y={y - 19} textAnchor="middle" className="fill-white text-[11px] font-bold font-mono">{val}</text>
-                  </g>
-                )}
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-      <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono mt-4 border-t border-slate-100 pt-3">
-        {labels.map((l, i) => <span key={i}>{l}</span>)}
-      </div>
-    </div>
-  );
-};
-
-const BarChart = ({ data, labels, expanded, onToggleExpand, color = "indigo" }) => {
-    const max = Math.max(...data) || 1;
-    return (
-        <div className={`bg-white border border-slate-200/80 p-6 rounded-3xl transition-all duration-500 ease-in-out relative overflow-hidden ${expanded ? "col-span-full row-span-2 z-50 scale-[1.01] shadow-2xl" : "col-span-1 shadow-sm"}`}>
-            <div className="flex justify-between items-center mb-8">
-                <div><h3 className={`font-bold text-slate-800 flex items-center gap-2 ${expanded ? "text-2xl" : "text-lg"}`}><BarChart3 size={expanded ? 24 : 18} className="text-indigo-600"/> Popular Services</h3><p className="text-slate-450 text-xs mt-1">Most requested services by clients.</p></div>
-                <button onClick={onToggleExpand} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-800 transition-colors">{expanded ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}</button>
-            </div>
-            <div className={`w-full flex items-end justify-between gap-2 md:gap-4 ${expanded ? "h-[400px]" : "h-[200px]"}`}>
-                {data.map((val, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group relative">
-                        <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-xs font-bold px-2 py-1 rounded mb-2 z-10 pointer-events-none">{val}</div>
-                        <motion.div initial={{ height: 0 }} animate={{ height: `${(val / max) * 100}%` }} transition={{ duration: 1, delay: i * 0.1, type: "spring" }} className="w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-indigo-100 to-indigo-600 border-t border-x border-indigo-200 hover:to-indigo-500 transition-all cursor-pointer relative overflow-hidden" />
-                        <span className="text-[9px] md:text-[10px] text-slate-450 mt-3 font-mono uppercase tracking-wider truncate w-full text-center">{labels[i]}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-const Toast = ({ message, type, onClose }) => (<motion.div initial={{ opacity: 0, y: -20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -20, scale: 0.9 }} className={`fixed top-6 left-1/2 -translate-x-1/2 z-[200] flex items-center gap-3 px-6 py-3 rounded-full shadow-2xl border bg-white border-slate-205 ${type === "success" ? "text-emerald-600" : "text-red-500"}`}>{type === "success" ? <CheckCircle size={18} /> : <AlertCircle size={18} />}<span className="text-sm font-bold tracking-wide">{message}</span></motion.div>);
-
-const StatCard = ({ title, value, icon: Icon, color, trend, onClick }) => (<div onClick={onClick} className="bg-white border border-slate-200/80 p-6 rounded-2xl relative overflow-hidden group hover:border-slate-350 transition-all hover:-translate-y-1 duration-300 shadow-sm hover:shadow-md cursor-pointer"><div className={`absolute -right-6 -top-6 w-24 h-24 bg-indigo-500/5 blur-2xl rounded-full group-hover:bg-indigo-500/10 transition-all`}></div><div className="flex justify-between items-start mb-4 relative z-10"><div className="p-3 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100/50"><Icon size={20} /></div>{trend && (<span className="text-[10px] font-bold text-green-700 bg-green-50 border border-green-150 px-2 py-0.5 rounded-full flex items-center gap-1"><TrendingUp size={10} /> {trend}</span>)}</div><h3 className="text-3xl font-black text-slate-900 mb-1 tracking-tight">{value}</h3><div className="flex items-center gap-2"><p className="text-slate-450 text-[10px] uppercase tracking-widest font-bold">{title}</p><ArrowRight size={12} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0" /></div></div>);
-
-const Pagination = ({ total, perPage, current, onChange }) => { const pages = Math.ceil(total / perPage); if (pages <= 1) return null; return (<div className="flex items-center justify-end gap-2 mt-4"><button disabled={current === 1} onClick={() => onChange(current - 1)} className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronLeft size={16}/></button><span className="text-xs text-slate-500 font-bold font-mono">Page {current} of {pages}</span><button disabled={current === pages} onClick={() => onChange(current + 1)} className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronRight size={16}/></button></div>); };
 
 export default function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
 
   const [activeTab, setActiveTab] = useState("dashboard"); 
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState(null); 
   const [loading, setLoading] = useState(false);
-  const [extracting, setExtracting] = useState(false);
-  const [uploading, setUploading] = useState(false); 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(""); 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [viewLead, setViewLead] = useState(null);
-  const [leadsTimeRange, setLeadsTimeRange] = useState('7D');
-  const [expandedChart, setExpandedChart] = useState(null); 
-  const [calendarDate, setCalendarDate] = useState(new Date());
-
-  const [data, setData] = useState({ leads: [], services: [], team: [], projects: [], pricing: [], reviews: [], blogs: [], clientProjects: [], customers: [] });
+  const [savingSection, setSavingSection] = useState(null);
   
-  const [calcSettings, setCalcSettings] = useState({
-    basePrice: 299,
-    pricePerPage: 40,
-    addons: [
-      { name: "Interactive Admin Panel (CMS)", price: 299, enabled: true },
-      { name: "Vitals SEO optimization", price: 149, enabled: true },
-      { name: "Payment Gateway integrations", price: 199, enabled: true }
-    ]
-  });
-  const [calcLoading, setCalcLoading] = useState(false);
+  // Live Simulator Viewport Mode
+  const [simulatorUrl, setSimulatorUrl] = useState("/");
+  const [simulatorDevice, setSimulatorDevice] = useState("desktop"); // desktop, tablet, mobile
+  const [showSimulator, setShowSimulator] = useState(false);
 
-  const [forms, setForms] = useState({
-    project: { id: null, title: "", category: "", image: "", tech: "", link: "" },
-    service: { title: "", desc: "", icon: "Monitor", color: "text-blue-500", gradient: "from-blue-500 to-cyan-500" },
-    team: { id: null, name: "", role: "", image: "", desc: "", skills: [] },
-    pricing: { id: null, name: "", desc: "", priceMonthly: "", priceYearly: "", features: "", missing: "", popular: false, gradient: "from-gray-500 to-gray-700" },
-    blog: { id: null, link: "", title: "", desc: "", image: "", category: "", platform: "other" },
-    review: { id: null, name: "", role: "", text: "", rating: 5, image: "" },
-    customer: { id: null, name: "", slug: "", logo: "", website: "", shortDescription: "", description: "", industry: "Enterprise", location: "", relationshipType: "Enterprise Platform", featured: false, order: 0, visibility: "public", status: "active", since: "" },
-    clientProject: { 
-        id: null, title: "", clientEmail: "", status: "Active", progress: 0, nextMilestone: "Discovery", dueDate: "TBD", 
-        description: "", budget: "", paymentStatus: "Pending", links: [], 
-        documents: [], 
-        stages: [
-            { id: 1, title: "Discovery", status: "pending", date: "Pending" },
-            { id: 2, title: "UI/UX Design", status: "pending", date: "Pending" },
-            { id: 3, title: "Development", status: "pending", date: "Pending" },
-            { id: 4, title: "Testing", status: "pending", date: "Pending" },
-            { id: 5, title: "Deployment", status: "pending", date: "Pending" }
-        ], 
-        updates: [] 
+  // Search & Filter
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Master Ecosystem Data
+  const [data, setData] = useState({
+    leads: [],
+    products: [],
+    sourceCodes: [],
+    services: [],
+    ecosystemItems: [],
+    industries: [],
+    pricing: [],
+    reviews: [],
+    team: [],
+    customers: [],
+    sections: [],
+    siteSettings: {
+      siteName: "DevSamp",
+      tagline: "Technology • Software Products • SaaS • Digital Solutions Ecosystem",
+      contactEmail: "devsamp1st@gmail.com",
+      contactPhone: "+91 9330680642",
+      address: "India",
+      heroEyebrow: "Technology • Software Products • Ecosystem",
+      heroTitle: "Building, Operating & Scaling Digital Ecosystems with Next-Gen Products & Engineering",
+      heroDescription: "DevSamp powers modern enterprises with high-performance software products, scalable cloud platforms, and bespoke technology services."
     }
   });
 
-  const showToast = (message, type = "success") => { setToast({ message, type }); setTimeout(() => setToast(null), 3000); };
+  // Active Modals & Forms
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(""); 
+  const [editingItem, setEditingItem] = useState(null);
 
-  const lineChartData = useMemo(() => filterAndGroupData(data.leads, leadsTimeRange), [data.leads, leadsTimeRange]);
-  const barChartData = useMemo(() => { const counts = {}; data.leads.forEach(l => { const svc = l.service || "General"; counts[svc] = (counts[svc] || 0) + 1; }); const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5); return { labels: sorted.map(s => s[0]), data: sorted.map(s => s[1]) }; }, [data.leads]);
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3500);
+  };
 
-  const itemsPerPage = 8;
-  const filteredData = useMemo(() => {
-    let list = [];
-    if(activeTab === 'leads') list = data.leads;
-    else if(activeTab === 'projects') list = data.projects;
-    else if(activeTab === 'blogs') list = data.blogs;
-    else if(activeTab === 'team') list = data.team;
-    else if(activeTab === 'services') list = data.services;
-    else if(activeTab === 'reviews') list = data.reviews;
-    else if(activeTab === 'pricing') list = data.pricing;
-    else if(activeTab === 'client-projects') list = data.clientProjects; 
-    else if(activeTab === 'customers') list = data.customers;
+  // Fetch All Master Data from MongoDB
+  const fetchAllData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [
+        contactRes, productsRes, sourceCodesRes, servicesRes,
+        ecosystemRes, industriesRes, pricingRes, reviewsRes,
+        teamRes, customersRes, homepageRes
+      ] = await Promise.all([
+        fetch("/api/contact").then(r => r.json()).catch(() => ({ contacts: [] })),
+        fetch("/api/products").then(r => r.json()).catch(() => ({ products: [] })),
+        fetch("/api/source-code").then(r => r.json()).catch(() => ({ data: [] })),
+        fetch("/api/services").then(r => r.json()).catch(() => ({ services: [] })),
+        fetch("/api/ecosystem").then(r => r.json()).catch(() => ({ ecosystem: [] })),
+        fetch("/api/industries").then(r => r.json()).catch(() => ({ data: { industries: [] } })),
+        fetch("/api/pricing").then(r => r.json()).catch(() => ({ pricing: [] })),
+        fetch("/api/reviews").then(r => r.json()).catch(() => ({ reviews: [] })),
+        fetch("/api/team").then(r => r.json()).catch(() => ({ team: [] })),
+        fetch("/api/customers?admin=true").then(r => r.json()).catch(() => ({ data: { customers: [] } })),
+        fetch("/api/homepage").then(r => r.json()).catch(() => ({ sections: [], settings: null }))
+      ]);
 
-    if (!searchTerm) return list;
-    return list.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm.toLowerCase())));
-  }, [activeTab, data, searchTerm]);
+      setData({
+        leads: contactRes.contacts || [],
+        products: productsRes.products || [],
+        sourceCodes: sourceCodesRes.data || [],
+        services: servicesRes.services || [],
+        ecosystemItems: ecosystemRes.ecosystem || [],
+        industries: industriesRes.data?.industries || industriesRes.industries || [],
+        pricing: pricingRes.pricing || [],
+        reviews: reviewsRes.reviews || [],
+        team: teamRes.team || [],
+        customers: customersRes.data?.customers || customersRes.customers || [],
+        sections: homepageRes.sections || [],
+        siteSettings: homepageRes.settings || null
+      });
+    } catch (e) {
+      console.error("Fetch all data failed:", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Persistent Session Checker (Cookie + LocalStorage Token)
+  useEffect(() => {
+    const checkPersistentSession = async () => {
+      try {
+        const storedToken = typeof window !== "undefined" ? localStorage.getItem("devsamp_admin_token") : null;
+        
+        const headers = {};
+        if (storedToken) {
+          headers["Authorization"] = `Bearer ${storedToken}`;
+        }
 
-  const handleLogin = async (e) => { 
-    e.preventDefault(); 
+        const res = await fetch("/api/admin/auth", { headers });
+        const json = await res.json();
+        
+        if (res.ok && (json.authenticated || json.isAuthenticated)) {
+          setIsAuthenticated(true);
+          fetchAllData();
+        } else if (storedToken) {
+          // If stored token exists, attempt direct auto-login
+          setIsAuthenticated(true);
+          fetchAllData();
+        }
+      } catch (err) {
+        console.error("Persistent session check error:", err);
+      } finally {
+        setIsCheckingSession(false);
+      }
+    };
+    checkPersistentSession();
+  }, [fetchAllData]);
+
+  // Login handler with persistent 30-day token
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setLoading(true);
     try {
       const res = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ password, rememberMe })
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const resJson = await res.json();
+      if (res.ok && (resJson.success || resJson.authenticated || resJson.isAuthenticated)) {
         setIsAuthenticated(true);
-        fetchAllData(); 
-        showToast("Access Granted!");
+        if (resJson.token && typeof window !== "undefined") {
+          localStorage.setItem("devsamp_admin_token", resJson.token);
+        }
+        fetchAllData();
+        showToast("✓ Access Granted! Session remembered for 30 days.");
       } else {
-        showToast(data.message || "Invalid Passkey", "error");
+        showToast(resJson.message || "Invalid Admin Passkey", "error");
       }
-    } catch (error) {
-      showToast("Connection failed", "error");
+    } catch (err) {
+      showToast("Server connection error", "error");
     } finally {
       setLoading(false);
     }
   };
 
+  // Logout handler
   const handleLogout = async () => {
     try {
-      const res = await fetch("/api/admin/auth", {
-        method: "DELETE"
-      });
-      if (res.ok) {
-        setIsAuthenticated(false);
-        setPassword("");
-        showToast("Logged out successfully");
-      } else {
-        showToast("Logout failed", "error");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("devsamp_admin_token");
       }
-    } catch (error) {
+      await fetch("/api/admin/auth", { method: "DELETE" });
+      setIsAuthenticated(false);
+      setPassword("");
+      showToast("Admin session ended successfully");
+    } catch (err) {
       showToast("Logout error", "error");
     }
   };
 
-  const fetchAllData = useCallback(async () => {
+  // Export Full Database JSON Backup
+  const handleExportBackup = () => {
+    const backupJson = JSON.stringify(data, null, 2);
+    const blob = new Blob([backupJson], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `devsamp-db-backup-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    showToast("✓ Complete Database Backup Exported!");
+  };
+
+  // Trigger Master Seeder
+  const handleTriggerSeed = async () => {
+    if (!confirm("Run master baseline database seeder? Missing records will be restored.")) return;
     setLoading(true);
     try {
-      const endpoints = ["contact", "services", "team", "projects", "pricing", "reviews", "blogs", "client-projects", "customers?admin=true"];
-      const responses = await Promise.all(endpoints.map(ep => fetch(`/api/${ep}`).then(res => res.json())));
-      setData({
-        leads: responses[0].contacts || [],
-        services: responses[1].services || [],
-        team: responses[2].team || [],
-        projects: responses[3].projects || [],
-        pricing: responses[4].pricing || [],
-        reviews: responses[5].reviews || [],
-        blogs: responses[6].blogs || [],
-        clientProjects: responses[7].projects || [],
-        customers: responses[8]?.data?.customers || responses[8]?.customers || []
-      });
-
-      const settingsRes = await fetch("/api/pricing/settings");
-      if (settingsRes.ok) {
-        const settingsData = await settingsRes.json();
-        if (settingsData.settings) {
-          setCalcSettings(settingsData.settings);
-        }
+      const res = await fetch("/api/seed");
+      if (res.ok) {
+        showToast("✓ Database Seeder Completed Successfully!");
+        fetchAllData();
       }
-    } catch (e) { showToast("Sync Failed", "error"); }
-    setLoading(false);
-  }, []);
+    } catch (e) {
+      showToast("Seed error", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const res = await fetch("/api/admin/auth");
-        const data = await res.json();
-        if (data.isAuthenticated) {
-          setIsAuthenticated(true);
-          fetchAllData();
-        }
-      } catch (err) {
-        console.error("Session check failed", err);
-      } finally {
-        setIsCheckingSession(false);
-      }
-    };
-    checkSession();
-  }, [fetchAllData]);
+  // --- SAVE / UPDATE HANDLERS (LIVE DB SYNC) ---
 
-  const handleSaveCalcSettings = async (e) => {
+  const handleSaveSiteSettings = async (e) => {
     e.preventDefault();
-    setCalcLoading(true);
+    setSavingSection("settings");
     try {
-      const res = await fetch("/api/pricing/settings", {
-        method: "PUT",
+      const res = await fetch("/api/homepage", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(calcSettings)
+        body: JSON.stringify({
+          type: "site-setting",
+          settings: data.siteSettings
+        })
       });
       if (res.ok) {
-        showToast("Calculator Settings Saved!");
+        showToast("✓ Site Branding & Settings Synchronized Live!");
       } else {
         showToast("Failed to save settings", "error");
       }
     } catch (err) {
-      showToast("Network Error", "error");
+      showToast("Error updating settings", "error");
     } finally {
-      setCalcLoading(false);
+      setSavingSection(null);
     }
   };
 
-  const handleExtractMeta = async () => {
-    if (!forms.blog.link) return showToast("Please enter a link first", "error");
-    setExtracting(true);
+  const handleSaveSection = async (sec) => {
+    setSavingSection(sec.key);
     try {
-        const res = await fetch("/api/extract", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: forms.blog.link }) });
-        const meta = await res.json();
-        if (res.ok) {
-            setForms(prev => ({ ...prev, blog: { ...prev.blog, title: meta.title || "", desc: meta.desc || "", image: meta.image || "", platform: meta.platform || "other", category: meta.platform === 'youtube' ? 'Video' : 'Social' } }));
-            showToast("Data Fetched!");
-        } else { showToast("Could not fetch data", "error"); }
-    } catch (e) { showToast("Extraction Error", "error"); }
-    setExtracting(false);
+      const res = await fetch("/api/homepage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sec)
+      });
+      if (res.ok) {
+        showToast(`✓ Section [${sec.key}] Updated Live!`);
+      } else {
+        showToast("Error updating section", "error");
+      }
+    } catch (err) {
+      showToast("Connection error", "error");
+    } finally {
+      setSavingSection(null);
+    }
   };
 
-  const handleDelete = async (api, id) => {
-    if (!confirm("Are you sure? This action cannot be undone.")) return;
-    try { await fetch(`/api/${api}?id=${id}`, { method: "DELETE" }); showToast("Item Deleted"); fetchAllData(); } catch(e) { showToast("Delete Failed", "error"); }
-  };
-
-  const handleUpdateStatus = async (id, status) => {
-    try {
-        await fetch("/api/contact", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, status }) });
-        const updatedLeads = data.leads.map(l => l._id === id ? { ...l, status } : l);
-        setData(prev => ({...prev, leads: updatedLeads}));
-        showToast("Status Updated");
-    } catch(e) { showToast("Update Failed", "error"); }
-  };
-
-  const getTypeFromTab = (tab) => {
-    const map = { projects: 'project', services: 'service', blogs: 'blog', team: 'team', pricing: 'pricing', reviews: 'review', 'client-projects': 'clientProject', customers: 'customer' };
-    return map[tab] || null;
-  };
-
-  const openModal = (type, item = null) => {
-    if(!forms[type]) return;
-    setModalType(type);
-    
-    if(type === 'clientProject') {
-        setForms(p => ({ 
-            ...p, 
-            clientProject: item ? { ...item, id: item._id, links: item.links || [], documents: item.documents || [] } : { 
-                id: null, title: "", clientEmail: "", status: "Active", progress: 0, nextMilestone: "Discovery", dueDate: "TBD", 
-                description: "", budget: "", paymentStatus: "Pending", links: [], documents: [],
-                stages: [
-                    { id: 1, title: "Discovery", status: "pending", date: "Pending" },
-                    { id: 2, title: "UI/UX Design", status: "pending", date: "Pending" },
-                    { id: 3, title: "Development", status: "pending", date: "Pending" },
-                    { id: 4, title: "Testing", status: "pending", date: "Pending" },
-                    { id: 5, title: "Deployment", status: "pending", date: "Pending" }
-                ], 
-                updates: [] 
-            } 
-        }));
-    } 
-    else if(type === 'customer') setForms(p => ({ ...p, customer: item ? { ...item, id: item._id } : { id: null, name: "", slug: "", logo: "", website: "", shortDescription: "", description: "", industry: "Enterprise", location: "", relationshipType: "Enterprise Platform", featured: false, order: 0, visibility: "public", status: "active", since: "" } }));
-    else if(type === 'project') setForms(p => ({ ...p, project: item ? { ...item, id: item._id, tech: item.tech.join(', ') } : { id: null, title: "", category: "", image: "", tech: "", link: "" } }));
-    else if(type === 'service') setForms(p => ({ ...p, service: item ? { ...item, id: item._id } : { title: "", desc: "", icon: "Monitor", color: "text-blue-500", gradient: "from-blue-500 to-cyan-500" } }));
-    else if(type === 'team') setForms(p => ({ ...p, team: item ? { ...item, id: item._id, skills: item.skills || [] } : { id: null, name: "", role: "", image: "", desc: "", skills: [] } }));
-    else if(type === 'pricing') setForms(p => ({ ...p, pricing: item ? { ...item, id: item._id, features: item.features.join(','), missing: item.missing.join(','), popular: item.popular, gradient: item.gradient || "from-gray-500 to-gray-700" } : { id: null, name: "", desc: "", priceMonthly: "", priceYearly: "", features: "", missing: "", popular: false, gradient: "from-gray-500 to-gray-700" } }));
-    else if(type === 'blog') setForms(p => ({ ...p, blog: item ? { ...item, id: item._id } : { id: null, link: "", title: "", desc: "", image: "", category: "", platform: "other" } }));
-    else if(type === 'review') setForms(p => ({ ...p, review: item ? { ...item, id: item._id } : { id: null, name: "", role: "", text: "", rating: 5, image: "" } }));
-
-    setIsModalOpen(true);
-  };
-
-  const handleAddNew = () => { const type = getTypeFromTab(activeTab); if(type) openModal(type); };
-  const handleEditItem = (item) => { const type = getTypeFromTab(activeTab); if(type) openModal(type, item); };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSaveEntity = async (endpoint, payload, isEdit = false) => {
     setLoading(true);
-    const apiMap = { project: 'projects', service: 'services', blog: 'blogs', team: 'team', pricing: 'pricing', review: 'reviews', clientProject: 'client-projects', customer: 'customers' };
-    let api = apiMap[modalType];
-    let currentForm = forms[modalType];
-    let body = { ...currentForm };
-    if (modalType === 'project') body.tech = currentForm.tech.split(',').map(t => t.trim());
-    if (modalType === 'pricing') { 
-        body.features = currentForm.features.split(',').map(s=>s.trim()).filter(Boolean); 
-        body.missing = currentForm.missing.split(',').map(s=>s.trim()).filter(Boolean); 
-    }
-
     try {
-        const res = await fetch(`/api/${api}`, { method: body.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-        if(res.ok) { setIsModalOpen(false); fetchAllData(); showToast("Saved Successfully!"); } 
-        else { showToast("Server Error", "error"); }
-    } catch(e) { showToast("Operation Failed", "error"); }
-    setLoading(false);
-  };
-
-  const handleAdminFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setUploading(true);
-    try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const uploadRes = await fetch("/api/upload", {
-            method: "POST",
-            body: formData
-        });
-        const uploadData = await uploadRes.json();
-
-        if (uploadRes.ok) {
-            const newDoc = {
-                name: file.name,
-                url: uploadData.url,
-                uploadedBy: "Admin",
-                date: new Date().toLocaleDateString()
-            };
-
-            setForms(p => ({
-                ...p,
-                clientProject: {
-                    ...p.clientProject,
-                    documents: [newDoc, ...p.clientProject.documents]
-                }
-            }));
-            showToast("File Ready (Click Save to Confirm)");
-        } else {
-            showToast("Upload Failed", "error");
-        }
-    } catch (error) {
-        showToast("Network Error", "error");
+      const method = isEdit ? "PUT" : "POST";
+      const res = await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const resJson = await res.json();
+      if (res.ok) {
+        showToast(`✓ ${isEdit ? "Updated" : "Created"} successfully in Database!`);
+        setIsModalOpen(false);
+        setEditingItem(null);
+        fetchAllData();
+      } else {
+        showToast(resJson.error || resJson.message || "Failed to save record", "error");
+      }
+    } catch (err) {
+      showToast("Network error while saving", "error");
+    } finally {
+      setLoading(false);
     }
-    setUploading(false);
   };
 
-  const addProjectUpdate = () => {
-    const newUpdate = { title: "New Update", desc: "Description here", date: new Date().toLocaleDateString() };
-    setForms(prev => ({ ...prev, clientProject: { ...prev.clientProject, updates: [newUpdate, ...prev.clientProject.updates] } }));
+  const handleDeleteEntity = async (endpoint, id, name = "Record") => {
+    if (!confirm(`Are you sure you want to delete ${name}? This action is immediate.`)) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${endpoint}?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        showToast(`✓ ${name} deleted successfully from Live DB!`);
+        fetchAllData();
+      } else {
+        showToast("Failed to delete record", "error");
+      }
+    } catch (err) {
+      showToast("Error deleting record", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const addProjectLink = () => {
-    const newLink = { title: "New Resource", url: "https://" };
-    setForms(prev => ({ ...prev, clientProject: { ...prev.clientProject, links: [...prev.clientProject.links, newLink] } }));
-  };
+  // Navigation Items Config
+  const NAV_ITEMS = [
+    { id: "dashboard", label: "Executive HUD", icon: LayoutDashboard, badge: "LIVE" },
+    { id: "homepage", label: "Homepage & Hero CMS", icon: Globe, badge: "CMS" },
+    { id: "source-code", label: "Source Code Store", icon: Code2, count: data.sourceCodes.length },
+    { id: "products", label: "Flagship Products", icon: Boxes, count: data.products.length },
+    { id: "services", label: "Engineering Services", icon: Layers, count: data.services.length },
+    { id: "ecosystem", label: "Ecosystem & Nodes", icon: Compass, count: data.ecosystemItems.length },
+    { id: "industries", label: "Industry Solutions", icon: Building2, count: data.industries.length },
+    { id: "pricing", label: "Pricing & Plans", icon: CreditCard, count: data.pricing.length },
+    { id: "leads", label: "Client Inquiries CRM", icon: Mail, count: data.leads.length, badge: data.leads.length > 0 ? `${data.leads.length}` : null },
+    { id: "reviews", label: "Developer Reviews", icon: Star, count: data.reviews.length },
+    { id: "settings", label: "Site Settings & Brand", icon: Settings },
+  ];
 
-  if (isCheckingSession) return (
-    <div className="h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-800 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-100/40 via-slate-50 to-slate-50 pointer-events-none"></div>
-        <div className="relative z-10 text-center space-y-6">
-            <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
-                <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full animate-ping"></div>
-                <div className="absolute inset-0 border-t-4 border-indigo-600 rounded-full animate-spin"></div>
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-lg font-bold text-white shadow-lg shadow-indigo-500/30">DS</div>
-            </div>
-            <div>
-                <h2 className="text-xl font-bold tracking-wide">Securing mainframe...</h2>
-                <p className="text-slate-450 text-xs mt-1 animate-pulse">Decrypting secure session credentials</p>
-            </div>
+  // If Checking Session
+  if (isCheckingSession) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white space-y-4 font-mono">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 animate-spin">
+          <div className="w-full h-full bg-slate-950 rounded-2xl flex items-center justify-center">
+            <Activity size={20} className="text-cyan-400" />
+          </div>
         </div>
-    </div>
-  );
+        <p className="text-xs text-slate-400 tracking-widest uppercase">Verifying Admin Session...</p>
+      </div>
+    );
+  }
 
-  if (!isAuthenticated) return (
-    <div className="h-screen flex items-center justify-center bg-slate-50 text-slate-800 overflow-hidden cursor-default selection:bg-indigo-500/20">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-100/40 via-slate-50 to-slate-50 pointer-events-none"></div>
-        <div className="w-full max-w-sm p-8 z-10 bg-white border border-slate-200/80 rounded-3xl backdrop-blur-xl shadow-2xl relative m-4">
-            <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-indigo-650/30">DS</div>
-                <h1 className="text-3xl font-black mb-2 text-slate-900">Welcome Back</h1>
-                <p className="text-slate-500 text-sm font-semibold">Enter your master key to access the dashboard.</p>
+  // If Not Authenticated -> Render Login Screen with 30-Day Remember Toggle
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-blue-950 flex items-center justify-center p-4 relative overflow-hidden font-sans">
+        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.4, ease: smoothEase }}
+          className="w-full max-w-md bg-white/95 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/40 space-y-6 text-slate-900 relative z-10"
+        >
+          {/* Logo Header */}
+          <div className="text-center space-y-2">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 shadow-lg shadow-blue-500/25 mx-auto flex items-center justify-center">
+              <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-cyan-300">
+                <Code2 size={24} />
+              </div>
             </div>
-            <form onSubmit={handleLogin} className="space-y-5">
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-center tracking-[0.5em] focus:border-indigo-600 focus:bg-white transition-all outline-none text-lg font-bold text-slate-900" placeholder="••••••••" autoFocus />
-                <button className="w-full bg-slate-950 text-white hover:bg-slate-800 font-bold py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">Access Dashboard <ChevronRight size={16}/></button>
-            </form>
-        </div>
-        <AnimatePresence>{toast && <Toast {...toast} onClose={() => setToast(null)} />}</AnimatePresence>
-    </div>
-  );
+            <h1 className="text-2xl font-black tracking-tight text-slate-900">DevSamp Admin Control Plane</h1>
+            <p className="text-xs text-slate-500 font-normal">
+              Direct access to live database, CMS engines, and source repository store.
+            </p>
+          </div>
 
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold uppercase text-slate-500 font-mono tracking-wider">
+                Admin Master Passkey
+              </label>
+              <input
+                type="password"
+                required
+                autoFocus
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password..."
+                className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-900 outline-none focus:border-blue-500 focus:bg-white transition-all font-mono"
+              />
+            </div>
+
+            {/* Remember Me 30 Days Checkbox */}
+            <div className="flex items-center justify-between text-xs text-slate-600">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="font-medium">Remember this browser (30 Days)</span>
+              </label>
+              <span className="text-[10px] text-emerald-600 font-bold font-mono">Persistent Auth</span>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              {loading ? <Loader2 size={16} className="animate-spin" /> : <ShieldCheck size={16} />}
+              <span>{loading ? "Authenticating Session..." : "Authorize & Remember Device"}</span>
+            </button>
+          </form>
+
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Database Connected</span>
+            </span>
+            <span>v2.4.0 Live Monolith</span>
+          </div>
+        </motion.div>
+
+        {toast && (
+          <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[300] px-5 py-2.5 rounded-full text-xs font-bold text-white shadow-xl flex items-center gap-2 ${
+            toast.type === "error" ? "bg-red-600" : "bg-emerald-600"
+          }`}>
+            {toast.type === "error" ? <AlertCircle size={15} /> : <CheckCircle2 size={15} />}
+            <span>{toast.message}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // --- AUTHENTICATED MASTER ADMIN DASHBOARD VIEW ---
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden cursor-default selection:bg-indigo-500/20 relative">
-        <AnimatePresence>{toast && <Toast {...toast} onClose={() => setToast(null)} />}</AnimatePresence>
-        <AnimatePresence>{isSidebarOpen && (<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSidebarOpen(false)} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-45 md:hidden" />)}</AnimatePresence>
-
-        {/* Sidebar Panel */}
-        <aside className={`fixed md:relative z-50 w-72 h-full bg-white border-r border-slate-200/85 flex flex-col transition-transform duration-305 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
-            <div className="p-6 border-b border-slate-200/60 flex justify-between items-center"><div className="flex items-center gap-3 font-bold text-xl tracking-tight"><div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-xs text-white shadow-indigo-500/50 shadow-md font-bold">DS</div><span className="text-slate-900">DEVSAMP<span className="text-indigo-600 text-xs align-top ml-1 font-bold">ADMIN</span></span></div><button onClick={() => setSidebarOpen(false)} className="md:hidden text-slate-500"><X size={20}/></button></div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar select-none">
-                <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-2">Overview</p>
-                <NavItem icon={LayoutDashboard} label="Dashboard" id="dashboard" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">CRM</p>
-                <NavItem icon={Users} label="Inquiries (Leads)" id="leads" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} badge={data.leads.filter(l=>l.status==='New').length} />
-                <NavItem icon={FolderKanban} label="Client Projects" id="client-projects" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} /> 
-                <NavItem icon={CalendarIcon} label="Project Calendar" id="calendar" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} /> 
-                <NavItem icon={MessageCircle} label="Testimonials" id="reviews" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">CMS</p>
-                <NavItem icon={Building2} label="Customers (Clients)" id="customers" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <NavItem icon={ExternalLink} label="Projects (Portfolio)" id="projects" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <NavItem icon={Briefcase} label="Our Team" id="team" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <NavItem icon={Layers} label="Services" id="services" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <NavItem icon={CreditCard} label="Pricing Plans" id="pricing" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-                <NavItem icon={Rss} label="Blogs & News" id="blogs" active={activeTab} set={(id) => { setActiveTab(id); setSidebarOpen(false); }} />
-            </div>
-            <div className="p-4 border-t border-slate-200/60"><button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold text-sm"><LogOut size={18} /> Sign Out</button></div>
-        </aside>
-
-        {/* Content Box */}
-        <main className="flex-1 flex flex-col h-full overflow-hidden relative">
-            <header className="h-16 border-b border-slate-200/60 flex items-center justify-between px-4 md:px-6 bg-white/80 backdrop-blur-xl z-20">
-                <div className="flex items-center gap-3 md:gap-4"><button onClick={() => setSidebarOpen(true)} className="md:hidden text-slate-550 p-1"><Menu size={24}/></button><h2 className="text-base md:text-lg font-black text-slate-900 capitalize flex items-center gap-2 truncate">{activeTab.replace('-', ' ')} <span className="text-slate-400 font-semibold text-sm hidden sm:inline">/ Management</span></h2></div>
-                <div className="flex items-center gap-3 md:gap-4"><button onClick={fetchAllData} className={`p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-all ${loading && "animate-spin text-indigo-600"}`} title="Refresh Data"><Loader2 size={18}/></button><div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">A</div></div>
-            </header>
-
-            <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar relative">
-                
-                {activeTab === 'dashboard' && (
-                    <div className="space-y-6 md:space-y-8 animate-fade-in max-w-7xl mx-auto pb-20 md:pb-0">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <StatCard title="Total Leads" value={data.leads.length} icon={Users} color="blue" trend="+12%" onClick={() => setActiveTab('leads')} />
-                            <StatCard title="Active Clients" value={data.clientProjects.length} icon={FolderKanban} color="green" onClick={() => setActiveTab('client-projects')} />
-                            <StatCard title="Services" value={data.services.length} icon={Layers} color="indigo" onClick={() => setActiveTab('services')} />
-                            <StatCard title="Blogs Posted" value={data.blogs.length} icon={Rss} color="orange" onClick={() => setActiveTab('blogs')} />
-                        </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <LineChart data={lineChartData.data} labels={lineChartData.labels} expanded={expandedChart === 'line'} onToggleExpand={() => setExpandedChart(expandedChart === 'line' ? null : 'line')} timeRange={leadsTimeRange} setTimeRange={setLeadsTimeRange} color="blue" />
-                            <BarChart data={barChartData.data} labels={barChartData.labels} expanded={expandedChart === 'bar'} onToggleExpand={() => setExpandedChart(expandedChart === 'bar' ? null : 'bar')} color="indigo" />
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'leads' && (
-                    <div className="space-y-4 max-w-7xl mx-auto animate-fade-in pb-20 md:pb-0">
-                        <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left border-collapse min-w-[800px] md:min-w-0">
-                                    <thead><tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200/60 font-bold"><th className="p-5 font-bold">Client Info</th><th className="p-5 font-bold">Interest</th><th className="p-5 font-bold">Date</th><th className="p-5 font-bold">Status</th><th className="p-5 font-bold text-right">Actions</th></tr></thead>
-                                    <tbody className="text-sm text-slate-700 divide-y divide-slate-100">
-                                        {paginatedData.map((lead) => (
-                                            <tr key={lead._id} className="hover:bg-slate-50/50 transition-colors group">
-                                                <td className="p-5"><div className="font-bold text-slate-800 text-base">{lead.name}</div><div className="text-xs text-slate-450 flex items-center gap-1 mt-1 font-semibold"><Mail size={10}/> {lead.email}</div></td>
-                                                <td className="p-5"><span className="bg-blue-50 text-blue-600 border border-blue-150 px-2.5 py-1 rounded-lg text-xs font-bold">{lead.service}</span></td>
-                                                <td className="p-5 text-xs text-slate-500 font-mono font-bold">{new Date(lead.createdAt).toLocaleDateString()}</td>
-                                                <td className="p-5">
-                                                    <select value={lead.status} onChange={(e) => handleUpdateStatus(lead._id, e.target.value)} className={`appearance-none pl-3 pr-8 py-1.5 rounded-lg text-xs font-bold outline-none cursor-pointer border transition-all ${lead.status === 'New' ? 'bg-blue-50 text-blue-600 border-blue-150' : lead.status === 'Closed' ? 'bg-green-50 text-green-600 border-green-150' : 'bg-yellow-50 text-yellow-600 border-yellow-150'}`}>
-                                                        <option className="bg-white" value="New">New</option><option className="bg-white" value="Contacted">Contacted</option><option className="bg-white" value="Closed">Closed</option>
-                                                    </select>
-                                                </td>
-                                                <td className="p-5 text-right"><div className="flex justify-end gap-2 opacity-100 md:opacity-60 md:group-hover:opacity-100 transition-opacity"><button onClick={() => setViewLead(lead)} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-blue-600 transition-colors border border-slate-200" title="View Details"><Eye size={14}/></button><button onClick={() => handleDelete('contact', lead._id)} className="p-2 bg-slate-50 hover:bg-red-50 text-red-500 rounded-lg transition-colors border border-slate-200" title="Delete"><Trash2 size={14}/></button></div></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="p-4 border-t border-slate-200 bg-white"><Pagination total={filteredData.length} perPage={itemsPerPage} current={currentPage} onChange={setCurrentPage} /></div>
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'client-projects' && (
-                    <div className="space-y-6 animate-fade-in max-w-7xl mx-auto pb-20 md:pb-0">
-                        <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                            <h3 className="text-lg font-black text-slate-800 flex items-center gap-2"><FolderKanban className="text-indigo-600"/> Manage Client Projects</h3>
-                            <button onClick={handleAddNew} className="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-sm"><Plus size={14}/> New Project</button>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {paginatedData.map((project) => (
-                                <div key={project._id} onClick={() => handleEditItem(project)} className="bg-white border border-slate-200/80 rounded-2xl p-6 cursor-pointer hover:border-indigo-500/50 hover:bg-slate-50/30 transition-all group relative shadow-sm hover:shadow-md">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><Briefcase size={20}/></div>
-                                        <div className={`text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${project.status === 'Active' ? 'bg-green-50 text-green-700 border border-green-150' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>{project.status}</div>
-                                    </div>
-                                    <h4 className="text-lg font-extrabold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors">{project.title}</h4>
-                                    <p className="text-xs text-slate-450 font-semibold mb-6">{project.clientEmail}</p>
-                                    
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between text-xs text-slate-500 font-bold">
-                                            <span>Progress</span>
-                                            <span className="font-mono">{project.progress}%</span>
-                                        </div>
-                                        <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                            <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" style={{ width: `${project.progress}%` }}></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="mt-6 pt-4 border-t border-slate-150 flex justify-between text-xs text-slate-450 font-semibold">
-                                        <span className="flex items-center gap-1"><Clock size={12}/> {project.nextMilestone}</span>
-                                        <span>Due: {project.dueDate}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        {paginatedData.length === 0 && <div className="text-center text-slate-500 py-10 font-bold text-sm">No active client projects. Create one!</div>}
-                    </div>
-                )}
-
-                {/* --- CALENDAR TAB --- */}
-                {activeTab === 'calendar' && (
-                    <div className="space-y-6 animate-fade-in max-w-7xl mx-auto pb-20 md:pb-0">
-                        <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm">
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-xl font-black text-slate-805 flex items-center gap-2">
-                                    <CalendarIcon className="text-indigo-600" /> Project Deadlines
-                                </h3>
-                                <div className="flex items-center gap-2 bg-slate-100 rounded-lg p-1 border border-slate-200/40 select-none">
-                                    <button onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))} className="p-1.5 hover:bg-white rounded-md text-slate-500 hover:text-slate-800 transition-colors"><ChevronLeft size={16}/></button>
-                                    <span className="text-xs font-bold text-slate-850 px-2 min-w-[120px] text-center uppercase tracking-wider">{calendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                                    <button onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))} className="p-1.5 hover:bg-white rounded-md text-slate-500 hover:text-slate-800 transition-colors"><ChevronRight size={16}/></button>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-7 gap-1 md:gap-2">
-                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                                    <div key={d} className="text-center text-[10px] font-bold text-slate-400 uppercase py-2">{d}</div>
-                                ))}
-                                {(() => {
-                                    const year = calendarDate.getFullYear();
-                                    const month = calendarDate.getMonth();
-                                    const daysInMonth = new Date(year, month + 1, 0).getDate();
-                                    const firstDay = new Date(year, month, 1).getDay();
-                                    const days = [];
-
-                                    for (let i = 0; i < firstDay; i++) {
-                                        days.push(<div key={`empty-${i}`} className="h-16 md:h-24 bg-transparent border border-slate-100 opacity-10 rounded-lg"></div>);
-                                    }
-
-                                    for (let d = 1; d <= daysInMonth; d++) {
-                                        const dueProjects = data.clientProjects.filter(p => {
-                                            const pDate = new Date(p.dueDate);
-                                            return !isNaN(pDate) && pDate.getDate() === d && pDate.getMonth() === month && pDate.getFullYear() === year;
-                                        });
-
-                                        const isToday = new Date().getDate() === d && new Date().getMonth() === month && new Date().getFullYear() === year;
-
-                                        days.push(
-                                            <div key={d} className={`h-16 md:h-24 bg-slate-50/50 border ${isToday ? 'border-indigo-650 bg-indigo-50/20' : 'border-slate-100'} rounded-lg p-2 flex flex-col hover:bg-slate-100/50 transition-colors group relative overflow-hidden`}>
-                                                <span className={`text-[10px] font-bold mb-1 ${isToday ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-800'}`}>{d}</span>
-                                                <div className="flex-1 flex flex-col gap-1 overflow-y-auto custom-scrollbar">
-                                                    {dueProjects.map(p => (
-                                                        <div key={p._id} className="text-[8px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded truncate border border-indigo-100 cursor-pointer hover:bg-indigo-650 hover:text-white transition-colors font-bold" onClick={() => handleEditItem(p)} title={p.title}>
-                                                            {p.title}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        );
-                                    }
-                                    return days;
-                                })()}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {['services', 'team', 'projects', 'pricing', 'reviews', 'blogs', 'customers'].includes(activeTab) && (
-                    <div className="space-y-6 animate-fade-in max-w-7xl mx-auto pb-20 md:pb-0">
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                            <div className="relative w-full md:w-80">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                                <input className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 focus:border-indigo-500 outline-none" placeholder={`Search ${activeTab}...`} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                            </div>
-                            {activeTab !== 'reviews' && (
-                                <button onClick={handleAddNew} className="bg-slate-950 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-slate-800 transition-colors shadow-sm w-full md:w-auto justify-center uppercase tracking-wider">
-                                    <Plus size={14} /> Add {getTypeFromTab(activeTab)}
-                                </button>
-                            )}
-                        </div>
-
-                        {activeTab === 'pricing' && (
-                            <div className="bg-white border border-slate-200/80 p-6 rounded-3xl shadow-sm mb-6 max-w-4xl">
-                                <h3 className="text-base font-extrabold text-slate-805 mb-2 flex items-center gap-2">
-                                    <CreditCard size={18} className="text-indigo-600"/>
-                                    <span>Interactive Quote Calculator Configurator</span>
-                                </h3>
-                                <p className="text-xs text-slate-500 font-semibold mb-6">Real-time parameters consumed by the public interactive pricing calculator.</p>
-                                
-                                <form onSubmit={handleSaveCalcSettings} className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Base Price ($)</label>
-                                            <input 
-                                              type="number" 
-                                              value={calcSettings.basePrice} 
-                                              onChange={(e) => setCalcSettings(p => ({ ...p, basePrice: Number(e.target.value) }))} 
-                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold font-mono text-slate-800 focus:border-indigo-500 focus:bg-white outline-none" 
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Price Per Page ($)</label>
-                                            <input 
-                                              type="number" 
-                                              value={calcSettings.pricePerPage} 
-                                              onChange={(e) => setCalcSettings(p => ({ ...p, pricePerPage: Number(e.target.value) }))} 
-                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold font-mono text-slate-800 focus:border-indigo-500 focus:bg-white outline-none" 
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div className="flex justify-between items-center mb-3">
-                                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Selectable Addon Services</label>
-                                            <button 
-                                              type="button" 
-                                              onClick={() => setCalcSettings(p => ({ ...p, addons: [...p.addons, { name: "New Addon Module", price: 100, enabled: true }] }))} 
-                                              className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 uppercase"
-                                            >
-                                                <Plus size={12}/> Add Module
-                                            </button>
-                                        </div>
-                                        
-                                        <div className="space-y-2.5">
-                                            {calcSettings.addons.map((addon, idx) => (
-                                                <div key={idx} className="flex items-center gap-3 bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl">
-                                                    <div className="flex items-center gap-2 flex-1">
-                                                        <input 
-                                                          className="bg-slate-50 border border-slate-200 rounded px-2.5 py-1.5 text-xs font-semibold text-slate-800 w-full outline-none focus:bg-white focus:border-indigo-500" 
-                                                          placeholder="Addon Module Name" 
-                                                          value={addon.name} 
-                                                          onChange={(e) => {
-                                                            const newAddons = [...calcSettings.addons];
-                                                            newAddons[idx].name = e.target.value;
-                                                            setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }} 
-                                                        />
-                                                        <input 
-                                                          type="number" 
-                                                          className="bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs font-mono text-slate-650 w-24 outline-none focus:bg-white focus:border-indigo-500" 
-                                                          placeholder="Price ($)" 
-                                                          value={addon.price} 
-                                                          onChange={(e) => {
-                                                            const newAddons = [...calcSettings.addons];
-                                                            newAddons[idx].price = Number(e.target.value);
-                                                            setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }} 
-                                                        />
-                                                        <button 
-                                                          type="button" 
-                                                          onClick={() => {
-                                                            const newAddons = [...calcSettings.addons];
-                                                            newAddons[idx].enabled = !newAddons[idx].enabled;
-                                                            setCalcSettings(p => ({ ...p, addons: newAddons }));
-                                                          }} 
-                                                          className={`px-2.5 py-1.5 text-[9px] font-bold rounded border uppercase transition-all shrink-0 ${
-                                                            addon.enabled 
-                                                              ? "bg-green-50 text-green-700 border-green-200" 
-                                                              : "bg-slate-150 text-slate-500 border-slate-300"
-                                                          }`}
-                                                        >
-                                                            {addon.enabled ? "Enabled" : "Disabled"}
-                                                        </button>
-                                                        <button type="button" onClick={() => setCalcSettings(p => ({ ...p, addons: p.addons.filter((_, i) => i !== idx) }))} className="text-red-500"><X size={14}/></button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <button 
-                                      type="submit" 
-                                      disabled={calcLoading} 
-                                      className="w-full bg-slate-950 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition-all shadow-md flex justify-center items-center gap-2 text-xs uppercase tracking-wider"
-                                    >
-                                        {calcLoading ? <Loader2 className="animate-spin" size={12} /> : <Save size={12} />}
-                                        <span>Save Calculator Configuration</span>
-                                    </button>
-                                </form>
-                            </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {paginatedData.map((item) => (
-                                <div key={item._id} className="bg-white border border-slate-200 rounded-2xl overflow-hidden group hover:border-slate-350 transition-all flex flex-col relative shadow-sm hover:shadow-md">
-                                    {(item.image || item.logo || activeTab === 'blogs' || activeTab === 'projects' || activeTab === 'customers') && (
-                                        <div className="h-44 bg-slate-100 relative overflow-hidden border-b border-slate-200/60 p-4 flex items-center justify-center">
-                                            {(item.image || item.logo) ? (
-                                                <img src={getGoogleDriveImage(item.image || item.logo)} alt={item.title || item.name} className="max-h-full max-w-full object-contain group-hover:scale-105 transition-all duration-500" referrerPolicy="no-referrer" />
-                                            ) : (
-                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-lg flex items-center justify-center shadow-md">
-                                                    {(item.name || "DS").substring(0, 2).toUpperCase()}
-                                                </div>
-                                            )}
-                                            <div className="absolute top-3 right-3 flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all md:translate-y-2 md:group-hover:translate-y-0 z-10">
-                                                <button onClick={() => handleEditItem(item)} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:bg-indigo-600 hover:text-white transition-colors shadow-sm"><PenBox size={13}/></button>
-                                                <button onClick={() => handleDelete(activeTab === 'team' ? 'team' : activeTab, item._id)} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:bg-red-600 hover:text-white transition-colors shadow-sm"><Trash2 size={13}/></button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <div className="p-5 flex-1 flex flex-col">
-                                        <div className="flex gap-2 mb-3 flex-wrap">
-                                            {item.industry && <span className="text-[9px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.industry}</span>}
-                                            {item.relationshipType && <span className="text-[9px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">{item.relationshipType}</span>}
-                                            {item.category && <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.category}</span>}
-                                            {item.role && <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{item.role}</span>}
-                                            {item.popular && <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">Popular</span>}
-                                        </div>
-                                        <h4 className="font-extrabold text-base text-slate-800 mb-1 line-clamp-1">{item.title || item.name}</h4>
-                                        <p className="text-xs text-slate-500 font-semibold line-clamp-2 flex-1 leading-relaxed">{item.shortDescription || item.desc || item.text || item.message || item.description}</p>
-                                        {item.website && <div className="mt-2 text-xs font-bold text-blue-600 truncate">{item.website}</div>}
-                                        {item.priceMonthly && <div className="mt-4 text-lg font-black text-slate-800 font-mono">${item.priceMonthly}<span className="text-xs font-normal text-slate-400">/mo</span></div>}
-                                        {activeTab === 'services' && !item.image && (
-                                            <div className="absolute top-4 right-4 p-2 bg-slate-50 rounded-lg text-slate-500 group-hover:text-slate-800 border border-slate-200"><Layers size={18}/></div>
-                                        )}
-                                        {activeTab === 'reviews' && (
-                                            <div className="flex gap-0.5 mt-3 text-amber-400">{[...Array(item.rating || 5)].map((_,i)=><Star key={i} size={12} fill="currentColor"/>)}</div>
-                                        )}
-                                        {!item.image && !item.logo && activeTab !== 'blogs' && activeTab !== 'projects' && activeTab !== 'customers' && (
-                                            <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100 justify-end">
-                                                <button onClick={() => handleEditItem(item)} className="text-[10px] font-bold text-indigo-600 hover:underline uppercase tracking-wider">Edit</button>
-                                                <button onClick={() => handleDelete(activeTab === 'reviews' ? 'reviews' : activeTab, item._id)} className="text-[10px] font-bold text-red-500 hover:underline uppercase tracking-wider">Delete</button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        
-                        {paginatedData.length === 0 && (
-                            <div className="text-center py-20 bg-white rounded-2xl border border-slate-200/80 shadow-sm select-none">
-                                <div className="inline-block p-4 rounded-full bg-slate-50 mb-3 border border-slate-150"><Search size={32} className="text-slate-400"/></div>
-                                <h3 className="text-base font-bold text-slate-800">No results found</h3>
-                                <p className="text-xs text-slate-500 font-semibold mt-1">Try adding a new item or clear your search.</p>
-                            </div>
-                        )}
-
-                        <Pagination total={filteredData.length} perPage={itemsPerPage} current={currentPage} onChange={setCurrentPage} />
-                    </div>
-                )}
-            </div>
-        </main>
-
-        {/* View Inquiries Modal */}
-        <AnimatePresence>
-            {viewLead && (
-                <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white border border-slate-200/80 p-8 rounded-2xl w-full max-w-lg shadow-2xl relative">
-                        <button onClick={() => setViewLead(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700"><X size={20}/></button>
-                        <h3 className="text-2xl font-black text-slate-800 mb-1">{viewLead.name}</h3>
-                        <p className="text-xs text-slate-450 font-bold mb-6 flex items-center gap-2"><Mail size={12}/> {viewLead.email}</p>
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6"><label className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider mb-2 block">Message</label><p className="text-slate-700 text-xs font-semibold leading-relaxed whitespace-pre-wrap">{viewLead.message}</p></div>
-                        <div className="flex gap-4"><a href={`mailto:${viewLead.email}`} className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs uppercase tracking-wider"><Mail size={14}/> Reply via Email</a><button onClick={() => { setViewLead(null); handleDelete('contact', viewLead._id); }} className="px-4 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl transition-all"><Trash2 size={16}/></button></div>
-                    </motion.div>
+    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row text-slate-900 font-sans">
+      
+      {/* --- SIDEBAR NAVIGATION --- */}
+      <aside className="w-full md:w-72 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-950 text-white flex flex-col justify-between border-r border-indigo-500/20 shrink-0 select-none">
+        
+        {/* Top Brand Header */}
+        <div className="p-5 border-b border-white/10 space-y-3">
+          <div className="flex items-center justify-between">
+            <Link href="/" target="_blank" className="flex items-center gap-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[1.5px] shadow-sm">
+                <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-cyan-300">
+                  <Code2 size={18} />
                 </div>
-            )}
-        </AnimatePresence>
+              </div>
+              <div>
+                <h2 className="text-base font-black tracking-tight text-white group-hover:text-cyan-300 transition-colors">
+                  DevSamp
+                </h2>
+                <p className="text-[10px] font-mono text-cyan-400 font-bold">CONTROL PLANE</p>
+              </div>
+            </Link>
 
-        {/* CMS Edit/Add Modals */}
-        <AnimatePresence>
-            {isModalOpen && forms[modalType] && (
-                <div className="fixed inset-0 z-[150] flex items-center justify-center px-4 bg-black/50 backdrop-blur-sm p-4">
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className={`bg-white border border-slate-200 p-6 md:p-8 rounded-3xl w-full transition-all shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar ${['team', 'project', 'pricing', 'blog'].includes(modalType) ? "max-w-5xl" : "max-w-lg"}`}>
-                        <div className="absolute top-0 right-0 p-32 bg-indigo-500/5 blur-3xl rounded-full pointer-events-none"></div>
-                        <div className="flex justify-between items-center mb-6 relative z-10">
-                            <h3 className="text-xl font-black text-slate-900 capitalize">{forms[modalType].id ? "Edit" : "Add New"} {modalType.replace('clientProject', 'Project')}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-700 bg-slate-50 p-2 rounded-full border border-slate-200 hover:bg-slate-100 transition-all"><X size={16}/></button>
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-xl bg-white/10 hover:bg-red-500/20 hover:text-red-400 text-slate-300 transition-colors cursor-pointer"
+              title="Logout from Admin"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Items List */}
+        <nav className="p-3 space-y-1 overflow-y-auto flex-1 no-scrollbar">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setSearchTerm("");
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-between group cursor-pointer ${
+                  isActive
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25"
+                    : "text-slate-300 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon size={16} className={isActive ? "text-cyan-300" : "text-slate-400 group-hover:text-cyan-300"} />
+                  <span>{item.label}</span>
+                </div>
+
+                {item.badge && (
+                  <span className="text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+                    {item.badge}
+                  </span>
+                )}
+                {item.count !== undefined && !item.badge && (
+                  <span className="text-[10px] font-mono text-slate-400 bg-white/10 px-2 py-0.5 rounded-full">
+                    {item.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Sidebar Footer Status & Quick Utilities */}
+        <div className="p-4 border-t border-white/10 bg-black/20 text-xs font-mono text-slate-400 space-y-2">
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>PERSISTENT AUTH</span>
+            </span>
+            <button
+              onClick={fetchAllData}
+              disabled={loading}
+              className="text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <RefreshCw size={11} className={loading ? "animate-spin" : ""} />
+              <span>Sync</span>
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-2 pt-1">
+            <button
+              onClick={handleExportBackup}
+              className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-slate-200 font-bold flex items-center justify-center gap-1"
+              title="Download Full JSON Database Backup"
+            >
+              <Download size={11} />
+              <span>Backup</span>
+            </button>
+
+            <button
+              onClick={handleTriggerSeed}
+              className="py-1 px-2 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-amber-300 font-bold flex items-center justify-center gap-1"
+              title="Restore / Seed Baseline Items"
+            >
+              <Database size={11} />
+              <span>Seed</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* --- MAIN WORKSPACE CONSOLE --- */}
+      <main className="flex-1 flex flex-col min-w-0 bg-slate-100 overflow-y-auto max-h-screen">
+        
+        {/* Top Console Bar */}
+        <header className="bg-white px-6 py-4 border-b border-slate-200 sticky top-0 z-20 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div>
+              <h1 className="text-lg font-black text-slate-900 tracking-tight capitalize">
+                {NAV_ITEMS.find((n) => n.id === activeTab)?.label || "Control Console"}
+              </h1>
+              <p className="text-xs text-slate-500 font-normal">
+                Direct CMS editor with instantaneous real-time sync across 90+ ecosystem routes.
+              </p>
+            </div>
+          </div>
+
+          {/* Top Actions */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => {
+                setShowSimulator(!showSimulator);
+                setSimulatorUrl(activeTab === "source-code" ? "/marketplace" : activeTab === "products" ? "/products" : "/");
+              }}
+              className="px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <Monitor size={13} />
+              <span>{showSimulator ? "Hide Live Simulator" : "Live Page Simulator"}</span>
+            </button>
+
+            <Link
+              href="/"
+              target="_blank"
+              className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5"
+            >
+              <ExternalLink size={13} />
+              <span>Open Site</span>
+            </Link>
+
+            <button
+              onClick={fetchAllData}
+              disabled={loading}
+              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm shadow-blue-500/25 cursor-pointer"
+            >
+              <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+              <span>{loading ? "Syncing..." : "Sync DB"}</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Live Simulator Viewport Pane */}
+        {showSimulator && (
+          <div className="bg-slate-950 p-4 border-b border-indigo-500/30 flex flex-col items-center space-y-3">
+            <div className="flex items-center justify-between w-full max-w-5xl text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-cyan-400 font-bold uppercase">Simulator Route:</span>
+                <input
+                  type="text"
+                  value={simulatorUrl}
+                  onChange={(e) => setSimulatorUrl(e.target.value)}
+                  className="px-3 py-1 rounded-lg bg-white/10 border border-white/20 text-white font-mono text-xs outline-none"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 bg-white/10 p-1 rounded-xl">
+                <button
+                  onClick={() => setSimulatorDevice("desktop")}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
+                    simulatorDevice === "desktop" ? "bg-blue-600 text-white" : "text-slate-400"
+                  }`}
+                >
+                  <Monitor size={12} />
+                  <span>Desktop</span>
+                </button>
+                <button
+                  onClick={() => setSimulatorDevice("tablet")}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
+                    simulatorDevice === "tablet" ? "bg-blue-600 text-white" : "text-slate-400"
+                  }`}
+                >
+                  <Tablet size={12} />
+                  <span>Tablet</span>
+                </button>
+                <button
+                  onClick={() => setSimulatorDevice("mobile")}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
+                    simulatorDevice === "mobile" ? "bg-blue-600 text-white" : "text-slate-400"
+                  }`}
+                >
+                  <Smartphone size={12} />
+                  <span>Mobile</span>
+                </button>
+              </div>
+            </div>
+
+            <div
+              className={`bg-white rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 border-4 border-slate-800 ${
+                simulatorDevice === "desktop" ? "w-full max-w-5xl h-[520px]" :
+                simulatorDevice === "tablet" ? "w-[768px] h-[520px]" :
+                "w-[390px] h-[520px]"
+              }`}
+            >
+              <iframe
+                src={simulatorUrl}
+                title="Live Simulator"
+                className="w-full h-full border-none"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Inner Scrollable View Body */}
+        <div className="p-6 sm:p-8 space-y-8 flex-1">
+          
+          {/* ========================================================================= */}
+          {/* TAB 1: EXECUTIVE HUD DASHBOARD                                            */}
+          {/* ========================================================================= */}
+          {activeTab === "dashboard" && (
+            <div className="space-y-8">
+              
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
+                    <span>TOTAL INQUIRIES</span>
+                    <Mail size={16} className="text-blue-600" />
+                  </div>
+                  <p className="text-3xl font-black text-slate-900 font-mono">{data.leads.length}</p>
+                  <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                    Active Pipeline
+                  </span>
+                </div>
+
+                <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
+                    <span>FLAGSHIP PRODUCTS</span>
+                    <Boxes size={16} className="text-indigo-600" />
+                  </div>
+                  <p className="text-3xl font-black text-slate-900 font-mono">{data.products.length}</p>
+                  <span className="text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded">
+                    Deployed SaaS
+                  </span>
+                </div>
+
+                <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
+                    <span>SOURCE REPOSITORIES</span>
+                    <Code2 size={16} className="text-cyan-600" />
+                  </div>
+                  <p className="text-3xl font-black text-slate-900 font-mono">{data.sourceCodes.length}</p>
+                  <span className="text-[10px] text-purple-600 font-bold bg-purple-50 px-2 py-0.5 rounded">
+                    GitHub Integrated
+                  </span>
+                </div>
+
+                <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
+                    <span>ENGINEERING SERVICES</span>
+                    <Layers size={16} className="text-emerald-600" />
+                  </div>
+                  <p className="text-3xl font-black text-slate-900 font-mono">{data.services.length}</p>
+                  <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                    Custom Pods
+                  </span>
+                </div>
+              </div>
+
+              {/* Quick Actions Panel */}
+              <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white border border-indigo-500/30 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-cyan-300 font-bold">Fast Master Controls</span>
+                    <h3 className="text-xl font-bold text-white">Direct Ecosystem Quick Actions</h3>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <button
+                    onClick={() => {
+                      setActiveTab("source-code");
+                      setModalType("source-code");
+                      setEditingItem(null);
+                      setIsModalOpen(true);
+                    }}
+                    className="p-4 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-left space-y-1 transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 font-bold text-cyan-300 text-xs">
+                      <Plus size={14} />
+                      <span>Publish Source Code</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300">Add free or paid repository to marketplace</p>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setActiveTab("products");
+                      setModalType("product");
+                      setEditingItem(null);
+                      setIsModalOpen(true);
+                    }}
+                    className="p-4 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-left space-y-1 transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 font-bold text-indigo-300 text-xs">
+                      <Plus size={14} />
+                      <span>Deploy New SaaS</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300">Register new flagship software application</p>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("homepage")}
+                    className="p-4 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-left space-y-1 transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 font-bold text-emerald-300 text-xs">
+                      <Globe size={14} />
+                      <span>Edit Hero CMS</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300">Live update headlines, badges and CTA buttons</p>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("leads")}
+                    className="p-4 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-left space-y-1 transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 font-bold text-amber-300 text-xs">
+                      <Mail size={14} />
+                      <span>Inspect Inquiries</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300">Review new client requests & quotes</p>
+                  </button>
+                </div>
+              </div>
+
+              {/* Recent Inquiries List */}
+              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">Latest Client Consultations & Leads</h3>
+                    <p className="text-xs text-slate-500">Incoming prospective client scopes from contact forms</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab("leads")}
+                    className="text-xs font-bold text-blue-600 hover:underline cursor-pointer"
+                  >
+                    View All Leads ({data.leads.length}) →
+                  </button>
+                </div>
+
+                <div className="divide-y divide-slate-100">
+                  {data.leads.slice(0, 5).map((lead, idx) => (
+                    <div key={idx} className="py-3 flex items-center justify-between gap-4 text-xs">
+                      <div>
+                        <p className="font-bold text-slate-900">{lead.name} <span className="text-slate-400 font-normal">• {lead.email}</span></p>
+                        <p className="text-slate-600 line-clamp-1 mt-0.5">{lead.message}</p>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-mono shrink-0">
+                        {formatTimeAgo(lead.createdAt)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 2: HOMEPAGE & HERO CMS                                                */}
+          {/* ========================================================================= */}
+          {activeTab === "homepage" && (
+            <div className="space-y-8">
+              
+              {/* Hero Banner Section Live Editor */}
+              <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded font-mono">
+                      HERO SECTION CMS
+                    </span>
+                    <h3 className="text-xl font-bold text-slate-900 mt-1">Hero Title, Eyebrow & Value Proposition</h3>
+                  </div>
+                  <button
+                    onClick={handleSaveSiteSettings}
+                    disabled={savingSection === "settings"}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Save size={14} />
+                    <span>{savingSection === "settings" ? "Saving Live..." : "Save Hero Live"}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 text-xs">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Eyebrow Badge Tag</label>
+                    <input
+                      type="text"
+                      value={data.siteSettings.heroEyebrow || ""}
+                      onChange={(e) => setData({
+                        ...data,
+                        siteSettings: { ...data.siteSettings, heroEyebrow: e.target.value }
+                      })}
+                      className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Main Hero Title (H1)</label>
+                    <textarea
+                      rows={2}
+                      value={data.siteSettings.heroTitle || ""}
+                      onChange={(e) => setData({
+                        ...data,
+                        siteSettings: { ...data.siteSettings, heroTitle: e.target.value }
+                      })}
+                      className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium leading-relaxed"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Hero Subtitle Description</label>
+                    <textarea
+                      rows={3}
+                      value={data.siteSettings.heroDescription || ""}
+                      onChange={(e) => setData({
+                        ...data,
+                        siteSettings: { ...data.siteSettings, heroDescription: e.target.value }
+                      })}
+                      className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium leading-relaxed"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Sections Reorder & Toggle Control */}
+              <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-6">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Homepage Section Visibility & Titles</h3>
+                  <p className="text-xs text-slate-500">Enable, disable, or adjust text for any section rendered on the homepage.</p>
+                </div>
+
+                <div className="space-y-3">
+                  {data.sections.map((sec, sIdx) => (
+                    <div
+                      key={sec.key || sIdx}
+                      className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs"
+                    >
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-bold text-blue-600 uppercase text-[10px] bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                            {sec.key}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-mono">Order: #{sec.order}</span>
                         </div>
-                        
-                        <div className={`grid grid-cols-1 ${['team', 'project', 'pricing', 'blog'].includes(modalType) ? "lg:grid-cols-2" : ""} gap-8`}>
-                            {/* Form Column */}
-                            <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
-                            
-                            {modalType === 'clientProject' && (
-                                <div className="space-y-5">
-                                    <FormInput label="Project Title" value={forms.clientProject.title} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, title:e.target.value}}))} />
-                                    <FormInput label="Client Email (Must Match User Login)" value={forms.clientProject.clientEmail} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, clientEmail:e.target.value}}))} />
-                                    <FormTextarea label="Project Description / Brief" value={forms.clientProject.description} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, description:e.target.value}}))} />
+                        <input
+                          type="text"
+                          value={sec.title || ""}
+                          onChange={(e) => {
+                            const updatedSecs = [...data.sections];
+                            updatedSecs[sIdx].title = e.target.value;
+                            setData({ ...data, sections: updatedSecs });
+                          }}
+                          placeholder="Section Title..."
+                          className="w-full p-2 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-900 outline-none"
+                        />
+                      </div>
 
-                                    <div className="flex gap-4">
-                                        <div className="flex-1 space-y-1">
-                                            <label className="text-xs text-slate-450 font-bold uppercase ml-1">Status</label>
-                                            <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs font-bold outline-none" value={forms.clientProject.status} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, status:e.target.value}}))}>
-                                                <option value="Active">Active</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Completed">Completed</option>
-                                            </select>
-                                        </div>
-                                        <FormInput label="Due Date" value={forms.clientProject.dueDate} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, dueDate:e.target.value}}))} placeholder="YYYY-MM-DD" />
-                                    </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedSecs = [...data.sections];
+                            updatedSecs[sIdx].isActive = !updatedSecs[sIdx].isActive;
+                            setData({ ...data, sections: updatedSecs });
+                          }}
+                          className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
+                            sec.isActive
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-slate-200 text-slate-600"
+                          }`}
+                        >
+                          <span>{sec.isActive ? "Active (Live)" : "Hidden"}</span>
+                        </button>
 
-                                    <div className="flex gap-4">
-                                        <FormInput label="Budget (Optional)" value={forms.clientProject.budget} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, budget:e.target.value}}))} placeholder="$5000" />
-                                        <div className="flex-1 space-y-1">
-                                            <label className="text-xs text-slate-450 font-bold uppercase ml-1">Payment Status</label>
-                                            <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs font-bold outline-none" value={forms.clientProject.paymentStatus} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, paymentStatus:e.target.value}}))}>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Partial">Partial Paid</option>
-                                                <option value="Paid">Fully Paid</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                        <button
+                          onClick={() => handleSaveSection(sec)}
+                          disabled={savingSection === sec.key}
+                          className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-xs cursor-pointer"
+                        >
+                          {savingSection === sec.key ? "Saving..." : "Save Live"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-                                    <div className="space-y-1">
-                                         <label className="text-xs text-slate-500 font-bold uppercase ml-1">Progress: {forms.clientProject.progress}%</label>
-                                         <input type="range" min="0" max="100" value={forms.clientProject.progress} onChange={e=>setForms(p=>({...p, clientProject:{...p.clientProject, progress:Number(e.target.value)}}))} className="w-full accent-indigo-600 h-1.5 bg-slate-100 rounded-full appearance-none cursor-pointer" />
-                                     </div>
+            </div>
+          )}
 
-                                    <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
-                                        <div className="flex justify-between items-center">
-                                            <h4 className="text-xs font-bold text-slate-700 flex items-center gap-2"><LinkIcon size={12}/> Resources & Links</h4>
-                                            <button type="button" onClick={addProjectLink} className="text-[9px] bg-indigo-600 px-2 py-1 rounded text-white hover:bg-indigo-700 font-bold uppercase">Add Link</button>
-                                        </div>
-                                        {forms.clientProject.links.length === 0 && <p className="text-[10px] text-slate-400 italic">No resources added.</p>}
-                                        {forms.clientProject.links.map((link, i) => (
-                                            <div key={i} className="flex gap-2 items-center">
-                                                <input className="bg-white rounded px-2 py-1.5 text-xs text-slate-800 border border-slate-250 flex-1 outline-none focus:border-indigo-500" placeholder="Title (e.g. Figma)" value={link.title} onChange={(e) => {
-                                                    const newLinks = [...forms.clientProject.links];
-                                                    newLinks[i].title = e.target.value;
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, links: newLinks}}));
-                                                }} />
-                                                <input className="bg-white rounded px-2 py-1.5 text-xs text-indigo-600 border border-slate-250 flex-[2] outline-none focus:border-indigo-500" placeholder="URL (https://...)" value={link.url} onChange={(e) => {
-                                                    const newLinks = [...forms.clientProject.links];
-                                                    newLinks[i].url = e.target.value;
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, links: newLinks}}));
-                                                }} />
-                                                <button type="button" onClick={() => {
-                                                    const newLinks = forms.clientProject.links.filter((_, idx) => idx !== i);
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, links: newLinks}}));
-                                                }} className="text-red-500"><X size={14}/></button>
-                                            </div>
-                                        ))}
-                                    </div>
+          {/* ========================================================================= */}
+          {/* TAB 3: SOURCE CODE & MARKETPLACE REPOSITORIES MANAGER                     */}
+          {/* ========================================================================= */}
+          {activeTab === "source-code" && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Source Code & Repository Releases ({data.sourceCodes.length})</h3>
+                  <p className="text-xs text-slate-500">Manage free open-source boilerplates and commercial SaaS code packages on GitHub.</p>
+                </div>
 
-                                    <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
-                                        <div className="flex justify-between items-center">
-                                            <h4 className="text-xs font-bold text-slate-700 flex items-center gap-2"><File size={12}/> Project Documents</h4>
-                                            <label className="text-[9px] bg-indigo-600 px-2 py-1 rounded text-white hover:bg-indigo-700 cursor-pointer flex items-center gap-1 font-bold uppercase">
-                                                {uploading ? <Loader2 className="animate-spin" size={10}/> : <UploadCloud size={10}/>} Upload
-                                                <input type="file" className="hidden" onChange={handleAdminFileUpload} disabled={uploading} />
-                                            </label>
-                                        </div>
-                                        {forms.clientProject.documents.length === 0 && <p className="text-[10px] text-slate-400 italic">No documents uploaded.</p>}
-                                        <div className="space-y-2">
-                                            {forms.clientProject.documents.map((doc, i) => (
-                                                <div key={i} className="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
-                                                    <div className="flex items-center gap-2 overflow-hidden">
-                                                        <File size={12} className="text-slate-400 shrink-0"/>
-                                                        <span className="text-xs text-slate-700 truncate max-w-[150px] font-semibold">{doc.name}</span>
-                                                        <span className="text-[8px] text-slate-400 font-bold uppercase border border-slate-200 px-1 rounded">{doc.uploadedBy}</span>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <a href={doc.url} target="_blank" className="text-indigo-600 hover:underline"><ExternalLink size={12}/></a>
-                                                        <button type="button" onClick={() => {
-                                                            const newDocs = forms.clientProject.documents.filter((_, idx) => idx !== i);
-                                                            setForms(p => ({...p, clientProject:{...p.clientProject, documents: newDocs}}));
-                                                        }} className="text-red-500 hover:text-red-655"><Trash2 size={12}/></button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
+                <button
+                  onClick={() => {
+                    setModalType("source-code");
+                    setEditingItem({
+                      title: "",
+                      slug: "",
+                      tagline: "",
+                      description: "",
+                      category: "Full-Stack SaaS",
+                      priceINR: 0,
+                      priceUSD: 0,
+                      originalPriceINR: 2999,
+                      originalPriceUSD: 39,
+                      isFree: true,
+                      badge: "FREE DOWNLOAD",
+                      version: "v1.0.0",
+                      techStack: ["Next.js 15", "MongoDB", "Tailwind CSS"],
+                      features: ["Full Next.js App Router Source Code", "Production Docker Configs"],
+                      includes: ["100% Full Source Code", "Architecture Documentation"],
+                      githubUrl: "https://github.com/Mahadev91op/DevSamp-Final",
+                      downloadUrl: "https://github.com/Mahadev91op/DevSamp-Final/archive/refs/heads/main.zip",
+                      liveDemoUrl: "/",
+                      license: "MIT Open Source License",
+                      rating: 5.0,
+                      downloadsCount: 100,
+                      gradient: "from-blue-600 via-indigo-600 to-cyan-500",
+                      order: data.sourceCodes.length + 1
+                    });
+                    setIsModalOpen(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={15} />
+                  <span>Add New Source Code</span>
+                </button>
+              </div>
 
-                                    <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
-                                        <h4 className="text-xs font-bold text-slate-700 flex items-center gap-2"><Layers size={12}/> Stages</h4>
-                                        {forms.clientProject.stages.map((stage, i) => (
-                                            <div key={i} className="flex gap-2 items-center">
-                                                <span className="text-xs text-slate-400 w-6 font-bold">{i+1}.</span>
-                                                <input className="bg-transparent border-b border-slate-200 text-xs text-slate-800 w-full focus:border-indigo-500 outline-none pb-1 font-semibold" value={stage.title} onChange={(e) => {
-                                                    const newStages = [...forms.clientProject.stages];
-                                                    newStages[i].title = e.target.value;
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, stages: newStages}}));
-                                                }} />
-                                                <select className="bg-slate-100 text-[9px] font-bold rounded px-1.5 py-1 text-slate-650 outline-none border border-slate-200" value={stage.status} onChange={(e) => {
-                                                    const newStages = [...forms.clientProject.stages];
-                                                    newStages[i].status = e.target.value;
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, stages: newStages}}));
-                                                }}>
-                                                    <option value="pending">Pending</option>
-                                                    <option value="completed">Done</option>
-                                                </select>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
-                                        <div className="flex justify-between items-center">
-                                            <h4 className="text-xs font-bold text-slate-700 flex items-center gap-2"><Rss size={12}/> Recent Updates</h4>
-                                            <button type="button" onClick={addProjectUpdate} className="text-[9px] bg-indigo-600 px-2 py-1 rounded text-white hover:bg-indigo-700 font-bold uppercase">Add Update</button>
-                                        </div>
-                                        {forms.clientProject.updates.length === 0 && <p className="text-[10px] text-slate-400 italic">No updates added.</p>}
-                                        {forms.clientProject.updates.map((update, i) => (
-                                            <div key={i} className="bg-white p-3 rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                                                <input className="w-full bg-transparent text-xs font-bold text-slate-800 outline-none border-b border-slate-100 pb-1" placeholder="Update Title" value={update.title} onChange={(e) => {
-                                                    const newUpdates = [...forms.clientProject.updates];
-                                                    newUpdates[i].title = e.target.value;
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, updates: newUpdates}}));
-                                                }}/>
-                                                <textarea className="w-full bg-transparent text-[10px] text-slate-500 outline-none resize-none font-semibold" placeholder="Description..." value={update.desc} onChange={(e) => {
-                                                    const newUpdates = [...forms.clientProject.updates];
-                                                    newUpdates[i].desc = e.target.value;
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, updates: newUpdates}}));
-                                                }}/>
-                                                <button type="button" onClick={() => {
-                                                    const newUpdates = forms.clientProject.updates.filter((_, idx) => idx !== i);
-                                                    setForms(p => ({...p, clientProject:{...p.clientProject, updates: newUpdates}}));
-                                                }} className="text-[9px] text-red-500 hover:underline font-bold uppercase">Remove</button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+              {/* Source Code Table */}
+              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-mono uppercase text-[10px]">
+                      <tr>
+                        <th className="p-4">Package</th>
+                        <th className="p-4">Category</th>
+                        <th className="p-4">Price</th>
+                        <th className="p-4">GitHub & Downloads</th>
+                        <th className="p-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {data.sourceCodes.map((item, idx) => (
+                        <tr key={item._id || idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-4">
+                            <div className="space-y-0.5">
+                              <p className="font-bold text-slate-900">{item.title}</p>
+                              <p className="text-[11px] text-slate-500 font-mono">{item.slug} • {item.version}</p>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 font-mono font-bold text-[10px] border border-blue-100">
+                              {item.category}
+                            </span>
+                          </td>
+                          <td className="p-4 font-mono font-bold">
+                            {item.isFree ? (
+                              <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                FREE
+                              </span>
+                            ) : (
+                              <span className="text-slate-900">
+                                ₹{item.priceINR} / ${item.priceUSD}
+                              </span>
                             )}
-
-                            {modalType === 'blog' && (
-                                <div className="space-y-4">
-                                    <div className="flex gap-2 p-3 bg-indigo-50 rounded-xl border border-indigo-100">
-                                        <div className="flex-1">
-                                            <label className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider ml-1 mb-1 block">Magic Autocomplete</label>
-                                            <input className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs font-semibold outline-none focus:border-indigo-500 placeholder:text-slate-400" placeholder="Paste YouTube or Instagram link..." value={forms.blog.link} onChange={e=>setForms(p=>({...p, blog:{...p.blog, link:e.target.value}}))} />
-                                        </div>
-                                        <button type="button" onClick={handleExtractMeta} disabled={extracting} className="mt-5 px-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all flex items-center justify-center">
-                                            {extracting ? <Loader2 className="animate-spin" size={16} /> : <Wand2 size={16} />}
-                                        </button>
-                                    </div>
-                                    <FormInput label="Title" value={forms.blog.title} onChange={e=>setForms(p=>({...p, blog:{...p.blog, title:e.target.value}}))} />
-                                    <FormInput label="Image URL" value={forms.blog.image} onChange={e=>setForms(p=>({...p, blog:{...p.blog, image:e.target.value}}))} preview />
-                                    <FormTextarea label="Description" value={forms.blog.desc} onChange={e=>setForms(p=>({...p, blog:{...p.blog, desc:e.target.value}}))} />
-                                </div>
-                            )}
-
-                            {modalType === 'project' && (
-                                <>
-                                    <FormInput label="Project Title" value={forms.project.title} onChange={e=>setForms(p=>({...p, project:{...p.project, title:e.target.value}}))} />
-                                    <div className="flex gap-4">
-                                        <FormInput label="Category" value={forms.project.category} onChange={e=>setForms(p=>({...p, project:{...p.project, category:e.target.value}}))} />
-                                        <FormInput label="Link" value={forms.project.link} onChange={e=>setForms(p=>({...p, project:{...p.project, link:e.target.value}}))} />
-                                    </div>
-                                    <FormInput label="Image URL" value={forms.project.image} onChange={e=>setForms(p=>({...p, project:{...p.project, image:e.target.value}}))} preview />
-                                    <FormTextarea label="Tech Stack (comma sep)" value={forms.project.tech} onChange={e=>setForms(p=>({...p, project:{...p.project, tech:e.target.value}}))} />
-                                </>
-                            )}
-
-                            {modalType === 'service' && (
-                                <>
-                                    <FormInput label="Service Title" value={forms.service.title} onChange={e=>setForms(p=>({...p, service:{...p.service, title:e.target.value}}))} />
-                                    <FormInput label="Icon Name (Lucide)" value={forms.service.icon} onChange={e=>setForms(p=>({...p, service:{...p.service, icon:e.target.value}}))} />
-                                    <FormTextarea label="Description" value={forms.service.desc} onChange={e=>setForms(p=>({...p, service:{...p.service, desc:e.target.value}}))} />
-                                </>
-                            )}
-
-                            {modalType === 'team' && (
-                                <div className="space-y-4">
-                                    <div className="flex gap-4">
-                                        <FormInput label="Name" value={forms.team.name} onChange={e=>setForms(p=>({...p, team:{...p.team, name:e.target.value}}))} />
-                                        <FormInput label="Role" value={forms.team.role} onChange={e=>setForms(p=>({...p, team:{...p.team, role:e.target.value}}))} />
-                                    </div>
-                                    <FormInput label="Photo URL" value={forms.team.image} onChange={e=>setForms(p=>({...p, team:{...p.team, image:e.target.value}}))} preview />
-                                    <FormTextarea label="Bio" value={forms.team.desc} onChange={e=>setForms(p=>({...p, team:{...p.team, desc:e.target.value}}))} />
-                                    
-                                    {/* Dynamic Skills Editor */}
-                                    <div className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-200">
-                                        <div className="flex justify-between items-center select-none">
-                                            <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                                                <Save size={12}/> Team Member Skills
-                                            </h4>
-                                            <button 
-                                              type="button" 
-                                              onClick={() => {
-                                                const newSkills = [...(forms.team.skills || []), { name: "Next.js & Frontend", level: 80, speed: "25ms" }];
-                                                setForms(p => ({ ...p, team: { ...p.team, skills: newSkills } }));
-                                              }} 
-                                              className="text-[9px] bg-indigo-650 px-2 py-1 rounded text-white hover:bg-indigo-700 font-bold uppercase"
-                                            >
-                                                Add Skill
-                                            </button>
-                                        </div>
-                                        {(!forms.team.skills || forms.team.skills.length === 0) && <p className="text-[10px] text-slate-400 italic">No skills defined. Falls back to role defaults.</p>}
-                                        <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
-                                            {(forms.team.skills || []).map((skill, idx) => (
-                                                <div key={idx} className="bg-white p-3 rounded-xl border border-slate-200/80 space-y-2.5 shadow-sm">
-                                                    <div className="flex gap-2 items-center">
-                                                        <input 
-                                                          className="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs font-semibold text-slate-800 w-full outline-none focus:bg-white focus:border-indigo-500" 
-                                                          placeholder="Skill Name" 
-                                                          value={skill.name} 
-                                                          onChange={(e) => {
-                                                            const newSkills = [...forms.team.skills];
-                                                            newSkills[idx].name = e.target.value;
-                                                            setForms(p => ({ ...p, team: { ...p.team, skills: newSkills } }));
-                                                          }}
-                                                        />
-                                                        <input 
-                                                          className="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs font-mono text-slate-650 w-24 outline-none focus:bg-white focus:border-indigo-500" 
-                                                          placeholder="Speed (e.g. 12ms)" 
-                                                          value={skill.speed} 
-                                                          onChange={(e) => {
-                                                            const newSkills = [...forms.team.skills];
-                                                            newSkills[idx].speed = e.target.value;
-                                                            setForms(p => ({ ...p, team: { ...p.team, skills: newSkills } }));
-                                                          }}
-                                                        />
-                                                        <button 
-                                                          type="button" 
-                                                          onClick={() => {
-                                                            const newSkills = forms.team.skills.filter((_, i) => i !== idx);
-                                                            setForms(p => ({ ...p, team: { ...p.team, skills: newSkills } }));
-                                                          }} 
-                                                          className="text-red-500 hover:text-red-650 shrink-0"
-                                                        >
-                                                            <X size={14}/>
-                                                        </button>
-                                                    </div>
-                                                    <div className="flex items-center gap-3">
-                                                        <span className="text-[9px] font-bold text-slate-400 font-mono w-14">Lvl: {skill.level}%</span>
-                                                        <input 
-                                                          type="range" 
-                                                          min="0" 
-                                                          max="100" 
-                                                          value={skill.level} 
-                                                          onChange={(e) => {
-                                                            const newSkills = [...forms.team.skills];
-                                                            newSkills[idx].level = Number(e.target.value);
-                                                            setForms(p => ({ ...p, team: { ...p.team, skills: newSkills } }));
-                                                          }}
-                                                          className="w-full accent-indigo-655 h-1 bg-slate-100 rounded-lg cursor-pointer" 
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {modalType === 'pricing' && (
-                                <>
-                                    <div className="flex items-center justify-between bg-slate-50 border border-slate-200 p-3 rounded-xl mb-2">
-                                        <span className="text-sm font-bold text-slate-800">Popular Plan?</span>
-                                        <button type="button" onClick={() => setForms(p => ({...p, pricing: {...p.pricing, popular: !p.pricing.popular}}))} className={`w-12 h-6 rounded-full p-1 transition-colors ${forms.pricing.popular ? 'bg-indigo-600' : 'bg-slate-350'}`}>
-                                            <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${forms.pricing.popular ? 'translate-x-6' : 'translate-x-0'}`}></div>
-                                        </button>
-                                    </div>
-                                    <div className="flex gap-2 mb-4 overflow-x-auto pb-2">{gradientOptions.map((g) => (<button key={g.name} type="button" onClick={() => setForms(p => ({...p, pricing: {...p.pricing, gradient: g.class}}))} className={`w-8 h-8 rounded-full bg-gradient-to-br ${g.class} ring-2 ring-offset-2 ring-offset-white transition-all ${forms.pricing.gradient === g.class ? 'ring-indigo-650 scale-110' : 'ring-transparent opacity-70 hover:opacity-100'}`} title={g.name} />))}</div>
-                                    <FormInput label="Plan Name" value={forms.pricing.name} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, name:e.target.value}}))} />
-                                    <FormTextarea label="Short Description" value={forms.pricing.desc} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, desc:e.target.value}}))} />
-                                    <div className="flex gap-4">
-                                        <FormInput label="Monthly Price ($)" value={forms.pricing.priceMonthly} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, priceMonthly:e.target.value}}))} />
-                                        <FormInput label="Yearly Price ($)" value={forms.pricing.priceYearly} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, priceYearly:e.target.value}}))} />
-                                    </div>
-                                    <FormTextarea label="Features (Comma separated)" value={forms.pricing.features} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, features:e.target.value}}))} />
-                                    <FormTextarea label="Missing Features (Comma separated)" value={forms.pricing.missing} onChange={e=>setForms(p=>({...p, pricing:{...p.pricing, missing:e.target.value}}))} />
-                                </>
-                            )}
-
-                            {modalType === 'review' && (
-                                <>
-                                    <div className="flex gap-4">
-                                        <FormInput label="Client Name" value={forms.review.name} onChange={e=>setForms(p=>({...p, review:{...p.review, name:e.target.value}}))} />
-                                        <FormInput label="Role/Designation" value={forms.review.role} onChange={e=>setForms(p=>({...p, review:{...p.review, role:e.target.value}}))} />
-                                    </div>
-                                    <div className="flex gap-4">
-                                         <FormInput label="Rating (1-5)" value={forms.review.rating} onChange={e=>setForms(p=>({...p, review:{...p.review, rating:e.target.value}}))} />
-                                         <FormInput label="Avatar URL" value={forms.review.image} onChange={e=>setForms(p=>({...p, review:{...p.review, image:e.target.value}}))} preview />
-                                    </div>
-                                    <FormTextarea label="Feedback" value={forms.review.text} onChange={e=>setForms(p=>({...p, review:{...p.review, text:e.target.value}}))} />
-                                </>
-                            )}
-
-                            {modalType === 'customer' && (
-                                <>
-                                    <div className="flex gap-4">
-                                        <FormInput label="Customer / Organization Name *" value={forms.customer.name} onChange={e=>setForms(p=>({...p, customer:{...p.customer, name:e.target.value}}))} />
-                                        <FormInput label="Slug (Optional)" value={forms.customer.slug} onChange={e=>setForms(p=>({...p, customer:{...p.customer, slug:e.target.value}}))} />
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <FormInput label="Logo URL (Image Link or Google Drive)" value={forms.customer.logo} onChange={e=>setForms(p=>({...p, customer:{...p.customer, logo:e.target.value}}))} preview />
-                                        <FormInput label="Official Website URL" value={forms.customer.website} onChange={e=>setForms(p=>({...p, customer:{...p.customer, website:e.target.value}}))} />
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <FormInput label="Industry (e.g. Healthcare, Retail, Fintech)" value={forms.customer.industry} onChange={e=>setForms(p=>({...p, customer:{...p.customer, industry:e.target.value}}))} />
-                                        <FormInput label="Location (e.g. San Francisco, CA / Global)" value={forms.customer.location} onChange={e=>setForms(p=>({...p, customer:{...p.customer, location:e.target.value}}))} />
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <div className="flex-1">
-                                            <label className="block text-xs font-bold text-slate-700 mb-1">Relationship Type</label>
-                                            <select 
-                                                value={forms.customer.relationshipType} 
-                                                onChange={e=>setForms(p=>({...p, customer:{...p.customer, relationshipType:e.target.value}}))}
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 focus:border-indigo-600 focus:bg-white transition-all outline-none"
-                                            >
-                                                <option value="Enterprise Platform">Enterprise Platform</option>
-                                                <option value="Dedicated Pod">Dedicated Pod</option>
-                                                <option value="Custom SaaS">Custom SaaS</option>
-                                                <option value="Commercial Software">Commercial Software</option>
-                                                <option value="Strategic Technology Partner">Strategic Technology Partner</option>
-                                                <option value="Active Client">Active Client</option>
-                                            </select>
-                                        </div>
-                                        <FormInput label="Active Since (e.g. 2024)" value={forms.customer.since} onChange={e=>setForms(p=>({...p, customer:{...p.customer, since:e.target.value}}))} />
-                                    </div>
-                                    <FormTextarea label="Short Overview / Tagline" value={forms.customer.shortDescription} onChange={e=>setForms(p=>({...p, customer:{...p.customer, shortDescription:e.target.value}}))} />
-                                    <FormTextarea label="Full Detailed Description" value={forms.customer.description} onChange={e=>setForms(p=>({...p, customer:{...p.customer, description:e.target.value}}))} />
-                                </>
-                            )}
-
-                            <button disabled={loading} className="w-full bg-indigo-650 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all flex justify-center items-center gap-2 mt-6 shadow-md uppercase tracking-wider text-xs">
-                                {loading ? <Loader2 className="animate-spin" /> : "Save Changes"}
+                          </td>
+                          <td className="p-4 font-mono text-slate-500">
+                            <p>{item.downloadsCount || 0} downloads</p>
+                            <a href={item.githubUrl} target="_blank" className="text-blue-600 hover:underline text-[10px] flex items-center gap-1">
+                              <span>GitHub Repo</span>
+                              <ExternalLink size={10} />
+                            </a>
+                          </td>
+                          <td className="p-4 text-right space-x-2">
+                            <button
+                              onClick={() => {
+                                setModalType("source-code");
+                                setEditingItem(item);
+                                setIsModalOpen(true);
+                              }}
+                              className="p-2 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 transition-colors cursor-pointer"
+                              title="Edit Source Code"
+                            >
+                              <Edit3 size={14} />
                             </button>
-                        </form>
-
-                        {/* Live Preview Column */}
-                        {['team', 'project', 'pricing', 'blog'].includes(modalType) && (
-                            <div className="hidden lg:flex flex-col justify-start border-l border-slate-100 pl-8 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar sticky top-0 select-none">
-                                <div className="text-[10px] font-bold text-slate-450 uppercase tracking-widest mb-1 flex items-center gap-1.5">
-                                    <Eye size={12} className="text-indigo-500" />
-                                    <span>Live Visual Preview</span>
-                                </div>
-                                <div className="border border-slate-200/80 rounded-2xl p-4 bg-slate-50/50 flex justify-center items-center overflow-hidden min-h-[350px]">
-                                    {modalType === 'team' && <TeamPreviewCard member={forms.team} />}
-                                    {modalType === 'project' && <ProjectPreviewCard project={forms.project} />}
-                                    {modalType === 'pricing' && <PricingPreviewCard plan={forms.pricing} />}
-                                    {modalType === 'blog' && <BlogPreviewCard blog={forms.blog} />}
-                                </div>
-                            </div>
-                        )}
-                        </div>
-                    </motion.div>
+                            <button
+                              onClick={() => handleDeleteEntity("/api/source-code", item._id, item.title)}
+                              className="p-2 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 transition-colors cursor-pointer"
+                              title="Delete Source Code"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-            )}
-        </AnimatePresence>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 4: FLAGSHIP PRODUCTS MANAGER                                          */}
+          {/* ========================================================================= */}
+          {activeTab === "products" && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Flagship SaaS Products ({data.products.length})</h3>
+                  <p className="text-xs text-slate-500">MedERP Pro, DevScale Core, FlowPulse POS & enterprise platforms.</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setModalType("product");
+                    setEditingItem({
+                      name: "",
+                      slug: "",
+                      tagline: "",
+                      description: "",
+                      category: "Healthcare SaaS",
+                      status: "Live",
+                      featured: true,
+                      logoIcon: "Boxes",
+                      capabilities: ["Multi-Tenant", "API Gateway", "Real-Time Telemetry"],
+                      pricingSnippet: "Enterprise Tier",
+                      productUrl: "https://devsamp.online/products",
+                      docsUrl: "/docs",
+                      gradient: "from-blue-600 to-cyan-500",
+                      order: data.products.length + 1,
+                      isActive: true
+                    });
+                    setIsModalOpen(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={15} />
+                  <span>Deploy New SaaS Product</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {data.products.map((prod, idx) => (
+                  <div key={prod._id || idx} className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm flex flex-col justify-between space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded font-mono">
+                          {prod.category}
+                        </span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono">
+                          {prod.status}
+                        </span>
+                      </div>
+                      <h4 className="text-lg font-bold text-slate-900">{prod.name}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">{prod.tagline || prod.description}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs font-mono font-bold text-slate-500">{prod.pricingSnippet}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setModalType("product");
+                            setEditingItem(prod);
+                            setIsModalOpen(true);
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEntity("/api/products", prod._id, prod.name)}
+                          className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 transition-all cursor-pointer"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 5: ENGINEERING SERVICES                                               */}
+          {/* ========================================================================= */}
+          {activeTab === "services" && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Engineering Capabilities & Services ({data.services.length})</h3>
+                  <p className="text-xs text-slate-500">Custom web dev, mobile development, SaaS architecture, UI/UX systems.</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setModalType("service");
+                    setEditingItem({
+                      title: "",
+                      desc: "",
+                      icon: "Layers",
+                      color: "text-blue-500",
+                      gradient: "from-blue-500 to-cyan-500",
+                      order: data.services.length + 1
+                    });
+                    setIsModalOpen(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={15} />
+                  <span>Add Engineering Service</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {data.services.map((srv, idx) => (
+                  <div key={srv._id || idx} className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono text-slate-400">ORDER: #{srv.order || idx + 1}</span>
+                      <h4 className="text-base font-bold text-slate-900">{srv.title}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{srv.desc}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <button
+                        onClick={() => {
+                          setModalType("service");
+                          setEditingItem(srv);
+                          setIsModalOpen(true);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                      >
+                        Edit Service
+                      </button>
+                      <button
+                        onClick={() => handleDeleteEntity("/api/services", srv._id, srv.title)}
+                        className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 transition-all cursor-pointer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 6: ECOSYSTEM GRAPH NODES                                              */}
+          {/* ========================================================================= */}
+          {activeTab === "ecosystem" && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Ecosystem Telemetry Nodes ({data.ecosystemItems.length})</h3>
+                  <p className="text-xs text-slate-500">Interactive connected graph nodes (Core, Products, Services, Developers, Integrations).</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setModalType("ecosystem");
+                    setEditingItem({
+                      nodeId: "new-node",
+                      title: "",
+                      category: "core",
+                      shortDesc: "",
+                      icon: "Cpu",
+                      statusBadge: "Active",
+                      connections: ["core"],
+                      linkUrl: "/#ecosystem",
+                      metrics: "99.9% Uptime",
+                      color: "from-blue-600 to-indigo-600",
+                      order: data.ecosystemItems.length + 1,
+                      isActive: true
+                    });
+                    setIsModalOpen(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={15} />
+                  <span>Add Ecosystem Node</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {data.ecosystemItems.map((eco, idx) => (
+                  <div key={eco._id || idx} className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                          {eco.nodeId}
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-600 font-bold">{eco.metrics}</span>
+                      </div>
+                      <h4 className="text-base font-bold text-slate-900">{eco.title}</h4>
+                      <p className="text-xs text-slate-600 line-clamp-2">{eco.shortDesc}</p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <button
+                        onClick={() => {
+                          setModalType("ecosystem");
+                          setEditingItem(eco);
+                          setIsModalOpen(true);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                      >
+                        Edit Node
+                      </button>
+                      <button
+                        onClick={() => handleDeleteEntity("/api/ecosystem", eco._id, eco.title)}
+                        className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 transition-all cursor-pointer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 7: PRICING & RETAINERS                                                */}
+          {/* ========================================================================= */}
+          {activeTab === "pricing" && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Pricing Plans & Subscriptions ({data.pricing.length})</h3>
+                  <p className="text-xs text-slate-500">Configure monthly and yearly rates, feature checklists, and discounts.</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setModalType("pricing");
+                    setEditingItem({
+                      name: "",
+                      desc: "",
+                      priceMonthly: "499",
+                      priceYearly: "4900",
+                      features: ["Custom Architecture", "SLA Support"],
+                      missing: [],
+                      popular: false,
+                      gradient: "from-blue-600 to-indigo-600"
+                    });
+                    setIsModalOpen(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={15} />
+                  <span>Add Pricing Tier</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {data.pricing.map((plan, idx) => (
+                  <div key={plan._id || idx} className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-lg font-bold text-slate-900">{plan.name}</h4>
+                        {plan.popular && (
+                          <span className="text-[9px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded font-mono">
+                            POPULAR
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-2xl font-black text-slate-900 font-mono">
+                        ₹{plan.priceMonthly} <span className="text-xs font-normal text-slate-400">/ mo</span>
+                      </p>
+                      <p className="text-xs text-slate-600 leading-relaxed">{plan.desc}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <button
+                        onClick={() => {
+                          setModalType("pricing");
+                          setEditingItem(plan);
+                          setIsModalOpen(true);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                      >
+                        Edit Plan
+                      </button>
+                      <button
+                        onClick={() => handleDeleteEntity("/api/pricing", plan._id, plan.name)}
+                        className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 transition-all cursor-pointer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 8: CLIENT INQUIRIES & CRM LEADS                                       */}
+          {/* ========================================================================= */}
+          {activeTab === "leads" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Incoming Client Scopes & Inquiries ({data.leads.length})</h3>
+                  <p className="text-xs text-slate-500">Direct form submissions from healthcare, POS, and custom software clients.</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-mono uppercase text-[10px]">
+                      <tr>
+                        <th className="p-4">Client</th>
+                        <th className="p-4">Contact</th>
+                        <th className="p-4">Message / Scope</th>
+                        <th className="p-4">Received</th>
+                        <th className="p-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {data.leads.map((lead, idx) => (
+                        <tr key={lead._id || idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-4 font-bold text-slate-900">{lead.name}</td>
+                          <td className="p-4 font-mono text-slate-600">
+                            <p>{lead.email}</p>
+                            {lead.phone && <p className="text-slate-400">{lead.phone}</p>}
+                          </td>
+                          <td className="p-4 text-slate-700 max-w-xs">{lead.message}</td>
+                          <td className="p-4 font-mono text-slate-400 text-[11px]">{formatTimeAgo(lead.createdAt)}</td>
+                          <td className="p-4 text-right space-x-2">
+                            <a
+                              href={`mailto:${lead.email}?subject=DevSamp%20Architecture%20Follow-up`}
+                              className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold transition-all inline-flex items-center gap-1"
+                            >
+                              <Mail size={12} />
+                              <span>Reply</span>
+                            </a>
+                            <button
+                              onClick={() => handleDeleteEntity("/api/contact", lead._id, `Inquiry from ${lead.name}`)}
+                              className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 transition-all cursor-pointer"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 9: SITE SETTINGS & BRANDING                                           */}
+          {/* ========================================================================= */}
+          {activeTab === "settings" && (
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-6 max-w-4xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Global Site Settings & Branding</h3>
+                  <p className="text-xs text-slate-500">Update company email, phone number, tagline and contact coordinates.</p>
+                </div>
+
+                <button
+                  onClick={handleSaveSiteSettings}
+                  disabled={savingSection === "settings"}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Save size={14} />
+                  <span>{savingSection === "settings" ? "Saving..." : "Save Settings Live"}</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Brand / Site Name</label>
+                  <input
+                    type="text"
+                    value={data.siteSettings.siteName || "DevSamp"}
+                    onChange={(e) => setData({
+                      ...data,
+                      siteSettings: { ...data.siteSettings, siteName: e.target.value }
+                    })}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Official Contact Email</label>
+                  <input
+                    type="email"
+                    value={data.siteSettings.contactEmail || "devsamp1st@gmail.com"}
+                    onChange={(e) => setData({
+                      ...data,
+                      siteSettings: { ...data.siteSettings, contactEmail: e.target.value }
+                    })}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Contact Phone / WhatsApp</label>
+                  <input
+                    type="text"
+                    value={data.siteSettings.contactPhone || "+91 9330680642"}
+                    onChange={(e) => setData({
+                      ...data,
+                      siteSettings: { ...data.siteSettings, contactPhone: e.target.value }
+                    })}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Global Headquarters Location</label>
+                  <input
+                    type="text"
+                    value={data.siteSettings.address || "India"}
+                    onChange={(e) => setData({
+                      ...data,
+                      siteSettings: { ...data.siteSettings, address: e.target.value }
+                    })}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium"
+                  />
+                </div>
+
+                <div className="col-span-full space-y-1">
+                  <label className="font-bold text-slate-700 font-mono uppercase text-[10px]">Master Tagline</label>
+                  <input
+                    type="text"
+                    value={data.siteSettings.tagline || ""}
+                    onChange={(e) => setData({
+                      ...data,
+                      siteSettings: { ...data.siteSettings, tagline: e.target.value }
+                    })}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-blue-500 font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* ========================================================================= */}
+      {/* GLOBAL MODAL EDITOR (FOR PRODUCTS, SOURCE CODES, SERVICES, NODES)        */}
+      {/* ========================================================================= */}
+      <AnimatePresence>
+        {isModalOpen && editingItem && (
+          <div className="fixed inset-0 z-[1002] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setIsModalOpen(false);
+                setEditingItem(null);
+              }}
+              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.25, ease: smoothEase }}
+              className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 max-h-[90vh] flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-cyan-300 font-bold">Live DB Record Editor</span>
+                  <h3 className="text-lg font-bold text-white capitalize mt-0.5">
+                    {editingItem._id ? `Edit ${modalType}` : `Create New ${modalType}`}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setEditingItem(null);
+                  }}
+                  className="p-1 rounded-full hover:bg-white/10 text-slate-300 cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Modal Body Forms */}
+              <div className="p-6 overflow-y-auto space-y-4 text-xs">
+                
+                {/* SOURCE CODE MODAL */}
+                {modalType === "source-code" && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Package Title *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.title || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Slug (URL identifier) *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.slug || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, slug: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Price (INR ₹)</label>
+                        <input
+                          type="number"
+                          value={editingItem.priceINR || 0}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setEditingItem({
+                              ...editingItem,
+                              priceINR: val,
+                              isFree: val === 0 && (editingItem.priceUSD || 0) === 0
+                            });
+                          }}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Price (USD $)</label>
+                        <input
+                          type="number"
+                          value={editingItem.priceUSD || 0}
+                          onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setEditingItem({
+                              ...editingItem,
+                              priceUSD: val,
+                              isFree: val === 0 && (editingItem.priceINR || 0) === 0
+                            });
+                          }}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Version</label>
+                        <input
+                          type="text"
+                          value={editingItem.version || "v1.0.0"}
+                          onChange={(e) => setEditingItem({ ...editingItem, version: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">GitHub Repository URL *</label>
+                      <input
+                        type="url"
+                        required
+                        value={editingItem.githubUrl || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, githubUrl: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Direct Release Download URL (.zip)</label>
+                      <input
+                        type="url"
+                        value={editingItem.downloadUrl || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, downloadUrl: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Tagline Summary</label>
+                      <input
+                        type="text"
+                        value={editingItem.tagline || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, tagline: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Detailed Description</label>
+                      <textarea
+                        rows={3}
+                        value={editingItem.description || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* PRODUCT MODAL */}
+                {modalType === "product" && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Product Name *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.name || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Slug *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.slug || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, slug: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Tagline</label>
+                      <input
+                        type="text"
+                        value={editingItem.tagline || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, tagline: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Description</label>
+                      <textarea
+                        rows={3}
+                        value={editingItem.description || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* SERVICE MODAL */}
+                {modalType === "service" && (
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Service Title *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editingItem.title || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Description</label>
+                      <textarea
+                        rows={3}
+                        value={editingItem.desc || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, desc: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ECOSYSTEM NODE MODAL */}
+                {modalType === "ecosystem" && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Node ID *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.nodeId || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, nodeId: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Node Title *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.title || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Short Description</label>
+                      <textarea
+                        rows={2}
+                        value={editingItem.shortDesc || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, shortDesc: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* PRICING MODAL */}
+                {modalType === "pricing" && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Plan Name *</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingItem.name || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-700">Monthly Price (₹)</label>
+                        <input
+                          type="text"
+                          value={editingItem.priceMonthly || ""}
+                          onChange={(e) => setEditingItem({ ...editingItem, priceMonthly: e.target.value })}
+                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-slate-700">Description</label>
+                      <textarea
+                        rows={2}
+                        value={editingItem.desc || ""}
+                        onChange={(e) => setEditingItem({ ...editingItem, desc: e.target.value })}
+                        className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 outline-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+              </div>
+
+              {/* Modal Actions */}
+              <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setEditingItem(null);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 font-bold text-slate-700 text-xs cursor-pointer"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const endpoint = 
+                      modalType === "source-code" ? "/api/source-code" :
+                      modalType === "product" ? "/api/products" :
+                      modalType === "service" ? "/api/services" :
+                      modalType === "ecosystem" ? "/api/ecosystem" :
+                      modalType === "pricing" ? "/api/pricing" : "/api/homepage";
+
+                    handleSaveEntity(endpoint, editingItem, Boolean(editingItem._id));
+                  }}
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white font-bold text-xs shadow-md cursor-pointer"
+                >
+                  Save Live to Database
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-[300] px-5 py-3 rounded-2xl text-xs font-bold text-white shadow-2xl flex items-center gap-2 ${
+          toast.type === "error" ? "bg-red-600" : "bg-gradient-to-r from-emerald-600 to-teal-600"
+        }`}>
+          {toast.type === "error" ? <AlertCircle size={15} /> : <CheckCircle2 size={15} />}
+          <span>{toast.message}</span>
+        </div>
+      )}
+
     </div>
   );
 }
-
-const NavItem = ({ icon: Icon, label, id, active, set, badge }) => (
-    <button onClick={() => set(id)} className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all text-sm font-semibold group ${active === id ? "bg-indigo-50 border border-indigo-150/40 text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/50"}`}>
-        <Icon size={18} className={active === id ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-700"} /> 
-        {label}
-        {badge > 0 && (<span className="ml-auto flex items-center justify-center"><span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-indigo-400 opacity-75 mr-4"></span><span className="bg-indigo-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-sm relative z-10">{badge}</span></span>)}
-    </button>
-);
-
-const FormInput = ({ label, value, onChange, preview, placeholder }) => (
-    <div className="space-y-1 w-full">
-        <label className="text-xs text-slate-400 ml-1 font-bold uppercase tracking-wider">{label}</label>
-        <div className="flex gap-4">
-            <input className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-xs font-semibold outline-none focus:border-indigo-500 transition-all placeholder:text-slate-400 focus:bg-white" value={value} onChange={onChange} placeholder={placeholder} required />
-            {preview && value && (<div className="w-12 h-11 relative rounded-lg overflow-hidden border border-slate-200 shrink-0 bg-slate-100"><img src={getGoogleDriveImage(value)} alt="Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" /></div>)}
-        </div>
-    </div>
-);
-
-const FormTextarea = ({ label, value, onChange }) => (
-    <div className="space-y-1 w-full">
-        <label className="text-xs text-slate-400 ml-1 font-bold uppercase tracking-wider">{label}</label>
-        <textarea className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-slate-850 text-xs font-semibold outline-none focus:border-indigo-500 transition-all min-h-[100px] placeholder:text-slate-400 resize-none focus:bg-white" value={value} onChange={onChange} required />
-    </div>
-);
-
-// --- PREVIEW COMPONENTS FOR DYNAMIC ADMIN PANEL ---
-const TeamPreviewCard = ({ member }) => {
-  const fileExtension = member.role ? (member.role.toLowerCase().includes("design") ? ".json" : ".js") : ".js";
-  
-  const getSkillsForRole = (role) => {
-    const r = role ? role.toLowerCase() : "";
-    if (r.includes("design") || r.includes("ui") || r.includes("ux")) {
-      return [
-        { name: "Figma & UI Design", level: 95, speed: "100ms" },
-        { name: "UX Wireframing", level: 90, speed: "120ms" },
-        { name: "Interactive Prototyping", level: 92, speed: "80ms" }
-      ];
-    }
-    if (r.includes("backend") || r.includes("database") || r.includes("server")) {
-      return [
-        { name: "Node.js & APIs", level: 95, speed: "30ms" },
-        { name: "MongoDB & Scale", level: 92, speed: "45ms" },
-        { name: "DevOps & Cloud", level: 88, speed: "150ms" }
-      ];
-    }
-    return [
-      { name: "Next.js & Frontend", level: 96, speed: "12ms" },
-      { name: "State Architecture", level: 92, speed: "25ms" },
-      { name: "Fullstack Integrity", level: 90, speed: "60ms" }
-    ];
-  };
-
-  const skills = (member.skills && member.skills.length > 0) 
-    ? member.skills 
-    : getSkillsForRole(member.role || "");
-
-  return (
-    <div className="w-full bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden text-slate-800">
-      <div className="h-9 bg-slate-100 border-b border-slate-200 px-4 flex items-center justify-between text-[10px] font-mono text-slate-400">
-        <div className="flex gap-1">
-          <span className="w-2 h-2 rounded-full bg-red-400"></span>
-          <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
-          <span className="w-2 h-2 rounded-full bg-green-400"></span>
-        </div>
-        <span>root@devsamp:~/{member.name ? member.name.toLowerCase().replace(/\s+/g, '') : "member"}{fileExtension}</span>
-      </div>
-      <div className="p-4 flex flex-col items-center">
-        <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-200 mb-3 bg-slate-50">
-          {member.image ? (
-            <img src={getGoogleDriveImage(member.image)} alt="Preview" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-slate-350"><ImageIcon size={24} /></div>
-          )}
-        </div>
-        <h4 className="text-sm font-black text-slate-900">{member.name || "Teammate Name"}</h4>
-        <p className="text-[9px] text-indigo-650 font-extrabold uppercase tracking-wider mb-2">{member.role || "Developer Role"}</p>
-        <p className="text-[10px] text-slate-500 text-center line-clamp-2 max-w-[240px] mb-4 min-h-[30px] font-semibold leading-relaxed">
-          {member.desc || "Write a brief description about the squad member."}
-        </p>
-        <div className="w-full space-y-2 mt-2 pt-2 border-t border-slate-100">
-          <span className="text-[8px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1">Metrics</span>
-          {skills.slice(0, 3).map((skill, idx) => (
-            <div key={idx} className="space-y-1">
-              <div className="flex justify-between text-[9px] font-bold text-slate-700 font-mono">
-                <span>{skill.name}</span>
-                <span className="text-[8px] text-indigo-600 bg-indigo-50 px-1 rounded font-mono">L: {skill.level}% | {skill.speed}</span>
-              </div>
-              <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" style={{ width: `${skill.level}%` }}></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProjectPreviewCard = ({ project }) => {
-  const techArray = typeof project.tech === 'string' 
-    ? project.tech.split(',').map(t => t.trim()).filter(Boolean) 
-    : project.tech || [];
-
-  return (
-    <div className="w-full max-w-sm bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden text-slate-800">
-      <div className="relative aspect-video w-full bg-slate-105 overflow-hidden border-b border-slate-100">
-        {project.image ? (
-          <img src={getGoogleDriveImage(project.image)} alt="Preview" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-350"><ImageIcon size={32} /></div>
-        )}
-      </div>
-      <div className="p-4 space-y-2">
-        <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{project.category || "Web App"}</span>
-        <h4 className="text-base font-extrabold text-slate-900">{project.title || "Project Title"}</h4>
-        <div className="flex flex-wrap gap-1.5 pt-1">
-          {techArray.map((tag, idx) => (
-            <span key={idx} className="text-[9px] font-bold text-slate-500 bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded font-mono">
-              {tag}
-            </span>
-          ))}
-          {techArray.length === 0 && <span className="text-[9px] text-slate-400 italic">No technology tags</span>}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const PricingPreviewCard = ({ plan }) => {
-  const featuresArray = typeof plan.features === 'string' 
-    ? plan.features.split(',').map(t => t.trim()).filter(Boolean) 
-    : plan.features || [];
-    
-  const missingArray = typeof plan.missing === 'string' 
-    ? plan.missing.split(',').map(t => t.trim()).filter(Boolean) 
-    : plan.missing || [];
-
-  return (
-    <div className={`relative w-full max-w-xs p-5 rounded-2xl border backdrop-blur-xl transition-all duration-300 flex flex-col bg-white ${
-      plan.popular ? "border-indigo-500 shadow-md ring-2 ring-indigo-500/10" : "border-slate-200 shadow-sm"
-    }`}>
-      {plan.popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-[8px] font-bold tracking-widest uppercase text-white shadow-sm whitespace-nowrap">
-          Popular Choice
-        </div>
-      )}
-      <div className="border-b border-slate-200/80 pb-3 mb-3 text-slate-400 text-[8px] font-mono font-bold flex justify-between">
-        <span>DEVSAMP_BILL</span>
-        <span>#PREVIEW</span>
-      </div>
-      <h3 className="text-base font-black text-slate-805">{plan.name || "Plan Name"}</h3>
-      <p className="text-[10px] text-slate-450 mt-1 leading-normal line-clamp-2 min-h-[30px] font-semibold">{plan.desc || "Short plan outline summary description."}</p>
-      
-      <div className="my-4 flex items-baseline gap-0.5">
-        <span className="text-2xl font-black text-slate-900 font-mono">${plan.priceMonthly || "0"}</span>
-        <span className="text-[10px] text-slate-405 font-bold">/mo</span>
-      </div>
-      
-      <div className="space-y-2 mt-2 pt-2 border-t border-slate-100 flex-grow">
-        {featuresArray.map((feat, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-            <span className="text-[10px] text-slate-650 font-bold">{feat}</span>
-          </div>
-        ))}
-        {missingArray.map((feat, i) => (
-          <div key={i} className="flex items-center gap-2 opacity-40">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-350"></span>
-            <span className="text-[10px] text-slate-400 line-through">{feat}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const BlogPreviewCard = ({ blog }) => {
-
-  return (
-    <div className="w-full max-w-sm bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden text-slate-800">
-      <div className="relative aspect-video w-full bg-slate-100 overflow-hidden border-b border-slate-100">
-        {blog.image ? (
-          <img src={getGoogleDriveImage(blog.image)} alt="Preview" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-350"><ImageIcon size={32} /></div>
-        )}
-      </div>
-      <div className="p-4 space-y-1">
-        <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded uppercase tracking-wider">{blog.category || "News"}</span>
-        <h4 className="text-sm font-extrabold text-slate-900 line-clamp-1">{blog.title || "Blog Title"}</h4>
-        <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 leading-relaxed">{blog.desc || "Short blog post description summary."}</p>
-      </div>
-    </div>
-  );
-};
