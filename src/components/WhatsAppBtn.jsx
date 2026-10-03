@@ -21,7 +21,7 @@ const WhatsAppBtn = () => {
       transition={{ delay: 1.5, duration: 0.5 }}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
-      className="fixed bottom-20 left-4 md:bottom-8 md:left-8 z-[45] flex items-center gap-2 group cursor-pointer"
+      className="fixed bottom-6 left-4 md:bottom-8 md:left-8 z-[45] flex items-center gap-2 group cursor-pointer"
       aria-label="Chat on WhatsApp"
     >
         {/* Button */}

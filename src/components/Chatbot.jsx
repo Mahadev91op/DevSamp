@@ -212,7 +212,7 @@ const Chatbot = () => {
         onClick={() => setIsOpen(!isOpen)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="fixed bottom-20 right-4 md:bottom-8 md:right-24 z-[45] p-3 md:p-3.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-xl shadow-indigo-500/25 border border-indigo-400/30 transition-all flex items-center justify-center cursor-pointer"
+        className="fixed bottom-6 right-4 md:bottom-8 md:right-24 z-[45] p-3 md:p-3.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-xl shadow-indigo-500/25 border border-indigo-400/30 transition-all flex items-center justify-center cursor-pointer"
         data-cursor="Chat"
         aria-label="Toggle AI Chat"
       >

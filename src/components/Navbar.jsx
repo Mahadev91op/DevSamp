@@ -765,59 +765,6 @@ export default function Navbar() {
           </div>
         )}
       </AnimatePresence>
-
-      {/* --- NATIVE MOBILE APP FLOATING DOCK (Bottom Navigation) --- */}
-      <nav 
-        aria-label="Mobile Bottom App Bar" 
-        className="md:hidden fixed bottom-3.5 left-4 right-4 z-40 bg-slate-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-2xl p-1.5 px-2 flex items-center justify-around text-slate-300 font-sans select-none"
-      >
-        {[
-          { href: "/", label: "Home", icon: Globe, match: (p) => p === "/" },
-          { href: "/products", label: "Products", icon: Boxes, match: (p) => p.startsWith("/products") },
-          { href: "/services", label: "Services", icon: Layers, match: (p) => p.startsWith("/services") },
-          { action: () => setIsSearchOpen(true), label: "Search", icon: Search },
-          { action: () => setIsMobileOpen(true), label: "Menu", icon: Menu }
-        ].map((tab, idx) => {
-          const Icon = tab.icon;
-          const isActive = tab.match ? tab.match(pathname) : false;
-
-          if (tab.action) {
-            return (
-              <button
-                key={idx}
-                type="button"
-                onClick={tab.action}
-                className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-white transition-all active:scale-95 cursor-pointer"
-              >
-                <div className={`w-8 h-8 rounded-full ${tab.label === 'Menu' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30' : 'bg-white/10 text-cyan-400'} flex items-center justify-center shadow-xs mb-0.5`}>
-                  <Icon size={15} />
-                </div>
-                <span className="text-[10px] font-bold text-slate-400">{tab.label}</span>
-              </button>
-            );
-          }
-
-          return (
-            <Link
-              key={idx}
-              href={tab.href}
-              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all active:scale-95 relative cursor-pointer ${
-                isActive ? "text-white font-bold" : "text-slate-400 hover:text-slate-200 font-medium"
-              }`}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="mobile-dock-active"
-                  className="absolute inset-0 bg-white/15 rounded-xl -z-10"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
-              )}
-              <Icon size={16} className={`mb-0.5 ${isActive ? "text-blue-400 scale-110" : "text-slate-400"} transition-all`} />
-              <span className="text-[10px] tracking-tight">{tab.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
     </>
   );
 }
